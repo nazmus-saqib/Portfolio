@@ -26,6 +26,18 @@ npm run preview -- --port 4173
 
 Deploy the generated `dist/` directory to a static hosting provider. No API keys, account integrations, backend, or external asset services are required. Fonts, images, models, and JavaScript are bundled locally. Building alone does not publish the website.
 
+### GitHub Pages
+
+The project-site address is `https://nazmus-saqib.github.io/Portfolio/`. Build for its project path:
+
+```sh
+npm run build -- --base=/Portfolio/
+```
+
+The `gh-pages` branch contains the compiled website, including fonts, project images, résumé, license notices, and a `.nojekyll` marker. In the repository's **Settings → Pages**, select **Deploy from a branch**, choose **gh-pages**, select **/ (root)**, and save. GitHub publishes the branch after Pages is enabled. Subsequent source changes need a fresh build and an update to that deployment branch. The `main` branch retains the editable source.
+
+For a local Pages-path regression check, serve the build with `npm run preview -- --base=/Portfolio/ --port 4174 --strictPort`, then run `PORTFOLIO_TEST_URL=http://127.0.0.1:4174/Portfolio/ npm test -- tests/pages.spec.js`.
+
 ## Controls and alternatives
 
 - Choose a chapter or a place in the 3D world to move the character and read its story.
