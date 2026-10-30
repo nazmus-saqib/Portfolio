@@ -1,6 +1,8 @@
 # Nazmus Saqib — A world of connected work
 
-A responsive portfolio about project and operations coordination, built with Vite, vanilla JavaScript, and Three.js. The miniature 3D world connects four career chapters; the site opens on the current Identify BDA role. Earlier UX work appears as career history, alongside individual, team, and academic project stories.
+A single-viewport portfolio about project and operations coordination, built with Vite, vanilla JavaScript, and Three.js. The miniature world follows seven employers in chronological order, from WebNSofTech to Identify BDA. The profile summary and résumé target Project Coordinator and Assistant Project Manager opportunities while preserving official employment titles. Earlier UX work appears as career history, alongside individual, team, and academic project stories.
+
+The page fits the browser viewport on desktop and mobile. Longer role descriptions, profile details, project collections, and case studies scroll inside their own panels; the page itself does not scroll.
 
 ![Nazmus Saqib's interactive portfolio preview](docs/preview.png)
 
@@ -40,19 +42,21 @@ For a local Pages-path regression check, serve the build with `npm run preview -
 
 ## Controls and alternatives
 
-- Choose a chapter or a place in the 3D world to move the character and read its story.
-- “Explore freely” enables WASD / arrow-key movement while the canvas has keyboard focus; on-screen controls support touch.
+- Choose a company in the 3D world or the bottom employment timeline. Each prompt card shows the role, month/year dates, tenure, and clickable project names.
+- “Next company” follows the chronological order. “Play journey” advances through employers every 16 seconds; manual navigation or opening a project stops the automatic tour. “Meet me today” jumps to Identify BDA.
+- “Explore” enables WASD / arrow-key movement while the canvas has keyboard focus; on-screen controls support touch.
 - The speaker button starts optional narration using the visitor’s browser speech synthesis. Voice availability depends on the browser/device. No voice recording is embedded.
 - Pause stops scene animation. Reduced-motion preferences disable continuous movement.
-- “Switch to reading view” presents all four chapters as ordinary text. If WebGL is unavailable, a fallback leads to this view.
-- Current operations and earlier digital-work filters, expandable project stories, a BIWTA prototype gallery, education, experience, and course credentials work independently of the 3D scene.
+- “Reading view” presents all seven employer stories as ordinary text inside the viewport. If WebGL is unavailable, a fallback leads to this view.
+- Journey, Profile, Projects, and Contact tabs share the same side panel. Current operations and earlier digital-work filters, project dialogs, a BIWTA prototype gallery, qualifications, skills, and credentials remain available without a long landing page.
 
 ## Content and personalization
 
-- `src/content.js`: career chapters, project stories, skills, education, and credentials.
+- `src/content.js`: employer chronology, professional summary, tenure formatting, project stories, skills, education, and credentials. Ended roles count the supplied calendar months; current-role tenure uses elapsed months in the current Toronto month. Dynamic Infotech and UPS/Staples are explicitly identified as overlapping roles.
 - `src/main.js`: interface and interactions; public contact email.
 - `src/world.js`: locally generated character and environment; no external model downloads.
 - `src/styles.css`: responsive interface styling.
+- `src/project-view.js` and `src/project-view.css`: reusable project previews and case-study presentation inside the viewport.
 - `public/projects/`: optimized previews from supplied project files. Original career records, project source files, and confidential documents are **not** public assets.
 - `public/favicon.svg`: the site icon. The wordmark is styled in CSS, interface icons are inline SVG in `src/main.js`, and illustrative project covers are generated from HTML/CSS. No external icon account or asset download is required.
 - `public/licenses/`: original dependency license notices, also copied into the built website.
@@ -69,6 +73,6 @@ npm run build
 npm test
 ```
 
-The Playwright configuration uses Chromium at `/usr/bin/chromium` in this cloud environment (or `CHROMIUM_PATH` if provided). In another environment, install a compatible browser or set that path. Tests cover chapter navigation, real canvas movement, reading view, project filtering and dialogs, local images and résumé download, mobile layout, reduced motion, and the no-WebGL fallback. Test reports and generated build files are ignored by Git.
+The Playwright configuration uses Chromium at `/usr/bin/chromium` in this cloud environment (or `CHROMIUM_PATH` if provided). In another environment, install a compatible browser or set that path. Tests cover employer chronology, dates and tenure, real canvas movement, automatic journey, clickable company projects, profile qualifications, project dialogs, local images and résumé download, mobile viewport containment, reduced motion, and the no-WebGL fallback. Test reports and generated build files are ignored by Git.
 
 Use the existing checkout; cloud tasks are already isolated. Do not create worktrees unless explicitly requested.

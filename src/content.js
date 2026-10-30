@@ -332,3 +332,185 @@ export const teaching = {
   title: 'Sharing the craft.',
   description: 'Led “Wireframe & Prototype in XD” at Synesis IT on August 17, 2021, covering requirements, interface components, wireframes, and connected prototypes.',
 };
+
+// Employer stops are chronological by the supplied start month. The two Canadian
+// roles with identical dates overlap; their order does not imply a promotion.
+// Dates have month precision. Ended-role tenure counts listed calendar months;
+// ongoing-role tenure counts elapsed months as of the current Toronto month.
+export const careerStops = [
+  {
+    id: 'webnsoftech',
+    company: 'WebNSofTech',
+    label: 'WebNSofTech',
+    role: 'Graphics Designer',
+    start: '2018-01',
+    end: '2020-07',
+    period: 'Jan 2018–Jul 2020',
+    location: 'Dhaka, Bangladesh',
+    employment: 'Part-time',
+    headline: 'Make the message clear.',
+    story: 'My earlier design work began with visual communication: turning ideas into banners, posters, logos, illustrations, and web designs. It gave me a practical foundation in organizing information and preparing clear deliverables.',
+    highlights: [
+      'Created visual material for digital and print communication.',
+      'Worked across illustration, photo editing, motion graphics, and web design.',
+      'Built a foundation in presenting information clearly.',
+    ],
+    projectIds: [],
+    projectLabel: 'Selected work types',
+  },
+  {
+    id: 'synesis',
+    company: 'Synesis IT',
+    label: 'Synesis IT',
+    role: 'UX Intern → UX Designer',
+    start: '2020-08',
+    end: '2021-11',
+    period: 'Aug 2020–Nov 2021',
+    location: 'Dhaka, Bangladesh',
+    employment: 'Internship → Full-time',
+    headline: 'Understand the requirement first.',
+    story: 'At Synesis IT, I worked with business and technical stakeholders on public-service and collaboration products. I learned to clarify requirements, document the work, coordinate feedback, and present prototypes to clients.',
+    highlights: [
+      'Internship: Aug–Oct 2020; UX Designer: Nov 2020–Nov 2021.',
+      'Translated software and client requirements into user flows, wireframes, and prototypes.',
+      'Contributed to client demonstrations, reviews, and design iterations.',
+    ],
+    projectIds: ['biwta', 'ereturn', 'convay'],
+    projectLabel: 'Projects at Synesis IT',
+  },
+  {
+    id: 'iquantile',
+    company: 'iQuantile',
+    label: 'iQuantile',
+    role: 'UX Designer',
+    start: '2021-12',
+    end: '2022-03',
+    period: 'Dec 2021–Mar 2022',
+    location: 'Dhaka, Bangladesh',
+    employment: 'Full-time',
+    headline: 'Connect needs with the next step.',
+    story: 'My work at iQuantile connected business and user requirements with organization-management and healthcare experiences. I worked through research, design, and feedback while keeping different stakeholder needs in view.',
+    highlights: [
+      'Gathered and analyzed business and user requirements.',
+      'Communicated requirements and coordinated feedback with internal teams.',
+      'Developed wireframes, prototypes, and supporting interface material.',
+    ],
+    projectIds: ['quantibly', 'qare'],
+    projectLabel: 'Projects at iQuantile',
+  },
+  {
+    id: 'istoreisend',
+    company: 'iStoreiSend',
+    label: 'iStoreiSend',
+    role: 'UX Designer',
+    start: '2022-04',
+    end: '2022-11',
+    period: 'Apr 2022–Nov 2022',
+    location: 'Malaysia',
+    employment: 'Full-time',
+    headline: 'See the whole operation.',
+    story: 'At iStoreiSend, I worked individually on ODIN, a warehouse and fulfillment system. Working across business and technical teams gave me a closer view of how requirements, information, and operational handoffs fit together.',
+    highlights: [
+      'Worked with stakeholders to understand requirements and business objectives.',
+      'Collaborated with business and technical colleagues on product design.',
+      'Coordinated feedback and revisions to support delivery.',
+    ],
+    projectIds: ['odin'],
+    projectLabel: 'Project at iStoreiSend',
+  },
+  {
+    id: 'dynamic',
+    company: 'Dynamic Infotech',
+    label: 'Dynamic Infotech',
+    role: 'Field Technician, Level 1',
+    start: '2023-01',
+    end: '2024-09',
+    period: 'Jan 2023–Sep 2024',
+    location: 'Canada',
+    employment: 'On-call · Overlapping roles',
+    headline: 'Follow the work onto the site.',
+    story: 'My on-call field work connected technical requirements with hands-on execution at customer and commercial sites. I installed devices, confirmed needs, resolved issues, and sometimes worked independently. This overlapped with my part-time customer-facing roles.',
+    highlights: [
+      'Supported installations of computers, peripherals, network devices, POS, and IoT equipment.',
+      'Confirmed customer requirements and resolved practical site issues.',
+      'Balanced scheduling, prioritization, and hands-on technical execution.',
+    ],
+    projectIds: [],
+    projectLabel: 'Work in practice',
+  },
+  {
+    id: 'ups-staples',
+    company: 'UPS & Staples',
+    label: 'UPS & Staples',
+    role: 'Sales Representative',
+    start: '2023-01',
+    end: '2024-09',
+    period: 'Jan 2023–Sep 2024',
+    location: 'Canada',
+    employment: 'Part-time · Overlapping roles',
+    headline: 'Keep the customer in the conversation.',
+    story: 'Alongside my on-call technical work, I built Canadian customer-facing experience through part-time sales roles at UPS and Staples. I listened to customer requirements, recommended suitable solutions, processed transactions, and helped resolve issues.',
+    highlights: [
+      'Understood customer requirements and recommended appropriate solutions.',
+      'Handled transactions and multiple competing customer requests.',
+      'Followed up and worked through customer issues.',
+    ],
+    projectIds: [],
+    projectLabel: 'Work in practice',
+  },
+  {
+    id: 'identify',
+    company: 'Identify BDA',
+    label: 'Identify BDA',
+    role: 'Print Project Coordinator',
+    start: '2024-10',
+    end: null,
+    period: 'Oct 2024–Present',
+    location: 'Canada',
+    employment: 'Full-time · Permanent',
+    headline: 'Turn the plan into progress.',
+    story: 'Today, I bring clients, vendors, designers, and delivery partners together at Identify BDA. I coordinate the work from the first request through sourcing, approvals, production, delivery, and financial follow-up, keeping people informed when plans change.',
+    highlights: [
+      'Coordinate a typical 6–10 client projects per month and work with 20+ external vendors.',
+      'Compare quotations, negotiate pricing, track approvals and timelines, and resolve production issues.',
+      'Arrange fulfillment, communicate shipment updates, and coordinate invoicing and cost reconciliation.',
+    ],
+    projectIds: ['identify'],
+    projectLabel: 'My coordination workflow',
+  },
+];
+
+export const professionalSummary = {
+  headline: 'Project & Operations Coordinator',
+  body: 'Project coordinator with end-to-end experience aligning client requirements, vendors, approvals, timelines, and delivery. I coordinate 6–10 projects a month, work with 20+ external vendors, and keep stakeholders informed through changes and issues. My technical degree and Canadian graduate certificates support a practical, organized approach to project delivery.',
+  qualifications: [
+    'Bachelor of Science in Computer Science & Engineering · North South University',
+    'Ontario Graduate Certificate in Project Management · Sir Sandford Fleming College',
+    'Ontario Graduate Certificate in Interactive Media Management · Centennial College',
+  ],
+  targets: ['Project Coordinator', 'Assistant Project Manager'],
+};
+
+export function formatTenure(start, end, asOfDate = new Date()) {
+  const monthIndex = value => {
+    if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(value)) throw new TypeError('Expected a YYYY-MM date');
+    const [year, month] = value.split('-').map(Number);
+    return year * 12 + month - 1;
+  };
+  let lastMonth;
+  if (end) {
+    lastMonth = monthIndex(end);
+  } else {
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Toronto', year: 'numeric', month: '2-digit',
+    }).formatToParts(asOfDate);
+    const year = parts.find(part => part.type === 'year').value;
+    const month = parts.find(part => part.type === 'month').value;
+    lastMonth = monthIndex(`${year}-${month}`);
+  }
+  const months = Math.max(0, lastMonth - monthIndex(start) + (end ? 1 : 0));
+  if (!months) return 'Less than 1 mo';
+  const years = Math.floor(months / 12);
+  const remainder = months % 12;
+  return [years ? `${years} ${years === 1 ? 'yr' : 'yrs'}` : '', remainder ? `${remainder} ${remainder === 1 ? 'mo' : 'mos'}` : ''].filter(Boolean).join(' ');
+}

@@ -3,10 +3,10 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 
 // The entire little world is built from geometry. It loads without model services,
 // remote textures, or a second network request.
-export function createWorld({ container, onSelect = () => {}, onReady = () => {}, reducedMotion = false }) {
+export function createWorld({ container, onSelect = () => {}, onReady = () => {}, reducedMotion = false, stations, onArrival = () => {} }) {
   const scene = new THREE.Scene();
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.7));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   renderer.setClearColor(0x000000, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -17,22 +17,22 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
   canvas.className = 'world-canvas';
   canvas.tabIndex = 0;
   canvas.setAttribute('role', 'img');
-  canvas.setAttribute('aria-label', 'A three-dimensional world of Saqib’s career: a design studio, a warehouse, a college, and a project workspace. Use the chapter buttons to visit each place.');
+  canvas.setAttribute('aria-label', 'A three-dimensional journey through Saqib’s employers, in career order. Choose a company to visit its workplace.');
   canvas.style.cssText = 'display:block;width:100%;height:100%;outline-offset:-5px;touch-action:pan-y;';
   container.append(canvas);
 
   const camera = new THREE.OrthographicCamera(-8, 8, 6, -6, 0.1, 100);
-  const cameraBase = new THREE.Vector3(12, 13, 16);
+  const cameraBase = new THREE.Vector3(13, 15, 18);
   camera.position.copy(cameraBase);
-  const lookAt = new THREE.Vector3(0, 0.7, 0);
+  const lookAt = new THREE.Vector3(0, 0.35, 0);
   camera.lookAt(lookAt);
 
   scene.add(new THREE.HemisphereLight(0xfffaf0, 0x839b9b, 2.8));
   const sunlight = new THREE.DirectionalLight(0xfff1d7, 4);
   sunlight.position.set(-5, 12, 9);
   sunlight.castShadow = true;
-  sunlight.shadow.mapSize.set(2048, 2048);
-  Object.assign(sunlight.shadow.camera, { left: -9, right: 9, top: 9, bottom: -9, near: 0.5, far: 32 });
+  sunlight.shadow.mapSize.set(1536, 1536);
+  Object.assign(sunlight.shadow.camera, { left: -11, right: 11, top: 11, bottom: -11, near: 0.5, far: 38 });
   sunlight.shadow.bias = -0.0005;
   sunlight.shadow.normalBias = 0.025;
   sunlight.shadow.radius = 4;
@@ -133,51 +133,76 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
   world.position.y = -0.55;
   scene.add(world);
   // A floating architectural model, with a softly bevelled edge and recessed base.
-  box(world, 10.8, 0.5, 8.5, 0, -0.1, 0, 'stone', 0.23);
-  box(world, 10.45, 0.36, 8.15, 0, -0.44, 0, 'edge', 0.17);
-  box(world, 9.95, 0.14, 7.65, 0, -0.66, 0, 'navy', 0.06);
+  box(world, 13.9, 0.5, 11.7, 0, -0.1, 0, 'stone', 0.23);
+  box(world, 13.55, 0.36, 11.35, 0, -0.44, 0, 'edge', 0.17);
+  box(world, 13.05, 0.14, 10.85, 0, -0.66, 0, 'navy', 0.06);
   // A subtle radial grounding shadow also works when real-time shadows are off.
   const shadowCanvas = document.createElement('canvas'); shadowCanvas.width = 128; shadowCanvas.height = 128;
   const sctx = shadowCanvas.getContext('2d');
   const gradient = sctx.createRadialGradient(64, 64, 12, 64, 64, 63);
   gradient.addColorStop(0, 'rgba(50,58,49,0.25)'); gradient.addColorStop(1, 'rgba(50,58,49,0)');
   sctx.fillStyle = gradient; sctx.fillRect(0, 0, 128, 128);
-  const groundShadow = new THREE.Mesh(new THREE.PlaneGeometry(17, 13), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(shadowCanvas), transparent: true, depthWrite: false }));
+  const groundShadow = new THREE.Mesh(new THREE.PlaneGeometry(21, 18), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(shadowCanvas), transparent: true, depthWrite: false }));
   groundShadow.rotation.x = -Math.PI / 2; groundShadow.position.y = -1.3; scene.add(groundShadow);
 
-  const stationData = [
-    { name: 'Design', position: [-2.85, 0, -2.08], stop: [-1.35, 0, -1.22], color: 'navy' },
-    { name: 'Systems', position: [2.85, 0, -2.08], stop: [1.4, 0, -1.2], color: 'terracotta' },
-    { name: 'Growth', position: [2.85, 0, 2.15], stop: [1.35, 0, 1.25], color: 'sage' },
-    { name: 'Delivery', position: [-2.85, 0, 2.15], stop: [-1.4, 0, 1.3], color: 'amber' },
+  const defaultStations = [
+    { company: 'WebNSofTech', label: 'WebNSofTech' },
+    { company: 'Synesis IT', label: 'Synesis IT' },
+    { company: 'iQuantile', label: 'iQuantile' },
+    { company: 'iStoreiSend', label: 'iStoreiSend' },
+    { company: 'Dynamic Infotech', label: 'Dynamic Infotech' },
+    { company: 'UPS & Staples', label: 'UPS + Staples' },
+    { company: 'Identify BDA', label: 'Identify BDA' },
   ];
+  const companyStations = stations?.length ? stations : defaultStations;
+  const stationData = companyStations.map((station, index) => {
+    const angle = -Math.PI + index * Math.PI * 2 / companyStations.length;
+    const x = Math.cos(angle), z = Math.sin(angle);
+    return {
+      name: station.label || station.company || defaultStations[index]?.company || `Company ${index + 1}`,
+      company: station.company || station.label || defaultStations[index]?.company,
+      position: [x * 5.05, 0, z * 4.05],
+      stop: [x * 3.0, 0, z * 2.4],
+      labelAnchor: new THREE.Vector3(x * 6.15, 0.5, z * 5.0),
+      color: ['terracotta', 'navy', 'sage', 'wood', 'gray', 'terracotta', 'moss'][index % 7],
+    };
+  });
   const stationGroups = [], hits = [], labels = [], markers = [];
   const targetMarkers = [];
-  // Walkable amber inlay connects the four points around a small central plaza.
-  box(world, 3.85, 0.025, 0.76, 0, 0.164, -1.2, 'wood', 0.035);
-  box(world, 3.85, 0.025, 0.76, 0, 0.164, 1.25, 'wood', 0.035);
-  box(world, 0.76, 0.025, 2.8, -1.38, 0.164, 0, 'wood', 0.035);
-  box(world, 0.76, 0.025, 2.8, 1.38, 0.164, 0, 'wood', 0.035);
-  box(world, 1.3, 0.045, 1.3, 0, 0.17, 0, 'chalk', 0.15).rotation.y = Math.PI / 4;
-  cylinder(world, 0.32, 0.32, 0.018, 0, 0.205, 0, 'amber', 48);
+  // A continuous inlaid path connects employers in chronological order.
+  stationData.forEach((station, index) => {
+    const next = stationData[(index + 1) % stationData.length];
+    const a = new THREE.Vector3(station.stop[0], 0.17, station.stop[2]);
+    const b = new THREE.Vector3(next.stop[0], 0.17, next.stop[2]);
+    const middle = a.clone().add(b).multiplyScalar(0.5);
+    const path = box(world, 0.64, 0.024, a.distanceTo(b), middle.x, middle.y, middle.z, 'wood', 0.035);
+    path.rotation.y = Math.atan2(b.x - a.x, b.z - a.z);
+    // Inlaid guide marks give the route a quiet sense of direction.
+    const guide = box(world, 0.065, 0.012, 0.25, middle.x, 0.189, middle.z, 'paper', 0.012);
+    guide.rotation.y = path.rotation.y;
+  });
+  box(world, 1.6, 0.035, 1.6, 0, 0.174, 0, 'chalk', 0.2).rotation.y = Math.PI / 4;
+  cylinder(world, 0.39, 0.39, 0.018, 0, 0.207, 0, 'amber', 48);
   for (let i = 0; i < 4; i++) {
-    const inset = box(world, 0.05, 0.015, 0.2, Math.sin(i * Math.PI / 2) * 0.48, 0.205, Math.cos(i * Math.PI / 2) * 0.48, 'navy', 0.01);
+    const inset = box(world, 0.05, 0.015, 0.22, Math.sin(i * Math.PI / 2) * 0.57, 0.205, Math.cos(i * Math.PI / 2) * 0.57, 'navy', 0.01);
     inset.rotation.y = i * Math.PI / 2;
   }
 
   stationData.forEach((station, index) => {
-    const group = new THREE.Group(); group.position.set(...station.position); world.add(group); stationGroups.push(group);
+    const group = new THREE.Group(); group.position.set(...station.position); group.scale.setScalar(0.78);
+    world.add(group); stationGroups.push(group);
     const platform = box(group, 3.25, 0.15, 2.82, 0, 0.225, 0, 'chalk', 0.12);
     platform.userData.station = index; hits.push(platform);
     const hit = new THREE.Mesh(new THREE.BoxGeometry(3.3, 2.4, 2.9), new THREE.MeshBasicMaterial({ visible: false }));
     hit.position.y = 1.2; hit.userData.station = index; group.add(hit); hits.push(hit);
-    const marker = cylinder(world, 0.29, 0.29, 0.035, station.stop[0], 0.198, station.stop[2], 'chalk', 48);
-    const inner = cylinder(world, 0.105, 0.105, 0.04, station.stop[0], 0.218, station.stop[2], station.color, 32);
+    const marker = cylinder(world, 0.29, 0.29, 0.035, station.stop[0], 0.198, station.stop[2], 'chalk', 32);
+    const inner = cylinder(world, 0.105, 0.105, 0.04, station.stop[0], 0.218, station.stop[2], station.color, 24);
     markers.push(marker); targetMarkers.push(inner);
     const label = document.createElement('button');
     label.type = 'button'; label.className = 'world-label';
-    label.innerHTML = `<span>${String(index + 1).padStart(2, '0')}</span> ${station.name}`;
-    label.setAttribute('aria-label', `Visit chapter ${index + 1}: ${station.name}`);
+    const count = document.createElement('span'); count.textContent = String(index + 1).padStart(2, '0');
+    label.append(count, document.createTextNode(` ${station.name}`));
+    label.setAttribute('aria-label', `Visit company ${index + 1}: ${station.company}`);
     label.style.position = 'absolute'; label.style.zIndex = '2';
     label.style.transform = 'translate(-50%, -50%)';
     label.addEventListener('click', () => onSelect(index));
@@ -186,7 +211,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
 
   // 01 — the design studio: a large blue pinboard, screen, desk and tiny sketches.
   {
-    const group = stationGroups[0];
+    const group = stationGroups[1] || stationGroups[0];
     box(group, 2.65, 1.92, 0.16, 0, 1.25, -0.97, 'navy', 0.09);
     box(group, 2.2, 1.35, 0.045, 0, 1.34, -0.87, 'sage', 0.04);
     sign(group, 'STUDIO', 1.06, 0.3, 0, 2, -0.872, '#8b9d87', '#fff9ed');
@@ -217,7 +242,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
 
   // 02 — the fulfillment space: a rack, real little parcels and a loading cart.
   {
-    const group = stationGroups[1];
+    const group = stationGroups[3] || stationGroups[0];
     [-1.1, 1.05].forEach(x => [-0.76, -0.16].forEach(z => box(group, 0.09, 1.72, 0.09, x, 1.15, z, 'navy', 0.015)));
     [0.46, 1.04, 1.64].forEach(y => box(group, 2.35, 0.07, 0.83, -0.02, y, -0.46, 'navy', 0.015));
     const parcel = (x, y, z, size = 0.42, shade = 'wood') => {
@@ -239,34 +264,85 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     parcel(0.22, 0.79, 0.81, 0.55); plant(group, -1.18, 0.95, 0.8);
   }
 
-  // 03 — study in Canada, told through a small architectural arch and open book.
+  // 01 — graphic design: the foundation in visual communication.
   {
+    const group = stationGroups[0];
+    box(group, 2.4, 1.55, 0.14, 0, 1.23, -0.67, 'terracotta', 0.09);
+    box(group, 2.1, 1.28, 0.03, 0, 1.24, -0.58, 'paper');
+    sign(group, 'CREATE', 1.45, 0.27, 0, 1.72, -0.56, '#fff9ed', '#bb7459');
+    [-0.65, 0, 0.65].forEach((x, i) => {
+      box(group, 0.46, 0.66, 0.025, x, 1.14, -0.54, ['navy', 'sage', 'wood'][i], 0.03);
+      cylinder(group, 0.12, 0.12, 0.015, x, 1.22, -0.52, 'paper', 20).rotation.x = Math.PI / 2;
+    });
+    box(group, 2.3, 0.12, 0.76, 0, 0.77, 0.35, 'wood');
+    [-0.93, 0.93].forEach(x => box(group, 0.08, 0.48, 0.57, x, 0.49, 0.35, 'navy'));
+    const sheet = box(group, 0.9, 0.024, 0.51, -0.2, 0.85, 0.3, 'paper'); sheet.rotation.y = -0.13;
+    box(group, 0.24, 0.024, 0.32, -0.42, 0.87, 0.3, 'terracotta');
+    cylinder(group, 0.1, 0.09, 0.24, 0.78, 0.94, 0.29, 'navy');
+    [-0.035, 0.04].forEach((x, i) => cylinder(group, 0.015, 0.015, 0.33, 0.78 + x, 1.18, 0.29, i ? 'wood' : 'amber', 8));
+    plant(group, -1.14, 0.91, 0.75);
+  }
+
+  // 03 — organization management: a small model of connected teams and systems.
+  if (stationGroups[2]) {
     const group = stationGroups[2];
-    box(group, 1.95, 1.78, 0.4, -0.3, 1.19, -0.6, 'sage', 0.12);
-    const archShape = new THREE.Shape();
-    const r = 0.57;
-    archShape.moveTo(-r, 0); archShape.lineTo(r, 0); archShape.lineTo(r, 0.91);
-    archShape.absarc(0, 0.91, r, 0, Math.PI, false); archShape.lineTo(-r, 0);
-    const arch = new THREE.Mesh(new THREE.ShapeGeometry(archShape, 32), materials.navy);
-    arch.position.set(-0.3, 0.32, -0.385); group.add(arch);
-    box(group, 0.04, 1.1, 0.025, -0.3, 0.99, -0.36, 'wood', 0.007);
-    box(group, 0.98, 0.04, 0.025, -0.3, 1.2, -0.36, 'wood', 0.007);
-    sign(group, 'KEEP LEARNING', 1.7, 0.26, -0.3, 2.22, -0.365, '#f5f1e5', '#526f5c');
-    box(group, 1.58, 0.1, 0.5, -0.3, 0.36, -0.2, 'edge');
-    box(group, 1.84, 0.07, 0.55, -0.3, 0.3, 0.06, 'stone');
-    box(group, 1.1, 0.17, 0.62, -0.5, 0.45, 0.9, 'terracotta');
-    box(group, 0.97, 0.14, 0.63, -0.47, 0.6, 0.9, 'navy');
-    box(group, 1.05, 0.1, 0.62, -0.53, 0.73, 0.92, 'paper');
-    // Two turned pages make the open book read clearly from the isometric camera.
-    const pageL = box(group, 0.43, 0.035, 0.5, -0.78, 0.82, 0.9, 'paper', 0.015); pageL.rotation.z = -0.14;
-    const pageR = box(group, 0.43, 0.035, 0.5, -0.34, 0.82, 0.9, 'paper', 0.015); pageR.rotation.z = 0.14;
-    tree(group, 1.03, 0.4, 0.85, 'terracotta');
-    cylinder(group, 0.45, 0.4, 0.12, 1.03, 0.36, 0.4, 'edge');
+    box(group, 2.45, 1.68, 0.16, 0, 1.15, -0.67, 'sage', 0.1);
+    box(group, 2.17, 1.37, 0.035, 0, 1.16, -0.57, 'chalk');
+    sign(group, 'CONNECTED', 1.8, 0.24, 0, 1.73, -0.54, '#f5f1e5', '#526f5c');
+    box(group, 0.53, 0.32, 0.04, 0, 1.43, -0.53, 'navy');
+    [-0.67, 0, 0.67].forEach((x, i) => {
+      lineBetween(group, [0, 1.25, -0.5], [x, 0.9, -0.5], 0.014, 'wood');
+      box(group, 0.48, 0.32, 0.04, x, 0.89, -0.48, i === 1 ? 'terracotta' : 'paper');
+    });
+    box(group, 1.75, 0.11, 0.71, 0, 0.67, 0.56, 'navy');
+    [-0.65, 0.65].forEach(x => box(group, 0.07, 0.37, 0.56, x, 0.45, 0.56, 'wood'));
+    box(group, 0.9, 0.07, 0.5, 0, 0.77, 0.56, 'paper');
+    plant(group, 1.05, 0.8, 0.8);
+  }
+
+  // 05 — technical site work: equipment, a router, and an open service kit.
+  if (stationGroups[4]) {
+    const group = stationGroups[4];
+    box(group, 0.75, 1.44, 0.78, -0.77, 1, -0.57, 'navy', 0.08);
+    [0.55, 0.85, 1.15, 1.45].forEach(y => {
+      box(group, 0.55, 0.19, 0.025, -0.77, y, -0.165, 'gray', 0.02);
+      sphere(group, 0.025, -0.57, y, -0.14, 'amber');
+    });
+    box(group, 1.45, 0.11, 0.85, 0.49, 0.89, 0.25, 'wood');
+    [-0.05, 1.04].forEach(x => box(group, 0.07, 0.58, 0.65, x, 0.55, 0.25, 'navy'));
+    const laptop = box(group, 0.71, 0.53, 0.045, 0.35, 1.22, 0.04, 'navy'); laptop.rotation.x = -0.11;
+    box(group, 0.6, 0.4, 0.018, 0.35, 1.23, 0.08, 'sage');
+    box(group, 0.73, 0.035, 0.48, 0.35, 0.97, 0.29, 'navy');
+    box(group, 0.43, 0.1, 0.26, 0.9, 1, 0.21, 'paper');
+    [-0.12, 0.12].forEach(x => cylinder(group, 0.013, 0.013, 0.36, 0.9 + x, 1.19, 0.17, 'navy', 8));
+    box(group, 0.62, 0.3, 0.4, 0.35, 0.42, 0.93, 'terracotta', 0.05);
+    lineBetween(group, [0.15, 0.6, 0.93], [0.55, 0.6, 0.93], 0.025, 'navy');
+    sign(group, 'SOLVE', 0.8, 0.25, -0.77, 1.9, -0.16, '#f5f1e5', '#263d48');
+    plant(group, 1.23, -0.71, 0.65);
+  }
+
+  // 06 — customer service: a retail counter, parcel shelving, and point of sale.
+  if (stationGroups[5]) {
+    const group = stationGroups[5];
+    box(group, 2.38, 1.48, 0.14, 0, 1.08, -0.76, 'chalk', 0.08);
+    box(group, 2.63, 0.14, 0.66, 0, 1.91, -0.48, 'terracotta');
+    [-0.9, -0.45, 0, 0.45, 0.9].forEach(x => box(group, 0.23, 0.04, 0.66, x, 2, -0.48, 'paper', 0.01));
+    sign(group, 'CUSTOMER FIRST', 1.9, 0.25, 0, 1.53, -0.67, '#f5f1e5', '#263d48');
+    box(group, 2.35, 0.8, 0.8, 0, 0.7, 0.52, 'wood', 0.08);
+    box(group, 2.52, 0.1, 0.95, 0, 1.14, 0.52, 'navy', 0.05);
+    const register = box(group, 0.53, 0.42, 0.06, 0.5, 1.45, 0.39, 'navy'); register.rotation.x = -0.15;
+    box(group, 0.43, 0.3, 0.025, 0.5, 1.45, 0.43, 'sage');
+    box(group, 0.4, 0.035, 0.28, 0.5, 1.22, 0.61, 'navy');
+    [-0.78, -0.28].forEach((x, i) => {
+      box(group, 0.39, 0.35, 0.34, x, 1.37, 0.46, i ? 'paper' : 'wood');
+      box(group, 0.07, 0.36, 0.35, x, 1.37, 0.46, 'chalk', 0.005);
+    });
+    plant(group, 1.11, -0.53, 0.75);
   }
 
   // 04 — the coordinator's board. Dependencies, approvals, people, delivery.
   {
-    const group = stationGroups[3];
+    const group = stationGroups[6] || stationGroups.at(-1);
     box(group, 2.4, 1.55, 0.12, -0.05, 1.38, -0.7, 'wood', 0.05);
     box(group, 2.2, 1.35, 0.035, -0.05, 1.38, -0.615, 'paper', 0.025);
     sign(group, 'MAKE IT HAPPEN', 1.75, 0.23, -0.05, 1.89, -0.59, '#fff9ed', '#263d48');
@@ -288,15 +364,15 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     plant(group, 1.17, 0.7, 0.85);
   }
 
-  // Small landscape details turn four plinths into one coherent place.
-  tree(world, -4.65, -0.15, 0.85);
-  tree(world, 4.62, -0.3, 0.65);
-  box(world, 0.55, 0.12, 0.9, -4.55, 0.21, 2.6, 'wood', 0.03);
-  box(world, 0.55, 0.12, 0.9, 4.6, 0.21, -2.4, 'sage', 0.03);
-  for (const [x, z] of [[0, -3.7], [0, 3.7]]) {
-    cylinder(world, 0.06, 0.08, 1.4, x, 0.86, z, 'navy', 16);
-    sphere(world, 0.16, x, 1.58, z, materials.white);
-    cylinder(world, 0.23, 0.23, 0.07, x, 1.7, z, 'navy', 24);
+  // Small landscape details connect the separate workplaces into one quiet campus.
+  tree(world, -6, -3.7, 0.75);
+  tree(world, 5.96, 3.9, 0.72, 'terracotta');
+  tree(world, -5.9, 3.8, 0.64);
+  tree(world, 5.85, -3.6, 0.68);
+  for (const [x, z] of [[-1.6, -2.9], [2.55, 1.35]]) {
+    cylinder(world, 0.045, 0.065, 1.25, x, 0.81, z, 'navy', 12);
+    sphere(world, 0.13, x, 1.48, z, materials.white);
+    cylinder(world, 0.19, 0.19, 0.06, x, 1.58, z, 'navy', 20);
   }
 
   // A small, deliberately stylized portrait: dark hair, beard and a navy jacket.
@@ -355,13 +431,33 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
   let userMoved = false;
   let size = { width: 1, height: 1 };
 
+  // Camera framing uses the complete miniature rather than four fixed corners.
+  scene.updateMatrixWorld(true); camera.updateMatrixWorld(true);
+  const modelBounds = new THREE.Box3().setFromObject(world);
+  const frameExtent = new THREE.Vector2();
+  for (const x of [modelBounds.min.x, modelBounds.max.x]) {
+    for (const y of [modelBounds.min.y, modelBounds.max.y]) {
+      for (const z of [modelBounds.min.z, modelBounds.max.z]) {
+        const corner = new THREE.Vector3(x, y, z).applyMatrix4(camera.matrixWorldInverse);
+        frameExtent.x = Math.max(frameExtent.x, Math.abs(corner.x));
+        frameExtent.y = Math.max(frameExtent.y, Math.abs(corner.y));
+      }
+    }
+  }
   function updateLabels() {
-    stationGroups.forEach((group, index) => {
-      projected.set(0, 0.45, index < 2 ? -1.65 : 1.64); group.localToWorld(projected); projected.project(camera);
-      labels[index].style.left = `${(projected.x * 0.5 + 0.5) * size.width}px`;
-      labels[index].style.top = `${(-projected.y * 0.5 + 0.5) * size.height}px`;
-      labels[index].classList.toggle('is-active', index === activeIndex);
-      labels[index].setAttribute('aria-pressed', String(index === activeIndex));
+    stationData.forEach((station, index) => {
+      projected.copy(station.labelAnchor); world.localToWorld(projected); projected.project(camera);
+      const label = labels[index];
+      const narrow = size.width < 480;
+      // The company timeline supplies all seven choices on compact screens;
+      // showing one world label keeps the small scene and character legible.
+      label.style.visibility = narrow && index !== activeIndex ? 'hidden' : 'visible';
+      const halfWidth = Math.min(narrow ? 73 : 85, 26 + station.name.length * 3);
+      const left = THREE.MathUtils.clamp((projected.x * 0.5 + 0.5) * size.width, halfWidth + 8, size.width - halfWidth - 8);
+      const top = THREE.MathUtils.clamp((-projected.y * 0.5 + 0.5) * size.height, 23, size.height - 24);
+      label.style.left = `${left}px`; label.style.top = `${top}px`;
+      label.classList.toggle('is-active', index === activeIndex);
+      label.setAttribute('aria-pressed', String(index === activeIndex));
     });
   }
   function resize() {
@@ -369,7 +465,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     size = { width: Math.max(container.clientWidth, 1), height: Math.max(container.clientHeight, 1) };
     renderer.setSize(size.width, size.height, false);
     const aspect = size.width / size.height;
-    const vertical = Math.max(5.1, 7.4 / aspect);
+    const vertical = Math.max(frameExtent.y + 0.6, (frameExtent.x + 0.8) / aspect);
     camera.left = -vertical * aspect; camera.right = vertical * aspect;
     camera.top = vertical; camera.bottom = -vertical;
     camera.updateProjectionMatrix();
@@ -378,22 +474,45 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
   const resizeObserver = new ResizeObserver(resize); resizeObserver.observe(container);
 
   function select(index) {
-    activeIndex = Math.max(0, Math.min(3, Number(index) || 0));
+    activeIndex = Math.max(0, Math.min(stationData.length - 1, Number(index) || 0));
+    container.dataset.activeCompany = stationData[activeIndex].company;
+    container.dataset.activeStation = String(activeIndex);
     labels.forEach((label, i) => label.classList.toggle('is-active', i === activeIndex));
     markers.forEach((marker, i) => marker.material = i === activeIndex ? materials.amber : materials.chalk);
     const destination = new THREE.Vector3(...stationData[activeIndex].stop); destination.y = 0.08;
     if (reducedMotion || paused) {
-      person.position.copy(destination); walkPath = [];
+      person.position.copy(destination); walkPath = []; onArrival(activeIndex);
     } else {
-      // Route around the central square instead of through furniture.
-      const start = person.position;
-      const corner = new THREE.Vector3(destination.x, 0.08, start.z);
+      // Reach the nearest point on the ring, then follow its edges. Next-company
+      // navigation walks forward in chronology instead of cutting through desks.
+      let closest = 0, distance = Infinity;
+      stationData.forEach((station, i) => {
+        const d = Math.hypot(person.position.x - station.stop[0], person.position.z - station.stop[2]);
+        if (d < distance) { distance = d; closest = i; }
+      });
       walkPath = [];
-      if (start.distanceTo(corner) > 0.05) walkPath.push(corner);
-      if ((walkPath.at(-1) || start).distanceTo(destination) > 0.05) walkPath.push(destination);
+      if (distance > 0.035) {
+        const first = new THREE.Vector3(...stationData[closest].stop); first.y = 0.08;
+        walkPath.push(first);
+      }
+      const forward = (activeIndex - closest + stationData.length) % stationData.length;
+      const step = forward <= stationData.length / 2 ? 1 : -1;
+      let cursor = closest;
+      while (cursor !== activeIndex) {
+        cursor = (cursor + step + stationData.length) % stationData.length;
+        const next = new THREE.Vector3(...stationData[cursor].stop); next.y = 0.08;
+        walkPath.push(next);
+      }
     }
+    container.dataset.traveling = String(walkPath.length > 0);
+    if (!walkPath.length && !reducedMotion && !paused) onArrival(activeIndex);
     userMoved = false;
     updateLabels(); renderOnce();
+  }
+  function clampToCampus(vector) {
+    const radius = Math.hypot(vector.x / 3.3, vector.z / 2.7);
+    if (radius > 1) { vector.x /= radius; vector.z /= radius; }
+    return vector;
   }
   function directionVector(direction) {
     // Screen-relative directions on an isometric ground plane.
@@ -408,8 +527,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
   function move(direction) {
     const vector = directionVector(direction);
     const destination = person.position.clone().addScaledVector(vector, 0.62);
-    destination.x = THREE.MathUtils.clamp(destination.x, -1.62, 1.62);
-    destination.z = THREE.MathUtils.clamp(destination.z, -1.55, 1.55);
+    clampToCampus(destination);
     walkPath = [destination]; userMoved = true;
     if (reducedMotion || paused) { person.position.copy(destination); walkPath = []; checkStation(); }
     renderOnce();
@@ -428,7 +546,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
   function onKeyDown(event) {
     if (!exploring || document.activeElement !== canvas || !keyDirections[event.key]) return;
     event.preventDefault(); heldKeys.add(event.key); walkPath = []; userMoved = true;
-    if (reducedMotion && !event.repeat) move(keyDirections[event.key]);
+    if ((reducedMotion || paused) && !event.repeat) move(keyDirections[event.key]);
   }
   function onKeyUp(event) { heldKeys.delete(event.key); }
   function clearKeys() { heldKeys.clear(); }
@@ -474,16 +592,18 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
       for (const key of heldKeys) moveVector.add(directionVector(keyDirections[key]));
       if (moveVector.lengthSq()) {
         moveVector.normalize(); person.position.addScaledVector(moveVector, delta * 1.65);
-        person.position.x = THREE.MathUtils.clamp(person.position.x, -1.62, 1.62);
-        person.position.z = THREE.MathUtils.clamp(person.position.z, -1.55, 1.55);
+        clampToCampus(person.position);
         desiredYaw = Math.atan2(moveVector.x, moveVector.z); walking = true;
       }
     } else if (!reducedMotion && walkPath.length) {
       moveVector.copy(walkPath[0]).sub(person.position); moveVector.y = 0;
       const distance = moveVector.length();
-      if (distance < 0.04) { person.position.copy(walkPath.shift()); }
+      if (distance < 0.04) {
+        person.position.copy(walkPath.shift());
+        if (!walkPath.length) { container.dataset.traveling = 'false'; if (!userMoved) onArrival(activeIndex); }
+      }
       else {
-        moveVector.normalize(); person.position.addScaledVector(moveVector, Math.min(distance, delta * 2.05));
+        moveVector.normalize(); person.position.addScaledVector(moveVector, Math.min(distance, delta * 3.0));
         desiredYaw = Math.atan2(moveVector.x, moveVector.z); walking = true;
       }
     }
@@ -524,7 +644,8 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     },
     setExploring(value) {
       exploring = !!value; clearKeys();
-      canvas.setAttribute('aria-label', exploring ? 'Explore Saqib’s career world. Move using the arrow keys or W, A, S and D. Visit the four stations to discover each chapter.' : 'A three-dimensional world of Saqib’s career. Choose a chapter button to move between stations.');
+      if (exploring) { walkPath = []; container.dataset.traveling = 'false'; }
+      canvas.setAttribute('aria-label', exploring ? 'Explore Saqib’s career world. Move using the arrow keys or W, A, S and D. Visit the company workplaces to discover each role.' : 'A three-dimensional world of Saqib’s career. Choose a company button to move between workplaces.');
       if (exploring) canvas.focus({ preventScroll: true });
     },
     move,
