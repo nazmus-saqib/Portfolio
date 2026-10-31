@@ -185,10 +185,41 @@ test('profile, qualifications, projects, and contact remain in the same viewport
   await expect(page.locator('#about-card')).toContainText('Assistant Project Manager');
   await page.locator('[data-panel="profile"]').click();
   const detail = page.locator('#sidebar-body');
-  await expect(detail).toContainText('Computer Science & Engineering');
-  await expect(detail).toContainText('Sir Sandford Fleming College');
-  await expect(detail).toContainText('Centennial College');
+  await expect(page.locator('#profile-view-0')).toBeVisible();
+  await expect(detail.getByText('6–10', { exact: true })).toBeVisible();
+  await expect(detail.getByText('20+', { exact: true })).toBeVisible();
   await expect(detail).toContainText('Assistant Project Manager');
+
+  await page.locator('[data-profile-tab="1"]').click();
+  const skillsPanel = page.locator('#profile-view-1');
+  await expect(skillsPanel).toBeVisible();
+  const vendorSkills = skillsPanel.locator('details').filter({ hasText: 'Connect the right partners.' });
+  await vendorSkills.locator('summary').click();
+  await expect(vendorSkills.getByText('Pricing negotiation', { exact: true })).toBeVisible();
+  await page.locator('[data-profile-tab="1"]').focus();
+  await page.keyboard.press('ArrowRight');
+  await expect(page.locator('[data-profile-tab="2"]')).toBeFocused();
+  await expect(page.locator('[data-profile-tab="2"]')).toHaveAttribute('aria-selected', 'true');
+  const learningPanel = page.locator('#profile-view-2');
+  await expect(learningPanel).toBeVisible();
+  for (const qualification of ['Computer Science & Engineering', 'Sir Sandford Fleming College', 'Centennial College']) {
+    await expect(learningPanel.getByText(qualification, { exact: true })).toBeVisible();
+  }
+  const credentials = learningPanel.locator('.credentials');
+  await credentials.locator('summary').click();
+  await expect(credentials.getByText('CalArts · Coursera', { exact: false })).toBeVisible();
+  await expect(credentials).toContainText('August 17, 2021');
+  await expect(page.locator('#profile-explorer [role="tabpanel"]:visible')).toHaveCount(1);
+  await page.locator('[data-profile-tab="2"]').focus();
+  await page.keyboard.press('Home');
+  await expect(page.locator('[data-profile-tab="0"]')).toBeFocused();
+  await expect(page.locator('#profile-view-0')).toBeVisible();
+  const coordinationStory = page.locator('#profile-view-0').getByRole('button', { name: 'Read From request to delivery project story', exact: true });
+  await coordinationStory.click();
+  await expect(page.locator('#dialog-title')).toHaveText('From request to delivery');
+  await page.locator('#dialog-close').click();
+  await expect(coordinationStory).toBeFocused();
+
   await detail.evaluate(element => element.scrollTop = element.scrollHeight);
   await expect(page.getByRole('link', { name: 'Download my résumé' })).toBeVisible();
   const pdf = await request.get(await page.getByRole('link', { name: 'Download my résumé' }).getAttribute('href'));
@@ -238,6 +269,10 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 640 }
     await page.locator('#dialog-close').click();
     await assertSingleViewport(page);
     await page.locator('[data-panel="profile"]').click();
+    await page.locator('[data-profile-tab="2"]').click();
+    await expect(page.locator('#profile-view-2')).toBeVisible();
+    await expect(page.locator('#profile-view-2')).toContainText('Centennial College');
+    expect(await page.locator('#profile-view-2').evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);
     await page.locator('#sidebar-body').evaluate(element => element.scrollTop = element.scrollHeight);
     await expect(page.getByRole('link', { name: 'Download my résumé' })).toBeVisible();
     await assertSingleViewport(page);

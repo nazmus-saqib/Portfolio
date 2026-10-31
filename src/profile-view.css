@@ -1,0 +1,85 @@
+.profile-summary { font-size: 1rem; line-height: 1.65; color: #506a41; }
+.profile-target { margin-top: 16px; padding: 13px 15px; border-left: 2px solid #9eb77c; background: #f2f6e9; color: #3f5c34; font-size: 1rem; line-height: 1.6; }
+.profile-target > span { display: block; margin-bottom: 5px; font-size: .875rem; line-height: 1.5; letter-spacing: .6px; color: #62774f; }
+.profile-stat-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 22px 0; }
+.profile-stat { position: relative; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding: 19px 17px 17px; border: 1px solid #c9d8b9; border-radius: 10px; background: linear-gradient(135deg, #f8faef, #e7efd9); }
+.profile-stat:nth-child(2) { border-color: #d9d9bd; background: linear-gradient(135deg, #f9f8ed, #ecebd8); }
+.profile-stat > strong { font-size: 2rem; line-height: 1.2; font-weight: 450; letter-spacing: -1px; color: #2f4a34; }
+.profile-stat > span:last-child { font-size: .875rem; line-height: 1.5; color: #536c43; }
+.profile-stat-icon { position: absolute; top: 16px; right: 15px; color: #819866; }
+.profile-stat-icon > svg { width: 20px; height: 20px; }
+.profile-explorer { min-width: 0; margin-top: 22px; }
+.profile-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.profile-tab { display: flex; min-width: 0; flex-direction: column; align-items: flex-start; gap: 8px; padding: 13px; border: 1px solid #c5d3b6; border-radius: 9px; background: #f2f6e9; text-align: left; transition: transform .18s ease, background .18s ease, border-color .18s ease; }
+.profile-tab:hover { transform: translateY(-2px); border-color: #91aa71; background: #e7efda; }
+.profile-tab[aria-selected=true] { border-color: #6e8e50; box-shadow: inset 0 0 0 1px #6e8e50; background: #dfeacb; }
+.profile-tab:focus-visible { outline: 2px solid #617f41; outline-offset: 3px; }
+.profile-tab-icon { width: 31px; height: 31px; display: grid; place-items: center; border: 1px solid #c2d1ac; border-radius: 8px; background: #fafbef; color: #48683a; }
+.profile-tab-icon > svg { width: 20px; height: 20px; }
+.profile-tab > strong { font-size: 1rem; line-height: 1.3; font-weight: 550; color: #304b32; }
+.profile-explorer-status { display: flex; align-items: center; gap: 14px; padding: 16px 2px 13px; }
+.profile-explorer-count { flex-shrink: 0; font-size: .875rem; line-height: 1.5; color: #5c744e; }
+.profile-explorer-progress { flex: 1; height: 3px; overflow: hidden; border-radius: 3px; background: #d5dfca; }
+.profile-explorer-progress > i { display: block; height: 100%; border-radius: inherit; background: #7c9b5b; transition: width .3s ease; }
+.profile-view { min-width: 0; padding: 21px; border: 1px solid #cad8b9; border-radius: 10px; background: #f3f7eb; animation: profile-reveal .22s ease; }
+.profile-view-label { font-size: .875rem; line-height: 1.5; color: #61784d; letter-spacing: .5px; }
+.profile-view > h3 { font-size: 1.375rem; line-height: 1.3; font-weight: 500; letter-spacing: -.3px; margin: 9px 0 17px; color: #2f4934; }
+.profile-view-copy { font-size: 1rem; line-height: 1.65; color: #506a41; }
+.profile-workflow { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; list-style: none; margin: 0 0 22px; padding: 18px 8px 14px; border: 1px solid #d4dec7; border-radius: 9px; background: radial-gradient(ellipse at 50% 20%, #e1ebd2, #f3f7eb); }
+.profile-workflow:before { content: ''; position: absolute; top: 39px; left: 18%; right: 18%; border-top: 1px dashed #9eb781; }
+.profile-workflow > li { position: relative; display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 0; }
+.profile-workflow-icon { display: grid; place-items: center; height: 42px; width: 42px; margin-bottom: 2px; border: 1px solid #b8cba0; border-radius: 50%; background: #fbfcf2; color: #4f7041; box-shadow: 0 3px 7px #3854320c; }
+.profile-workflow-icon > svg { width: 22px; height: 22px; }
+.profile-workflow strong { font-size: .875rem; line-height: 1.4; font-weight: 550; color: #3e5b34; }
+.profile-workflow li > span:last-child { font-size: .875rem; line-height: 1.4; color: #6f845b; }
+.profile-work-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 17px; }
+.profile-work-tags > span { display: inline-flex; align-items: center; gap: 5px; font-size: .875rem; line-height: 1.5; color: #587247; }
+.profile-work-tags svg { width: 14px; height: 14px; }
+.profile-case-link { display: inline-flex; align-items: center; gap: 15px; margin-top: 22px; padding: 7px 0; border-bottom: 1px solid #93aa77; color: #3b5b32; font-size: 1rem; line-height: 1.5; text-align: left; }
+.profile-case-link:hover { color: #223f27; border-color: #4f703c; }
+.profile-case-link > svg { width: 16px; height: 16px; }
+.profile-skill-list { display: grid; gap: 10px; }
+.profile-skill-card { min-width: 0; border: 1px solid #cad7ba; border-radius: 8px; background: #f8faef; }
+.profile-skill-card > summary { display: flex; align-items: center; gap: 10px; padding: 14px 12px; list-style: none; cursor: pointer; color: #3b5733; font-size: 1rem; line-height: 1.5; }
+.profile-skill-card > summary::-webkit-details-marker { display: none; }
+.profile-skill-card > summary > b { margin-left: auto; font-size: 20px; line-height: 1; font-weight: 350; color: #5c7847; }
+.profile-skill-card[open] > summary > b { transform: rotate(45deg); }
+.profile-skill-symbol { display: grid; place-items: center; flex-shrink: 0; width: 30px; height: 30px; border: 1px solid #d0ddbf; border-radius: 7px; background: #eaf0df; color: #5b7745; }
+.profile-skill-symbol > svg { width: 19px; height: 19px; }
+.profile-skill-body { padding: 0 14px 16px; }
+.profile-skill-body > p { font-size: 1rem; line-height: 1.65; color: #536d43; }
+.profile-skill-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.profile-skill-tags > span { max-width: 100%; padding: 5px 8px; border: 1px solid #c7d6b5; border-radius: 5px; background: #eaf0df; color: #4e6a3f; font-size: .875rem; line-height: 1.5; }
+.profile-education { display: grid; gap: 12px; }
+.profile-education-card { display: flex; align-items: flex-start; gap: 12px; min-width: 0; padding: 16px 13px; border: 1px solid #cbd8bb; border-radius: 8px; background: #fafbef; }
+.profile-education-card > div { min-width: 0; }
+.profile-education-icon { display: grid; place-items: center; flex-shrink: 0; width: 32px; height: 32px; border: 1px solid #d2ddc4; border-radius: 8px; background: #e8efda; color: #647e4c; }
+.profile-education-icon > svg { width: 21px; height: 21px; }
+.profile-education-card .profile-qualification { font-size: .875rem; line-height: 1.5; color: #667c52; }
+.profile-education-card h4 { font-size: 1rem; line-height: 1.5; font-weight: 550; color: #3c5734; margin: 5px 0; }
+.profile-education-card p { font-size: 1rem; line-height: 1.6; color: #536d44; overflow-wrap: anywhere; }
+.profile-learning-credentials.credentials { margin-top: 20px; padding: 15px 0 0; border-bottom: 0; }
+.profile-learning-credentials.credentials > summary { font-size: 1rem; line-height: 1.5; color: #456137; }
+.profile-learning-credentials.credentials > article > h4 { font-size: 1rem; line-height: 1.6; }
+.profile-learning-credentials.credentials > article > p { font-size: 1rem; line-height: 1.65; }
+.profile-learning-credentials.credentials > article > p > span { font-size: .875rem; }
+.profile-download { width: 100%; margin-top: 24px; font-size: 1rem; }
+@keyframes profile-reveal { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 620px) {
+  .profile-stat-grid { gap: 10px; }
+  .profile-stat { padding: 16px 13px 14px; }
+  .profile-stat-icon { top: 15px; right: 11px; }
+  .profile-stat > strong { font-size: 1.875rem; }
+  .profile-tabs { gap: 6px; }
+  .profile-tab { padding: 11px 10px; }
+  .profile-tab > strong { font-size: .875rem; }
+  .profile-view { padding: 17px; }
+  .profile-view > h3 { font-size: 1.25rem; }
+  .profile-education-card { padding: 14px 11px; gap: 10px; }
+  .profile-education-icon { width: 27px; height: 27px; }
+  .profile-education-icon > svg { width: 18px; height: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .profile-tab, .profile-explorer-progress > i { transition: none; }
+  .profile-view { animation: none; }
+}

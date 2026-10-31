@@ -3,8 +3,10 @@ import '@fontsource/instrument-serif/latin-400-italic.css';
 import { aboutMe, careerStops, professionalSummary, formatTenure, projects, skills, education, certificates, teaching } from './content.js';
 import { renderProjectCard, renderProjectDetail } from './project-view.js';
 import { renderStoryJourney, activateStoryMilestone } from './story-view.js';
+import { renderProfile, activateProfileTab } from './profile-view.js';
 import './project-view.css';
 import './story-view.css';
+import './profile-view.css';
 
 const icons = {
   arrow: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg>',
@@ -26,6 +28,7 @@ const latest = careerStops.length - 1;
 let world, active = -1, panel = 'journey', reading = false, exploring = false, paused = motionPreference.matches;
 let toastTimer, speaking = false, dialogTrigger, disposed = false;
 let selectedStoryMilestone = 0;
+let selectedProfileTab = 0;
 
 document.querySelector('#app').innerHTML = `
   <a class="skip-link" href="#sidebar-body">Skip to career details</a>
@@ -84,7 +87,7 @@ function companyMarkup(stop, index, compact = false) {
 }
 
 function profileMarkup() {
-  return `<section class="profile-detail"><p class="eyebrow">PROJECT DELIVERY / COORDINATION / OPERATIONS</p><h2>A practical partner<br>for <em>project delivery.</em></h2><p class="full-summary">${esc(professionalSummary.body)}</p><p class="target-statement">I’m pursuing <strong>Project Coordinator</strong> and <strong>Assistant Project Manager</strong> opportunities where clear communication, organized delivery, and dependable follow-through matter.</p><div class="profile-metrics"><div><strong>6–10</strong><span>Projects / month</span></div><div><strong>20+</strong><span>External vendors</span></div></div><h3 class="detail-heading">Qualifications</h3><div class="education-list">${education.map(e=>`<article><span>${esc(e.qualification)}</span><h4>${esc(e.title)}</h4><p>${esc(e.school)}</p></article>`).join('')}</div><h3 class="detail-heading">What I bring to a project</h3><div class="skills-list">${skills.map(s=>`<article><h4>${esc(s.title)}</h4><p>${esc(s.description)}</p><div class="tag-list">${s.items.map(item=>`<span>${esc(item)}</span>`).join('')}</div></article>`).join('')}</div><details class="credentials"><summary>Courses & knowledge sharing <span>+</span></summary>${certificates.map(c=>`<article><h4>${esc(c.title)}</h4><p>${esc(c.issuer)} · ${esc(c.date)}</p></article>`).join('')}<article><h4>Trainer · Wireframe & Prototype in XD</h4><p>Synesis IT · August 17, 2021</p></article></details><a class="button button-dark full-resume" href="${assetUrl('nazmus-saqib-resume.pdf')}" download>Download my résumé ${icons.download}</a></section>`;
+  return renderProfile({professionalSummary,skills,education,certificates,teaching},{selectedIndex:selectedProfileTab,assetUrl});
 }
 
 let projectFilter = 'all';
@@ -139,7 +142,16 @@ function showStoryMilestone(index, focus = false) {
   activateStoryMilestone(document.querySelector('#story-journey'),index,{focus});
 }
 
+function showProfileTab(index, focus = false) {
+  const explorer=document.querySelector('#profile-explorer');
+  if(!explorer||!Number.isInteger(index)||index<0||index>=explorer.querySelectorAll('[data-profile-tab]').length)return;
+  selectedProfileTab=index;
+  stopSpeech();
+  activateProfileTab(explorer,index,{focus});
+}
+
 document.querySelector('#app').addEventListener('click',event=>{
+  const profileTab=event.target.closest('[data-profile-tab]');if(profileTab){showProfileTab(Number(profileTab.dataset.profileTab));return;}
   const milestone=event.target.closest('[data-story-milestone]');if(milestone){showStoryMilestone(Number(milestone.dataset.storyMilestone));return;}
   const aboutJump=event.target.closest('[data-about-jump]');if(aboutJump){stopSpeech();const body=document.querySelector('#sidebar-body');const target=body.querySelector(aboutJump.dataset.aboutJump==='story'?'#about-story-title':'#about-goal-title');if(target){target.focus({preventScroll:true});body.scrollTo({top:body.scrollTop+target.getBoundingClientRect().top-body.getBoundingClientRect().top-12,behavior:motionPreference.matches?'instant':'smooth'});}return;}
   const project=event.target.closest('[data-project]');if(project){openProject(project.dataset.project,project);return;}
@@ -158,6 +170,17 @@ document.querySelector('#app').addEventListener('keydown',event=>{
   if(event.key==='End')next=count-1;
   if(next===undefined)return;
   event.preventDefault();showStoryMilestone(next,true);
+});
+document.querySelector('#app').addEventListener('keydown',event=>{
+  const tab=event.target.closest('[role="tab"][data-profile-tab]');if(!tab)return;
+  const index=Number(tab.dataset.profileTab),count=document.querySelectorAll('#profile-explorer [data-profile-tab]').length;
+  let next;
+  if(event.key==='ArrowRight')next=(index+1)%count;
+  if(event.key==='ArrowLeft')next=(index-1+count)%count;
+  if(event.key==='Home')next=0;
+  if(event.key==='End')next=count-1;
+  if(next===undefined)return;
+  event.preventDefault();showProfileTab(next,true);
 });
 document.querySelector('#previous-stop').addEventListener('click',()=>selectStop(active-1));
 document.querySelector('#next-stop').addEventListener('click',()=>selectStop(active===latest?-1:active+1));
