@@ -29,7 +29,6 @@ document.querySelector('#app').innerHTML = `
   <main class="portfolio-shell" aria-label="Nazmus Saqib’s interactive portfolio">
     <header class="shell-header">
       <button type="button" class="wordmark" data-home aria-label="Nazmus Saqib, start of journey">saqib<span></span></button>
-      <div class="shell-caption"><i></i><span>THE WORLD OF MY WORK</span><b>/</b><span class="caption-secondary">PEOPLE. PLANS. FOLLOW-THROUGH.</span></div>
       <div class="header-actions"><a href="${assetUrl('nazmus-saqib-resume.pdf')}" class="resume-link" download>Résumé ${icons.download}</a><button type="button" class="view-toggle" id="reading-toggle" aria-pressed="false">${icons.cube}<span>Reading view</span></button></div>
     </header>
 
@@ -45,7 +44,6 @@ document.querySelector('#app').innerHTML = `
       </section>
 
       <aside class="sidebar" aria-label="Professional profile and career details">
-        <section class="profile-intro" id="profile-intro" aria-labelledby="profile-name"><div class="identity-line"><p class="eyebrow">${esc(professionalSummary.headline)}</p><span class="identity-star" aria-hidden="true">✳</span></div><h1 id="profile-name">Nazmus Saqib<span>Bringing it <em>all together.</em></span></h1><p class="summary-short">I connect clients, vendors, and teams to keep projects moving.</p><p class="role-target">NEXT ROLE <strong>Project Coordinator / Assistant Project Manager</strong></p></section>
         <nav class="panel-nav" id="panel-nav" aria-label="Portfolio sections"><button type="button" data-panel="journey" class="active" aria-pressed="true">Journey</button><button type="button" data-panel="profile" aria-pressed="false">Profile</button><button type="button" data-panel="projects" aria-pressed="false">Projects <span>${projects.length}</span></button><button type="button" data-panel="contact" aria-pressed="false">Contact</button></nav>
         <div class="sidebar-body" id="sidebar-body" tabindex="-1" role="region" aria-label="Career details"></div>
         <div class="company-navigation" id="company-navigation"><button type="button" class="icon-button" id="previous-stop" aria-label="Previous chapter">${icons.previous}</button><span id="stop-counter" aria-live="polite">00 / ${number(latest)}</span><button type="button" id="next-stop">First company ${icons.next}</button><button type="button" class="icon-button" id="listen" aria-label="Listen to my story">${icons.sound}</button></div>
@@ -67,7 +65,7 @@ function aboutMarkup(compact = false) {
     <div class="about-overview"><header><p class="eyebrow">00 / About Me &amp; My Story</p><h1 id="about-title">${esc(aboutMe.name)}</h1><p class="about-position">${esc(aboutMe.position)}</p><p class="about-current-role">${esc(aboutMe.currentRole)}</p><div class="about-links"><button type="button" data-about-jump="story" aria-label="Read my story: Bangladesh to Canada">My story ${icons.next}</button><button type="button" data-about-jump="goal" aria-label="My career goal">My goal ${icons.next}</button></div></header>
     <h3 class="about-tagline">${esc(aboutMe.tagline)}</h3><p class="about-statement">${esc(aboutMe.professionalStatement)}</p>
     <section class="about-motivation"><h3>What drives me</h3><p>${esc(aboutMe.motivation)}</p></section>
-    <section class="about-goal"><h3 id="about-goal-title" tabindex="-1">Where I’m headed</h3><p>${esc(aboutMe.goal)}</p></section></div>
+    <section class="about-goal"><h3 id="about-goal-title" tabindex="-1">Where I’m headed</h3><p>${esc(aboutMe.goal)}</p></section><footer class="about-signature"><span>THE WORLD OF MY WORK</span><span aria-hidden="true">/</span><strong>PEOPLE. PLANS. FOLLOW-THROUGH.</strong></footer></div>
     <section class="about-narrative" aria-labelledby="about-story-title"><p class="eyebrow">BANGLADESH → CANADA</p><h3 id="about-story-title" tabindex="-1">${esc(aboutMe.storyTitle)}</h3>${aboutMe.story.map(paragraph=>`<p class="about-story-paragraph">${esc(paragraph)}</p>`).join('')}</section>
   </article>`;
 }
@@ -108,7 +106,6 @@ function renderPanel(resetScroll = true) {
   document.querySelectorAll('#panel-nav [data-panel]').forEach(button=>{const selected=button.dataset.panel===panel;button.classList.toggle('active',selected);button.setAttribute('aria-pressed',selected);});
   document.querySelector('#company-navigation').hidden=panel!=='journey'||reading;
   document.querySelector('.portfolio-shell').dataset.panel=panel;
-  document.querySelector('.portfolio-shell').classList.toggle('about-mode',panel==='journey'&&active===-1);
   if(resetScroll) body.scrollTop=0;
 }
 

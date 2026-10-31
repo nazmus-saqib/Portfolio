@@ -167,7 +167,7 @@ test('company project names open details and return focus to the selected employ
 
 test('profile, qualifications, projects, and contact remain in the same viewport', async ({ page, request, baseURL }) => {
   await loadWorld(page, baseURL);
-  await expect(page.locator('#profile-intro')).toContainText('Project Coordinator / Assistant Project Manager');
+  await expect(page.locator('#about-card')).toContainText('Assistant Project Manager');
   await page.locator('[data-panel="profile"]').click();
   const detail = page.locator('#sidebar-body');
   await expect(detail).toContainText('Computer Science & Engineering');

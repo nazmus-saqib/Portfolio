@@ -42,7 +42,7 @@ For a local Pages-path regression check, serve the build with `npm run preview -
 
 ## Controls and alternatives
 
-- “00 About Me & My Story” introduces Saqib’s name, position, professional statement, tagline, motivation, goal, and journey from Bangladesh to Canada. Its quick links jump to the story or goal inside the panel. Select 00, the wordmark, or the central compass to return to the introduction.
+- “00 About Me & My Story” introduces Saqib’s name, position, professional statement, tagline, motivation, goal, and journey from Bangladesh to Canada. “THE WORLD OF MY WORK / PEOPLE. PLANS. FOLLOW-THROUGH.” appears below the career goal as a closing statement. Its quick links jump to the story or goal inside the panel. Select 00, the wordmark, or the central compass to return to the introduction.
 - Choose a company in the 3D world or the bottom timeline. Employer chapters remain numbered 01–07, with role, month/year dates, tenure, and clickable project names.
 - “First company” begins the employment journey; “Next company” follows the chronological order. “Play journey” advances through chapters every 16 seconds; manual navigation or opening a project stops the automatic tour. “Meet me today” jumps to Identify BDA.
 - “Explore” enables WASD / arrow-key movement while the canvas has keyboard focus; on-screen controls support touch.
@@ -56,7 +56,7 @@ For a local Pages-path regression check, serve the build with `npm run preview -
 - `src/content.js`: the `aboutMe` introduction and personal story, employer chronology, professional summary, tenure formatting, project stories, skills, education, and credentials. Ended roles count the supplied calendar months; current-role tenure uses elapsed months in the current Toronto month. Dynamic Infotech and UPS/Staples are explicitly identified as overlapping roles.
 - `src/main.js`: interface and interactions; public contact email.
 - `src/world.js`: locally generated character and environment; no external model downloads. iStoreiSend is illustrated as an automated fulfillment cell with robotic handling, parcel conveyors, scanning, and automated storage. Machine movement follows the scene’s pause and reduced-motion settings. The Dynamic Infotech workplace contains a desktop computer, cabled server rack, and service kit.
-- `src/styles.css`: responsive interface styling, with 16px body text and labels and controls of at least 14px. Smaller screens use compact profile headers and internally scrolling panels to preserve readable type inside the viewport.
+- `src/styles.css`: responsive interface styling, with 16px body text and labels and controls of at least 14px. Internally scrolling panels preserve readable type inside the viewport.
 - `src/project-view.js` and `src/project-view.css`: reusable project previews and case-study presentation inside the viewport.
 - `public/projects/`: optimized previews from supplied project files. Original career records, project source files, and confidential documents are **not** public assets.
 - `public/favicon.svg`: the site icon. The wordmark is styled in CSS, interface icons are inline SVG in `src/main.js`, and illustrative project covers are generated from HTML/CSS. No external icon account or asset download is required.

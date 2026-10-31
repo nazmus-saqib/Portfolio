@@ -32,10 +32,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, canvas:focus-visib
 .shell-header { display: flex; align-items: center; gap: 27px; padding: 0 25px; border-bottom: 1px solid var(--line); min-width: 0; }
 .wordmark { font-weight: 650; font-size: 26px; letter-spacing: -1.7px; display: inline-flex; align-items: baseline; padding: 5px 0; }
 .wordmark > span { width: 5px; height: 5px; background: #8ba56e; border-radius: 50%; margin-left: 3px; }
-.shell-caption { display: flex; align-items: center; gap: 12px; font-size: .875rem; font-weight: 550; letter-spacing: 1.2px; min-width: 0; white-space: nowrap; }
-.shell-caption > i, .location-tag > i { width: 5px; height: 5px; border-radius: 50%; background: #91a673; flex-shrink: 0; }
-.shell-caption > b { color: #9fa98f; font-weight: 400; }
-.caption-secondary { color: #6d7e60; font-size: .875rem; letter-spacing: 1.1px; }
+.location-tag > i { width: 5px; height: 5px; border-radius: 50%; background: #91a673; flex-shrink: 0; }
 .header-actions { display: flex; align-items: center; gap: 23px; margin-left: auto; white-space: nowrap; }
 .resume-link, .view-toggle { display: inline-flex; align-items: center; gap: 8px; font-size: .875rem; }
 .resume-link svg, .view-toggle svg { width: 15px; height: 15px; }
@@ -79,16 +76,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, canvas:focus-visib
 .touch-controls button:first-child { grid-column: 2; }
 .touch-controls button:nth-child(2) { grid-column: 1; }
 .sidebar { min-height: 0; min-width: 0; border-left: 1px solid var(--line); background: #e9edde; display: flex; flex-direction: column; }
-.profile-intro { padding: 22px 26px 18px; flex-shrink: 0; border-bottom: 1px solid #d4ddc8; }
-.identity-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .eyebrow { font-size: .875rem; font-weight: 550; letter-spacing: 1.1px; line-height: 1.6; color: #5b714a; }
-.identity-star { color: #879e60; font-size: 22px; line-height: 1; }
-.profile-intro h1 { font-size: 22px; font-weight: 500; letter-spacing: -.7px; margin-top: 8px; line-height: 1.25; }
-.profile-intro h1 > span { display: block; font-size: 27px; font-weight: 450; letter-spacing: -.9px; margin-top: 4px; }
-.profile-intro h1 em { font-size: 1.1em; }
-.summary-short { font-size: 1rem; line-height: 1.6; color: #4f6642; margin-top: 11px; }
-.role-target { display: flex; flex-direction: column; gap: 3px; font-size: .875rem; letter-spacing: 1px; margin-top: 12px; color: #657b53; }
-.role-target strong { font-size: .875rem; font-weight: 500; letter-spacing: .1px; color: #3e5a33; }
 .panel-nav { display: flex; padding: 0 22px; min-height: 43px; flex-shrink: 0; border-bottom: 1px solid #d4ddc8; gap: 8px; }
 .panel-nav button { padding: 13px 10px 11px; position: relative; font-size: .875rem; color: #5d754c; }
 .panel-nav button > span { font-size: .875rem; margin-left: 3px; }
@@ -97,7 +85,6 @@ button:focus-visible, a:focus-visible, summary:focus-visible, canvas:focus-visib
 .sidebar-body { position: relative; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; flex: 1; padding: 22px 26px; scroll-behavior: smooth; }
 .sidebar-body:focus { outline-offset: -4px; }
 .company-card { animation: card-in .3s ease both; }
-.about-mode .profile-intro, .reading-mode[data-panel=journey] .profile-intro { display: none; }
 .about-story { min-width: 0; animation: card-in .3s ease both; }
 .about-story h1 { font-size: clamp(2rem, 2.8vw, 2.75rem); font-weight: 500; letter-spacing: -1.2px; line-height: 1.15; margin-top: 14px; }
 .about-position { font-size: 1.125rem; line-height: 1.5; font-weight: 500; color: #426137; margin-top: 12px; }
@@ -111,6 +98,9 @@ button:focus-visible, a:focus-visible, summary:focus-visible, canvas:focus-visib
 .about-motivation { margin-top: 24px; border-left: 2px solid #9bb37c; padding-left: 15px; }
 .about-motivation h3, .about-goal h3 { font-size: 1rem; line-height: 1.5; font-weight: 550; margin-bottom: 7px; }
 .about-goal { margin-top: 24px; border: 1px solid #c8d5b8; border-radius: 7px; padding: 17px; background: #f2f6e9; }
+.about-signature { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line); font-size: .875rem; line-height: 1.7; letter-spacing: .5px; color: var(--muted); }
+.about-signature > span:first-child { color: var(--ink); font-weight: 550; }
+.about-signature > strong { font: inherit; font-weight: 500; overflow-wrap: anywhere; }
 .about-narrative { margin-top: 28px; padding-top: 26px; border-top: 1px solid #c9d6b9; }
 .about-narrative > h3 { font-size: 1.375rem; font-weight: 500; letter-spacing: -.4px; line-height: 1.35; margin: 10px 0 18px; }
 .about-story-paragraph + .about-story-paragraph { margin-top: 18px; }
@@ -208,11 +198,6 @@ summary::-webkit-details-marker { display: none; }
 .reading-mode .experience-layout { grid-template-columns: minmax(0, 1fr); }
 .reading-mode .world-pane { display: none; }
 .reading-mode .sidebar { border: 0; }
-.reading-mode .profile-intro { padding-block: 14px; }
-.reading-mode .profile-intro h1 { display: flex; align-items: baseline; gap: 24px; }
-.reading-mode .profile-intro h1 > span { font-size: 24px; }
-.reading-mode .summary-short { max-width: 750px; }
-.reading-mode .role-target { display: none; }
 .reading-mode .sidebar-body { background: #edf1e4; }
 #reading-view { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 25px; }
 .reading-about { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px; padding: 28px; border: 1px solid #cbd7ba; border-radius: 8px; background: #f3f6eb; }
@@ -242,10 +227,6 @@ summary::-webkit-details-marker { display: none; }
 @media (min-width: 1600px) {
   .portfolio-shell { grid-template-rows: 70px minmax(0, 1fr) 102px; margin: 18px; height: calc(100dvh - 36px); }
   .experience-layout { grid-template-columns: minmax(0, 1fr) 500px; }
-  .profile-intro { padding: 27px 31px 22px; }
-  .profile-intro h1 { font-size: 26px; }
-  .profile-intro h1 > span { font-size: 33px; }
-  .summary-short { font-size: 1rem; }
   .sidebar-body { padding: 28px 31px; }
   .company-card h2 { font-size: 41px; }
   .company-story p { font-size: 1rem; }
@@ -258,14 +239,7 @@ summary::-webkit-details-marker { display: none; }
 @media (max-width: 1150px) {
   .portfolio-shell { margin: 10px; height: calc(100dvh - 20px); grid-template-rows: 62px minmax(0, 1fr) 102px; }
   .shell-header { padding: 0 21px; gap: 20px; }
-  .caption-secondary, .shell-caption > b { display: none; }
   .experience-layout { grid-template-columns: minmax(0, 1fr) 420px; }
-  .profile-intro { padding: 19px 22px 15px; }
-  .profile-intro h1 { font-size: 20px; }
-  .profile-intro h1 > span { font-size: 25px; }
-  .summary-short { font-size: 1rem; }
-  .role-target { margin-top: 10px; }
-  .role-target strong { font-size: .875rem; }
   .sidebar-body { padding: 20px 22px; }
   .company-card h2 { font-size: 30px; }
   .company-role { font-size: 1rem; }
@@ -284,15 +258,11 @@ summary::-webkit-details-marker { display: none; }
 }
 @media (max-width: 1000px) and (min-width: 861px) {
   .experience-layout { grid-template-columns: minmax(0, 1fr) 400px; }
-  .shell-caption { font-size: .875rem; letter-spacing: .8px; }
   .header-actions { gap: 15px; }
   .resume-link, .view-toggle { font-size: .875rem; }
   .world-note p { font-size: .875rem; }
   .monogram { width: 25px; height: 25px; font-size: .875rem; }
   .world-meta { display: none; }
-  .profile-intro { padding: 17px 19px 14px; }
-  .profile-intro h1 > span { font-size: 23px; }
-  .identity-line .eyebrow { font-size: .875rem; }
   .sidebar-body { padding: 18px 19px; }
   .company-navigation { padding: 12px 17px; gap: 9px; }
   #go-today { font-size: .875rem; gap: 6px; padding: 8px; }
@@ -300,11 +270,6 @@ summary::-webkit-details-marker { display: none; }
   #explore-toggle { font-size: .875rem; gap: 5px; }
 }
 @media (max-height: 740px) and (min-width: 861px) {
-  .profile-intro { padding-block: 14px; }
-  .profile-intro h1 { font-size: 19px; }
-  .profile-intro h1 > span { display: inline; font-size: 23px; margin-left: 12px; }
-  .summary-short { font-size: 1rem; margin-top: 8px; }
-  .role-target { flex-direction: row; align-items: center; gap: 7px; margin-top: 9px; }
   .panel-nav { min-height: 37px; }
   .panel-nav button { padding-block: 10px; }
   .company-navigation { padding-block: 11px; }
@@ -315,8 +280,6 @@ summary::-webkit-details-marker { display: none; }
   .shell-header { padding: 0 13px; gap: 13px; }
   .wordmark { font-size: 21px; letter-spacing: -1.3px; }
   .wordmark > span { width: 4px; height: 4px; }
-  .shell-caption { display: none; font-size: .875rem; letter-spacing: .6px; gap: 6px; }
-  .shell-caption > i { width: 4px; height: 4px; }
   .header-actions { gap: 13px; }
   .resume-link { font-size: 0; gap: 0; border: 0; padding: 6px 0; }
   .resume-link svg { width: 14px; height: 14px; }
@@ -344,14 +307,6 @@ summary::-webkit-details-marker { display: none; }
   .touch-controls { right: 11px; bottom: 45px; grid-template-columns: repeat(3, 29px); gap: 2px; }
   .touch-controls button { width: 29px; height: 29px; font-size: .875rem; }
   .sidebar { border-left: 0; border-top: 1px solid var(--line); }
-  .profile-intro { padding: 12px 17px 10px; }
-  .identity-line .eyebrow { font-size: .875rem; letter-spacing: .7px; }
-  .identity-star { font-size: 1rem; }
-  .profile-intro h1 { font-size: 22px; margin-top: 5px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-  .profile-intro h1 > span { display: none; font-size: 21px; margin-top: 0; letter-spacing: -.65px; }
-  .summary-short { display: none; font-size: 1rem; line-height: 1.7; margin-top: 7px; }
-  .role-target { flex-direction: column; align-items: flex-start; gap: 2px; margin-top: 7px; font-size: .875rem; letter-spacing: .5px; }
-  .role-target strong { font-size: .875rem; }
   .panel-nav { padding: 0 8px; min-height: 46px; gap: 4px; }
   .panel-nav button { font-size: .875rem; padding: 10px 7px; }
   .panel-nav button > span { font-size: .875rem; }
@@ -397,9 +352,6 @@ summary::-webkit-details-marker { display: none; }
   .target-statement { padding: 11px; }
   .project-filter button { font-size: .875rem; }
   .reading-mode .experience-layout { grid-template-rows: minmax(0, 1fr); }
-  .reading-mode .profile-intro { padding-block: 12px; }
-  .reading-mode .profile-intro h1 { justify-content: space-between; }
-  .reading-mode .profile-intro h1 > span { font-size: 21px; }
   #reading-view { grid-template-columns: 1fr; gap: 16px; }
   .reading-about { grid-template-columns: 1fr; gap: 28px; padding: 20px; }
   .reading-about .about-narrative { padding-top: 24px; border-top: 1px solid #c9d6b9; }
@@ -419,18 +371,11 @@ summary::-webkit-details-marker { display: none; }
   .world-fallback .button { font-size: .875rem; padding: 10px 13px; }
 }
 @media (max-width: 390px) {
-  .shell-caption { font-size: .875rem; letter-spacing: .4px; }
   .header-actions { gap: 9px; }
-  .profile-intro h1 > span { font-size: 18px; }
-  .profile-intro h1 { font-size: 22px; }
 }
 @media (max-height: 650px) and (max-width: 860px) {
   .portfolio-shell { grid-template-rows: 52px minmax(0, 1fr) 90px; }
   .experience-layout { grid-template-rows: 130px minmax(0, 1fr); }
-  .summary-short { display: none; }
-  .profile-intro { padding-block: 9px; }
-  .profile-intro h1 > span { font-size: 18px; }
-  .role-target { display: none; margin-top: 5px; }
   .panel-nav { min-height: 31px; }
   .panel-nav button { padding-block: 9px; }
   .company-navigation { padding-block: 6px; }
