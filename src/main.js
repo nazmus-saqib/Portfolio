@@ -1,6 +1,6 @@
 import '@fontsource-variable/dm-sans';
 import '@fontsource/instrument-serif/latin-400-italic.css';
-import { careerStops, professionalSummary, formatTenure, projects, skills, education, certificates, teaching } from './content.js';
+import { aboutMe, careerStops, professionalSummary, formatTenure, projects, skills, education, certificates, teaching } from './content.js';
 import { renderProjectCard, renderProjectDetail } from './project-view.js';
 import './project-view.css';
 
@@ -21,7 +21,7 @@ const number = index => String(index + 1).padStart(2, '0');
 const email = 'saqib.uxui@gmail.com';
 const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 const latest = careerStops.length - 1;
-let world, active = 0, panel = 'journey', reading = false, exploring = false, paused = motionPreference.matches;
+let world, active = -1, panel = 'journey', reading = false, exploring = false, paused = motionPreference.matches;
 let tourPlaying = false, tourTimer, toastTimer, speaking = false, dialogTrigger, disposed = false;
 
 document.querySelector('#app').innerHTML = `
@@ -36,7 +36,7 @@ document.querySelector('#app').innerHTML = `
     <div class="experience-layout" id="scene-layout">
       <section class="world-pane" id="world-pane" aria-label="Explore my workplaces">
         <div class="world-note"><span class="monogram">S.</span><p>Different workplaces.<br>One connected journey.</p></div>
-        <div class="world-meta"><span>MY CAREER, IN ${careerStops.length} STOPS</span><span id="travel-status" role="status">At ${esc(careerStops[0].company)}</span></div>
+        <div class="world-meta"><span>MY STORY + ${careerStops.length} WORKPLACES</span><span id="travel-status" role="status">Meet Saqib</span></div>
         <div id="world" class="world-container"></div>
         <div class="world-loading" id="world-loading"><span class="loading-orbit"></span><p>A small world is taking shape.</p></div>
         <div class="stage-tools"><button type="button" id="go-today">Meet me today ${icons.arrow}</button><div class="stage-controls"><button type="button" id="explore-toggle" aria-pressed="false">Explore <span class="toggle-track"><i></i></span></button><button type="button" class="icon-button" id="pause-world" aria-label="Pause scene animation">${icons.pause}</button></div></div>
@@ -48,11 +48,11 @@ document.querySelector('#app').innerHTML = `
         <section class="profile-intro" id="profile-intro" aria-labelledby="profile-name"><div class="identity-line"><p class="eyebrow">${esc(professionalSummary.headline)}</p><span class="identity-star" aria-hidden="true">✳</span></div><h1 id="profile-name">Nazmus Saqib<span>Bringing it <em>all together.</em></span></h1><p class="summary-short">I connect clients, vendors, and teams to keep projects moving.</p><p class="role-target">NEXT ROLE <strong>Project Coordinator / Assistant Project Manager</strong></p></section>
         <nav class="panel-nav" id="panel-nav" aria-label="Portfolio sections"><button type="button" data-panel="journey" class="active" aria-pressed="true">Journey</button><button type="button" data-panel="profile" aria-pressed="false">Profile</button><button type="button" data-panel="projects" aria-pressed="false">Projects <span>${projects.length}</span></button><button type="button" data-panel="contact" aria-pressed="false">Contact</button></nav>
         <div class="sidebar-body" id="sidebar-body" tabindex="-1" role="region" aria-label="Career details"></div>
-        <div class="company-navigation" id="company-navigation"><button type="button" class="icon-button" id="previous-stop" aria-label="Previous company">${icons.previous}</button><span id="stop-counter" aria-live="polite">01 / ${number(latest)}</span><button type="button" id="next-stop">Next company ${icons.next}</button><button type="button" class="icon-button" id="listen" aria-label="Listen to this company story">${icons.sound}</button></div>
+        <div class="company-navigation" id="company-navigation"><button type="button" class="icon-button" id="previous-stop" aria-label="Previous chapter">${icons.previous}</button><span id="stop-counter" aria-live="polite">00 / ${number(latest)}</span><button type="button" id="next-stop">First company ${icons.next}</button><button type="button" class="icon-button" id="listen" aria-label="Listen to my story">${icons.sound}</button></div>
       </aside>
     </div>
 
-    <footer class="journey-footer"><div class="tour-control"><button type="button" id="tour-toggle" aria-pressed="false">${icons.play}<span>Play journey</span></button><p>EARLIEST → TODAY</p></div><nav class="timeline-nav" aria-label="Employment timeline"><ol class="career-track" id="career-track">${careerStops.map((stop,index)=>`<li><button type="button" class="timeline-stop ${index===0?'active':''}" data-stop-index="${index}" aria-pressed="${index===0}" aria-label="Visit ${esc(stop.company)}, ${esc(stop.period)}"><span class="timeline-index">${number(index)}</span><span class="timeline-company">${esc(stop.label)}<small>${esc(stop.start.slice(0,4))}–${stop.end?esc(stop.end.slice(0,4)):'Today'}</small></span><i></i></button></li>`).join('')}</ol></nav><span class="location-tag"><i></i> ONTARIO, CANADA</span></footer>
+    <footer class="journey-footer"><div class="tour-control"><button type="button" id="tour-toggle" aria-pressed="false">${icons.play}<span>Play journey</span></button><p>MY STORY → TODAY</p></div><nav class="timeline-nav" aria-label="Story and employment timeline"><ol class="career-track" id="career-track"><li><button type="button" class="timeline-stop timeline-about active" data-stop-index="-1" aria-pressed="true" aria-label="00 About Me & My Story"><span class="timeline-index">00</span><span class="timeline-company">About Me &amp; My Story<small>Bangladesh → Canada</small></span><i></i></button></li>${careerStops.map((stop,index)=>`<li><button type="button" class="timeline-stop" data-stop-index="${index}" aria-pressed="false" aria-label="Visit ${esc(stop.company)}, ${esc(stop.period)}"><span class="timeline-index">${number(index)}</span><span class="timeline-company">${esc(stop.label)}<small>${esc(stop.start.slice(0,4))}–${stop.end?esc(stop.end.slice(0,4)):'Today'}</small></span><i></i></button></li>`).join('')}</ol></nav><span class="location-tag"><i></i> ONTARIO, CANADA</span></footer>
   </main>
   <dialog class="project-dialog" id="project-dialog" aria-labelledby="dialog-title"><button type="button" class="dialog-close icon-button" id="dialog-close" aria-label="Close project">${icons.close}</button><div id="dialog-content"></div></dialog>
   <div class="toast" id="toast" role="status"></div>
@@ -60,6 +60,16 @@ document.querySelector('#app').innerHTML = `
 
 function projectNames(stop) {
   return stop.projectIds.map(id => projects.find(project => project.id === id)).filter(Boolean);
+}
+
+function aboutMarkup(compact = false) {
+  return `<article class="about-story ${compact?'reading-about':''} ${active===-1?'is-current':''}" id="about-card" aria-labelledby="about-title">
+    <div class="about-overview"><header><p class="eyebrow">00 / About Me &amp; My Story</p><h1 id="about-title">${esc(aboutMe.name)}</h1><p class="about-position">${esc(aboutMe.position)}</p><p class="about-current-role">${esc(aboutMe.currentRole)}</p><div class="about-links"><button type="button" data-about-jump="story" aria-label="Read my story: Bangladesh to Canada">My story ${icons.next}</button><button type="button" data-about-jump="goal" aria-label="My career goal">My goal ${icons.next}</button></div></header>
+    <h3 class="about-tagline">${esc(aboutMe.tagline)}</h3><p class="about-statement">${esc(aboutMe.professionalStatement)}</p>
+    <section class="about-motivation"><h3>What drives me</h3><p>${esc(aboutMe.motivation)}</p></section>
+    <section class="about-goal"><h3 id="about-goal-title" tabindex="-1">Where I’m headed</h3><p>${esc(aboutMe.goal)}</p></section></div>
+    <section class="about-narrative" aria-labelledby="about-story-title"><p class="eyebrow">BANGLADESH → CANADA</p><h3 id="about-story-title" tabindex="-1">${esc(aboutMe.storyTitle)}</h3>${aboutMe.story.map(paragraph=>`<p class="about-story-paragraph">${esc(paragraph)}</p>`).join('')}</section>
+  </article>`;
 }
 
 function companyMarkup(stop, index, compact = false) {
@@ -90,56 +100,59 @@ function contactMarkup() {
 
 function renderPanel(resetScroll = true) {
   const body=document.querySelector('#sidebar-body');
-  if(panel==='journey') body.innerHTML=reading?`<div id="reading-view"><div class="reading-heading"><p class="eyebrow">THE CAREER JOURNEY</p><h2>One step<br><em>at a time.</em></h2><p>Employer dates, roles, and the work behind them.</p></div>${careerStops.map((s,i)=>companyMarkup(s,i,true)).join('')}</div>`:companyMarkup(careerStops[active],active);
+  if(panel==='journey') body.innerHTML=reading?`<div id="reading-view">${aboutMarkup(true)}${careerStops.map((s,i)=>companyMarkup(s,i,true)).join('')}</div>`:active===-1?aboutMarkup():companyMarkup(careerStops[active],active);
   if(panel==='profile') body.innerHTML=profileMarkup();
   if(panel==='projects') body.innerHTML=projectsMarkup();
   if(panel==='contact') body.innerHTML=contactMarkup();
-  body.setAttribute('aria-label',`${panel==='journey'?'Company story':panel} details`);
+  body.setAttribute('aria-label',`${panel==='journey'?(active===-1?'About me and my story':'Company story'):panel} details`);
   document.querySelectorAll('#panel-nav [data-panel]').forEach(button=>{const selected=button.dataset.panel===panel;button.classList.toggle('active',selected);button.setAttribute('aria-pressed',selected);});
   document.querySelector('#company-navigation').hidden=panel!=='journey'||reading;
   document.querySelector('.portfolio-shell').dataset.panel=panel;
+  document.querySelector('.portfolio-shell').classList.toggle('about-mode',panel==='journey'&&active===-1);
   if(resetScroll) body.scrollTop=0;
 }
 
 function updateTimeline() {
   document.querySelectorAll('[data-stop-index]').forEach(button=>{const selected=Number(button.dataset.stopIndex)===active;button.classList.toggle('active',selected);button.setAttribute('aria-pressed',selected);});
   document.querySelector('#stop-counter').textContent=`${number(active)} / ${number(latest)}`;
-  document.querySelector('#previous-stop').disabled=active===0;
-  document.querySelector('#next-stop').innerHTML=`${active===latest?'Back to start':'Next company'} ${icons.next}`;
+  document.querySelector('#previous-stop').disabled=active===-1;
+  document.querySelector('#next-stop').innerHTML=`${active===latest?'Back to my story':active===-1?'First company':'Next company'} ${icons.next}`;
+  document.querySelector('#listen').setAttribute('aria-label',active===-1?'Listen to my story':'Listen to this company story');
   const track=document.querySelector('#career-track');const selected=track.querySelector('.active');
   if(selected) track.scrollTo({left:selected.parentElement.offsetLeft-track.clientWidth/2+selected.offsetWidth/2,behavior:motionPreference.matches?'instant':'smooth'});
 }
 
 function stopSpeech() {
   if('speechSynthesis' in window) window.speechSynthesis.cancel();
-  speaking=false;const button=document.querySelector('#listen');button.classList.remove('speaking');button.setAttribute('aria-label','Listen to this company story');
+  speaking=false;const button=document.querySelector('#listen');button.classList.remove('speaking');button.setAttribute('aria-label',active===-1?'Listen to my story':'Listen to this company story');
 }
 
 function updateMotion() { world?.setPaused(paused||reading||document.hidden||document.querySelector('#project-dialog').open);document.querySelector('#pause-world').innerHTML=paused?icons.play:icons.pause;document.querySelector('#pause-world').setAttribute('aria-label',`${paused?'Resume':'Pause'} scene animation`); }
 function stopTour() { clearTimeout(tourTimer);tourPlaying=false;const button=document.querySelector('#tour-toggle');button.innerHTML=`${icons.play}<span>Play journey</span>`;button.setAttribute('aria-pressed','false'); }
 function scheduleTour() {clearTimeout(tourTimer);tourTimer=setTimeout(()=>{if(!tourPlaying)return;if(active===latest){stopTour();return;}selectStop(active+1,false);scheduleTour();},16000);}
 function selectStop(index,manual=true) {
-  if(index<0||index>=careerStops.length)return;
+  if(!Number.isInteger(index)||index < -1||index>=careerStops.length)return;
   if(manual)stopTour();stopSpeech();active=index;panel='journey';renderPanel();updateTimeline();
-  document.querySelector('#travel-status').textContent=`${paused||motionPreference.matches?'At':'Visiting'} ${careerStops[active].company}`;
+  document.querySelector('#travel-status').textContent=active===-1?'Meet Saqib':`${paused||motionPreference.matches?'At':'Visiting'} ${careerStops[active].company}`;
   world?.goTo(index);scrollCurrentReading();
 }
 
-function scrollCurrentReading() {if(!reading||panel!=='journey')return;const body=document.querySelector('#sidebar-body');const card=body.querySelector('.reading-company.is-current');if(card)body.scrollTop+=card.getBoundingClientRect().top-body.getBoundingClientRect().top-8;}
+function scrollCurrentReading() {if(!reading||panel!=='journey')return;const body=document.querySelector('#sidebar-body');const card=body.querySelector('#reading-view > .is-current');if(card)body.scrollTop+=card.getBoundingClientRect().top-body.getBoundingClientRect().top-8;}
 
 document.querySelector('#app').addEventListener('click',event=>{
+  const aboutJump=event.target.closest('[data-about-jump]');if(aboutJump){stopTour();stopSpeech();const body=document.querySelector('#sidebar-body');const target=body.querySelector(aboutJump.dataset.aboutJump==='story'?'#about-story-title':'#about-goal-title');if(target){target.focus({preventScroll:true});body.scrollTo({top:body.scrollTop+target.getBoundingClientRect().top-body.getBoundingClientRect().top-12,behavior:motionPreference.matches?'instant':'smooth'});}return;}
   const project=event.target.closest('[data-project]');if(project){openProject(project.dataset.project,project);return;}
   const section=event.target.closest('button[data-panel]');if(section){stopTour();stopSpeech();panel=section.dataset.panel;renderPanel();return;}
   const stop=event.target.closest('[data-stop-index]');if(stop){selectStop(Number(stop.dataset.stopIndex));return;}
   const category=event.target.closest('[data-filter]');if(category){projectFilter=category.dataset.filter;renderPanel(false);return;}
-  if(event.target.closest('[data-home]')){selectStop(0);return;}
+  if(event.target.closest('[data-home]')){selectStop(-1);return;}
   if(event.target.closest('[data-copy-email]')) copyEmail();
 });
 document.querySelector('#previous-stop').addEventListener('click',()=>selectStop(active-1));
-document.querySelector('#next-stop').addEventListener('click',()=>selectStop(active===latest?0:active+1));
+document.querySelector('#next-stop').addEventListener('click',()=>selectStop(active===latest?-1:active+1));
 document.querySelector('#go-today').addEventListener('click',()=>selectStop(latest));
-document.querySelector('#career-track').addEventListener('keydown',event=>{const button=event.target.closest('[data-stop-index]');if(!button)return;let next;if(event.key==='ArrowRight')next=Math.min(latest,active+1);if(event.key==='ArrowLeft')next=Math.max(0,active-1);if(event.key==='Home')next=0;if(event.key==='End')next=latest;if(next===undefined)return;event.preventDefault();selectStop(next);document.querySelector(`[data-stop-index="${next}"]`).focus({preventScroll:true});});
-document.querySelector('#tour-toggle').addEventListener('click',()=>{if(tourPlaying){stopTour();return;}if(reading)toggleReading(false);selectStop(active===latest?0:active,false);tourPlaying=true;document.querySelector('#tour-toggle').innerHTML=`${icons.pause}<span>Pause journey</span>`;document.querySelector('#tour-toggle').setAttribute('aria-pressed','true');scheduleTour();});
+document.querySelector('#career-track').addEventListener('keydown',event=>{const button=event.target.closest('[data-stop-index]');if(!button)return;let next;if(event.key==='ArrowRight')next=Math.min(latest,active+1);if(event.key==='ArrowLeft')next=Math.max(-1,active-1);if(event.key==='Home')next=-1;if(event.key==='End')next=latest;if(next===undefined)return;event.preventDefault();selectStop(next);document.querySelector(`[data-stop-index="${next}"]`).focus({preventScroll:true});});
+document.querySelector('#tour-toggle').addEventListener('click',()=>{if(tourPlaying){stopTour();return;}if(reading)toggleReading(false);selectStop(active===latest?-1:active,false);tourPlaying=true;document.querySelector('#tour-toggle').innerHTML=`${icons.pause}<span>Pause journey</span>`;document.querySelector('#tour-toggle').setAttribute('aria-pressed','true');scheduleTour();});
 
 function toggleReading(force) {reading=typeof force==='boolean'?force:!reading;stopTour();stopSpeech();document.querySelector('.portfolio-shell').classList.toggle('reading-mode',reading);document.querySelector('#reading-toggle').setAttribute('aria-pressed',reading);document.querySelector('#reading-toggle span').textContent=reading?'3D view':'Reading view';panel='journey';renderPanel();scrollCurrentReading();updateMotion();}
 document.querySelector('#reading-toggle').addEventListener('click',()=>toggleReading());
@@ -148,7 +161,7 @@ document.querySelector('#touch-controls').addEventListener('click',event=>{const
 document.querySelector('#pause-world').addEventListener('click',()=>{paused=!paused;updateMotion();});
 motionPreference.addEventListener('change',()=>{paused=motionPreference.matches;updateMotion();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden){stopTour();stopSpeech();}updateMotion();});
-document.querySelector('#listen').addEventListener('click',()=>{if(speaking){stopSpeech();return;}stopTour();const stop=careerStops[active];const utterance=new SpeechSynthesisUtterance(`${stop.company}. ${stop.role}. ${stop.period}. ${stop.story}`);utterance.lang='en-CA';utterance.rate=.94;utterance.onend=utterance.onerror=()=>{speaking=false;document.querySelector('#listen').classList.remove('speaking');document.querySelector('#listen').setAttribute('aria-label','Listen to this company story');};speaking=true;document.querySelector('#listen').classList.add('speaking');document.querySelector('#listen').setAttribute('aria-label','Stop narration');window.speechSynthesis.speak(utterance);});
+document.querySelector('#listen').addEventListener('click',()=>{if(speaking){stopSpeech();return;}stopTour();const stop=careerStops[active];const text=active===-1?`${aboutMe.name}. ${aboutMe.position}. ${aboutMe.professionalStatement} ${aboutMe.motivation} ${aboutMe.goal} ${aboutMe.story.join(' ')}`:`${stop.company}. ${stop.role}. ${stop.period}. ${stop.story}`;const utterance=new SpeechSynthesisUtterance(text);utterance.lang='en-CA';utterance.rate=.94;utterance.onend=utterance.onerror=()=>{speaking=false;document.querySelector('#listen').classList.remove('speaking');document.querySelector('#listen').setAttribute('aria-label',active===-1?'Listen to my story':'Listen to this company story');};speaking=true;document.querySelector('#listen').classList.add('speaking');document.querySelector('#listen').setAttribute('aria-label','Stop narration');window.speechSynthesis.speak(utterance);});
 if(!('speechSynthesis' in window))document.querySelector('#listen').hidden=true;
 
 function openProject(id,trigger) {const project=projects.find(item=>item.id===id);if(!project)return;stopTour();stopSpeech();dialogTrigger=trigger;document.querySelector('#dialog-content').innerHTML=renderProjectDetail(project,{assetUrl});document.querySelector('#project-dialog').showModal();document.querySelector('#dialog-content').scrollTop=0;updateMotion();}
@@ -161,7 +174,7 @@ function toast(text) {const node=document.querySelector('#toast');node.textConte
 
 renderPanel();updateTimeline();updateMotion();
 async function initWorld() {
-  try {const {createWorld}=await import('./world.js');if(disposed)return;world=createWorld({container:document.querySelector('#world'),stations:careerStops,onSelect:index=>selectStop(index),onArrival:index=>{if(index===active)document.querySelector('#travel-status').textContent=`At ${careerStops[index].company}`;},onReady:()=>document.querySelector('#world-loading').classList.add('loaded'),reducedMotion:motionPreference.matches});world.goTo(active);updateMotion();}
+  try {const {createWorld}=await import('./world.js');if(disposed)return;world=createWorld({container:document.querySelector('#world'),stations:careerStops,onSelect:index=>selectStop(index),onArrival:index=>{if(index===active)document.querySelector('#travel-status').textContent=index===-1?'Meet Saqib':`At ${careerStops[index].company}`;},onReady:()=>document.querySelector('#world-loading').classList.add('loaded'),reducedMotion:motionPreference.matches});world.goTo(active);updateMotion();}
   catch(error){console.warn('The 3D view is unavailable; all career details remain accessible.',error);document.querySelector('#world-loading').classList.add('loaded');document.querySelector('#world').innerHTML=`<div class="world-fallback"><span aria-hidden="true">✳</span><h2>There’s another<br>way into the story.</h2><p>Explore every employer, project, and qualification in reading view.</p><button type="button" class="button button-dark" id="fallback-reading">Read my journey ${icons.next}</button></div>`;document.querySelector('#fallback-reading').addEventListener('click',()=>toggleReading(true));document.querySelector('#explore-toggle').disabled=true;document.querySelector('#pause-world').disabled=true;}
 }
 initWorld();

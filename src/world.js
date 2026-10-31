@@ -182,7 +182,10 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     const guide = box(world, 0.065, 0.012, 0.25, middle.x, 0.189, middle.z, 'paper', 0.012);
     guide.rotation.y = path.rotation.y;
   });
-  box(world, 1.6, 0.035, 1.6, 0, 0.174, 0, 'chalk', 0.2).rotation.y = Math.PI / 4;
+  const introductionPlaza = box(world, 1.6, 0.035, 1.6, 0, 0.174, 0, 'chalk', 0.2);
+  introductionPlaza.rotation.y = Math.PI / 4;
+  introductionPlaza.userData.station = -1;
+  hits.push(introductionPlaza);
   cylinder(world, 0.39, 0.39, 0.018, 0, 0.207, 0, 'amber', 48);
   for (let i = 0; i < 4; i++) {
     const inset = box(world, 0.05, 0.015, 0.22, Math.sin(i * Math.PI / 2) * 0.57, 0.205, Math.cos(i * Math.PI / 2) * 0.57, 'navy', 0.01);
@@ -592,7 +595,9 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     const controls = exploring
       ? 'Explore Saqib’s career world. Move using the arrow keys or W, A, S and D.'
       : 'A three-dimensional world of Saqib’s career. Choose a company button to move between workplaces.';
-    const workplace = activeIndex === 3
+    const workplace = activeIndex === -1
+      ? ' Meet Saqib at the central compass for About Me & My Story: his journey from Bangladesh to Canada and into project coordination.'
+      : activeIndex === 3
       ? ' The iStoreiSend illustration shows automated fulfillment with a robotic parcel handler, moving conveyor, illuminated scanner, and automated storage.'
       : activeIndex === 4
         ? ' The Dynamic Infotech workplace contains a desktop computer setup, a cabled server rack, and a service kit.'
@@ -600,15 +605,28 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     canvas.setAttribute('aria-label', controls + workplace);
   }
   function select(index) {
-    activeIndex = Math.max(0, Math.min(stationData.length - 1, Number(index) || 0));
-    container.dataset.activeCompany = stationData[activeIndex].company;
+    const previousIndex = activeIndex;
+    const requestedIndex = Number(index);
+    activeIndex = requestedIndex === -1 ? -1 : Math.max(0, Math.min(stationData.length - 1, requestedIndex || 0));
+    container.dataset.activeCompany = activeIndex === -1 ? 'About Me & My Story' : stationData[activeIndex].company;
     container.dataset.activeStation = String(activeIndex);
     updateCanvasDescription();
     labels.forEach((label, i) => label.classList.toggle('is-active', i === activeIndex));
     markers.forEach((marker, i) => marker.material = i === activeIndex ? materials.amber : materials.chalk);
-    const destination = new THREE.Vector3(...stationData[activeIndex].stop); destination.y = 0.08;
+    const destination = activeIndex === -1
+      ? new THREE.Vector3(0, 0.08, 0)
+      : new THREE.Vector3(...stationData[activeIndex].stop);
+    destination.y = 0.08;
     if (reducedMotion || paused) {
-      person.position.copy(destination); walkPath = []; onArrival(activeIndex);
+      person.position.copy(destination); walkPath = [];
+      if (activeIndex === -1) person.rotation.y = desiredYaw = 0.45;
+      onArrival(activeIndex);
+    } else if (activeIndex === -1 || previousIndex === -1) {
+      // The central introduction is inside the ring, clear of the workplaces.
+      // Start the career journey directly at the selected employer, and return
+      // through the open plaza without changing any company indices.
+      walkPath = person.position.distanceTo(destination) > 0.035 ? [destination] : [];
+      if (!walkPath.length && activeIndex === -1) desiredYaw = 0.45;
     } else {
       // Reach the nearest point on the ring, then follow its edges. Next-company
       // navigation walks forward in chronology instead of cutting through desks.
@@ -727,7 +745,11 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
       const distance = moveVector.length();
       if (distance < 0.04) {
         person.position.copy(walkPath.shift());
-        if (!walkPath.length) { container.dataset.traveling = 'false'; if (!userMoved) onArrival(activeIndex); }
+        if (!walkPath.length) {
+          container.dataset.traveling = 'false';
+          if (activeIndex === -1) desiredYaw = 0.45;
+          if (!userMoved) onArrival(activeIndex);
+        }
       }
       else {
         moveVector.normalize(); person.position.addScaledVector(moveVector, Math.min(distance, delta * 3.0));

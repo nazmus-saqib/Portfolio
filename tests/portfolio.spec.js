@@ -20,7 +20,7 @@ async function loadWorld(page, baseURL) {
   await expect(page.locator('#world-loading')).toHaveClass(/loaded/);
   await expect(page.locator('canvas.world-canvas')).toBeVisible();
   await expect(page.locator('.world-label')).toHaveCount(7);
-  await expect(page.locator('#career-track [data-stop-index]')).toHaveCount(7);
+  await expect(page.locator('#career-track [data-stop-index]')).toHaveCount(8);
 }
 
 async function assertSingleViewport(page) {
@@ -38,12 +38,59 @@ async function assertSingleViewport(page) {
   expect(dimensions.y).toBe(0);
 }
 
+test('chapter 00 introduces Saqib and his story before the employer journey', async ({ page, baseURL }) => {
+  await loadWorld(page, baseURL);
+  const about = page.locator('#about-card');
+  await expect(about).toBeVisible();
+  for (const text of ['About Me & My Story', 'Nazmus Saqib', 'Project & Operations Coordinator', 'Print Project Coordinator', 'Identify BDA', 'Bringing it all together.', 'Bangladesh', 'Canada', '2022', 'Centennial College', 'Sir Sandford Fleming College', 'October 2024', 'Assistant Project Manager']) {
+    await expect(about).toContainText(text);
+  }
+  await expect(page.locator('#career-track [data-stop-index]').first()).toHaveAttribute('data-stop-index', '-1');
+  await expect(page.locator('[data-stop-index="-1"]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#world')).toHaveAttribute('data-active-station', '-1');
+  await expect(page.locator('#previous-stop')).toBeDisabled();
+  await expect(page.locator('#next-stop')).toContainText('First company');
+
+  await page.getByRole('button', { name: 'Read my story: Bangladesh to Canada', exact: true }).click();
+  await expect(page.locator('#about-story-title')).toBeInViewport();
+  await expect(page.locator('#about-story-title')).toBeFocused();
+  await assertSingleViewport(page);
+  await page.locator('[data-stop-index="-1"]').click();
+  await page.getByRole('button', { name: 'My career goal', exact: true }).click();
+  await expect(page.locator('#about-goal-title')).toBeInViewport();
+  await page.locator('[data-stop-index="-1"]').click();
+
+  await page.locator('#next-stop').click();
+  await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
+  await expect(page.locator('#previous-stop')).toBeEnabled();
+  await page.locator('#previous-stop').click();
+  await expect(about).toBeVisible();
+  await expect(page.locator('#world')).toHaveAttribute('data-active-company', 'About Me & My Story');
+
+  await page.locator('[data-stop-index="-1"]').focus();
+  await page.keyboard.press('End');
+  await expect(page.locator('#company-name')).toHaveText('Identify BDA');
+  await page.keyboard.press('Home');
+  await expect(about).toBeVisible();
+  await expect(page.locator('[data-stop-index="-1"]')).toBeFocused();
+  await page.locator('#go-today').click();
+  await page.getByRole('button', { name: 'Nazmus Saqib, start of journey', exact: true }).click();
+  await expect(about).toBeVisible();
+
+  await page.locator('#reading-toggle').click();
+  await expect(page.locator('#about-card.reading-about')).toBeVisible();
+  await expect(page.locator('#reading-view .reading-company')).toHaveCount(7);
+  await page.locator('#about-card').getByText('In October 2024,', { exact: false }).scrollIntoViewIfNeeded();
+  await assertSingleViewport(page);
+});
+
 test('seven employer cards follow career chronology with dates, tenure, and accurate roles', async ({ page, baseURL }) => {
   await loadWorld(page, baseURL);
+  await page.locator('#next-stop').click();
   await expect(page.locator('#company-name')).toHaveText(companies[0]);
   await expect(page.locator('#company-dates')).toHaveText('Jan 2018–Jul 2020');
   await expect(page.locator('#company-tenure')).toHaveText('2 yrs 7 mos');
-  await expect(page.locator('#previous-stop')).toBeDisabled();
+  await expect(page.locator('#previous-stop')).toBeEnabled();
 
   for (let index = 1; index < companies.length; index += 1) {
     await page.locator('#next-stop').click();
@@ -53,9 +100,9 @@ test('seven employer cards follow career chronology with dates, tenure, and accu
   }
   await expect(page.locator('#company-role')).toHaveText('Print Project Coordinator');
   await expect(page.locator('#company-dates')).toHaveText('Oct 2024–Present');
-  await expect(page.locator('#next-stop')).toContainText('Back to start');
+  await expect(page.locator('#next-stop')).toContainText('Back to my story');
   await page.locator('#next-stop').click();
-  await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
+  await expect(page.locator('#about-card')).toBeVisible();
 
   await page.getByRole('button', { name: 'Visit company 2: Synesis IT', exact: true }).click();
   await expect(page.locator('#company-dates')).toHaveText('Aug 2020–Nov 2021');
@@ -159,9 +206,9 @@ test('automatic journey advances chronologically and stops when a company is cho
   await page.locator('#tour-toggle').click();
   await expect(page.locator('#tour-toggle')).toHaveAttribute('aria-pressed', 'true');
   await page.clock.runFor(16_010);
-  await expect(page.locator('#company-name')).toHaveText('Synesis IT');
+  await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
   await page.clock.runFor(16_010);
-  await expect(page.locator('#company-name')).toHaveText('iQuantile');
+  await expect(page.locator('#company-name')).toHaveText('Synesis IT');
   await page.locator('[data-stop-index="6"]').click();
   await expect(page.locator('#tour-toggle')).toHaveAttribute('aria-pressed', 'false');
   await page.clock.runFor(20_000);
@@ -174,6 +221,9 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 640 }
     await loadWorld(page, baseURL);
     await assertSingleViewport(page);
     await expect(page.locator('#world-pane')).toBeVisible();
+    await expect(page.locator('#about-card')).toBeVisible();
+    await page.locator('#about-card').getByText('In October 2024,', { exact: false }).scrollIntoViewIfNeeded();
+    await assertSingleViewport(page);
     await page.locator('[data-stop-index="1"]').click();
     await expect(page.locator('#company-name')).toHaveText('Synesis IT');
     const biwta = page.getByRole('button', { name: 'Read BIWTA project story' });
@@ -188,6 +238,7 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 640 }
     await assertSingleViewport(page);
     await page.locator('#reading-toggle').click();
     await expect(page.locator('#reading-view .reading-company')).toHaveCount(7);
+    await expect(page.locator('#about-card.reading-about')).toHaveCount(1);
     await expect(page.locator('#world-pane')).toBeHidden();
     await page.locator('#sidebar-body').evaluate(element => element.scrollTop = element.scrollHeight);
     await expect(page.getByRole('button', { name: 'Read From request to delivery project story' })).toBeVisible();
@@ -210,6 +261,8 @@ test('without WebGL the complete career and clickable projects remain available 
   await expect(page.locator('.world-fallback')).toBeVisible();
   await expect(page.locator('#explore-toggle')).toBeDisabled();
   await page.getByRole('button', { name: 'Read my journey' }).click();
+  await expect(page.locator('#about-card')).toContainText('Bangladesh');
+  await expect(page.locator('#about-card')).toContainText('Canada');
   await expect(page.locator('#reading-view .reading-company')).toHaveCount(7);
   await expect(page.locator('#reading-view')).toContainText('Oct 2024–Present');
   await page.getByRole('button', { name: 'Read From request to delivery project story' }).click();

@@ -13,7 +13,8 @@ test('single-viewport company journey preserves public assets and résumé links
   await page.goto(site.href);
   await expect(page.locator('#world-loading')).toHaveClass(/loaded/);
   await expect(page.locator('canvas.world-canvas')).toBeVisible();
-  await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
+  await expect(page.locator('#about-card')).toContainText('About Me & My Story');
+  await expect(page.locator('#world')).toHaveAttribute('data-active-station', '-1');
   await expect(page.locator('.world-label')).toHaveCount(7);
 
   const icon = await page.locator('link[rel="icon"]').getAttribute('href');

@@ -1,6 +1,6 @@
 # Nazmus Saqib — A world of connected work
 
-A single-viewport portfolio about project and operations coordination, built with Vite, vanilla JavaScript, and Three.js. The miniature world follows seven employers in chronological order, from WebNSofTech to Identify BDA. The profile summary and résumé target Project Coordinator and Assistant Project Manager opportunities while preserving official employment titles. Earlier UX work appears as career history, alongside individual, team, and academic project stories.
+A single-viewport portfolio about project and operations coordination, built with Vite, vanilla JavaScript, and Three.js. It opens with “00 About Me & My Story” at the central plaza, followed by seven employers in chronological order, from WebNSofTech to Identify BDA. The profile summary and résumé target Project Coordinator and Assistant Project Manager opportunities while preserving official employment titles. Earlier UX work appears as career history, alongside individual, team, and academic project stories.
 
 The page fits the browser viewport on desktop and mobile. Longer role descriptions, profile details, project collections, and case studies scroll inside their own panels; the page itself does not scroll.
 
@@ -42,17 +42,18 @@ For a local Pages-path regression check, serve the build with `npm run preview -
 
 ## Controls and alternatives
 
-- Choose a company in the 3D world or the bottom employment timeline. Each prompt card shows the role, month/year dates, tenure, and clickable project names.
-- “Next company” follows the chronological order. “Play journey” advances through employers every 16 seconds; manual navigation or opening a project stops the automatic tour. “Meet me today” jumps to Identify BDA.
+- “00 About Me & My Story” introduces Saqib’s name, position, professional statement, tagline, motivation, goal, and journey from Bangladesh to Canada. Its quick links jump to the story or goal inside the panel. Select 00, the wordmark, or the central compass to return to the introduction.
+- Choose a company in the 3D world or the bottom timeline. Employer chapters remain numbered 01–07, with role, month/year dates, tenure, and clickable project names.
+- “First company” begins the employment journey; “Next company” follows the chronological order. “Play journey” advances through chapters every 16 seconds; manual navigation or opening a project stops the automatic tour. “Meet me today” jumps to Identify BDA.
 - “Explore” enables WASD / arrow-key movement while the canvas has keyboard focus; on-screen controls support touch.
 - The speaker button starts optional narration using the visitor’s browser speech synthesis. Voice availability depends on the browser/device. No voice recording is embedded.
 - Pause stops scene animation. Reduced-motion preferences disable continuous movement.
-- “Reading view” presents all seven employer stories as ordinary text inside the viewport. If WebGL is unavailable, a fallback leads to this view.
+- “Reading view” presents the introduction and all seven employer stories as ordinary text inside the viewport. If WebGL is unavailable, a fallback leads to this view.
 - Journey, Profile, Projects, and Contact tabs share the same side panel. Current operations and earlier digital-work filters, project dialogs, a BIWTA prototype gallery, qualifications, skills, and credentials remain available without a long landing page.
 
 ## Content and personalization
 
-- `src/content.js`: employer chronology, professional summary, tenure formatting, project stories, skills, education, and credentials. Ended roles count the supplied calendar months; current-role tenure uses elapsed months in the current Toronto month. Dynamic Infotech and UPS/Staples are explicitly identified as overlapping roles.
+- `src/content.js`: the `aboutMe` introduction and personal story, employer chronology, professional summary, tenure formatting, project stories, skills, education, and credentials. Ended roles count the supplied calendar months; current-role tenure uses elapsed months in the current Toronto month. Dynamic Infotech and UPS/Staples are explicitly identified as overlapping roles.
 - `src/main.js`: interface and interactions; public contact email.
 - `src/world.js`: locally generated character and environment; no external model downloads. iStoreiSend is illustrated as an automated fulfillment cell with robotic handling, parcel conveyors, scanning, and automated storage. Machine movement follows the scene’s pause and reduced-motion settings. The Dynamic Infotech workplace contains a desktop computer, cabled server rack, and service kit.
 - `src/styles.css`: responsive interface styling, with 16px body text and labels and controls of at least 14px. Smaller screens use compact profile headers and internally scrolling panels to preserve readable type inside the viewport.

@@ -1,6 +1,22 @@
 // Public portfolio copy grounded in the owner's career record and uploaded work.
 // Private source material and unresolved source questions stay outside this site.
 
+export const aboutMe = {
+  name: 'Nazmus Saqib',
+  position: 'Project & Operations Coordinator',
+  currentRole: 'Print Project Coordinator · Identify BDA',
+  professionalStatement: 'I’m a project and operations coordinator who brings clients, vendors, and teams together to move work from a clear request to a completed delivery. I combine technical education, project management training, and hands-on experience to coordinate requirements, approvals, timelines, costs, and communication when plans change.',
+  tagline: 'Bringing it all together.',
+  motivation: 'I’m motivated by making the next step clear, keeping people informed, and following through until the work is delivered.',
+  goal: 'I’m looking for Project Coordinator or Assistant Project Manager opportunities where I can help teams plan clearly, communicate well, and deliver dependable results.',
+  storyTitle: 'From Bangladesh to Canada. From understanding needs to coordinating delivery.',
+  story: [
+    'I’m originally from Bangladesh, where I earned a degree in Computer Science & Engineering from North South University. I began working in UX in 2020 at Synesis IT, learning to listen carefully and turn needs into clear requirements. Across my work at Synesis IT, iQuantile, and iStoreiSend, I developed a wider view of how business needs, technical teams, and operational workflows connect.',
+    'I came to Canada as a student in 2022 and completed graduate certificates in Interactive Media Management at Centennial College and Project Management at Sir Sandford Fleming College. Alongside my studies and transition into the Canadian workplace, I gained customer-facing experience at UPS and Staples and worked on-call at Dynamic Infotech. Those roles strengthened my communication, practical problem solving, and ability to balance priorities.',
+    'In October 2024, I joined Identify BDA as a Print Project Coordinator. Today, I connect client requirements with vendors, approvals, production, delivery, and financial follow-up. Becoming a coordinator brought together the parts of my earlier work I use most: understanding the requirement, communicating across teams, and keeping the next step moving. I’m now building toward Project Coordinator and Assistant Project Manager opportunities.',
+  ],
+};
+
 export const chapters = [
   {
     eyebrow: '01 / LEARNING TO LISTEN',
