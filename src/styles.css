@@ -37,7 +37,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, canvas:focus-visib
 .resume-link svg, .view-toggle svg { width: 15px; height: 15px; }
 .resume-link { border-bottom: 1px solid #b1bfa0; padding-bottom: 5px; }
 .view-toggle { padding: 8px 0; }
-.experience-layout { min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 460px; }
+.experience-layout { min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 560px; }
 .world-pane { position: relative; overflow: hidden; min-height: 0; min-width: 0; background: radial-gradient(ellipse at 50% 42%, #f5f4ec, #ecefe4); }
 .world-container { position: absolute; inset: 0; }
 .world-note { position: absolute; left: 25px; top: 24px; z-index: 3; display: flex; align-items: center; gap: 10px; pointer-events: none; }
@@ -206,7 +206,7 @@ summary::-webkit-details-marker { display: none; }
 
 @media (min-width: 1600px) {
   .portfolio-shell { grid-template-rows: 70px minmax(0, 1fr); margin: 18px; height: calc(100dvh - 36px); }
-  .experience-layout { grid-template-columns: minmax(0, 1fr) 500px; }
+  .experience-layout { grid-template-columns: minmax(0, 1fr) 620px; }
   .sidebar-body { padding: 28px 31px; }
   .company-card h2 { font-size: 41px; }
   .company-story p { font-size: 1rem; }
@@ -217,7 +217,7 @@ summary::-webkit-details-marker { display: none; }
 @media (max-width: 1150px) {
   .portfolio-shell { margin: 10px; height: calc(100dvh - 20px); grid-template-rows: 62px minmax(0, 1fr); }
   .shell-header { padding: 0 21px; gap: 20px; }
-  .experience-layout { grid-template-columns: minmax(0, 1fr) 420px; }
+  .experience-layout { grid-template-columns: minmax(0, 1fr) 470px; }
   .sidebar-body { padding: 20px 22px; }
   .company-card h2 { font-size: 30px; }
   .company-role { font-size: 1rem; }
@@ -231,7 +231,7 @@ summary::-webkit-details-marker { display: none; }
   #reading-view { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 1000px) and (min-width: 861px) {
-  .experience-layout { grid-template-columns: minmax(0, 1fr) 400px; }
+  .experience-layout { grid-template-columns: minmax(0, 1fr) 440px; }
   .header-actions { gap: 15px; }
   .resume-link, .view-toggle { font-size: .875rem; }
   .world-note p { font-size: .875rem; }
