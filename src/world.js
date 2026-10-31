@@ -163,8 +163,8 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
       company: station.company || station.label || defaultStations[index]?.company,
       position: [x * 5.05, 0, z * 4.05],
       stop: [x * 3.0, 0, z * 2.4],
-      // Keep the network workplace label below its equipment display.
-      labelAnchor: new THREE.Vector3(x * 6.15, index === 4 ? -0.35 : 0.5, z * 5.0),
+      // Keep the automated fulfillment and network labels below their equipment displays.
+      labelAnchor: new THREE.Vector3(x * 6.15, index === 3 ? -0.75 : index === 4 ? -0.35 : 0.5, z * 5.0),
       color: ['terracotta', 'navy', 'sage', 'wood', 'gray', 'terracotta', 'moss'][index % 7],
     };
   });
@@ -241,28 +241,94 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     box(chair, 0.55, 0.05, 0.4, 0, 0.29, 0, 'navy');
   }
 
-  // 02 — the fulfillment space: a rack, real little parcels and a loading cart.
+  // 04 — an illustrative automated fulfillment cell: robot, conveyor and scanner.
+  let fulfillmentTime = 0;
+  let updateFulfillment = () => {};
   {
     const group = stationGroups[3] || stationGroups[0];
-    [-1.1, 1.05].forEach(x => [-0.76, -0.16].forEach(z => box(group, 0.09, 1.72, 0.09, x, 1.15, z, 'navy', 0.015)));
-    [0.46, 1.04, 1.64].forEach(y => box(group, 2.35, 0.07, 0.83, -0.02, y, -0.46, 'navy', 0.015));
-    const parcel = (x, y, z, size = 0.42, shade = 'wood') => {
-      box(group, size, size * 0.83, size * 0.92, x, y, z, shade, 0.025);
-      box(group, 0.09, size * 0.83 + 0.004, size * 0.92 + 0.006, x, y, z, 'paper', 0.005);
-      box(group, 0.18, 0.1, 0.01, x + 0.07, y - 0.02, z + size * 0.46 + 0.007, 'chalk', 0.003);
+    group.name = 'automated-fulfillment-cell';
+    const alloy = material(0xe2eae8, { metalness: 0.32, roughness: 0.42 });
+    const cyan = material(0x70d9d0, { emissive: 0x41bdb5, emissiveIntensity: 0.45, roughness: 0.35 });
+    const graphite = material(0x304b55, { metalness: 0.35, roughness: 0.48 });
+    const parcel = (parent, x, y, z, size = 0.34) => {
+      const item = new THREE.Group(); item.position.set(x, y, z); parent.add(item);
+      box(item, size, size * 0.8, size * 0.86, 0, 0, 0, 'wood', 0.025);
+      box(item, 0.065, size * 0.8 + 0.006, size * 0.86 + 0.006, 0, 0, 0, 'paper', 0.005);
+      box(item, 0.13, 0.075, 0.012, 0.055, -0.015, size * 0.43 + 0.01, 'chalk', 0.003);
+      return item;
     };
-    parcel(-0.7, 0.68, -0.44); parcel(-0.09, 0.71, -0.44, 0.5); parcel(0.65, 0.66, -0.44, 0.37);
-    parcel(-0.65, 1.29, -0.44, 0.5, 'terracotta'); parcel(0.1, 1.27, -0.44, 0.47); parcel(0.71, 1.27, -0.44, 0.43);
-    parcel(-0.72, 1.88, -0.44, 0.44); parcel(-0.08, 1.9, -0.44, 0.5);
-    sign(group, 'FULFILLMENT', 1.8, 0.3, -0.02, 2.24, -0.12, '#f5f1e5', '#263d48');
-    box(group, 0.9, 0.12, 0.65, 0.32, 0.49, 0.81, 'amber', 0.04);
-    [-0.03, 0.67].forEach(x => [0.58, 1.05].forEach(z => {
-      const wheel = cylinder(group, 0.1, 0.1, 0.07, x, 0.35, z, 'navy', 16); wheel.rotation.z = Math.PI / 2;
-    }));
-    lineBetween(group, [0.8, 0.5, 0.56], [0.8, 1.05, 0.56], 0.035, 'navy');
-    lineBetween(group, [0.8, 0.5, 1.04], [0.8, 1.05, 1.04], 0.035, 'navy');
-    lineBetween(group, [0.8, 1.05, 0.56], [0.8, 1.05, 1.04], 0.04, 'navy');
-    parcel(0.22, 0.79, 0.81, 0.55); plant(group, -1.18, 0.95, 0.8);
+
+    // Low enclosed conveyor with visible rollers and illuminated edge rails.
+    const conveyor = new THREE.Group(); conveyor.name = 'automatic-parcel-conveyor'; group.add(conveyor);
+    box(conveyor, 2.95, 0.28, 0.9, 0, 0.64, 0.6, alloy, 0.07);
+    box(conveyor, 2.72, 0.055, 0.66, 0, 0.81, 0.6, graphite, 0.02);
+    [-1.12, 1.12].forEach(x => [-0.3, 0.3].forEach(z => box(conveyor, 0.13, 0.25, 0.13, x, 0.41, 0.6 + z, 'navy', 0.02)));
+    [-0.42, 0.42].forEach(z => box(conveyor, 2.8, 0.045, 0.035, 0, 0.77, 0.6 + z, cyan, 0.012));
+    for (let i = 0; i < 13; i++) {
+      const roller = cylinder(conveyor, 0.035, 0.035, 0.62, -1.25 + i * 0.208, 0.848, 0.6, alloy, 12);
+      roller.rotation.x = Math.PI / 2;
+    }
+    const packages = [parcel(conveyor, -1, 1.025, 0.6), parcel(conveyor, 0, 1.025, 0.6), parcel(conveyor, 1, 1.025, 0.6)];
+
+    // A scanning portal reads each parcel before automated dispatch.
+    const scanner = new THREE.Group(); scanner.name = 'automated-dispatch-scanner'; scanner.position.x = 0.87; group.add(scanner);
+    [0.06, 1.14].forEach(z => {
+      box(scanner, 0.2, 1.03, 0.17, 0, 1.32, z, alloy, 0.04);
+      box(scanner, 0.035, 0.75, 0.035, -0.111, 1.34, z, cyan, 0.008);
+    });
+    box(scanner, 0.25, 0.21, 1.25, 0, 1.89, 0.6, graphite, 0.04);
+    box(scanner, 0.05, 0.035, 1.02, -0.139, 1.86, 0.6, cyan, 0.009);
+    const scanMaterial = new THREE.MeshBasicMaterial({ color: 0x73e4dc, transparent: true, opacity: 0.13, side: THREE.DoubleSide, depthWrite: false });
+    const scan = new THREE.Mesh(new THREE.PlaneGeometry(1.02, 0.89), scanMaterial);
+    scan.rotation.y = Math.PI / 2; scan.position.set(0, 1.34, 0.6); scanner.add(scan);
+
+    // Articulated pick-and-place robot, with contrasting joints and a two-finger gripper.
+    const robot = new THREE.Group(); robot.name = 'robotic-parcel-handler'; robot.position.set(-0.78, 0.3, -0.58); group.add(robot);
+    box(robot, 0.72, 0.14, 0.72, 0, 0.08, 0, graphite, 0.06);
+    cylinder(robot, 0.24, 0.3, 0.31, 0, 0.29, 0, alloy);
+    cylinder(robot, 0.255, 0.255, 0.055, 0, 0.47, 0, cyan);
+    const turret = new THREE.Group(); turret.position.y = 0.5; robot.add(turret);
+    const shoulder = new THREE.Group(); turret.add(shoulder);
+    sphere(shoulder, 0.17, 0, 0, 0, graphite);
+    box(shoulder, 0.29, 0.69, 0.27, 0, 0.36, 0, graphite, 0.07);
+    box(shoulder, 0.21, 0.48, 0.035, 0, 0.36, 0.151, alloy, 0.02);
+    box(shoulder, 0.045, 0.45, 0.025, 0.135, 0.36, 0.1, cyan, 0.012);
+    const elbow = new THREE.Group(); elbow.position.y = 0.72; shoulder.add(elbow);
+    sphere(elbow, 0.18, 0, 0, 0, graphite);
+    cylinder(elbow, 0.095, 0.095, 0.385, 0, 0, 0, cyan, 24).rotation.x = Math.PI / 2;
+    box(elbow, 0.25, 0.6, 0.23, 0, 0.32, 0, alloy, 0.055);
+    const wrist = new THREE.Group(); wrist.position.y = 0.64; elbow.add(wrist);
+    sphere(wrist, 0.12, 0, 0, 0, graphite);
+    box(wrist, 0.36, 0.1, 0.18, 0, -0.1, 0, cyan, 0.025);
+    [-0.145, 0.145].forEach(x => box(wrist, 0.065, 0.22, 0.15, x, -0.23, 0, graphite, 0.015));
+    const heldParcel = parcel(wrist, 0, -0.32, 0, 0.29);
+
+    // Compact automated storage bays and a dispatch display complete the cell.
+    box(group, 0.8, 1.4, 0.59, 1.02, 1.01, -0.76, graphite, 0.08);
+    [0.6, 1.02, 1.44].forEach(y => {
+      box(group, 0.62, 0.32, 0.045, 1.02, y, -0.445, alloy, 0.025);
+      box(group, 0.42, 0.025, 0.02, 1.02, y - 0.09, -0.413, cyan, 0.006);
+    });
+    sign(group, 'AUTO FULFILLMENT', 1.55, 0.25, 0.08, 2.21, -0.66, '#263d48', '#a1ede2');
+    box(group, 1.74, 0.35, 0.1, 0.08, 2.21, -0.73, graphite, 0.04);
+    cylinder(group, 0.035, 0.035, 0.39, 0.8, 1.87, -0.75, alloy, 12);
+
+    updateFulfillment = time => {
+      packages.forEach((item, index) => {
+        const progress = (time * 0.13 + index / packages.length + 0.08) % 1;
+        item.position.x = -1.25 + progress * 2.5;
+        const edgeScale = Math.min(1, progress * 12, (1 - progress) * 12);
+        item.scale.setScalar(edgeScale);
+      });
+      const cycle = time * 0.7;
+      turret.rotation.y = -0.58 + Math.sin(cycle) * 0.43;
+      shoulder.rotation.z = -0.58 + Math.sin(cycle + 0.5) * 0.15;
+      elbow.rotation.z = -1.52 + Math.sin(cycle - 0.3) * 0.22;
+      wrist.rotation.z = -shoulder.rotation.z - elbow.rotation.z;
+      heldParcel.visible = Math.sin(cycle) > -0.4;
+      scanMaterial.opacity = 0.1 + (Math.sin(time * 2.4) + 1) * 0.035;
+    };
+    updateFulfillment(0);
   }
 
   // 01 — graphic design: the foundation in visual communication.
@@ -498,7 +564,9 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
       const marginX = Math.min(8, size.width / 2), marginY = Math.min(8, size.height / 2);
       const halfWidth = Math.min(label.offsetWidth / 2, size.width / 2 - marginX);
       const halfHeight = Math.min(label.offsetHeight / 2, size.height / 2 - marginY);
-      const left = THREE.MathUtils.clamp((projected.x * 0.5 + 0.5) * size.width, halfWidth + marginX, size.width - halfWidth - marginX);
+      const left = narrow && index === 3
+        ? halfWidth + marginX
+        : THREE.MathUtils.clamp((projected.x * 0.5 + 0.5) * size.width, halfWidth + marginX, size.width - halfWidth - marginX);
       // Reserve the bottom control row when the scene is compact.
       const bottomMargin = narrow ? Math.min(64, size.height / 2) : marginY;
       const top = THREE.MathUtils.clamp((-projected.y * 0.5 + 0.5) * size.height, halfHeight + marginY, size.height - halfHeight - bottomMargin);
@@ -524,9 +592,11 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     const controls = exploring
       ? 'Explore Saqib’s career world. Move using the arrow keys or W, A, S and D.'
       : 'A three-dimensional world of Saqib’s career. Choose a company button to move between workplaces.';
-    const workplace = activeIndex === 4
-      ? ' The Dynamic Infotech workplace contains a desktop computer setup, a cabled server rack, and a service kit.'
-      : '';
+    const workplace = activeIndex === 3
+      ? ' The iStoreiSend illustration shows automated fulfillment with a robotic parcel handler, moving conveyor, illuminated scanner, and automated storage.'
+      : activeIndex === 4
+        ? ' The Dynamic Infotech workplace contains a desktop computer setup, a cabled server rack, and a service kit.'
+        : '';
     canvas.setAttribute('aria-label', controls + workplace);
   }
   function select(index) {
@@ -681,6 +751,8 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
         marker.scale.set(scale, 1, scale);
       });
     }
+    fulfillmentTime += delta;
+    updateFulfillment(fulfillmentTime);
     checkStation(); renderOnce();
   }
   resize(); select(0); animate(); onReady();
