@@ -38,8 +38,7 @@ document.querySelector('#app').innerHTML = `
         <div class="world-meta"><span>MY STORY + ${careerStops.length} WORKPLACES</span><span id="travel-status" role="status">Meet Saqib</span></div>
         <div id="world" class="world-container"></div>
         <div class="world-loading" id="world-loading"><span class="loading-orbit"></span><p>A small world is taking shape.</p></div>
-        <div class="stage-tools"><button type="button" id="go-today">Meet me today ${icons.arrow}</button><div class="stage-controls"><button type="button" id="explore-toggle" aria-pressed="false">Explore <span class="toggle-track"><i></i></span></button><button type="button" class="icon-button" id="pause-world" aria-label="Pause scene animation">${icons.pause}</button></div></div>
-        <div class="scene-hint" id="scene-hint">Choose a company. I’ll take you there.</div>
+        <div class="stage-tools"><button type="button" id="go-today">Meet me today ${icons.arrow}</button><div class="scene-hint" id="scene-hint">Choose a company. I’ll take you there.</div><div class="stage-controls"><button type="button" id="explore-toggle" aria-pressed="false">Explore <span class="toggle-track"><i></i></span></button><button type="button" class="icon-button" id="pause-world" aria-label="Pause scene animation">${icons.pause}</button></div></div>
         <div class="touch-controls" id="touch-controls" aria-label="Move character" hidden><button type="button" data-direction="up" aria-label="Move forward">↑</button><button type="button" data-direction="left" aria-label="Move left">←</button><button type="button" data-direction="down" aria-label="Move back">↓</button><button type="button" data-direction="right" aria-label="Move right">→</button></div>
       </section>
 
@@ -144,7 +143,7 @@ document.querySelector('#go-today').addEventListener('click',()=>selectStop(late
 
 function toggleReading(force) {reading=typeof force==='boolean'?force:!reading;stopSpeech();document.querySelector('.portfolio-shell').classList.toggle('reading-mode',reading);document.querySelector('#reading-toggle').setAttribute('aria-pressed',reading);document.querySelector('#reading-toggle span').textContent=reading?'3D view':'Reading view';panel='journey';renderPanel();scrollCurrentReading();updateMotion();}
 document.querySelector('#reading-toggle').addEventListener('click',()=>toggleReading());
-document.querySelector('#explore-toggle').addEventListener('click',()=>{exploring=!exploring;world?.setExploring(exploring);document.querySelector('#explore-toggle').setAttribute('aria-pressed',exploring);document.querySelector('#touch-controls').hidden=!exploring;document.querySelector('#scene-hint').textContent=exploring?'Focus the world. Move with WASD, arrow keys, or the controls.':'Choose a company. I’ll take you there.';});
+document.querySelector('#explore-toggle').addEventListener('click',()=>{exploring=!exploring;world?.setExploring(exploring);document.querySelector('#explore-toggle').setAttribute('aria-pressed',exploring);document.querySelector('#touch-controls').hidden=!exploring;document.querySelector('#scene-hint').textContent=exploring?'Move with WASD, arrows, or the controls.':'Choose a company. I’ll take you there.';});
 document.querySelector('#touch-controls').addEventListener('click',event=>{const button=event.target.closest('[data-direction]');if(button)world?.move(button.dataset.direction);});
 document.querySelector('#pause-world').addEventListener('click',()=>{paused=!paused;updateMotion();});
 motionPreference.addEventListener('change',()=>{paused=motionPreference.matches;updateMotion();});

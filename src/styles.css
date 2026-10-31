@@ -38,7 +38,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, canvas:focus-visib
 .resume-link { border-bottom: 1px solid #b1bfa0; padding-bottom: 5px; }
 .view-toggle { padding: 8px 0; }
 .experience-layout { min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 560px; }
-.world-pane { position: relative; overflow: hidden; min-height: 0; min-width: 0; background: radial-gradient(ellipse at 50% 42%, #f5f4ec, #ecefe4); }
+.world-pane { position: relative; overflow: hidden; min-height: 0; min-width: 0; container-type: inline-size; background: radial-gradient(ellipse at 50% 42%, #f5f4ec, #ecefe4); }
 .world-container { position: absolute; inset: 0; }
 .world-note { position: absolute; left: 25px; top: 24px; z-index: 3; display: flex; align-items: center; gap: 10px; pointer-events: none; }
 .monogram { width: 31px; height: 31px; border: 1px solid #aab998; border-radius: 50%; display: grid; place-items: center; font-size: 1rem; font-family: var(--serif); font-style: italic; color: #758b5e; }
@@ -57,9 +57,9 @@ button:focus-visible, a:focus-visible, summary:focus-visible, canvas:focus-visib
 .loading-orbit { width: 35px; height: 35px; border-radius: 50%; border: 1px solid #c2cfb1; border-top-color: #657e4b; animation: orbit 1.5s linear infinite; }
 .stage-tools { position: absolute; left: 22px; right: 22px; bottom: 20px; display: flex; align-items: center; justify-content: space-between; pointer-events: none; gap: 20px; z-index: 3; }
 .stage-tools button { pointer-events: auto; }
-#go-today { display: inline-flex; align-items: center; gap: 14px; font-size: .875rem; color: #48643b; background: #f7f9efde; border: 1px solid #cbd6bd; padding: 9px 12px; border-radius: 5px; }
+#go-today { display: inline-flex; align-items: center; flex-shrink: 0; white-space: nowrap; gap: 14px; font-size: .875rem; color: #48643b; background: #f7f9efde; border: 1px solid #cbd6bd; padding: 9px 12px; border-radius: 5px; }
 #go-today svg { width: 12px; height: 12px; }
-.stage-controls { display: flex; align-items: center; gap: 16px; }
+.stage-controls { display: flex; align-items: center; flex-shrink: 0; gap: 16px; }
 #explore-toggle { display: flex; align-items: center; gap: 8px; font-size: .875rem; }
 .toggle-track { width: 27px; height: 15px; border: 1px solid #aebfa0; border-radius: 20px; padding: 3px; display: flex; align-items: center; }
 .toggle-track i { display: block; height: 7px; width: 7px; background: #9bb184; border-radius: 50%; transition: transform .2s; }
@@ -69,7 +69,8 @@ button:focus-visible, a:focus-visible, summary:focus-visible, canvas:focus-visib
 .icon-button:hover { background: #dce6cc; }
 .icon-button svg { width: 14px; height: 14px; }
 .icon-button.speaking { background: #d6eaa9; box-shadow: 0 0 0 4px #c3da9b30; }
-.scene-hint { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); color: #5d754d; font-size: .875rem; pointer-events: none; text-align: center; max-width: 240px; }
+.scene-hint { flex: 1; min-width: 0; color: #5d754d; font-size: .875rem; pointer-events: none; text-align: center; white-space: nowrap; }
+@container (max-width: 660px) { .scene-hint { display: none; } }
 .touch-controls { position: absolute; right: 22px; bottom: 65px; z-index: 3; display: grid; grid-template-columns: repeat(3, 34px); gap: 3px; }
 .touch-controls button { height: 34px; width: 34px; border-radius: 5px; border: 1px solid #bbcbaa; background: #f8faefeb; }
 .touch-controls button:first-child { grid-column: 2; }
