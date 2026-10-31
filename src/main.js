@@ -2,7 +2,9 @@ import '@fontsource-variable/dm-sans';
 import '@fontsource/instrument-serif/latin-400-italic.css';
 import { aboutMe, careerStops, professionalSummary, formatTenure, projects, skills, education, certificates, teaching } from './content.js';
 import { renderProjectCard, renderProjectDetail } from './project-view.js';
+import { renderStoryJourney, activateStoryMilestone } from './story-view.js';
 import './project-view.css';
+import './story-view.css';
 
 const icons = {
   arrow: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg>',
@@ -23,6 +25,7 @@ const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 const latest = careerStops.length - 1;
 let world, active = -1, panel = 'journey', reading = false, exploring = false, paused = motionPreference.matches;
 let toastTimer, speaking = false, dialogTrigger, disposed = false;
+let selectedStoryMilestone = 0;
 
 document.querySelector('#app').innerHTML = `
   <a class="skip-link" href="#sidebar-body">Skip to career details</a>
@@ -64,7 +67,7 @@ function aboutMarkup(compact = false) {
     <h3 class="about-tagline">${esc(aboutMe.tagline)}</h3><p class="about-statement">${esc(aboutMe.professionalStatement)}</p>
     <section class="about-motivation"><h3>What drives me</h3><p>${esc(aboutMe.motivation)}</p></section>
     <section class="about-goal"><h3 id="about-goal-title" tabindex="-1">Where I’m headed</h3><p>${esc(aboutMe.goal)}</p></section><footer class="about-signature"><span>THE WORLD OF MY WORK</span><span aria-hidden="true">/</span><strong>PEOPLE. PLANS. FOLLOW-THROUGH.</strong></footer></div>
-    <section class="about-narrative" aria-labelledby="about-story-title"><p class="eyebrow">BANGLADESH → CANADA</p><h3 id="about-story-title" tabindex="-1">${esc(aboutMe.storyTitle)}</h3>${aboutMe.story.map(paragraph=>`<p class="about-story-paragraph">${esc(paragraph)}</p>`).join('')}</section>
+    ${renderStoryJourney(aboutMe,{selectedIndex:selectedStoryMilestone})}
   </article>`;
 }
 
@@ -129,13 +132,32 @@ function selectStop(index) {
 
 function scrollCurrentReading() {if(!reading||panel!=='journey')return;const body=document.querySelector('#sidebar-body');const card=body.querySelector('#reading-view > .is-current');if(card)body.scrollTop+=card.getBoundingClientRect().top-body.getBoundingClientRect().top-8;}
 
+function showStoryMilestone(index, focus = false) {
+  if(!Number.isInteger(index)||index<0||index>=aboutMe.storyMilestones.length)return;
+  selectedStoryMilestone=index;
+  stopSpeech();
+  activateStoryMilestone(document.querySelector('#story-journey'),index,{focus});
+}
+
 document.querySelector('#app').addEventListener('click',event=>{
+  const milestone=event.target.closest('[data-story-milestone]');if(milestone){showStoryMilestone(Number(milestone.dataset.storyMilestone));return;}
   const aboutJump=event.target.closest('[data-about-jump]');if(aboutJump){stopSpeech();const body=document.querySelector('#sidebar-body');const target=body.querySelector(aboutJump.dataset.aboutJump==='story'?'#about-story-title':'#about-goal-title');if(target){target.focus({preventScroll:true});body.scrollTo({top:body.scrollTop+target.getBoundingClientRect().top-body.getBoundingClientRect().top-12,behavior:motionPreference.matches?'instant':'smooth'});}return;}
   const project=event.target.closest('[data-project]');if(project){openProject(project.dataset.project,project);return;}
   const section=event.target.closest('button[data-panel]');if(section){stopSpeech();panel=section.dataset.panel;renderPanel();return;}
   const category=event.target.closest('[data-filter]');if(category){projectFilter=category.dataset.filter;renderPanel(false);return;}
   if(event.target.closest('[data-home]')){selectStop(-1);return;}
   if(event.target.closest('[data-copy-email]')) copyEmail();
+});
+document.querySelector('#app').addEventListener('keydown',event=>{
+  const tab=event.target.closest('[role="tab"][data-story-milestone]');if(!tab)return;
+  const index=Number(tab.dataset.storyMilestone),count=aboutMe.storyMilestones.length;
+  let next;
+  if(event.key==='ArrowRight')next=(index+1)%count;
+  if(event.key==='ArrowLeft')next=(index-1+count)%count;
+  if(event.key==='Home')next=0;
+  if(event.key==='End')next=count-1;
+  if(next===undefined)return;
+  event.preventDefault();showStoryMilestone(next,true);
 });
 document.querySelector('#previous-stop').addEventListener('click',()=>selectStop(active-1));
 document.querySelector('#next-stop').addEventListener('click',()=>selectStop(active===latest?-1:active+1));
