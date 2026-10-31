@@ -163,8 +163,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
       company: station.company || station.label || defaultStations[index]?.company,
       position: [x * 5.05, 0, z * 4.05],
       stop: [x * 3.0, 0, z * 2.4],
-      // The network workplace has a foreground technician; its label sits
-      // below the tile so it does not cover him or the ladder.
+      // Keep the network workplace label below its equipment display.
       labelAnchor: new THREE.Vector3(x * 6.15, index === 4 ? -0.35 : 0.5, z * 5.0),
       color: ['terracotta', 'navy', 'sage', 'wood', 'gray', 'terracotta', 'moss'][index % 7],
     };
@@ -302,9 +301,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     plant(group, 1.05, 0.8, 0.8);
   }
 
-  // 05 — network site work: desktop setup, live rack equipment and a service ladder.
-  let updateNetworkTechnician = () => {};
-  let networkWorkTime = 0;
+  // 05 — network site work: desktop setup, live rack equipment and service kit.
   if (stationGroups[4]) {
     const group = stationGroups[4];
     group.name = 'dynamic-infotech-network-workplace';
@@ -342,19 +339,6 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     cable([[-0.52, 0.64, -0.27], [-0.33, 0.41, -0.14], [0.35, 0.32, -0.1], [1.15, 0.42, 0.19]], 'navy', 0.023);
     sign(rack, 'NETWORK', 0.83, 0.22, 0, 2.22, 0.392, '#263d48', '#fff9ed');
 
-    // A light aluminium ladder leans beside the open rack, with seven distinct
-    // rungs and rubber feet. It stays inside the original workplace footprint.
-    const ladder = new THREE.Group(); ladder.position.set(0.03, 0, -0.08); group.add(ladder);
-    ladder.name = 'server-service-ladder';
-    [-0.23, 0.23].forEach(x => {
-      lineBetween(ladder, [x, 0.34, 0.62], [x, 2.25, -0.28], 0.035, 'gray');
-      box(ladder, 0.11, 0.09, 0.13, x, 0.345, 0.62, 'navy', 0.02);
-    });
-    for (let i = 0; i < 7; i++) {
-      const amount = (i + 1) / 8;
-      lineBetween(ladder, [-0.23, 0.34 + amount * 1.91, 0.62 - amount * 0.9], [0.23, 0.34 + amount * 1.91, 0.62 - amount * 0.9], 0.032, 'paper');
-    }
-
     // A desktop computer, keyboard, tower and setup screen explain the other
     // half of the role without borrowing the laptop used by the UX workplaces.
     box(group, 1.05, 0.11, 0.73, 0.99, 0.99, 0.47, 'wood');
@@ -374,50 +358,6 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     box(group, 0.37, 0.045, 0.018, 0.865, 1.4, 0.367, 'sage', 0.008);
     box(group, 0.32, 0.025, 0.012, 0.93, 1.3, 0.355, 'gray', 0.005);
 
-    // The site technician alternates between the keyboard and a low ladder
-    // rung to service the rack. His body is separate from the visiting avatar.
-    const technician = new THREE.Group(); group.add(technician);
-    technician.name = 'network-technician';
-    const body = new THREE.Group(); technician.add(body);
-    const legs = [-0.1, 0.1].map(x => {
-      const leg = new THREE.Group(); leg.position.set(x, 0.5, 0); body.add(leg);
-      box(leg, 0.15, 0.37, 0.17, 0, -0.19, 0, 'navy', 0.045);
-      box(leg, 0.18, 0.1, 0.27, 0, -0.43, 0.045, 'dark', 0.035);
-      return leg;
-    });
-    box(body, 0.42, 0.46, 0.26, 0, 0.75, 0, 'gray', 0.075);
-    box(body, 0.42, 0.09, 0.27, 0, 0.59, 0, 'navy', 0.025);
-    box(body, 0.075, 0.07, 0.024, -0.105, 0.83, 0.142, 'paper', 0.01);
-    box(body, 0.055, 0.14, 0.055, 0.22, 0.57, 0.05, 'amber', 0.012);
-    cylinder(body, 0.07, 0.075, 0.11, 0, 1.02, 0, 'skin');
-    sphere(body, 0.215, 0, 1.19, 0, 'skin', [0.92, 1.05, 0.9]);
-    sphere(body, 0.205, 0, 1.32, -0.015, 'dark', [0.99, 0.58, 0.97]);
-    sphere(body, 0.055, 0, 1.17, 0.18, 'skin', [0.7, 0.8, 0.7]);
-    [-0.07, 0.07].forEach(x => sphere(body, 0.019, x, 1.22, 0.183, 'dark', [1, 0.85, 0.5]));
-    const arms = [-1, 1].map(side => {
-      const arm = new THREE.Group(); arm.position.set(side * 0.25, 0.94, 0); body.add(arm);
-      box(arm, 0.13, 0.25, 0.15, 0, -0.11, 0, 'gray', 0.05);
-      const elbow = new THREE.Group(); elbow.position.y = -0.22; arm.add(elbow);
-      box(elbow, 0.12, 0.22, 0.135, 0, -0.1, 0, 'skin', 0.04);
-      sphere(elbow, 0.07, 0, -0.23, 0.01, 'skin', [0.9, 1, 0.8]);
-      return { arm, elbow, side };
-    });
-    updateNetworkTechnician = time => {
-      const phase = (time + 8) % 15;
-      const toRack = phase < 5 ? 0 : phase < 7 ? (phase - 5) / 2 : phase < 12 ? 1 : (15 - phase) / 3;
-      const blend = THREE.MathUtils.smoothstep(toRack, 0, 1);
-      const walking = phase >= 5 && phase < 7 || phase >= 12;
-      technician.position.set(0.82 - blend * 0.82, 0.305 + blend * 0.2, 1.06 - blend * 0.73);
-      technician.rotation.y = Math.PI + blend * 0.59;
-      body.rotation.x = -0.06 - blend * 0.08;
-      legs.forEach((leg, index) => leg.rotation.x = walking ? Math.sin(time * 9 + index * Math.PI) * 0.23 : index ? blend * 0.32 : 0);
-      arms.forEach(({ arm, elbow, side }, index) => {
-        arm.rotation.x = -1.02 - blend * 0.37 + Math.sin(time * 4 + index) * 0.035;
-        arm.rotation.z = side * (0.08 + blend * 0.14);
-        elbow.rotation.x = -0.48 + Math.sin(time * 3.5 + index * 1.7) * 0.06;
-      });
-    };
-    updateNetworkTechnician(0);
     box(group, 0.48, 0.22, 0.32, -1.02, 0.43, 0.87, 'terracotta', 0.04);
     lineBetween(group, [-1.19, 0.58, 0.87], [-0.85, 0.58, 0.87], 0.023, 'navy');
   }
@@ -549,13 +489,19 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     stationData.forEach((station, index) => {
       projected.copy(station.labelAnchor); world.localToWorld(projected); projected.project(camera);
       const label = labels[index];
-      const narrow = size.width < 480;
+      const narrow = size.width < 480 || size.height < 240;
       // The company timeline supplies all seven choices on compact screens;
       // showing one world label keeps the small scene and character legible.
-      label.style.visibility = narrow && index !== activeIndex ? 'hidden' : 'visible';
-      const halfWidth = Math.min(narrow ? 73 : 85, 26 + station.name.length * 3);
-      const left = THREE.MathUtils.clamp((projected.x * 0.5 + 0.5) * size.width, halfWidth + 8, size.width - halfWidth - 8);
-      const top = THREE.MathUtils.clamp((-projected.y * 0.5 + 0.5) * size.height, 23, size.height - 24);
+      label.style.visibility = size.height < 180 || (narrow && index !== activeIndex) ? 'hidden' : 'visible';
+      // Measure the actual readable label instead of estimating from the old
+      // miniature font size. Clamp both axes so larger text stays in the scene.
+      const marginX = Math.min(8, size.width / 2), marginY = Math.min(8, size.height / 2);
+      const halfWidth = Math.min(label.offsetWidth / 2, size.width / 2 - marginX);
+      const halfHeight = Math.min(label.offsetHeight / 2, size.height / 2 - marginY);
+      const left = THREE.MathUtils.clamp((projected.x * 0.5 + 0.5) * size.width, halfWidth + marginX, size.width - halfWidth - marginX);
+      // Reserve the bottom control row when the scene is compact.
+      const bottomMargin = narrow ? Math.min(64, size.height / 2) : marginY;
+      const top = THREE.MathUtils.clamp((-projected.y * 0.5 + 0.5) * size.height, halfHeight + marginY, size.height - halfHeight - bottomMargin);
       label.style.left = `${left}px`; label.style.top = `${top}px`;
       label.classList.toggle('is-active', index === activeIndex);
       label.setAttribute('aria-pressed', String(index === activeIndex));
@@ -579,7 +525,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
       ? 'Explore Saqib’s career world. Move using the arrow keys or W, A, S and D.'
       : 'A three-dimensional world of Saqib’s career. Choose a company button to move between workplaces.';
     const workplace = activeIndex === 4
-      ? ' At Dynamic Infotech, a network technician sets up a desktop computer and services a server rack beside a ladder.'
+      ? ' The Dynamic Infotech workplace contains a desktop computer setup, a cabled server rack, and a service kit.'
       : '';
     canvas.setAttribute('aria-label', controls + workplace);
   }
@@ -735,8 +681,6 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
         marker.scale.set(scale, 1, scale);
       });
     }
-    networkWorkTime += delta;
-    updateNetworkTechnician(networkWorkTime);
     checkStation(); renderOnce();
   }
   resize(); select(0); animate(); onReady();
