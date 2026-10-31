@@ -22,7 +22,7 @@ const email = 'saqib.uxui@gmail.com';
 const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 const latest = careerStops.length - 1;
 let world, active = -1, panel = 'journey', reading = false, exploring = false, paused = motionPreference.matches;
-let tourPlaying = false, tourTimer, toastTimer, speaking = false, dialogTrigger, disposed = false;
+let toastTimer, speaking = false, dialogTrigger, disposed = false;
 
 document.querySelector('#app').innerHTML = `
   <a class="skip-link" href="#sidebar-body">Skip to career details</a>
@@ -50,7 +50,6 @@ document.querySelector('#app').innerHTML = `
       </aside>
     </div>
 
-    <footer class="journey-footer"><div class="tour-control"><button type="button" id="tour-toggle" aria-pressed="false">${icons.play}<span>Play journey</span></button><p>MY STORY → TODAY</p></div><nav class="timeline-nav" aria-label="Story and employment timeline"><ol class="career-track" id="career-track"><li><button type="button" class="timeline-stop timeline-about active" data-stop-index="-1" aria-pressed="true" aria-label="00 About Me & My Story"><span class="timeline-index">00</span><span class="timeline-company">About Me &amp; My Story<small>Bangladesh → Canada</small></span><i></i></button></li>${careerStops.map((stop,index)=>`<li><button type="button" class="timeline-stop" data-stop-index="${index}" aria-pressed="false" aria-label="Visit ${esc(stop.company)}, ${esc(stop.period)}"><span class="timeline-index">${number(index)}</span><span class="timeline-company">${esc(stop.label)}<small>${esc(stop.start.slice(0,4))}–${stop.end?esc(stop.end.slice(0,4)):'Today'}</small></span><i></i></button></li>`).join('')}</ol></nav><span class="location-tag"><i></i> ONTARIO, CANADA</span></footer>
   </main>
   <dialog class="project-dialog" id="project-dialog" aria-labelledby="dialog-title"><button type="button" class="dialog-close icon-button" id="dialog-close" aria-label="Close project">${icons.close}</button><div id="dialog-content"></div></dialog>
   <div class="toast" id="toast" role="status"></div>
@@ -109,14 +108,11 @@ function renderPanel(resetScroll = true) {
   if(resetScroll) body.scrollTop=0;
 }
 
-function updateTimeline() {
-  document.querySelectorAll('[data-stop-index]').forEach(button=>{const selected=Number(button.dataset.stopIndex)===active;button.classList.toggle('active',selected);button.setAttribute('aria-pressed',selected);});
+function updateChapterControls() {
   document.querySelector('#stop-counter').textContent=`${number(active)} / ${number(latest)}`;
   document.querySelector('#previous-stop').disabled=active===-1;
   document.querySelector('#next-stop').innerHTML=`${active===latest?'Back to my story':active===-1?'First company':'Next company'} ${icons.next}`;
   document.querySelector('#listen').setAttribute('aria-label',active===-1?'Listen to my story':'Listen to this company story');
-  const track=document.querySelector('#career-track');const selected=track.querySelector('.active');
-  if(selected) track.scrollTo({left:selected.parentElement.offsetLeft-track.clientWidth/2+selected.offsetWidth/2,behavior:motionPreference.matches?'instant':'smooth'});
 }
 
 function stopSpeech() {
@@ -125,11 +121,9 @@ function stopSpeech() {
 }
 
 function updateMotion() { world?.setPaused(paused||reading||document.hidden||document.querySelector('#project-dialog').open);document.querySelector('#pause-world').innerHTML=paused?icons.play:icons.pause;document.querySelector('#pause-world').setAttribute('aria-label',`${paused?'Resume':'Pause'} scene animation`); }
-function stopTour() { clearTimeout(tourTimer);tourPlaying=false;const button=document.querySelector('#tour-toggle');button.innerHTML=`${icons.play}<span>Play journey</span>`;button.setAttribute('aria-pressed','false'); }
-function scheduleTour() {clearTimeout(tourTimer);tourTimer=setTimeout(()=>{if(!tourPlaying)return;if(active===latest){stopTour();return;}selectStop(active+1,false);scheduleTour();},16000);}
-function selectStop(index,manual=true) {
+function selectStop(index) {
   if(!Number.isInteger(index)||index < -1||index>=careerStops.length)return;
-  if(manual)stopTour();stopSpeech();active=index;panel='journey';renderPanel();updateTimeline();
+  stopSpeech();active=index;panel='journey';renderPanel();updateChapterControls();
   document.querySelector('#travel-status').textContent=active===-1?'Meet Saqib':`${paused||motionPreference.matches?'At':'Visiting'} ${careerStops[active].company}`;
   world?.goTo(index);scrollCurrentReading();
 }
@@ -137,10 +131,9 @@ function selectStop(index,manual=true) {
 function scrollCurrentReading() {if(!reading||panel!=='journey')return;const body=document.querySelector('#sidebar-body');const card=body.querySelector('#reading-view > .is-current');if(card)body.scrollTop+=card.getBoundingClientRect().top-body.getBoundingClientRect().top-8;}
 
 document.querySelector('#app').addEventListener('click',event=>{
-  const aboutJump=event.target.closest('[data-about-jump]');if(aboutJump){stopTour();stopSpeech();const body=document.querySelector('#sidebar-body');const target=body.querySelector(aboutJump.dataset.aboutJump==='story'?'#about-story-title':'#about-goal-title');if(target){target.focus({preventScroll:true});body.scrollTo({top:body.scrollTop+target.getBoundingClientRect().top-body.getBoundingClientRect().top-12,behavior:motionPreference.matches?'instant':'smooth'});}return;}
+  const aboutJump=event.target.closest('[data-about-jump]');if(aboutJump){stopSpeech();const body=document.querySelector('#sidebar-body');const target=body.querySelector(aboutJump.dataset.aboutJump==='story'?'#about-story-title':'#about-goal-title');if(target){target.focus({preventScroll:true});body.scrollTo({top:body.scrollTop+target.getBoundingClientRect().top-body.getBoundingClientRect().top-12,behavior:motionPreference.matches?'instant':'smooth'});}return;}
   const project=event.target.closest('[data-project]');if(project){openProject(project.dataset.project,project);return;}
-  const section=event.target.closest('button[data-panel]');if(section){stopTour();stopSpeech();panel=section.dataset.panel;renderPanel();return;}
-  const stop=event.target.closest('[data-stop-index]');if(stop){selectStop(Number(stop.dataset.stopIndex));return;}
+  const section=event.target.closest('button[data-panel]');if(section){stopSpeech();panel=section.dataset.panel;renderPanel();return;}
   const category=event.target.closest('[data-filter]');if(category){projectFilter=category.dataset.filter;renderPanel(false);return;}
   if(event.target.closest('[data-home]')){selectStop(-1);return;}
   if(event.target.closest('[data-copy-email]')) copyEmail();
@@ -148,20 +141,18 @@ document.querySelector('#app').addEventListener('click',event=>{
 document.querySelector('#previous-stop').addEventListener('click',()=>selectStop(active-1));
 document.querySelector('#next-stop').addEventListener('click',()=>selectStop(active===latest?-1:active+1));
 document.querySelector('#go-today').addEventListener('click',()=>selectStop(latest));
-document.querySelector('#career-track').addEventListener('keydown',event=>{const button=event.target.closest('[data-stop-index]');if(!button)return;let next;if(event.key==='ArrowRight')next=Math.min(latest,active+1);if(event.key==='ArrowLeft')next=Math.max(-1,active-1);if(event.key==='Home')next=-1;if(event.key==='End')next=latest;if(next===undefined)return;event.preventDefault();selectStop(next);document.querySelector(`[data-stop-index="${next}"]`).focus({preventScroll:true});});
-document.querySelector('#tour-toggle').addEventListener('click',()=>{if(tourPlaying){stopTour();return;}if(reading)toggleReading(false);selectStop(active===latest?-1:active,false);tourPlaying=true;document.querySelector('#tour-toggle').innerHTML=`${icons.pause}<span>Pause journey</span>`;document.querySelector('#tour-toggle').setAttribute('aria-pressed','true');scheduleTour();});
 
-function toggleReading(force) {reading=typeof force==='boolean'?force:!reading;stopTour();stopSpeech();document.querySelector('.portfolio-shell').classList.toggle('reading-mode',reading);document.querySelector('#reading-toggle').setAttribute('aria-pressed',reading);document.querySelector('#reading-toggle span').textContent=reading?'3D view':'Reading view';panel='journey';renderPanel();scrollCurrentReading();updateMotion();}
+function toggleReading(force) {reading=typeof force==='boolean'?force:!reading;stopSpeech();document.querySelector('.portfolio-shell').classList.toggle('reading-mode',reading);document.querySelector('#reading-toggle').setAttribute('aria-pressed',reading);document.querySelector('#reading-toggle span').textContent=reading?'3D view':'Reading view';panel='journey';renderPanel();scrollCurrentReading();updateMotion();}
 document.querySelector('#reading-toggle').addEventListener('click',()=>toggleReading());
-document.querySelector('#explore-toggle').addEventListener('click',()=>{exploring=!exploring;stopTour();world?.setExploring(exploring);document.querySelector('#explore-toggle').setAttribute('aria-pressed',exploring);document.querySelector('#touch-controls').hidden=!exploring;document.querySelector('#scene-hint').textContent=exploring?'Focus the world. Move with WASD, arrow keys, or the controls.':'Choose a company. I’ll take you there.';});
+document.querySelector('#explore-toggle').addEventListener('click',()=>{exploring=!exploring;world?.setExploring(exploring);document.querySelector('#explore-toggle').setAttribute('aria-pressed',exploring);document.querySelector('#touch-controls').hidden=!exploring;document.querySelector('#scene-hint').textContent=exploring?'Focus the world. Move with WASD, arrow keys, or the controls.':'Choose a company. I’ll take you there.';});
 document.querySelector('#touch-controls').addEventListener('click',event=>{const button=event.target.closest('[data-direction]');if(button)world?.move(button.dataset.direction);});
 document.querySelector('#pause-world').addEventListener('click',()=>{paused=!paused;updateMotion();});
 motionPreference.addEventListener('change',()=>{paused=motionPreference.matches;updateMotion();});
-document.addEventListener('visibilitychange',()=>{if(document.hidden){stopTour();stopSpeech();}updateMotion();});
-document.querySelector('#listen').addEventListener('click',()=>{if(speaking){stopSpeech();return;}stopTour();const stop=careerStops[active];const text=active===-1?`${aboutMe.name}. ${aboutMe.position}. ${aboutMe.professionalStatement} ${aboutMe.motivation} ${aboutMe.goal} ${aboutMe.story.join(' ')}`:`${stop.company}. ${stop.role}. ${stop.period}. ${stop.story}`;const utterance=new SpeechSynthesisUtterance(text);utterance.lang='en-CA';utterance.rate=.94;utterance.onend=utterance.onerror=()=>{speaking=false;document.querySelector('#listen').classList.remove('speaking');document.querySelector('#listen').setAttribute('aria-label',active===-1?'Listen to my story':'Listen to this company story');};speaking=true;document.querySelector('#listen').classList.add('speaking');document.querySelector('#listen').setAttribute('aria-label','Stop narration');window.speechSynthesis.speak(utterance);});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){stopSpeech();}updateMotion();});
+document.querySelector('#listen').addEventListener('click',()=>{if(speaking){stopSpeech();return;}const stop=careerStops[active];const text=active===-1?`${aboutMe.name}. ${aboutMe.position}. ${aboutMe.professionalStatement} ${aboutMe.motivation} ${aboutMe.goal} ${aboutMe.story.join(' ')}`:`${stop.company}. ${stop.role}. ${stop.period}. ${stop.story}`;const utterance=new SpeechSynthesisUtterance(text);utterance.lang='en-CA';utterance.rate=.94;utterance.onend=utterance.onerror=()=>{speaking=false;document.querySelector('#listen').classList.remove('speaking');document.querySelector('#listen').setAttribute('aria-label',active===-1?'Listen to my story':'Listen to this company story');};speaking=true;document.querySelector('#listen').classList.add('speaking');document.querySelector('#listen').setAttribute('aria-label','Stop narration');window.speechSynthesis.speak(utterance);});
 if(!('speechSynthesis' in window))document.querySelector('#listen').hidden=true;
 
-function openProject(id,trigger) {const project=projects.find(item=>item.id===id);if(!project)return;stopTour();stopSpeech();dialogTrigger=trigger;document.querySelector('#dialog-content').innerHTML=renderProjectDetail(project,{assetUrl});document.querySelector('#project-dialog').showModal();document.querySelector('#dialog-content').scrollTop=0;updateMotion();}
+function openProject(id,trigger) {const project=projects.find(item=>item.id===id);if(!project)return;stopSpeech();dialogTrigger=trigger;document.querySelector('#dialog-content').innerHTML=renderProjectDetail(project,{assetUrl});document.querySelector('#project-dialog').showModal();document.querySelector('#dialog-content').scrollTop=0;updateMotion();}
 function closeProject() {document.querySelector('#project-dialog').close();}
 document.querySelector('#dialog-close').addEventListener('click',closeProject);
 document.querySelector('#project-dialog').addEventListener('click',event=>{if(event.target.closest('[data-contact]')){closeProject();panel='contact';renderPanel();return;}if(event.target===event.currentTarget){const rect=event.currentTarget.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)closeProject();}});
@@ -169,10 +160,10 @@ document.querySelector('#project-dialog').addEventListener('close',()=>{if(dialo
 async function copyEmail() {try{await navigator.clipboard.writeText(email);toast('Email copied. Let’s connect.');}catch{toast(`Email me at ${email}`);}}
 function toast(text) {const node=document.querySelector('#toast');node.textContent=text;node.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>node.classList.remove('visible'),4000);}
 
-renderPanel();updateTimeline();updateMotion();
+renderPanel();updateChapterControls();updateMotion();
 async function initWorld() {
   try {const {createWorld}=await import('./world.js');if(disposed)return;world=createWorld({container:document.querySelector('#world'),stations:careerStops,onSelect:index=>selectStop(index),onArrival:index=>{if(index===active)document.querySelector('#travel-status').textContent=index===-1?'Meet Saqib':`At ${careerStops[index].company}`;},onReady:()=>document.querySelector('#world-loading').classList.add('loaded'),reducedMotion:motionPreference.matches});world.goTo(active);updateMotion();}
   catch(error){console.warn('The 3D view is unavailable; all career details remain accessible.',error);document.querySelector('#world-loading').classList.add('loaded');document.querySelector('#world').innerHTML=`<div class="world-fallback"><span aria-hidden="true">✳</span><h2>There’s another<br>way into the story.</h2><p>Explore every employer, project, and qualification in reading view.</p><button type="button" class="button button-dark" id="fallback-reading">Read my journey ${icons.next}</button></div>`;document.querySelector('#fallback-reading').addEventListener('click',()=>toggleReading(true));document.querySelector('#explore-toggle').disabled=true;document.querySelector('#pause-world').disabled=true;}
 }
 initWorld();
-window.addEventListener('pagehide',event=>{stopSpeech();stopTour();if(!event.persisted){disposed=true;world?.dispose();}},{once:true});
+window.addEventListener('pagehide',event=>{stopSpeech();if(!event.persisted){disposed=true;world?.dispose();}},{once:true});

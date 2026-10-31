@@ -559,7 +559,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
       projected.copy(station.labelAnchor); world.localToWorld(projected); projected.project(camera);
       const label = labels[index];
       const narrow = size.width < 480 || size.height < 240;
-      // The company timeline supplies all seven choices on compact screens;
+      // Previous/Next chapter controls provide access on compact screens;
       // showing one world label keeps the small scene and character legible.
       label.style.visibility = size.height < 180 || (narrow && index !== activeIndex) ? 'hidden' : 'visible';
       // Measure the actual readable label instead of estimating from the old

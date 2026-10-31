@@ -27,7 +27,7 @@ test('single-viewport company journey preserves public assets and résumé links
   expect(resume.headers()['content-type']).toContain('application/pdf');
   expect((await resume.body()).subarray(0, 5).toString()).toBe('%PDF-');
 
-  await page.locator('[data-stop-index="1"]').click();
+  await page.getByRole('button', { name: 'Visit company 2: Synesis IT', exact: true }).click();
   await page.getByRole('button', { name: 'Read BIWTA project story' }).click();
   await page.getByText('Explore the prototype screens', { exact: true }).click();
   const previews = await page.locator('.project-gallery img').evaluateAll(images => images.map(image => image.getAttribute('src')));

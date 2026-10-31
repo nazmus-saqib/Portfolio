@@ -20,7 +20,6 @@ async function loadWorld(page, baseURL) {
   await expect(page.locator('#world-loading')).toHaveClass(/loaded/);
   await expect(page.locator('canvas.world-canvas')).toBeVisible();
   await expect(page.locator('.world-label')).toHaveCount(7);
-  await expect(page.locator('#career-track [data-stop-index]')).toHaveCount(8);
 }
 
 async function assertSingleViewport(page) {
@@ -45,8 +44,6 @@ test('chapter 00 introduces Saqib and his story before the employer journey', as
   for (const text of ['About Me & My Story', 'Nazmus Saqib', 'Project & Operations Coordinator', 'Identify BDA', 'Bringing it all together.', 'Bangladesh', 'Canada', '2022', 'Centennial College', 'Sir Sandford Fleming College', 'October 2024', 'Assistant Project Manager']) {
     await expect(about).toContainText(text);
   }
-  await expect(page.locator('#career-track [data-stop-index]').first()).toHaveAttribute('data-stop-index', '-1');
-  await expect(page.locator('[data-stop-index="-1"]')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#world')).toHaveAttribute('data-active-station', '-1');
   await expect(page.locator('#previous-stop')).toBeDisabled();
   await expect(page.locator('#next-stop')).toContainText('First company');
@@ -55,10 +52,10 @@ test('chapter 00 introduces Saqib and his story before the employer journey', as
   await expect(page.locator('#about-story-title')).toBeInViewport();
   await expect(page.locator('#about-story-title')).toBeFocused();
   await assertSingleViewport(page);
-  await page.locator('[data-stop-index="-1"]').click();
+  await page.getByRole('button', { name: 'Nazmus Saqib, start of journey', exact: true }).click();
   await page.getByRole('button', { name: 'My career goal', exact: true }).click();
   await expect(page.locator('#about-goal-title')).toBeInViewport();
-  await page.locator('[data-stop-index="-1"]').click();
+  await page.getByRole('button', { name: 'Nazmus Saqib, start of journey', exact: true }).click();
 
   await page.locator('#next-stop').click();
   await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
@@ -67,13 +64,8 @@ test('chapter 00 introduces Saqib and his story before the employer journey', as
   await expect(about).toBeVisible();
   await expect(page.locator('#world')).toHaveAttribute('data-active-company', 'About Me & My Story');
 
-  await page.locator('[data-stop-index="-1"]').focus();
-  await page.keyboard.press('End');
-  await expect(page.locator('#company-name')).toHaveText('Identify BDA');
-  await page.keyboard.press('Home');
-  await expect(about).toBeVisible();
-  await expect(page.locator('[data-stop-index="-1"]')).toBeFocused();
   await page.locator('#go-today').click();
+  await expect(page.locator('#company-name')).toHaveText('Identify BDA');
   await page.getByRole('button', { name: 'Nazmus Saqib, start of journey', exact: true }).click();
   await expect(about).toBeVisible();
 
@@ -86,6 +78,7 @@ test('chapter 00 introduces Saqib and his story before the employer journey', as
 
 test('seven employer cards follow career chronology with dates, tenure, and accurate roles', async ({ page, baseURL }) => {
   await loadWorld(page, baseURL);
+  await expect(page.locator('.journey-footer')).toHaveCount(0);
   await page.locator('#next-stop').click();
   await expect(page.locator('#company-name')).toHaveText(companies[0]);
   await expect(page.locator('#company-dates')).toHaveText('Jan 2018–Jul 2020');
@@ -96,7 +89,7 @@ test('seven employer cards follow career chronology with dates, tenure, and accu
     await page.locator('#next-stop').click();
     await expect(page.locator('#company-name')).toHaveText(companies[index]);
     await expect(page.locator('#world')).toHaveAttribute('data-active-company', companies[index]);
-    await expect(page.locator(`[data-stop-index="${index}"]`)).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByRole('button', { name: `Visit company ${index + 1}: ${companies[index]}`, exact: true })).toHaveAttribute('aria-pressed', 'true');
   }
   await expect(page.locator('#company-role')).toHaveText('Project & Operations Coordinator');
   await expect(page.locator('#company-dates')).toHaveText('Oct 2024–Present');
@@ -109,9 +102,9 @@ test('seven employer cards follow career chronology with dates, tenure, and accu
   await expect(page.locator('#company-tenure')).toHaveText('1 yr 4 mos');
   await expect(page.locator('#company-role')).toHaveText('UX Intern → UX Designer');
   await expect(page.getByRole('button', { name: 'Read BIWTA project story' })).toBeVisible();
-  await page.locator('[data-stop-index="4"]').click();
+  await page.getByRole('button', { name: 'Visit company 5: Dynamic Infotech', exact: true }).click();
   await expect(page.locator('#company-card')).toContainText('Overlapping roles');
-  await page.locator('[data-stop-index="5"]').click();
+  await page.getByRole('button', { name: 'Visit company 6: UPS & Staples', exact: true }).click();
   await expect(page.locator('#company-card')).toContainText('Overlapping roles');
   await assertSingleViewport(page);
 });
@@ -136,7 +129,8 @@ test('the character renders movement with on-screen and focused keyboard control
 
 test('company project names open details and return focus to the selected employer card', async ({ page, request, baseURL }) => {
   await loadWorld(page, baseURL);
-  await page.locator('[data-stop-index="1"]').click();
+  await page.locator('#next-stop').click();
+  await page.locator('#next-stop').click();
   const biwta = page.getByRole('button', { name: 'Read BIWTA project story' });
   await biwta.click();
   await expect(page.getByRole('dialog')).toBeVisible();
@@ -153,7 +147,7 @@ test('company project names open details and return focus to the selected employ
   await expect(page.getByRole('dialog')).toBeHidden();
   await expect(biwta).toBeFocused();
   await expect(page.locator('#company-name')).toHaveText('Synesis IT');
-  await page.locator('[data-stop-index="2"]').click();
+  await page.locator('#next-stop').click();
   await page.getByRole('button', { name: 'Read Quantibly project story' }).click();
   await expect(page.getByRole('dialog')).toContainText('Internal product details stay confidential');
   await page.locator('#dialog-close').click();
@@ -200,21 +194,6 @@ test('profile, qualifications, projects, and contact remain in the same viewport
   await assertSingleViewport(page);
 });
 
-test('automatic journey advances chronologically and stops when a company is chosen', async ({ page, baseURL }) => {
-  await loadWorld(page, baseURL);
-  await page.clock.install();
-  await page.locator('#tour-toggle').click();
-  await expect(page.locator('#tour-toggle')).toHaveAttribute('aria-pressed', 'true');
-  await page.clock.runFor(16_010);
-  await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
-  await page.clock.runFor(16_010);
-  await expect(page.locator('#company-name')).toHaveText('Synesis IT');
-  await page.locator('[data-stop-index="6"]').click();
-  await expect(page.locator('#tour-toggle')).toHaveAttribute('aria-pressed', 'false');
-  await page.clock.runFor(20_000);
-  await expect(page.locator('#company-name')).toHaveText('Identify BDA');
-});
-
 for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 640 }]) {
   test(`mobile ${viewport.width}×${viewport.height} keeps the world, company card, and panels within the viewport`, async ({ page, baseURL }) => {
     await page.setViewportSize(viewport);
@@ -224,7 +203,8 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 640 }
     await expect(page.locator('#about-card')).toBeVisible();
     await page.locator('#about-card').getByText('In October 2024,', { exact: false }).scrollIntoViewIfNeeded();
     await assertSingleViewport(page);
-    await page.locator('[data-stop-index="1"]').click();
+    await page.locator('#next-stop').click();
+    await page.locator('#next-stop').click();
     await expect(page.locator('#company-name')).toHaveText('Synesis IT');
     const biwta = page.getByRole('button', { name: 'Read BIWTA project story' });
     await biwta.click();

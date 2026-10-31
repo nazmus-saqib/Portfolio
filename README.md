@@ -42,9 +42,9 @@ For a local Pages-path regression check, serve the build with `npm run preview -
 
 ## Controls and alternatives
 
-- “00 About Me & My Story” introduces Saqib’s name, position, professional statement, tagline, motivation, goal, and journey from Bangladesh to Canada. “THE WORLD OF MY WORK / PEOPLE. PLANS. FOLLOW-THROUGH.” appears below the career goal as a closing statement. Its quick links jump to the story or goal inside the panel. Select 00, the wordmark, or the central compass to return to the introduction.
-- Choose a company in the 3D world or the bottom timeline. Employer chapters remain numbered 01–07, with role, month/year dates, tenure, and clickable project names.
-- “First company” begins the employment journey; “Next company” follows the chronological order. “Play journey” advances through chapters every 16 seconds; manual navigation or opening a project stops the automatic tour. “Meet me today” jumps to Identify BDA.
+- “00 About Me & My Story” introduces Saqib’s name, position, professional statement, tagline, motivation, goal, and journey from Bangladesh to Canada. “THE WORLD OF MY WORK / PEOPLE. PLANS. FOLLOW-THROUGH.” appears below the career goal as a closing statement. Its quick links jump to the story or goal inside the panel. Select the wordmark or central compass to return to the introduction.
+- Choose a company in the 3D world or use the Previous/Next chapter controls. Employer chapters remain numbered 01–07, with role, month/year dates, tenure, and clickable project names.
+- “First company” begins the employment journey; “Next company” follows the chronological order. “Meet me today” jumps to Identify BDA. The world and content fill the space below the header.
 - “Explore” enables WASD / arrow-key movement while the canvas has keyboard focus; on-screen controls support touch.
 - The speaker button starts optional narration using the visitor’s browser speech synthesis. Voice availability depends on the browser/device. No voice recording is embedded.
 - Pause stops scene animation. Reduced-motion preferences disable continuous movement.
@@ -74,6 +74,6 @@ npm run build
 npm test
 ```
 
-The Playwright configuration uses Chromium at `/usr/bin/chromium` in this cloud environment (or `CHROMIUM_PATH` if provided). In another environment, install a compatible browser or set that path. Tests cover employer chronology, dates and tenure, real canvas movement, automatic journey, clickable company projects, profile qualifications, project dialogs, local images and résumé download, mobile viewport containment, reduced motion, and the no-WebGL fallback. Test reports and generated build files are ignored by Git.
+The Playwright configuration uses Chromium at `/usr/bin/chromium` in this cloud environment (or `CHROMIUM_PATH` if provided). In another environment, install a compatible browser or set that path. Tests cover employer chronology, dates and tenure, real canvas movement, chapter navigation, clickable company projects, profile qualifications, project dialogs, local images and résumé download, mobile viewport containment, reduced motion, and the no-WebGL fallback. Test reports and generated build files are ignored by Git.
 
 Use the existing checkout; cloud tasks are already isolated. Do not create worktrees unless explicitly requested.
