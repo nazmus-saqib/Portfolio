@@ -4,16 +4,16 @@
 export const aboutMe = {
   name: 'Nazmus Saqib',
   position: 'Project & Operations Coordinator',
-  currentRole: 'Print Project Coordinator · Identify BDA',
+  company: 'Identify BDA',
   professionalStatement: 'I’m a project and operations coordinator who brings clients, vendors, and teams together to move work from a clear request to a completed delivery. I combine technical education, project management training, and hands-on experience to coordinate requirements, approvals, timelines, costs, and communication when plans change.',
   tagline: 'Bringing it all together.',
   motivation: 'I’m motivated by making the next step clear, keeping people informed, and following through until the work is delivered.',
   goal: 'I’m looking for Project Coordinator or Assistant Project Manager opportunities where I can help teams plan clearly, communicate well, and deliver dependable results.',
-  storyTitle: 'From Bangladesh to Canada. From understanding needs to coordinating delivery.',
+  storyTitle: 'From Bangladesh to Canada. From understanding needs to coordinating Projects.',
   story: [
     'I’m originally from Bangladesh, where I earned a degree in Computer Science & Engineering from North South University. I began working in UX in 2020 at Synesis IT, learning to listen carefully and turn needs into clear requirements. Across my work at Synesis IT, iQuantile, and iStoreiSend, I developed a wider view of how business needs, technical teams, and operational workflows connect.',
     'I came to Canada as a student in 2022 and completed graduate certificates in Interactive Media Management at Centennial College and Project Management at Sir Sandford Fleming College. Alongside my studies and transition into the Canadian workplace, I gained customer-facing experience at UPS and Staples and worked on-call at Dynamic Infotech. Those roles strengthened my communication, practical problem solving, and ability to balance priorities.',
-    'In October 2024, I joined Identify BDA as a Print Project Coordinator. Today, I connect client requirements with vendors, approvals, production, delivery, and financial follow-up. Becoming a coordinator brought together the parts of my earlier work I use most: understanding the requirement, communicating across teams, and keeping the next step moving. I’m now building toward Project Coordinator and Assistant Project Manager opportunities.',
+    'In October 2024, I joined Identify BDA as a Project & Operations Coordinator. Today, I connect client requirements with vendors, approvals, production, delivery, and financial follow-up. Becoming a coordinator brought together the parts of my earlier work I use most: understanding the requirement, communicating across teams, and keeping the next step moving. I’m now building toward Project Coordinator and Assistant Project Manager opportunities.',
   ],
 };
 
@@ -49,7 +49,7 @@ export const chapters = [
     eyebrow: '04 / BRINGING IT TOGETHER',
     title: 'Turn the plan into progress.',
     body: 'Today, I coordinate projects and operations at Identify BDA. I connect client requirements with vendor capabilities, keep approvals and timelines moving, resolve issues, and follow the work through production, delivery, and billing. My focus is bringing people and moving parts together.',
-    detail: 'Official role: Print Project Coordinator · Identify BDA · October 2024–present.',
+    detail: 'Role: Project & Operations Coordinator · Identify BDA · October 2024–present.',
     tags: ['Project & operations coordination', 'Client & vendor liaison', 'Delivery & follow-through'],
     place: 'Canada / Today',
     period: '2024–present',
@@ -65,7 +65,7 @@ export const projects = [
     company: 'Identify BDA · Canada',
     collaboration: 'Project coordination',
     summary: 'Keeping client requirements, vendors, approvals, production, and delivery connected across a typical 6–10 projects each month.',
-    role: 'Print Project Coordinator',
+    role: 'Project & Operations Coordinator',
     challenge: 'Keep changing requirements, supplier options, approvals, deadlines, and delivery details aligned as projects move between clients, internal colleagues, and production partners.',
     approach: [
       'Clarify the request, confirm specifications and dependencies, coordinate artwork, and obtain client approvals before production.',
@@ -261,7 +261,7 @@ export const projects = [
 export const experience = [
   {
     period: 'Oct 2024–present',
-    title: 'Print Project Coordinator',
+    title: 'Project & Operations Coordinator',
     company: 'Identify BDA · Canada',
     description: 'Coordinate client requirements, artwork approvals, vendor sourcing, quotations, production, delivery, and financial follow-up. Work directly with clients, internal colleagues, and a network of 20+ external vendors.',
   },
@@ -478,7 +478,7 @@ export const careerStops = [
     id: 'identify',
     company: 'Identify BDA',
     label: 'Identify BDA',
-    role: 'Print Project Coordinator',
+    role: 'Project & Operations Coordinator',
     start: '2024-10',
     end: null,
     period: 'Oct 2024–Present',

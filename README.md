@@ -1,6 +1,6 @@
 # Nazmus Saqib — A world of connected work
 
-A single-viewport portfolio about project and operations coordination, built with Vite, vanilla JavaScript, and Three.js. It opens with “00 About Me & My Story” at the central plaza, followed by seven employers in chronological order, from WebNSofTech to Identify BDA. The profile summary and résumé target Project Coordinator and Assistant Project Manager opportunities while preserving official employment titles. Earlier UX work appears as career history, alongside individual, team, and academic project stories.
+A single-viewport portfolio about project and operations coordination, built with Vite, vanilla JavaScript, and Three.js. It opens with “00 About Me & My Story” at the central plaza, followed by seven employers in chronological order, from WebNSofTech to Identify BDA. The profile summary and résumé target Project Coordinator and Assistant Project Manager opportunities. Earlier UX work appears as career history, alongside individual, team, and academic project stories.
 
 The page fits the browser viewport on desktop and mobile. Longer role descriptions, profile details, project collections, and case studies scroll inside their own panels; the page itself does not scroll.
 

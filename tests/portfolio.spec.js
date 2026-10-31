@@ -42,7 +42,7 @@ test('chapter 00 introduces Saqib and his story before the employer journey', as
   await loadWorld(page, baseURL);
   const about = page.locator('#about-card');
   await expect(about).toBeVisible();
-  for (const text of ['About Me & My Story', 'Nazmus Saqib', 'Project & Operations Coordinator', 'Print Project Coordinator', 'Identify BDA', 'Bringing it all together.', 'Bangladesh', 'Canada', '2022', 'Centennial College', 'Sir Sandford Fleming College', 'October 2024', 'Assistant Project Manager']) {
+  for (const text of ['About Me & My Story', 'Nazmus Saqib', 'Project & Operations Coordinator', 'Identify BDA', 'Bringing it all together.', 'Bangladesh', 'Canada', '2022', 'Centennial College', 'Sir Sandford Fleming College', 'October 2024', 'Assistant Project Manager']) {
     await expect(about).toContainText(text);
   }
   await expect(page.locator('#career-track [data-stop-index]').first()).toHaveAttribute('data-stop-index', '-1');
@@ -98,7 +98,7 @@ test('seven employer cards follow career chronology with dates, tenure, and accu
     await expect(page.locator('#world')).toHaveAttribute('data-active-company', companies[index]);
     await expect(page.locator(`[data-stop-index="${index}"]`)).toHaveAttribute('aria-pressed', 'true');
   }
-  await expect(page.locator('#company-role')).toHaveText('Print Project Coordinator');
+  await expect(page.locator('#company-role')).toHaveText('Project & Operations Coordinator');
   await expect(page.locator('#company-dates')).toHaveText('Oct 2024–Present');
   await expect(page.locator('#next-stop')).toContainText('Back to my story');
   await page.locator('#next-stop').click();
@@ -159,7 +159,7 @@ test('company project names open details and return focus to the selected employ
   await page.locator('#dialog-close').click();
   await page.locator('#go-today').click();
   await page.getByRole('button', { name: 'Read From request to delivery project story' }).click();
-  await expect(page.getByRole('dialog')).toContainText('Print Project Coordinator');
+  await expect(page.getByRole('dialog')).toContainText('Project & Operations Coordinator');
   await expect(page.getByRole('dialog')).toContainText('20+ external vendors');
   await page.locator('#dialog-close').click();
   await assertSingleViewport(page);
