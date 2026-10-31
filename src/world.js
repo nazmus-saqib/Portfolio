@@ -163,7 +163,9 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
       company: station.company || station.label || defaultStations[index]?.company,
       position: [x * 5.05, 0, z * 4.05],
       stop: [x * 3.0, 0, z * 2.4],
-      labelAnchor: new THREE.Vector3(x * 6.15, 0.5, z * 5.0),
+      // The network workplace has a foreground technician; its label sits
+      // below the tile so it does not cover him or the ladder.
+      labelAnchor: new THREE.Vector3(x * 6.15, index === 4 ? -0.35 : 0.5, z * 5.0),
       color: ['terracotta', 'navy', 'sage', 'wood', 'gray', 'terracotta', 'moss'][index % 7],
     };
   });
@@ -300,25 +302,124 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     plant(group, 1.05, 0.8, 0.8);
   }
 
-  // 05 — technical site work: equipment, a router, and an open service kit.
+  // 05 — network site work: desktop setup, live rack equipment and a service ladder.
+  let updateNetworkTechnician = () => {};
+  let networkWorkTime = 0;
   if (stationGroups[4]) {
     const group = stationGroups[4];
-    box(group, 0.75, 1.44, 0.78, -0.77, 1, -0.57, 'navy', 0.08);
-    [0.55, 0.85, 1.15, 1.45].forEach(y => {
-      box(group, 0.55, 0.19, 0.025, -0.77, y, -0.165, 'gray', 0.02);
-      sphere(group, 0.025, -0.57, y, -0.14, 'amber');
+    group.name = 'dynamic-infotech-network-workplace';
+
+    // The open-front rack makes switches, patch ports and server trays legible
+    // at the normal campus camera distance.
+    const rack = new THREE.Group(); rack.position.set(-0.82, 0, -0.62); group.add(rack);
+    rack.name = 'network-server-rack';
+    box(rack, 1.02, 0.13, 0.76, 0, 0.36, 0, 'navy');
+    box(rack, 1.02, 0.12, 0.76, 0, 2.22, 0, 'navy');
+    [-0.46, 0.46].forEach(x => {
+      box(rack, 0.1, 1.87, 0.72, x, 1.29, 0, 'navy', 0.02);
+      box(rack, 0.035, 1.75, 0.035, x, 1.28, 0.386, 'gray', 0.008);
     });
-    box(group, 1.45, 0.11, 0.85, 0.49, 0.89, 0.25, 'wood');
-    [-0.05, 1.04].forEach(x => box(group, 0.07, 0.58, 0.65, x, 0.55, 0.25, 'navy'));
-    const laptop = box(group, 0.71, 0.53, 0.045, 0.35, 1.22, 0.04, 'navy'); laptop.rotation.x = -0.11;
-    box(group, 0.6, 0.4, 0.018, 0.35, 1.23, 0.08, 'sage');
-    box(group, 0.73, 0.035, 0.48, 0.35, 0.97, 0.29, 'navy');
-    box(group, 0.43, 0.1, 0.26, 0.9, 1, 0.21, 'paper');
-    [-0.12, 0.12].forEach(x => cylinder(group, 0.013, 0.013, 0.36, 0.9 + x, 1.19, 0.17, 'navy', 8));
-    box(group, 0.62, 0.3, 0.4, 0.35, 0.42, 0.93, 'terracotta', 0.05);
-    lineBetween(group, [0.15, 0.6, 0.93], [0.55, 0.6, 0.93], 0.025, 'navy');
-    sign(group, 'SOLVE', 0.8, 0.25, -0.77, 1.9, -0.16, '#f5f1e5', '#263d48');
-    plant(group, 1.23, -0.71, 0.65);
+    box(rack, 0.84, 1.7, 0.045, 0, 1.28, -0.35, 'dark', 0.01);
+    [0.66, 0.96, 1.26, 1.56].forEach((y, row) => {
+      box(rack, 0.8, 0.22, 0.62, 0, y, 0.015, 'gray', 0.025);
+      box(rack, 0.73, 0.16, 0.026, 0, y, 0.34, 'navy', 0.015);
+      [-0.23, -0.13, -0.03, 0.07].forEach(x => box(rack, 0.055, 0.025, 0.012, x, y, 0.358, 'gray', 0.005));
+      sphere(rack, 0.023, 0.25, y + 0.025, 0.365, row % 2 ? 'amber' : 'sage');
+      sphere(rack, 0.016, 0.31, y + 0.025, 0.365, 'paper');
+    });
+    box(rack, 0.8, 0.23, 0.61, 0, 1.91, 0.01, 'paper', 0.025);
+    [-0.28, -0.17, -0.06, 0.05, 0.16, 0.27].forEach(x => {
+      box(rack, 0.065, 0.07, 0.025, x, 1.92, 0.33, 'navy', 0.008);
+      box(rack, 0.04, 0.015, 0.015, x, 2, 0.35, 'sage', 0.004);
+    });
+    const cable = (points, shade, radius = 0.018) => {
+      const curve = new THREE.CatmullRomCurve3(points.map(point => new THREE.Vector3(...point)));
+      const mesh = new THREE.Mesh(new THREE.TubeGeometry(curve, 20, radius, 6, false), materials[shade]);
+      mesh.castShadow = true; group.add(mesh);
+    };
+    cable([[-1.1, 1.91, -0.27], [-1.1, 1.72, -0.13], [-0.64, 1.7, -0.11], [-0.64, 1.58, -0.26]], 'amber');
+    cable([[-0.89, 1.91, -0.27], [-0.89, 1.62, -0.09], [-0.53, 1.55, -0.08], [-0.53, 1.26, -0.26]], 'sage');
+    cable([[-0.52, 0.64, -0.27], [-0.33, 0.41, -0.14], [0.35, 0.32, -0.1], [1.15, 0.42, 0.19]], 'navy', 0.023);
+    sign(rack, 'NETWORK', 0.83, 0.22, 0, 2.22, 0.392, '#263d48', '#fff9ed');
+
+    // A light aluminium ladder leans beside the open rack, with seven distinct
+    // rungs and rubber feet. It stays inside the original workplace footprint.
+    const ladder = new THREE.Group(); ladder.position.set(0.03, 0, -0.08); group.add(ladder);
+    ladder.name = 'server-service-ladder';
+    [-0.23, 0.23].forEach(x => {
+      lineBetween(ladder, [x, 0.34, 0.62], [x, 2.25, -0.28], 0.035, 'gray');
+      box(ladder, 0.11, 0.09, 0.13, x, 0.345, 0.62, 'navy', 0.02);
+    });
+    for (let i = 0; i < 7; i++) {
+      const amount = (i + 1) / 8;
+      lineBetween(ladder, [-0.23, 0.34 + amount * 1.91, 0.62 - amount * 0.9], [0.23, 0.34 + amount * 1.91, 0.62 - amount * 0.9], 0.032, 'paper');
+    }
+
+    // A desktop computer, keyboard, tower and setup screen explain the other
+    // half of the role without borrowing the laptop used by the UX workplaces.
+    box(group, 1.05, 0.11, 0.73, 0.99, 0.99, 0.47, 'wood');
+    [0.58, 1.39].forEach(x => box(group, 0.065, 0.62, 0.57, x, 0.62, 0.47, 'navy', 0.015));
+    box(group, 0.78, 0.58, 0.075, 0.93, 1.43, 0.29, 'navy', 0.045);
+    box(group, 0.67, 0.46, 0.018, 0.93, 1.44, 0.337, 'paper', 0.015);
+    box(group, 0.07, 0.14, 0.07, 0.93, 1.09, 0.29, 'gray');
+    box(group, 0.35, 0.025, 0.23, 0.93, 1.055, 0.33, 'navy');
+    box(group, 0.54, 0.035, 0.21, 0.87, 1.065, 0.66, 'navy', 0.015);
+    [-0.16, -0.05, 0.06, 0.17].forEach(x => box(group, 0.075, 0.012, 0.1, 0.87 + x, 1.089, 0.66, 'gray', 0.006));
+    sphere(group, 0.07, 1.29, 1.085, 0.67, 'paper', [0.7, 0.36, 1]);
+    box(group, 0.27, 0.55, 0.43, 1.27, 0.6, 0.44, 'gray', 0.035);
+    box(group, 0.19, 0.43, 0.025, 1.27, 0.62, 0.67, 'navy', 0.015);
+    sphere(group, 0.018, 1.27, 0.77, 0.691, 'sage');
+    sign(group, 'SETUP', 0.53, 0.14, 0.93, 1.55, 0.351, '#fff9ed', '#526f5c');
+    box(group, 0.5, 0.045, 0.015, 0.93, 1.4, 0.355, 'stone', 0.008);
+    box(group, 0.37, 0.045, 0.018, 0.865, 1.4, 0.367, 'sage', 0.008);
+    box(group, 0.32, 0.025, 0.012, 0.93, 1.3, 0.355, 'gray', 0.005);
+
+    // The site technician alternates between the keyboard and a low ladder
+    // rung to service the rack. His body is separate from the visiting avatar.
+    const technician = new THREE.Group(); group.add(technician);
+    technician.name = 'network-technician';
+    const body = new THREE.Group(); technician.add(body);
+    const legs = [-0.1, 0.1].map(x => {
+      const leg = new THREE.Group(); leg.position.set(x, 0.5, 0); body.add(leg);
+      box(leg, 0.15, 0.37, 0.17, 0, -0.19, 0, 'navy', 0.045);
+      box(leg, 0.18, 0.1, 0.27, 0, -0.43, 0.045, 'dark', 0.035);
+      return leg;
+    });
+    box(body, 0.42, 0.46, 0.26, 0, 0.75, 0, 'gray', 0.075);
+    box(body, 0.42, 0.09, 0.27, 0, 0.59, 0, 'navy', 0.025);
+    box(body, 0.075, 0.07, 0.024, -0.105, 0.83, 0.142, 'paper', 0.01);
+    box(body, 0.055, 0.14, 0.055, 0.22, 0.57, 0.05, 'amber', 0.012);
+    cylinder(body, 0.07, 0.075, 0.11, 0, 1.02, 0, 'skin');
+    sphere(body, 0.215, 0, 1.19, 0, 'skin', [0.92, 1.05, 0.9]);
+    sphere(body, 0.205, 0, 1.32, -0.015, 'dark', [0.99, 0.58, 0.97]);
+    sphere(body, 0.055, 0, 1.17, 0.18, 'skin', [0.7, 0.8, 0.7]);
+    [-0.07, 0.07].forEach(x => sphere(body, 0.019, x, 1.22, 0.183, 'dark', [1, 0.85, 0.5]));
+    const arms = [-1, 1].map(side => {
+      const arm = new THREE.Group(); arm.position.set(side * 0.25, 0.94, 0); body.add(arm);
+      box(arm, 0.13, 0.25, 0.15, 0, -0.11, 0, 'gray', 0.05);
+      const elbow = new THREE.Group(); elbow.position.y = -0.22; arm.add(elbow);
+      box(elbow, 0.12, 0.22, 0.135, 0, -0.1, 0, 'skin', 0.04);
+      sphere(elbow, 0.07, 0, -0.23, 0.01, 'skin', [0.9, 1, 0.8]);
+      return { arm, elbow, side };
+    });
+    updateNetworkTechnician = time => {
+      const phase = (time + 8) % 15;
+      const toRack = phase < 5 ? 0 : phase < 7 ? (phase - 5) / 2 : phase < 12 ? 1 : (15 - phase) / 3;
+      const blend = THREE.MathUtils.smoothstep(toRack, 0, 1);
+      const walking = phase >= 5 && phase < 7 || phase >= 12;
+      technician.position.set(0.82 - blend * 0.82, 0.305 + blend * 0.2, 1.06 - blend * 0.73);
+      technician.rotation.y = Math.PI + blend * 0.59;
+      body.rotation.x = -0.06 - blend * 0.08;
+      legs.forEach((leg, index) => leg.rotation.x = walking ? Math.sin(time * 9 + index * Math.PI) * 0.23 : index ? blend * 0.32 : 0);
+      arms.forEach(({ arm, elbow, side }, index) => {
+        arm.rotation.x = -1.02 - blend * 0.37 + Math.sin(time * 4 + index) * 0.035;
+        arm.rotation.z = side * (0.08 + blend * 0.14);
+        elbow.rotation.x = -0.48 + Math.sin(time * 3.5 + index * 1.7) * 0.06;
+      });
+    };
+    updateNetworkTechnician(0);
+    box(group, 0.48, 0.22, 0.32, -1.02, 0.43, 0.87, 'terracotta', 0.04);
+    lineBetween(group, [-1.19, 0.58, 0.87], [-0.85, 0.58, 0.87], 0.023, 'navy');
   }
 
   // 06 — customer service: a retail counter, parcel shelving, and point of sale.
@@ -473,10 +574,20 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
   }
   const resizeObserver = new ResizeObserver(resize); resizeObserver.observe(container);
 
+  function updateCanvasDescription() {
+    const controls = exploring
+      ? 'Explore Saqib’s career world. Move using the arrow keys or W, A, S and D.'
+      : 'A three-dimensional world of Saqib’s career. Choose a company button to move between workplaces.';
+    const workplace = activeIndex === 4
+      ? ' At Dynamic Infotech, a network technician sets up a desktop computer and services a server rack beside a ladder.'
+      : '';
+    canvas.setAttribute('aria-label', controls + workplace);
+  }
   function select(index) {
     activeIndex = Math.max(0, Math.min(stationData.length - 1, Number(index) || 0));
     container.dataset.activeCompany = stationData[activeIndex].company;
     container.dataset.activeStation = String(activeIndex);
+    updateCanvasDescription();
     labels.forEach((label, i) => label.classList.toggle('is-active', i === activeIndex));
     markers.forEach((marker, i) => marker.material = i === activeIndex ? materials.amber : materials.chalk);
     const destination = new THREE.Vector3(...stationData[activeIndex].stop); destination.y = 0.08;
@@ -624,6 +735,8 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
         marker.scale.set(scale, 1, scale);
       });
     }
+    networkWorkTime += delta;
+    updateNetworkTechnician(networkWorkTime);
     checkStation(); renderOnce();
   }
   resize(); select(0); animate(); onReady();
@@ -645,7 +758,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     setExploring(value) {
       exploring = !!value; clearKeys();
       if (exploring) { walkPath = []; container.dataset.traveling = 'false'; }
-      canvas.setAttribute('aria-label', exploring ? 'Explore Saqib’s career world. Move using the arrow keys or W, A, S and D. Visit the company workplaces to discover each role.' : 'A three-dimensional world of Saqib’s career. Choose a company button to move between workplaces.');
+      updateCanvasDescription();
       if (exploring) canvas.focus({ preventScroll: true });
     },
     move,

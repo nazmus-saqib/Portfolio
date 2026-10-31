@@ -54,7 +54,7 @@ For a local Pages-path regression check, serve the build with `npm run preview -
 
 - `src/content.js`: employer chronology, professional summary, tenure formatting, project stories, skills, education, and credentials. Ended roles count the supplied calendar months; current-role tenure uses elapsed months in the current Toronto month. Dynamic Infotech and UPS/Staples are explicitly identified as overlapping roles.
 - `src/main.js`: interface and interactions; public contact email.
-- `src/world.js`: locally generated character and environment; no external model downloads.
+- `src/world.js`: locally generated character and environment; no external model downloads. The Dynamic Infotech workplace depicts a technician setting up a desktop computer and servicing a cabled server rack, with a ladder beside the equipment. Its work animation follows the same pause and reduced-motion controls as the rest of the scene.
 - `src/styles.css`: responsive interface styling.
 - `src/project-view.js` and `src/project-view.css`: reusable project previews and case-study presentation inside the viewport.
 - `public/projects/`: optimized previews from supplied project files. Original career records, project source files, and confidential documents are **not** public assets.
