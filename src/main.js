@@ -83,7 +83,7 @@ function companyMarkup(stop, index, compact = false) {
     <div class="card-topline"><p class="eyebrow">${number(index)} / ${esc(stop.location)}</p><span class="employment-type">${esc(stop.employment)}</span></div>
     <h2 ${compact?'':'id="company-name"'}>${esc(stop.company)}</h2><p class="company-role" ${compact?'':'id="company-role"'}>${esc(stop.role)}</p>
     <div class="job-dates"><span ${compact?'':'id="company-dates"'}>${esc(stop.period)}</span><span class="tenure" ${compact?'':'id="company-tenure"'} title="Based on the supplied month-level dates">${esc(formatTenure(stop.start,stop.end))}</span></div>
-    ${related.length?`<section class="company-projects" aria-label="Projects at ${esc(stop.company)}"><h3>${esc(stop.projectLabel || 'Projects from this chapter')} <span>CLICK TO EXPLORE</span></h3><div class="project-chips">${related.map(p=>`<button type="button" data-project="${esc(p.id)}" aria-label="Read ${esc(p.title)} project story">${esc(p.title)}${icons.arrow}</button>`).join('')}</div></section>`:''}
+    ${related.length?`<section class="company-projects" aria-label="Projects at ${esc(stop.company)}"><h3>${esc(stop.projectLabel || 'Projects from this chapter')}</h3><div class="project-chips">${related.map(p=>`<button type="button" class="button button-dark" data-project="${esc(p.id)}" aria-label="Read ${esc(p.title)} project story"><span>${esc(p.title)}</span>${icons.arrow}</button>`).join('')}</div></section>`:''}
     <div class="company-story" ${compact?'':'id="story-copy"'}><h3>${esc(stop.headline)}</h3><p>${esc(stop.story)}</p></div>
     ${renderRoleContributions(stop, { selectedIndex: selectedContributions.get(stop.id) ?? 0 })}
   </article>`;

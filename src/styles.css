@@ -116,12 +116,12 @@ button:focus-visible, a:focus-visible, summary:focus-visible, canvas:focus-visib
 .company-story h3 { font-size: 20px; font-weight: 500; letter-spacing: -.35px; line-height: 1.4; }
 .company-story p { font-size: 1rem; line-height: 1.65; color: #526c43; margin-top: 9px; }
 .company-projects { margin-top: 20px; }
-.company-projects h3 { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; font-size: .875rem; font-weight: 500; color: #46613a; }
-.company-projects h3 > span { font-size: .875rem; letter-spacing: .7px; color: #5f7950; }
-.project-chips { display: flex; flex-wrap: wrap; gap: 7px; padding-top: 10px; }
-.project-chips button { display: flex; align-items: center; justify-content: space-between; gap: 22px; border: 1px solid #bccdaa; background: #f5f8ec; border-radius: 5px; padding: 10px 12px; font-size: .875rem; font-weight: 500; transition: background .2s; }
-.project-chips button:hover { background: #d8e7bf; }
-.project-chips button svg { width: 11px; height: 11px; }
+.company-projects h3 { font-size: .875rem; font-weight: 500; color: #46613a; }
+.project-chips { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 12px; }
+.project-chips .button { max-width: 100%; min-height: 44px; gap: 16px; border: 1px solid var(--green); padding: 10px 14px; font-size: 1rem; line-height: 1.4; text-align: left; transition: background .2s, border-color .2s; }
+.project-chips .button:hover { border-color: #46633b; }
+.project-chips .button > span { min-width: 0; overflow-wrap: anywhere; }
+.project-chips .button svg { width: 14px; height: 14px; }
 summary { cursor: pointer; }
 .credentials summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 15px; font-size: .875rem; color: #4d683e; }
 summary::-webkit-details-marker { display: none; }
@@ -295,10 +295,8 @@ summary::-webkit-details-marker { display: none; }
   .company-story p { font-size: 1rem; margin-top: 8px; line-height: 1.65; }
   .company-projects { margin-top: 16px; }
   .company-projects h3 { font-size: .875rem; }
-  .company-projects h3 > span { font-size: .875rem; }
-  .project-chips { gap: 6px; padding-top: 9px; }
-  .project-chips button { padding: 9px 11px; font-size: .875rem; gap: 18px; }
-  .project-chips button svg { width: 10px; height: 10px; }
+  .project-chips { gap: 8px; padding-top: 10px; }
+  .project-chips .button { padding: 10px 12px; gap: 12px; }
   .company-navigation { padding: 8px 12px; gap: 8px; }
   .company-navigation .icon-button { height: 36px; width: 36px; }
   .company-navigation .icon-button svg { height: 12px; width: 12px; }
