@@ -129,13 +129,16 @@ summary::-webkit-details-marker { display: none; }
 .credentials summary > span { font-size: 1rem; font-weight: 350; }
 .credentials[open] summary > span { transform: rotate(45deg); }
 .company-navigation { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 23px; flex-shrink: 0; border-top: 1px solid #cfdbc1; background: #e7edda; }
-#stop-counter { font-size: .875rem; color: #526c43; }
-#next-stop { display: flex; align-items: center; gap: 17px; font-size: .875rem; font-weight: 500; margin-left: auto; }
+#stop-counter { flex-shrink: 0; white-space: nowrap; font-size: .875rem; color: #526c43; }
+#next-stop { display: flex; align-items: center; min-width: 0; min-height: 44px; gap: 17px; padding: 8px 12px; font-size: .875rem; line-height: 1.4; font-weight: 500; text-align: left; margin-left: auto; }
 #next-stop svg { width: 16px; height: 16px; }
 .button { display: inline-flex; align-items: center; justify-content: space-between; gap: 35px; font-size: .875rem; font-weight: 500; padding: 13px 17px; border-radius: 5px; }
 .button svg { width: 15px; height: 15px; }
 .button-dark { background: var(--green); color: #f3f8e7; }
 .button-dark:hover { background: #46633b; }
+.button-secondary { border: 1px solid #9fb58c; background: #f3f6e9; color: #3f5b34; }
+.button-secondary:hover { border-color: #7f9c65; background: #e1ead1; }
+.button-secondary:active { background: #d9e5c6; }
 .profile-detail > h2, .project-collection > h2, .contact-panel > h2, .reading-heading > h2 { font-weight: 450; font-size: 34px; letter-spacing: -1.3px; line-height: 1.12; margin: 13px 0 17px; }
 .profile-detail > h2 em, .project-collection > h2 em, .contact-panel > h2 em, .reading-heading > h2 em { font-size: 1.13em; }
 .full-summary, .target-statement, .panel-description, .contact-panel > p, .reading-heading > p:last-child { font-size: 1rem; line-height: 1.65; color: #506a41; }
@@ -302,7 +305,7 @@ summary::-webkit-details-marker { display: none; }
   .company-navigation .icon-button { height: 36px; width: 36px; }
   .company-navigation .icon-button svg { height: 12px; width: 12px; }
   #stop-counter { font-size: .875rem; }
-  #next-stop { font-size: .875rem; gap: 7px; }
+  #next-stop { padding: 8px 10px; font-size: .875rem; gap: 7px; }
   #next-stop svg { width: 14px; height: 14px; }
   .profile-detail > h2, .project-collection > h2, .contact-panel > h2, .reading-heading > h2 { font-size: 30px; }
   .full-summary, .target-statement, .panel-description, .contact-panel > p, .reading-heading > p:last-child { font-size: 1rem; }
