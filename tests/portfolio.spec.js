@@ -207,7 +207,7 @@ test('the character renders movement with on-screen and focused keyboard control
   await assertSingleViewport(page);
 });
 
-test('company project names open details and return focus to the selected employer card', async ({ page, request, baseURL }) => {
+test('company project actions open details and return focus to the selected employer card', async ({ page, request, baseURL }) => {
   await loadWorld(page, baseURL);
   await page.locator('#next-stop').click();
   await page.locator('#next-stop').click();
@@ -232,10 +232,16 @@ test('company project names open details and return focus to the selected employ
   await expect(page.getByRole('dialog')).toContainText('Internal product details stay confidential');
   await page.locator('#dialog-close').click();
   await page.locator('#go-today').click();
-  await page.getByRole('button', { name: 'Read From request to delivery project story' }).click();
+  const workflow = page.locator('.identify-workflow-stages');
+  for (const stage of ['Understand', 'Source', 'Coordinate', 'Deliver']) {
+    await expect(workflow.getByText(stage, { exact: true })).toBeVisible();
+  }
+  const exploreFlow = page.getByRole('button', { name: 'Explore the flow: From request to delivery', exact: true });
+  await exploreFlow.click();
   await expect(page.getByRole('dialog')).toContainText('Project & Operations Coordinator');
   await expect(page.getByRole('dialog')).toContainText('20+ external vendors');
   await page.locator('#dialog-close').click();
+  await expect(exploreFlow).toBeFocused();
   await assertSingleViewport(page);
 });
 
@@ -347,7 +353,7 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 640 }
     await expect(page.locator('#about-card.reading-about')).toHaveCount(1);
     await expect(page.locator('#world-pane')).toBeHidden();
     await page.locator('#sidebar-body').evaluate(element => element.scrollTop = element.scrollHeight);
-    await expect(page.getByRole('button', { name: 'Read From request to delivery project story' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Explore the flow: From request to delivery', exact: true })).toBeVisible();
     await assertSingleViewport(page);
     await page.locator('#reading-toggle').click();
     await expect(page.locator('#world-pane')).toBeVisible();
@@ -371,7 +377,7 @@ test('without WebGL the complete career and clickable projects remain available 
   await expect(page.locator('#about-card')).toContainText('Canada');
   await expect(page.locator('#reading-view .reading-company')).toHaveCount(7);
   await expect(page.locator('#reading-view')).toContainText('Oct 2024–Present');
-  await page.getByRole('button', { name: 'Read From request to delivery project story' }).click();
+  await page.getByRole('button', { name: 'Explore the flow: From request to delivery', exact: true }).click();
   await expect(page.locator('#dialog-title')).toHaveText('From request to delivery');
   await page.locator('#dialog-close').click();
   await assertSingleViewport(page);

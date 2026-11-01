@@ -5,10 +5,12 @@ import { renderProjectCard, renderProjectDetail } from './project-view.js';
 import { renderStoryJourney, activateStoryMilestone } from './story-view.js';
 import { renderProfile, activateProfileTab } from './profile-view.js';
 import { renderRoleContributions, activateRoleContribution } from './contribution-view.js';
+import { renderIdentifyWorkflow } from './workflow-view.js';
 import './project-view.css';
 import './story-view.css';
 import './profile-view.css';
 import './contribution-view.css';
+import './workflow-view.css';
 
 const icons = {
   arrow: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg>',
@@ -77,13 +79,23 @@ function aboutMarkup(compact = false) {
   </article>`;
 }
 
-function companyMarkup(stop, index, compact = false) {
+function companyProjectsMarkup(stop) {
   const related = projectNames(stop);
+  if(!related.length)return '';
+  const heading=esc(stop.projectLabel || 'Projects from this chapter');
+  if(stop.id==='identify'){
+    const project=related.find(item=>item.id==='identify') || related[0];
+    return `<section class="company-projects company-workflow" aria-label="Projects at ${esc(stop.company)}"><h3>${heading}</h3>${renderIdentifyWorkflow()}<button type="button" class="button button-dark workflow-explore" data-project="${esc(project.id)}" aria-label="Explore the flow: ${esc(project.title)}">Explore the flow ${icons.arrow}</button></section>`;
+  }
+  return `<section class="company-projects" aria-label="Projects at ${esc(stop.company)}"><h3>${heading}</h3><div class="project-chips">${related.map(p=>`<button type="button" class="button button-dark" data-project="${esc(p.id)}" aria-label="Read ${esc(p.title)} project story"><span>${esc(p.title)}</span>${icons.arrow}</button>`).join('')}</div></section>`;
+}
+
+function companyMarkup(stop, index, compact = false) {
   return `<article class="company-card ${compact?'reading-company':''} ${index===active?'is-current':''}" ${compact?'':`id="company-card"`} data-stop="${esc(stop.id)}">
     <div class="card-topline"><p class="eyebrow">${number(index)} / ${esc(stop.location)}</p><span class="employment-type">${esc(stop.employment)}</span></div>
     <h2 ${compact?'':'id="company-name"'}>${esc(stop.company)}</h2><p class="company-role" ${compact?'':'id="company-role"'}>${esc(stop.role)}</p>
     <div class="job-dates"><span ${compact?'':'id="company-dates"'}>${esc(stop.period)}</span><span class="tenure" ${compact?'':'id="company-tenure"'} title="Based on the supplied month-level dates">${esc(formatTenure(stop.start,stop.end))}</span></div>
-    ${related.length?`<section class="company-projects" aria-label="Projects at ${esc(stop.company)}"><h3>${esc(stop.projectLabel || 'Projects from this chapter')}</h3><div class="project-chips">${related.map(p=>`<button type="button" class="button button-dark" data-project="${esc(p.id)}" aria-label="Read ${esc(p.title)} project story"><span>${esc(p.title)}</span>${icons.arrow}</button>`).join('')}</div></section>`:''}
+    ${companyProjectsMarkup(stop)}
     <div class="company-story" ${compact?'':'id="story-copy"'}><h3>${esc(stop.headline)}</h3><p>${esc(stop.story)}</p></div>
     ${renderRoleContributions(stop, { selectedIndex: selectedContributions.get(stop.id) ?? 0 })}
   </article>`;

@@ -122,6 +122,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, canvas:focus-visib
 .project-chips .button:hover { border-color: #46633b; }
 .project-chips .button > span { min-width: 0; overflow-wrap: anywhere; }
 .project-chips .button svg { width: 14px; height: 14px; }
+.company-workflow .workflow-explore { max-width: 100%; min-height: 44px; margin-top: 18px; gap: 24px; font-size: 1rem; line-height: 1.4; }
 summary { cursor: pointer; }
 .credentials summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 15px; font-size: .875rem; color: #4d683e; }
 summary::-webkit-details-marker { display: none; }
