@@ -46,6 +46,7 @@ For a local Pages-path regression check, serve the build with `npm run preview -
 - The Bangladesh–Canada story uses three selectable milestones: Roots, Canada, and Today. Each reveals a short passage and a transferable skill, while the route marker and progress indicator follow the selection. Arrow keys, Home, and End work while a milestone tab is focused; reduced-motion preferences disable transitions.
 - Profile uses matching Work, Skills, and Learning cards. Explore the coordination workflow, expand practical skill groups, and browse education, courses, and knowledge sharing. The current-work card opens the coordination case study; the résumé download stays available below the profile.
 - Choose a company in the 3D world or use the Previous/Next chapter controls. Employer chapters remain numbered 01–07, with role, month/year dates, tenure, and clickable project names.
+- “What I brought to the work” stays open for every employer. Illustrated contribution cards show all original highlights; selecting a card updates the skill carried forward. Use a click, tap, Enter, or Space, or move between cards with the arrow keys, Home, and End. Reading view keeps each employer’s selection independent.
 - “First company” begins the employment journey; “Next company” follows the chronological order. “Meet me today” jumps to Identify BDA. The world and content fill the space below the header.
 - “Explore” enables WASD / arrow-key movement while the canvas has keyboard focus; on-screen controls support touch.
 - The speaker button starts optional narration using the visitor’s browser speech synthesis. Voice availability depends on the browser/device. No voice recording is embedded.
@@ -62,6 +63,7 @@ For a local Pages-path regression check, serve the build with `npm run preview -
 - `src/project-view.js` and `src/project-view.css`: reusable project previews and case-study presentation inside the viewport.
 - `src/story-view.js` and `src/story-view.css`: the illustrated story route, accessible milestone tabs, and brief story cards. `aboutMe.storyMilestones` is the single source for the shortened copy and narration.
 - `src/profile-view.js` and `src/profile-view.css`: the interactive professional profile, using the supplied summary, skills, education, and credentials. Its tabs support the same arrow-key, Home, and End navigation as the story.
+- `src/contribution-view.js` and `src/contribution-view.css`: always-visible contribution cards for each employer, with local illustrations and a selectable takeaway. The original career highlights remain the source for every card description.
 - `public/projects/`: optimized previews from supplied project files. Original career records, project source files, and confidential documents are **not** public assets.
 - `public/favicon.svg`: the site icon. The wordmark is styled in CSS, interface icons are inline SVG in `src/main.js`, and illustrative project covers are generated from HTML/CSS. No external icon account or asset download is required.
 - `public/licenses/`: original dependency license notices, also copied into the built website.

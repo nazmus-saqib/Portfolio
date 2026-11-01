@@ -122,14 +122,11 @@ button:focus-visible, a:focus-visible, summary:focus-visible, canvas:focus-visib
 .project-chips button { display: flex; align-items: center; justify-content: space-between; gap: 22px; border: 1px solid #bccdaa; background: #f5f8ec; border-radius: 5px; padding: 10px 12px; font-size: .875rem; font-weight: 500; transition: background .2s; }
 .project-chips button:hover { background: #d8e7bf; }
 .project-chips button svg { width: 11px; height: 11px; }
-.role-highlights { border-top: 1px solid #ced9bf; border-bottom: 1px solid #ced9bf; margin-top: 20px; padding: 12px 0; }
 summary { cursor: pointer; }
-.role-highlights summary, .credentials summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 15px; font-size: .875rem; color: #4d683e; }
+.credentials summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 15px; font-size: .875rem; color: #4d683e; }
 summary::-webkit-details-marker { display: none; }
-.role-highlights summary > span, .credentials summary > span { font-size: 1rem; font-weight: 350; }
-.role-highlights[open] summary > span, .credentials[open] summary > span { transform: rotate(45deg); }
-.role-highlights ul { padding-left: 15px; margin: 13px 0 3px; }
-.role-highlights li { font-size: 1rem; color: #526c43; line-height: 1.65; padding-left: 2px; margin-bottom: 6px; }
+.credentials summary > span { font-size: 1rem; font-weight: 350; }
+.credentials[open] summary > span { transform: rotate(45deg); }
 .company-navigation { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 23px; flex-shrink: 0; border-top: 1px solid #cfdbc1; background: #e7edda; }
 #stop-counter { font-size: .875rem; color: #526c43; }
 #next-stop { display: flex; align-items: center; gap: 17px; font-size: .875rem; font-weight: 500; margin-left: auto; }
@@ -302,9 +299,6 @@ summary::-webkit-details-marker { display: none; }
   .project-chips { gap: 6px; padding-top: 9px; }
   .project-chips button { padding: 9px 11px; font-size: .875rem; gap: 18px; }
   .project-chips button svg { width: 10px; height: 10px; }
-  .role-highlights { padding: 10px 0; margin-top: 16px; }
-  .role-highlights summary { font-size: .875rem; }
-  .role-highlights li { font-size: 1rem; }
   .company-navigation { padding: 8px 12px; gap: 8px; }
   .company-navigation .icon-button { height: 36px; width: 36px; }
   .company-navigation .icon-button svg { height: 12px; width: 12px; }

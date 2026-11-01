@@ -4,9 +4,11 @@ import { aboutMe, careerStops, professionalSummary, formatTenure, projects, skil
 import { renderProjectCard, renderProjectDetail } from './project-view.js';
 import { renderStoryJourney, activateStoryMilestone } from './story-view.js';
 import { renderProfile, activateProfileTab } from './profile-view.js';
+import { renderRoleContributions, activateRoleContribution } from './contribution-view.js';
 import './project-view.css';
 import './story-view.css';
 import './profile-view.css';
+import './contribution-view.css';
 
 const icons = {
   arrow: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg>',
@@ -29,6 +31,7 @@ let world, active = -1, panel = 'journey', reading = false, exploring = false, p
 let toastTimer, speaking = false, dialogTrigger, disposed = false;
 let selectedStoryMilestone = 0;
 let selectedProfileTab = 0;
+const selectedContributions = new Map();
 
 document.querySelector('#app').innerHTML = `
   <a class="skip-link" href="#sidebar-body">Skip to career details</a>
@@ -82,7 +85,7 @@ function companyMarkup(stop, index, compact = false) {
     <div class="job-dates"><span ${compact?'':'id="company-dates"'}>${esc(stop.period)}</span><span class="tenure" ${compact?'':'id="company-tenure"'} title="Based on the supplied month-level dates">${esc(formatTenure(stop.start,stop.end))}</span></div>
     ${related.length?`<section class="company-projects" aria-label="Projects at ${esc(stop.company)}"><h3>${esc(stop.projectLabel || 'Projects from this chapter')} <span>CLICK TO EXPLORE</span></h3><div class="project-chips">${related.map(p=>`<button type="button" data-project="${esc(p.id)}" aria-label="Read ${esc(p.title)} project story">${esc(p.title)}${icons.arrow}</button>`).join('')}</div></section>`:''}
     <div class="company-story" ${compact?'':'id="story-copy"'}><h3>${esc(stop.headline)}</h3><p>${esc(stop.story)}</p></div>
-    <details class="role-highlights"><summary>What I brought to the work <span>+</span></summary><ul>${stop.highlights.map(item=>`<li>${esc(item)}</li>`).join('')}</ul></details>
+    ${renderRoleContributions(stop, { selectedIndex: selectedContributions.get(stop.id) ?? 0 })}
   </article>`;
 }
 
@@ -150,7 +153,15 @@ function showProfileTab(index, focus = false) {
   activateProfileTab(explorer,index,{focus});
 }
 
+function showRoleContribution(section, index, focus = false) {
+  if(!section||!Number.isInteger(index)||index<0||index>=section.querySelectorAll('[data-contribution-index]').length)return;
+  selectedContributions.set(section.dataset.roleContributions,index);
+  stopSpeech();
+  activateRoleContribution(section,index,{focus});
+}
+
 document.querySelector('#app').addEventListener('click',event=>{
+  const contribution=event.target.closest('[data-contribution-index]');if(contribution){showRoleContribution(contribution.closest('[data-role-contributions]'),Number(contribution.dataset.contributionIndex));return;}
   const profileTab=event.target.closest('[data-profile-tab]');if(profileTab){showProfileTab(Number(profileTab.dataset.profileTab));return;}
   const milestone=event.target.closest('[data-story-milestone]');if(milestone){showStoryMilestone(Number(milestone.dataset.storyMilestone));return;}
   const aboutJump=event.target.closest('[data-about-jump]');if(aboutJump){stopSpeech();const body=document.querySelector('#sidebar-body');const target=body.querySelector(aboutJump.dataset.aboutJump==='story'?'#about-story-title':'#about-goal-title');if(target){target.focus({preventScroll:true});body.scrollTo({top:body.scrollTop+target.getBoundingClientRect().top-body.getBoundingClientRect().top-12,behavior:motionPreference.matches?'instant':'smooth'});}return;}
@@ -159,6 +170,18 @@ document.querySelector('#app').addEventListener('click',event=>{
   const category=event.target.closest('[data-filter]');if(category){projectFilter=category.dataset.filter;renderPanel(false);return;}
   if(event.target.closest('[data-home]')){selectStop(-1);return;}
   if(event.target.closest('[data-copy-email]')) copyEmail();
+});
+document.querySelector('#app').addEventListener('keydown',event=>{
+  const card=event.target.closest('[data-contribution-index]');if(!card)return;
+  const section=card.closest('[data-role-contributions]');
+  const index=Number(card.dataset.contributionIndex),count=section.querySelectorAll('[data-contribution-index]').length;
+  let next;
+  if(event.key==='ArrowRight'||event.key==='ArrowDown')next=(index+1)%count;
+  if(event.key==='ArrowLeft'||event.key==='ArrowUp')next=(index-1+count)%count;
+  if(event.key==='Home')next=0;
+  if(event.key==='End')next=count-1;
+  if(next===undefined)return;
+  event.preventDefault();showRoleContribution(section,next,true);
 });
 document.querySelector('#app').addEventListener('keydown',event=>{
   const tab=event.target.closest('[role="tab"][data-story-milestone]');if(!tab)return;

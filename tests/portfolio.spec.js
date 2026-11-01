@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { formatTenure } from '../src/content.js';
+import { careerStops, formatTenure } from '../src/content.js';
 
 const companies = ['WebNSofTech', 'Synesis IT', 'iQuantile', 'iStoreiSend', 'Dynamic Infotech', 'UPS & Staples', 'Identify BDA'];
 const errorsByPage = new WeakMap();
@@ -35,6 +35,15 @@ async function assertSingleViewport(page) {
   expect(dimensions.bodyHeight, 'Only internal panels may scroll').toBeLessThanOrEqual(dimensions.height);
   expect(dimensions.x).toBe(0);
   expect(dimensions.y).toBe(0);
+}
+
+async function assertContributionDescriptionsVisible(page, stop) {
+  const contribution = page.locator(`[data-role-contributions="${stop.id}"]`);
+  await expect(contribution.getByRole('heading', { name: 'What I brought to the work', exact: true })).toBeVisible();
+  for (const highlight of stop.highlights) {
+    await expect(contribution.getByText(highlight, { exact: true })).toBeVisible();
+  }
+  return contribution;
 }
 
 test('chapter 00 introduces Saqib and his story before the employer journey', async ({ page, baseURL }) => {
@@ -97,7 +106,7 @@ test('chapter 00 introduces Saqib and his story before the employer journey', as
   await assertSingleViewport(page);
 });
 
-test('seven employer cards follow career chronology with dates, tenure, and accurate roles', async ({ page, baseURL }) => {
+test('seven employer cards preserve chronology, accurate roles, and always-visible contributions', async ({ page, baseURL }) => {
   await loadWorld(page, baseURL);
   await expect(page.locator('.journey-footer')).toHaveCount(0);
   await page.locator('#next-stop').click();
@@ -105,12 +114,14 @@ test('seven employer cards follow career chronology with dates, tenure, and accu
   await expect(page.locator('#company-dates')).toHaveText('Jan 2018–Jul 2020');
   await expect(page.locator('#company-tenure')).toHaveText('2 yrs 7 mos');
   await expect(page.locator('#previous-stop')).toBeEnabled();
+  await assertContributionDescriptionsVisible(page, careerStops[0]);
 
   for (let index = 1; index < companies.length; index += 1) {
     await page.locator('#next-stop').click();
     await expect(page.locator('#company-name')).toHaveText(companies[index]);
     await expect(page.locator('#world')).toHaveAttribute('data-active-company', companies[index]);
     await expect(page.getByRole('button', { name: `Visit company ${index + 1}: ${companies[index]}`, exact: true })).toHaveAttribute('aria-pressed', 'true');
+    await assertContributionDescriptionsVisible(page, careerStops[index]);
   }
   await expect(page.locator('#company-role')).toHaveText('Project & Operations Coordinator');
   await expect(page.locator('#company-dates')).toHaveText('Oct 2024–Present');
@@ -127,6 +138,54 @@ test('seven employer cards follow career chronology with dates, tenure, and accu
   await expect(page.locator('#company-card')).toContainText('Overlapping roles');
   await page.getByRole('button', { name: 'Visit company 6: UPS & Staples', exact: true }).click();
   await expect(page.locator('#company-card')).toContainText('Overlapping roles');
+  await assertSingleViewport(page);
+});
+
+test('contribution cards update the takeaway without hiding work and remain independent in reading view', async ({ page, baseURL }) => {
+  await loadWorld(page, baseURL);
+  await page.locator('#next-stop').click();
+  const contribution = await assertContributionDescriptionsVisible(page, careerStops[0]);
+  expect(await contribution.evaluate(element => element.closest('details'))).toBeNull();
+  await expect(contribution.locator('summary, details')).toHaveCount(0);
+  const cards = contribution.locator('[data-contribution-index]');
+  await expect(cards).toHaveCount(3);
+  await expect(contribution.locator('[data-contribution-index][aria-pressed="true"]')).toHaveCount(1);
+  const takeaway = contribution.locator('.contribution-takeaway');
+  const firstTakeaway = await takeaway.textContent();
+
+  await cards.nth(1).click();
+  await expect(cards.nth(1)).toHaveAttribute('aria-pressed', 'true');
+  await expect(takeaway).not.toHaveText(firstTakeaway);
+  await assertContributionDescriptionsVisible(page, careerStops[0]);
+
+  await page.keyboard.press('ArrowRight');
+  await expect(cards.nth(2)).toBeFocused();
+  await expect(cards.nth(2)).toHaveAttribute('aria-pressed', 'true');
+  await page.keyboard.press('Home');
+  await expect(cards.nth(0)).toBeFocused();
+  await expect(takeaway).toHaveText(firstTakeaway);
+  await page.keyboard.press('End');
+  await expect(cards.nth(2)).toBeFocused();
+  await expect(cards.nth(2)).toHaveAttribute('aria-pressed', 'true');
+  await cards.nth(1).focus();
+  await page.keyboard.press('Enter');
+  await expect(cards.nth(1)).toHaveAttribute('aria-pressed', 'true');
+  await assertContributionDescriptionsVisible(page, careerStops[0]);
+
+  await page.locator('#reading-toggle').click();
+  await expect(page.locator('#reading-view .role-contributions')).toHaveCount(7);
+  const first = await assertContributionDescriptionsVisible(page, careerStops[0]);
+  const second = await assertContributionDescriptionsVisible(page, careerStops[1]);
+  const secondTakeaway = await second.locator('.contribution-takeaway').textContent();
+  const secondSelection = await second.locator('[aria-pressed="true"]').getAttribute('data-contribution-index');
+  const current = Number(await first.locator('[data-contribution-index][aria-pressed="true"]').getAttribute('data-contribution-index'));
+  await first.locator('[data-contribution-index]').nth((current + 1) % 3).click();
+  await expect(second.locator('.contribution-takeaway')).toHaveText(secondTakeaway);
+  await expect(second.locator(`[data-contribution-index="${secondSelection}"]`)).toHaveAttribute('aria-pressed', 'true');
+  await expect(first.locator('[data-contribution-index][aria-pressed="true"]')).toHaveCount(1);
+  for (const stop of careerStops) await assertContributionDescriptionsVisible(page, stop);
+  const ids = await page.locator('#reading-view .role-contributions [id]').evaluateAll(elements => elements.map(element => element.id));
+  expect(new Set(ids).size, 'Contribution headings and live regions have unique IDs in reading view').toBe(ids.length);
   await assertSingleViewport(page);
 });
 
@@ -262,6 +321,13 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 640 }
     await page.locator('#next-stop').click();
     await page.locator('#next-stop').click();
     await expect(page.locator('#company-name')).toHaveText('Synesis IT');
+    const contribution = await assertContributionDescriptionsVisible(page, careerStops[1]);
+    expect(await contribution.evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);
+    expect(await contribution.getByText(careerStops[1].highlights[1], { exact: true }).evaluate(element => getComputedStyle(element).fontSize)).toBe('16px');
+    await contribution.locator('[data-contribution-index="2"]').click();
+    await expect(contribution.locator('[data-contribution-index="2"]')).toHaveAttribute('aria-pressed', 'true');
+    await assertContributionDescriptionsVisible(page, careerStops[1]);
+    await assertSingleViewport(page);
     const biwta = page.getByRole('button', { name: 'Read BIWTA project story' });
     await biwta.click();
     await expect(page.locator('#dialog-title')).toHaveText('BIWTA');
