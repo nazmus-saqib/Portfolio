@@ -52,7 +52,7 @@ export function renderProfile({ professionalSummary = {}, skills = [], education
       </section>
     </div>
     <p class="profile-target"><span>MY NEXT OPPORTUNITY</span>${escapeHtml(targets.join(' / '))}</p>
-    <a class="button button-dark profile-download" href="${escapeHtml(assetUrl('nazmus-saqib-resume.pdf'))}" download>Download my résumé ${icon('download')}</a>
+    <a class="button button-dark profile-download" href="${escapeHtml(assetUrl('Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf'))}" download>Download my résumé ${icon('download')}</a>
   </section>`;
 }
 

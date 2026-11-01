@@ -21,7 +21,7 @@ test('single-viewport company journey preserves public assets and résumé links
   expect(new URL(icon, site).href).toBe(new URL('favicon.svg', site).href);
   expect((await request.get(new URL('favicon.svg', site).href)).status()).toBe(200);
   const resumeLink = page.getByRole('link', { name: 'Résumé', exact: true });
-  await expect(resumeLink).toHaveAttribute('href', `${site.pathname}nazmus-saqib-resume.pdf`);
+  await expect(resumeLink).toHaveAttribute('href', `${site.pathname}Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf`);
   const resume = await request.get(new URL(await resumeLink.getAttribute('href'), site).href);
   expect(resume.status()).toBe(200);
   expect(resume.headers()['content-type']).toContain('application/pdf');
@@ -43,7 +43,7 @@ test('single-viewport company journey preserves public assets and résumé links
   expect(html).toContain(`href="${site.pathname}resume.html"`);
   const resumeHtml = await (await request.get(new URL('resume.html', site).href)).text();
   expect(resumeHtml).toContain('href="./"');
-  expect(resumeHtml).toContain('href="./nazmus-saqib-resume.pdf"');
+  expect(resumeHtml).toContain('href="./Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf"');
   expect(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight)).toBe(true);
   expect(errors).toEqual([]);
   expect(failedAssets).toEqual([]);

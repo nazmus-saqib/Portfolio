@@ -35,7 +35,7 @@ document.querySelector('#app').innerHTML = `
   <main class="portfolio-shell" aria-label="Nazmus Saqib’s interactive portfolio">
     <header class="shell-header">
       <button type="button" class="wordmark" data-home aria-label="Nazmus Saqib, start of journey">saqib<span></span></button>
-      <div class="header-actions"><a href="${assetUrl('nazmus-saqib-resume.pdf')}" class="resume-link" download>Résumé ${icons.download}</a><button type="button" class="view-toggle" id="reading-toggle" aria-pressed="false">${icons.cube}<span>Reading view</span></button></div>
+      <div class="header-actions"><a href="${assetUrl('Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf')}" class="resume-link" download>Résumé ${icons.download}</a><button type="button" class="view-toggle" id="reading-toggle" aria-pressed="false">${icons.cube}<span>Reading view</span></button></div>
     </header>
 
     <div class="experience-layout" id="scene-layout">
@@ -97,7 +97,7 @@ function projectsMarkup() {
 }
 
 function contactMarkup() {
-  return `<section class="contact-panel"><p class="eyebrow">THE NEXT CONNECTION</p><h2>Let’s move<br><em>things forward.</em></h2><p>I bring a technical foundation, hands-on coordination experience, and a clear line of communication between clients, vendors, and teams.</p><p>If you’re hiring a Project Coordinator or Assistant Project Manager, I’d welcome a conversation.</p><a class="button button-dark" href="mailto:${email}">Start a conversation ${icons.arrow}</a><a class="contact-email" href="mailto:${email}">${email}</a><button type="button" class="copy-email" data-copy-email>Copy email address</button><div class="contact-links"><a href="${assetUrl('nazmus-saqib-resume.pdf')}" download>Résumé ${icons.download}</a><a href="https://github.com/nazmus-saqib" target="_blank" rel="noopener noreferrer">GitHub ${icons.arrow}</a></div><p class="contact-location">Based in Ontario, Canada.</p></section>`;
+  return `<section class="contact-panel"><p class="eyebrow">THE NEXT CONNECTION</p><h2>Let’s move<br><em>things forward.</em></h2><p>I bring a technical foundation, hands-on coordination experience, and a clear line of communication between clients, vendors, and teams.</p><p>If you’re hiring a Project Coordinator or Assistant Project Manager, I’d welcome a conversation.</p><a class="button button-dark" href="mailto:${email}">Start a conversation ${icons.arrow}</a><a class="contact-email" href="mailto:${email}">${email}</a><button type="button" class="copy-email" data-copy-email>Copy email address</button><div class="contact-links"><a href="${assetUrl('Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf')}" download>Résumé ${icons.download}</a><a href="https://github.com/nazmus-saqib" target="_blank" rel="noopener noreferrer">GitHub ${icons.arrow}</a></div><p class="contact-location">Based in Ontario, Canada.</p></section>`;
 }
 
 function renderPanel(resetScroll = true) {

@@ -65,7 +65,7 @@ For a local Pages-path regression check, serve the build with `npm run preview -
 - `public/projects/`: optimized previews from supplied project files. Original career records, project source files, and confidential documents are **not** public assets.
 - `public/favicon.svg`: the site icon. The wordmark is styled in CSS, interface icons are inline SVG in `src/main.js`, and illustrative project covers are generated from HTML/CSS. No external icon account or asset download is required.
 - `public/licenses/`: original dependency license notices, also copied into the built website.
-- `public/resume.html` and `public/nazmus-saqib-resume.pdf`: a reviewable two-page résumé based on the supplied career record. To revise the résumé, edit the HTML and print to Letter PDF with background graphics enabled, no browser header/footer, and zero margins (page padding is defined in the document).
+- `public/Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf`: the résumé PDF supplied by the owner, preserved without changes. All résumé downloads use this file. `public/resume.html` provides view and download links that work without JavaScript. Replace the PDF and update the links when a new résumé is supplied; the website does not generate its résumé from HTML.
 
 `package-lock.json` pins all library and font dependencies. Run `npm ci` to restore them; dependency folders and build output are not committed. The production build includes the used font files, images, CSS, and scripts. See [third-party notices](THIRD_PARTY_NOTICES.md) for bundled font and library licenses.
 
