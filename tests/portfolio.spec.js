@@ -40,8 +40,19 @@ async function assertSingleViewport(page) {
 async function assertContributionDescriptionsVisible(page, stop) {
   const contribution = page.locator(`[data-role-contributions="${stop.id}"]`);
   await expect(contribution.getByRole('heading', { name: 'What I brought to the work', exact: true })).toBeVisible();
-  for (const highlight of stop.highlights) {
-    await expect(contribution.getByText(highlight, { exact: true })).toBeVisible();
+  const pairs = contribution.locator('.contribution-pair');
+  await expect(pairs).toHaveCount(stop.highlights.length);
+  for (let index = 0; index < stop.highlights.length; index += 1) {
+    const pair = pairs.nth(index);
+    await expect(pair.getByText(stop.highlights[index], { exact: true })).toBeVisible();
+    const card = pair.locator('[data-contribution-index]');
+    const takeaway = pair.locator('.contribution-takeaway');
+    await expect(takeaway).toBeVisible();
+    await expect(takeaway.locator('.contribution-takeaway-copy')).not.toBeEmpty();
+    await expect(takeaway.locator('.contribution-takeaway-title')).toHaveText(await card.locator('strong').textContent());
+    const takeawayId = await takeaway.getAttribute('id');
+    expect(takeawayId, 'Each paired takeaway has an addressable ID').toMatch(/\S+/);
+    await expect(card, 'Each card controls its own paired takeaway').toHaveAttribute('aria-controls', takeawayId);
   }
   return contribution;
 }
@@ -141,51 +152,63 @@ test('seven employer cards preserve chronology, accurate roles, and always-visib
   await assertSingleViewport(page);
 });
 
-test('contribution cards update the takeaway without hiding work and remain independent in reading view', async ({ page, baseURL }) => {
+test('contribution cards keep every linked takeaway open and remain independent in reading view', async ({ page, baseURL }) => {
   await loadWorld(page, baseURL);
   await page.locator('#next-stop').click();
   const contribution = await assertContributionDescriptionsVisible(page, careerStops[0]);
   expect(await contribution.evaluate(element => element.closest('details'))).toBeNull();
   await expect(contribution.locator('summary, details')).toHaveCount(0);
   const cards = contribution.locator('[data-contribution-index]');
+  const pairs = contribution.locator('.contribution-pair');
   await expect(cards).toHaveCount(3);
   await expect(contribution.locator('[data-contribution-index][aria-pressed="true"]')).toHaveCount(1);
-  const takeaway = contribution.locator('.contribution-takeaway');
-  const firstTakeaway = await takeaway.textContent();
+  await expect(contribution.locator('.contribution-takeaway')).toHaveCount(3);
+  const takeawayCopies = contribution.locator('.contribution-takeaway-copy');
+  const originalTakeaways = await takeawayCopies.allTextContents();
 
   await cards.nth(1).click();
   await expect(cards.nth(1)).toHaveAttribute('aria-pressed', 'true');
-  await expect(takeaway).not.toHaveText(firstTakeaway);
+  await expect(pairs.nth(1)).toHaveClass(/is-active/);
+  await expect(contribution.locator('.contribution-pair.is-active')).toHaveCount(1);
+  await expect(takeawayCopies).toHaveText(originalTakeaways);
   await assertContributionDescriptionsVisible(page, careerStops[0]);
 
   await page.keyboard.press('ArrowRight');
   await expect(cards.nth(2)).toBeFocused();
   await expect(cards.nth(2)).toHaveAttribute('aria-pressed', 'true');
+  await expect(pairs.nth(2)).toHaveClass(/is-active/);
   await page.keyboard.press('Home');
   await expect(cards.nth(0)).toBeFocused();
-  await expect(takeaway).toHaveText(firstTakeaway);
+  await expect(pairs.nth(0)).toHaveClass(/is-active/);
+  await expect(takeawayCopies).toHaveText(originalTakeaways);
   await page.keyboard.press('End');
   await expect(cards.nth(2)).toBeFocused();
   await expect(cards.nth(2)).toHaveAttribute('aria-pressed', 'true');
   await cards.nth(1).focus();
   await page.keyboard.press('Enter');
   await expect(cards.nth(1)).toHaveAttribute('aria-pressed', 'true');
+  await expect(pairs.nth(1)).toHaveClass(/is-active/);
+  await expect(takeawayCopies).toHaveText(originalTakeaways);
   await assertContributionDescriptionsVisible(page, careerStops[0]);
 
   await page.locator('#reading-toggle').click();
   await expect(page.locator('#reading-view .role-contributions')).toHaveCount(7);
+  await expect(page.locator('#reading-view .contribution-pair')).toHaveCount(21);
+  await expect(page.locator('#reading-view .contribution-takeaway')).toHaveCount(21);
   const first = await assertContributionDescriptionsVisible(page, careerStops[0]);
   const second = await assertContributionDescriptionsVisible(page, careerStops[1]);
-  const secondTakeaway = await second.locator('.contribution-takeaway').textContent();
+  const secondTakeaways = await second.locator('.contribution-takeaway-copy').allTextContents();
   const secondSelection = await second.locator('[aria-pressed="true"]').getAttribute('data-contribution-index');
   const current = Number(await first.locator('[data-contribution-index][aria-pressed="true"]').getAttribute('data-contribution-index'));
   await first.locator('[data-contribution-index]').nth((current + 1) % 3).click();
-  await expect(second.locator('.contribution-takeaway')).toHaveText(secondTakeaway);
+  await expect(second.locator('.contribution-takeaway-copy')).toHaveText(secondTakeaways);
   await expect(second.locator(`[data-contribution-index="${secondSelection}"]`)).toHaveAttribute('aria-pressed', 'true');
+  await expect(second.locator(`[data-contribution-pair="${secondSelection}"]`)).toHaveClass(/is-active/);
   await expect(first.locator('[data-contribution-index][aria-pressed="true"]')).toHaveCount(1);
+  await expect(first.locator('.contribution-pair.is-active')).toHaveCount(1);
   for (const stop of careerStops) await assertContributionDescriptionsVisible(page, stop);
   const ids = await page.locator('#reading-view .role-contributions [id]').evaluateAll(elements => elements.map(element => element.id));
-  expect(new Set(ids).size, 'Contribution headings and live regions have unique IDs in reading view').toBe(ids.length);
+  expect(new Set(ids).size, 'Contribution headings and paired takeaways have unique IDs in reading view').toBe(ids.length);
   await assertSingleViewport(page);
 });
 
@@ -329,7 +352,9 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 640 }
     await expect(page.locator('#company-name')).toHaveText('Synesis IT');
     const contribution = await assertContributionDescriptionsVisible(page, careerStops[1]);
     expect(await contribution.evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);
+    expect(await contribution.locator('.contribution-pair').evaluateAll(elements => elements.every(element => element.scrollWidth <= element.clientWidth))).toBe(true);
     expect(await contribution.getByText(careerStops[1].highlights[1], { exact: true }).evaluate(element => getComputedStyle(element).fontSize)).toBe('16px');
+    expect(await contribution.locator('.contribution-takeaway-copy').first().evaluate(element => getComputedStyle(element).fontSize)).toBe('16px');
     await contribution.locator('[data-contribution-index="2"]').click();
     await expect(contribution.locator('[data-contribution-index="2"]')).toHaveAttribute('aria-pressed', 'true');
     await assertContributionDescriptionsVisible(page, careerStops[1]);
