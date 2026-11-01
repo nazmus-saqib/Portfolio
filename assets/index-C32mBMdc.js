@@ -103,7 +103,7 @@
       <aside class="sidebar" aria-label="Professional profile and career details">
         <nav class="panel-nav" id="panel-nav" aria-label="Portfolio sections"><button type="button" data-panel="journey" class="active" aria-pressed="true">Journey</button><button type="button" data-panel="profile" aria-pressed="false">Profile</button><button type="button" data-panel="projects" aria-pressed="false">Projects <span>${O.length}</span></button><button type="button" data-panel="contact" aria-pressed="false">Contact</button></nav>
         <div class="sidebar-body" id="sidebar-body" tabindex="-1" role="region" aria-label="Career details"></div>
-        <div class="company-navigation" id="company-navigation"><button type="button" class="icon-button" id="previous-stop" aria-label="Previous chapter">${g.previous}</button><span id="stop-counter" aria-live="polite">00 / ${B(D)}</span><button type="button" id="next-stop">First company ${g.next}</button><button type="button" class="icon-button" id="listen" aria-label="Listen to my story">${g.sound}</button></div>
+        <div class="company-navigation" id="company-navigation"><button type="button" class="icon-button" id="previous-stop" aria-label="Previous chapter">${g.previous}</button><span id="stop-counter" aria-live="polite">00 / ${B(D)}</span><button type="button" class="button button-secondary" id="next-stop">First company ${g.next}</button><button type="button" class="icon-button" id="listen" aria-label="Listen to my story">${g.sound}</button></div>
       </aside>
     </div>
 
