@@ -28,7 +28,6 @@
 .contribution-takeaway-mark { display: grid; place-items: center; flex-shrink: 0; width: 30px; height: 30px; border: 1px solid #d1dabe; border-radius: 8px; background: #eaf0dc; color: #6e8654; }
 .contribution-takeaway-mark > svg { width: 19px; height: 19px; }
 .contribution-takeaway-label { display: block; color: #63794f; font-size: .875rem; line-height: 1.5; }
-.contribution-takeaway-title { display: block; margin-top: 5px; color: #3d5934; font-size: 1rem; line-height: 1.5; font-weight: 550; }
 .contribution-takeaway-copy { margin-top: 5px; color: #526c43; font-size: 1rem; line-height: 1.6; overflow-wrap: anywhere; }
 @media (max-width: 620px) {
   .role-contributions { margin-top: 22px; padding-top: 19px; }

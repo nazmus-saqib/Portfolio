@@ -49,7 +49,7 @@ async function assertContributionDescriptionsVisible(page, stop) {
     const takeaway = pair.locator('.contribution-takeaway');
     await expect(takeaway).toBeVisible();
     await expect(takeaway.locator('.contribution-takeaway-copy')).not.toBeEmpty();
-    await expect(takeaway.locator('.contribution-takeaway-title')).toHaveText(await card.locator('strong').textContent());
+    await expect(takeaway.locator('.contribution-takeaway-title')).toHaveCount(0);
     const takeawayId = await takeaway.getAttribute('id');
     expect(takeawayId, 'Each paired takeaway has an addressable ID').toMatch(/\S+/);
     await expect(card, 'Each card controls its own paired takeaway').toHaveAttribute('aria-controls', takeawayId);
