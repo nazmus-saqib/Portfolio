@@ -71,13 +71,15 @@ export function renderRoleContributions(stop, { selectedIndex = 0 } = {}) {
   }));
   const selected = Number.isInteger(selectedIndex) && selectedIndex >= 0 && selectedIndex < cards.length ? selectedIndex : 0;
   const headingId = `contributions-title-${id}`;
+  const takeawayHeadingId = `contribution-takeaways-title-${id}`;
 
   return `<section class="role-contributions" data-role-contributions="${escapeHtml(stop.id || 'work')}" aria-labelledby="${headingId}">
     <header class="contribution-heading"><span class="contribution-heading-symbol" aria-hidden="true">${icon('layers')}</span><div><h3 id="${headingId}">What I brought to the work</h3><p>Each contribution connects to a skill I carry forward.</p></div></header>
     <div class="contribution-cards" role="group" aria-label="Contributions at ${escapeHtml(stop.company || 'this workplace')}">${cards.map((card, index) => {
       const takeawayId = `contribution-takeaway-${id}-${index}`;
-      return `<div class="contribution-pair ${index === selected ? 'is-active' : ''}" data-contribution-pair="${index}"><button type="button" class="contribution-card ${index === selected ? 'is-active' : ''}" data-contribution-index="${index}" data-contribution-title="${escapeHtml(card.title)}" data-contribution-takeaway="${escapeHtml(card.takeaway)}" aria-pressed="${index === selected}" aria-controls="${takeawayId}"><span class="contribution-node" aria-hidden="true">${icon(card.icon)}</span><span class="contribution-card-body"><span class="contribution-card-topline"><strong>${escapeHtml(card.title)}</strong><span class="contribution-number" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span></span><span class="contribution-description">${escapeHtml(card.description)}</span></span></button><div class="contribution-takeaway" id="${takeawayId}"><span class="contribution-takeaway-mark" aria-hidden="true">${icon('growth')}</span><div><span class="contribution-takeaway-label">What I carry forward</span><p class="contribution-takeaway-copy">${escapeHtml(card.takeaway)}</p></div></div></div>`;
+      return `<button type="button" class="contribution-card ${index === selected ? 'is-active' : ''}" data-contribution-index="${index}" data-contribution-title="${escapeHtml(card.title)}" data-contribution-takeaway="${escapeHtml(card.takeaway)}" aria-pressed="${index === selected}" aria-controls="${takeawayId}"><span class="contribution-node" aria-hidden="true">${icon(card.icon)}</span><span class="contribution-card-body"><span class="contribution-card-topline"><strong>${escapeHtml(card.title)}</strong><span class="contribution-number" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span></span><span class="contribution-description">${escapeHtml(card.description)}</span></span></button>`;
     }).join('')}</div>
+    <section class="contribution-takeaway" aria-labelledby="${takeawayHeadingId}"><header class="contribution-takeaway-heading"><span class="contribution-takeaway-mark" aria-hidden="true">${icon('growth')}</span><h4 class="contribution-takeaway-label" id="${takeawayHeadingId}">What I carry forward</h4></header><ol class="contribution-takeaway-list" role="list">${cards.map((card, index) => `<li class="contribution-takeaway-item ${index === selected ? 'is-active' : ''}" id="contribution-takeaway-${id}-${index}" data-contribution-takeaway-index="${index}"><span class="contribution-takeaway-number" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span><p class="contribution-takeaway-copy">${escapeHtml(card.takeaway)}</p></li>`).join('')}</ol></section>
   </section>`;
 }
 
@@ -90,7 +92,9 @@ export function activateRoleContribution(root, index, { focus = false } = {}) {
     const selected = card === active;
     card.setAttribute('aria-pressed', String(selected));
     card.classList.toggle('is-active', selected);
-    card.closest('.contribution-pair')?.classList.toggle('is-active', selected);
+  });
+  root.querySelectorAll('[data-contribution-takeaway-index]').forEach(item => {
+    item.classList.toggle('is-active', Number(item.dataset.contributionTakeawayIndex) === index);
   });
   if (focus) active.focus();
   return true;
