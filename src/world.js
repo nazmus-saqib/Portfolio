@@ -485,10 +485,11 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     cylinder(world, 0.19, 0.19, 0.06, x, 1.58, z, 'navy', 20);
   }
 
-  // A small, deliberately stylized portrait: dark hair, beard and a navy jacket.
+  // A small, deliberately stylized portrait with cropped hair and facial hair.
   const person = new THREE.Group(); world.add(person);
   const personBody = new THREE.Group(); person.add(personBody);
-  const darkHair = material(0x20211f);
+  const darkHair = material(0x20211f, { roughness: 0.96, metalness: 0 });
+  const facialHair = material(0x352d27, { roughness: 0.96, metalness: 0 });
   const trouser = material(0x394442);
   const leftLeg = new THREE.Group(), rightLeg = new THREE.Group();
   leftLeg.position.set(-0.13, 0.68, 0); rightLeg.position.set(0.13, 0.68, 0);
@@ -511,12 +512,53 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     arm.rotation.z = -side * 0.08;
   }
   sphere(personBody, 0.275, 0, 1.52, 0, 'skin', [0.9, 1.06, 0.85]);
-  sphere(personBody, 0.265, 0, 1.69, -0.025, darkHair, [0.95, 0.65, 0.92]);
-  sphere(personBody, 0.18, 0.07, 1.78, 0.045, darkHair, [1.25, 0.67, 0.85]);
-  sphere(personBody, 0.16, -0.11, 1.73, 0.015, darkHair, [0.8, 0.6, 0.85]);
-  // Lower-face beard follows the head, instead of a flat floating block.
-  sphere(personBody, 0.21, 0, 1.4, 0.075, darkHair, [0.95, 0.65, 0.91]);
+  // Fitted ellipsoid patches keep short hair close to the head. The variable
+  // hairline leaves the forehead open while covering the crown, sides and back.
+  function headSurface(name, radii, phiStart, phiLength, thetaStart, thetaEnd, mat) {
+    const columns = 40, rows = 16, positions = [], normals = [], indices = [];
+    for (let row = 0; row <= rows; row++) {
+      for (let column = 0; column <= columns; column++) {
+        const phi = phiStart + phiLength * column / columns;
+        const start = typeof thetaStart === 'function' ? thetaStart(phi) : thetaStart;
+        const end = typeof thetaEnd === 'function' ? thetaEnd(phi) : thetaEnd;
+        const theta = THREE.MathUtils.lerp(start, end, row / rows);
+        const x = Math.sin(theta) * Math.sin(phi), y = Math.cos(theta), z = Math.sin(theta) * Math.cos(phi);
+        positions.push(radii[0] * x, radii[1] * y, radii[2] * z);
+        const nx = x / radii[0], ny = y / radii[1], nz = z / radii[2], length = Math.hypot(nx, ny, nz);
+        normals.push(nx / length, ny / length, nz / length);
+        if (row < rows && column < columns) {
+          const a = row * (columns + 1) + column, b = a + columns + 1;
+          indices.push(a, b, a + 1, b, b + 1, a + 1);
+        }
+      }
+    }
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    geometry.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+    geometry.setIndex(indices);
+    const mesh = new THREE.Mesh(geometry, mat);
+    mesh.name = name; mesh.position.y = 1.52; mesh.castShadow = true;
+    personBody.add(mesh);
+    return mesh;
+  }
+  headSurface('Short hair', [0.258, 0.315, 0.246], -Math.PI, Math.PI * 2, 0,
+    phi => {
+      const front = THREE.MathUtils.smoothstep(Math.cos(phi), 0.15, 0.8);
+      return THREE.MathUtils.lerp(1.73, 1.15 + Math.cos(phi * 6) * 0.018, front);
+    }, darkHair);
+  // A shallow jaw-and-chin layer leaves a clean opening around the mouth.
+  headSurface('Short beard', [0.253, 0.297, 0.24], -1.72, 3.44,
+    phi => 1.69 + 0.45 * Math.pow(Math.max(0, Math.cos(phi)), 3), Math.PI, facialHair);
   sphere(personBody, 0.08, 0, 1.48, 0.208, 'skin', [0.75, 0.8, 0.7]);
+  for (const side of [-1, 1]) {
+    const moustache = sphere(personBody, 0.042, side * 0.035, 1.417, 0.226, facialHair, [1, 0.27, 0.3]);
+    moustache.name = 'Short moustache'; moustache.rotation.z = -side * 0.14;
+  }
+  const smile = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-0.057, 1.386, 0.203), new THREE.Vector3(0, 1.378, 0.209), new THREE.Vector3(0.057, 1.386, 0.203),
+  ]);
+  const mouth = new THREE.Mesh(new THREE.TubeGeometry(smile, 10, 0.006, 6, false), material(0x744431));
+  personBody.add(mouth);
   [-0.095, 0.095].forEach(x => {
     sphere(personBody, 0.028, x, 1.56, 0.215, 'dark', [1, 0.9, 0.55]);
     const brow = box(personBody, 0.07, 0.025, 0.025, x, 1.62, 0.215, darkHair, 0.01);
