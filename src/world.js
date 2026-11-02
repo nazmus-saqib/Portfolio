@@ -485,11 +485,11 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     cylinder(world, 0.19, 0.19, 0.06, x, 1.58, z, 'navy', 20);
   }
 
-  // A small, deliberately stylized portrait with cropped hair and facial hair.
+  // A small, deliberately stylized portrait with an Ivy League cut and a short beard.
   const person = new THREE.Group(); world.add(person);
   const personBody = new THREE.Group(); person.add(personBody);
   const darkHair = material(0x20211f, { roughness: 0.96, metalness: 0 });
-  const facialHair = material(0x352d27, { roughness: 0.96, metalness: 0 });
+  const facialHair = material(0x654b38, { roughness: 0.98, metalness: 0 });
   const trouser = material(0x394442);
   const leftLeg = new THREE.Group(), rightLeg = new THREE.Group();
   leftLeg.position.set(-0.13, 0.68, 0); rightLeg.position.set(0.13, 0.68, 0);
@@ -512,10 +512,9 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     arm.rotation.z = -side * 0.08;
   }
   sphere(personBody, 0.275, 0, 1.52, 0, 'skin', [0.9, 1.06, 0.85]);
-  // Fitted ellipsoid patches keep short hair close to the head. The variable
-  // hairline leaves the forehead open while covering the crown, sides and back.
-  function headSurface(name, radii, phiStart, phiLength, thetaStart, thetaEnd, mat) {
-    const columns = 40, rows = 16, positions = [], normals = [], indices = [];
+  // Fitted surfaces allow a tapered cut without adding bulk around the face.
+  function headSurface(name, radii, phiStart, phiLength, thetaStart, thetaEnd, mat, colorAt) {
+    const columns = 40, rows = 16, positions = [], normals = [], indices = [], colors = [];
     for (let row = 0; row <= rows; row++) {
       for (let column = 0; column <= columns; column++) {
         const phi = phiStart + phiLength * column / columns;
@@ -523,9 +522,14 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
         const end = typeof thetaEnd === 'function' ? thetaEnd(phi) : thetaEnd;
         const theta = THREE.MathUtils.lerp(start, end, row / rows);
         const x = Math.sin(theta) * Math.sin(phi), y = Math.cos(theta), z = Math.sin(theta) * Math.cos(phi);
-        positions.push(radii[0] * x, radii[1] * y, radii[2] * z);
-        const nx = x / radii[0], ny = y / radii[1], nz = z / radii[2], length = Math.hypot(nx, ny, nz);
+        const fittedRadii = typeof radii === 'function' ? radii(theta, phi) : radii;
+        positions.push(fittedRadii[0] * x, fittedRadii[1] * y, fittedRadii[2] * z);
+        const nx = x / fittedRadii[0], ny = y / fittedRadii[1], nz = z / fittedRadii[2], length = Math.hypot(nx, ny, nz);
         normals.push(nx / length, ny / length, nz / length);
+        if (colorAt) {
+          const color = colorAt(row / rows, phi);
+          colors.push(color.r, color.g, color.b);
+        }
         if (row < rows && column < columns) {
           const a = row * (columns + 1) + column, b = a + columns + 1;
           indices.push(a, b, a + 1, b, b + 1, a + 1);
@@ -535,23 +539,43 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
     geometry.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+    if (colors.length) geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
     geometry.setIndex(indices);
     const mesh = new THREE.Mesh(geometry, mat);
     mesh.name = name; mesh.position.y = 1.52; mesh.castShadow = true;
     personBody.add(mesh);
     return mesh;
   }
-  headSurface('Short hair', [0.258, 0.315, 0.246], -Math.PI, Math.PI * 2, 0,
-    phi => {
+  // One fitted shell keeps the sides close to the head and the longer top
+  // gently swept to one side, without a separate fringe or bulky quiff.
+  const hairline = phi => THREE.MathUtils.lerp(1.68, 1.06,
+    THREE.MathUtils.smoothstep(Math.cos(phi), 0.15, 0.8));
+  const hairRadii = (theta, phi) => {
+    const top = 1 - THREE.MathUtils.smoothstep(theta, 0.65, 1.5);
+    const sweep = Math.sin(theta) * Math.max(0, -Math.sin(phi));
+    return [0.2485 + 0.003 * top, 0.2925 + (0.022 + 0.012 * sweep) * top, 0.23475 + 0.004 * top];
+  };
+  const taperMaterial = material(0xffffff, { roughness: 1, metalness: 0, vertexColors: true });
+  headSurface('Ivy League top', hairRadii, -Math.PI, Math.PI * 2, 0, hairline, taperMaterial,
+    (progress, phi) => {
       const front = THREE.MathUtils.smoothstep(Math.cos(phi), 0.15, 0.8);
-      return THREE.MathUtils.lerp(1.73, 1.15 + Math.cos(phi * 6) * 0.018, front);
-    }, darkHair);
-  // A shallow jaw-and-chin layer leaves a clean opening around the mouth.
-  headSurface('Short beard', [0.253, 0.297, 0.24], -1.72, 3.44,
-    phi => 1.69 + 0.45 * Math.pow(Math.max(0, Math.cos(phi)), 3), Math.PI, facialHair);
+      const theta = progress * hairline(phi);
+      const fade = THREE.MathUtils.smoothstep(theta, 1.08, 1.68) * (1 - front);
+      return darkHair.color.clone().lerp(materials.skin.color, fade);
+    });
+  const partPoints = [[1.03, 0.34], [0.74, 0.46], [0.45, 0.7], [0.25, 1.28], [0.27, 2.25]].map(([theta, phi]) => {
+    const [rx, ry, rz] = hairRadii(theta, phi);
+    return new THREE.Vector3((rx + 0.001) * Math.sin(theta) * Math.sin(phi),
+      1.52 + (ry + 0.001) * Math.cos(theta), (rz + 0.001) * Math.sin(theta) * Math.cos(phi));
+  });
+  const part = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(partPoints), 28, 0.0015, 6, false), material(0x493e30));
+  part.name = 'Side part'; personBody.add(part);
+  // A very close beard sits low on the jaw, leaving the cheeks clear.
+  headSurface('Short beard', [0.249, 0.294, 0.2355], -1.5, 3,
+    phi => 1.93 + 0.3 * Math.pow(Math.max(0, Math.cos(phi)), 3), Math.PI, facialHair);
   sphere(personBody, 0.08, 0, 1.48, 0.208, 'skin', [0.75, 0.8, 0.7]);
   for (const side of [-1, 1]) {
-    const moustache = sphere(personBody, 0.042, side * 0.035, 1.417, 0.226, facialHair, [1, 0.27, 0.3]);
+    const moustache = sphere(personBody, 0.035, side * 0.028, 1.417, 0.225, facialHair, [1, 0.18, 0.2]);
     moustache.name = 'Short moustache'; moustache.rotation.z = -side * 0.14;
   }
   const smile = new THREE.CatmullRomCurve3([
