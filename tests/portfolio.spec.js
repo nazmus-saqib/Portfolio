@@ -343,10 +343,10 @@ test('BIWTA and eReturn connect needs, persona stories, and design evidence with
       await expect(prototypeGallery.locator('[data-study-picture-status]')).toContainText('5 of 5');
     } else {
       const sketchGallery = sketch.locator('[data-study-gallery]').first();
-      await expect(sketchGallery.locator('[data-study-picture-select]')).toHaveCount(2);
+      await expect(sketchGallery.locator('[data-study-picture-select]')).toHaveCount(3);
       await sketchGallery.locator('[data-study-picture-select]').last().click();
       await expect(sketchGallery.locator('[data-study-picture-detail]:visible')).toHaveCount(1);
-      await expect(sketchGallery.locator('[data-study-picture-status]')).toContainText('2 of 2');
+      await expect(sketchGallery.locator('[data-study-picture-status]')).toContainText('3 of 3');
     }
     const ids = await dialog.locator('[id]').evaluateAll(elements => elements.map(element => element.id));
     expect(new Set(ids).size, 'Case-study controls and sections have unique IDs').toBe(ids.length);

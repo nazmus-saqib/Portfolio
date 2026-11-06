@@ -379,17 +379,27 @@ export const ereturnExpansion = {
     "variant": "filing",
     "pictures": [
       {
-        "image": "/projects/ereturn/sketch-study.webp",
-        "title": "Entry and review study",
-        "alt": "Blue-ballpoint layout study on lined notebook paper, showing financial sections, entry fields, add controls, and review",
-        "caption": "Grouped information, repeated entries, and progress controls.",
+        "image": "/projects/ereturn/sketch-return-review.webp",
+        "fullSize": "/projects/ereturn/sketch-return-review.png",
+        "title": "Supporting sections and review",
+        "alt": "Blue-ballpoint notebook study of supporting financial sections, return summaries, tax and payment information",
+        "caption": "Connect supporting sections to the return and payment overview.",
         "basis": "Generated reconstruction"
       },
       {
-        "image": "/projects/ereturn/sketch-filing-study.webp",
-        "alt": "Earlier generated eReturn pencil study showing filing context, entry, and review",
-        "title": "Filing overview",
-        "caption": "An earlier reconstructed study: set the context, enter details, review the whole.",
+        "image": "/projects/ereturn/sketch-access-income.webp",
+        "fullSize": "/projects/ereturn/sketch-access-income.png",
+        "title": "Access and income",
+        "alt": "Blue-ballpoint notebook study of registration, recovery, assessment context and repeatable income entry",
+        "caption": "Registration, recovery, assessment context, and repeatable income entries.",
+        "basis": "Generated reconstruction"
+      },
+      {
+        "image": "/projects/ereturn/sketch-access-context.webp",
+        "fullSize": "/projects/ereturn/sketch-access-context.png",
+        "title": "Access, context, and review",
+        "alt": "Blue-ballpoint notebook layout study of access, financial entry, progress controls and return review",
+        "caption": "Layout exploration; see the original registration diagrams for verification routes.",
         "basis": "Generated reconstruction"
       }
     ],
