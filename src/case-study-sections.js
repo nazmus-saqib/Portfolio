@@ -154,7 +154,7 @@ export function renderStudySection(study, key, { projectId = 'project', assetUrl
     return section(study,key,projectId,`${visible ? `<div class="study-findings study-findings-primary">${visible}</div>` : ''}${more}${methods}`,data.intro);
   }
   if (key === 'challenges') {
-    const cards = data.map((item,index)=>`<details class="study-challenge study-disclosure"><summary><span><span class="study-mini-label">Challenge ${number(index)}</span><h4>${escapeHtml(item.title)}</h4></span><span class="study-disclosure-mark" aria-hidden="true">+</span></summary><div class="study-disclosure-body"><p class="study-challenge-detail">${escapeHtml(item.detail)}</p><div class="study-challenge-response"><span class="study-mini-label">Design response</span><p>${escapeHtml(item.response)}</p></div></div></details>`).join('');
+    const cards = data.map((item,index)=>`<details class="study-challenge study-disclosure"><summary><span><span class="study-mini-label">Challenge ${number(index)}</span><h4>${escapeHtml(item.title)}</h4></span><span class="study-disclosure-mark" aria-hidden="true">+</span></summary><div class="study-disclosure-body"><p class="study-challenge-detail">${escapeHtml(item.detail)}</p><div class="study-challenge-response"><span class="study-mini-label">Design response</span><p>${escapeHtml(item.response)}</p></div>${renderPictures(item.pictures,assetUrl,`Solution ${number(index)} prototype`)}</div></details>`).join('');
     return section(study,key,projectId,cards ? `<div class="study-challenges">${cards}</div>` : '',study.challengesNote);
   }
   if (key === 'personas') {

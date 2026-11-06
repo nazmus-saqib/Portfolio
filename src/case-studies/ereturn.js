@@ -1,7 +1,7 @@
 // Historical artifacts and retrospective explanations remain distinguished in the presentation.
 export const ereturnExpansion = {
   "needs": {
-    "intro": "Register with an NID-linked mobile, complete only applicable forms, and prepare a full return file with online submission optional.",
+    "intro": "Verify phone ownership, filter relevant forms, save progress manually, and prepare a complete return without mandatory online submission.",
     "stories": [
       {
         "role": "NID-based self-registration",
@@ -11,21 +11,21 @@ export const ereturnExpansion = {
       },
       {
         "role": "Required forms only",
-        "need": "Complete the forms required for my circumstances and skip additional forms",
+        "need": "Use income-source checkboxes to include required forms and exclude extras",
         "soThat": "I do not work through irrelevant paperwork.",
         "basis": "Designer-confirmed requirement; context questions and category-specific forms"
       },
       {
         "role": "Preparing without online submission",
-        "need": "Prepare a complete return file without having to submit it online",
+        "need": "Save my inputs manually and obtain a completed copy through Print",
         "soThat": "Return preparation remains useful when I choose another submission route.",
         "basis": "Project requirement confirmed by the designer"
       },
       {
         "role": "One digital return",
-        "need": "Work across Income, Rebate, Expenditure, and Assets & Liabilities",
-        "soThat": "Different paper forms come together in one connected experience.",
-        "basis": "Designer-confirmed scope and reviewed filing sections"
+        "need": "Find forms within five filing sections",
+        "soThat": "Different paper forms share a clear structure.",
+        "basis": "Designer-confirmed rationale and navigation screenshot"
       }
     ]
   },
@@ -33,22 +33,22 @@ export const ereturnExpansion = {
     {
       "need": "Verify phone ownership under the same NID",
       "evidence": "The designer confirmed that NID-based self-registration required a phone registered under the taxpayer’s NID; original flows map the matching check.",
-      "response": "Allow this self-registration route to reach OTP only after ownership matches; explain correction when it does not."
+      "response": "Use NID-linked mobile verification and a clear mismatch message before this self-registration route can continue."
     },
     {
       "need": "Show required forms only",
       "evidence": "The designer confirmed that users should fill required forms and skip additional or non-applicable forms.",
-      "response": "Use filing context and income circumstances to identify applicable forms and let users skip the rest."
+      "response": "Use income-source checkboxes to include applicable forms and exclude unnecessary forms."
     },
     {
       "need": "Prepare without online submission",
       "evidence": "The designer confirmed that users must be able to prepare a full return file even when they do not submit online.",
-      "response": "Separate complete return-file preparation and review from the decision to submit online."
+      "response": "Provide manual Save Draft because there is no autosave, plus Print for obtaining the completed return without mandatory online submission."
     },
     {
-      "need": "Unify four groups of paper forms",
-      "evidence": "Income, Rebate, Expenditure, and Assets & Liabilities each contain different paper forms.",
-      "response": "Bring the four sections into one digital structure with consistent navigation, applicable fields, and a shared review."
+      "need": "Organize paper forms into five navigation sections",
+      "evidence": "The designer’s explanation and prototype show Income, Rebate, Expenditure, Assets & Liabilities, and Tax & Payment.",
+      "response": "Place relevant forms under the five filing sections, with Home and Return View as separate destinations."
     },
     {
       "need": "Connect the office handoff",
@@ -61,13 +61,13 @@ export const ereturnExpansion = {
       "response": "Keep labels and summary relationships recognizable."
     },
     {
-      "need": "Separate progress actions",
-      "evidence": "Sketches distinguish adding, Back, Save Draft, and Save and Continue.",
-      "response": "Make adding, saving, and navigation distinct."
+      "need": "Make manual saving explicit",
+      "evidence": "The designer confirmed there was no autosave; Save Draft appears on entry screens.",
+      "response": "Give users an explicit way to save inputs whenever needed and distinguish it from continuing."
     }
   ],
   "research": {
-    "intro": "Client visits, team requirements analysis, and the designer’s clarified project requirements shaped these decisions.",
+    "intro": "Client requirements and team analysis informed the work. The designer’s explanations and prototype screenshots connect each challenge to a specific response.",
     "methods": [
       {
         "title": "Client requirements",
@@ -75,9 +75,9 @@ export const ereturnExpansion = {
         "status": "Documented team activity"
       },
       {
-        "title": "Clarified project requirements",
-        "body": "Confirmed NID-linked phone ownership, required-only form paths, preparation without online submission, and the four groups of paper forms.",
-        "status": "Confirmed by the project designer"
+        "title": "Design decisions and prototype evidence",
+        "body": "The designer explained NID-linked verification, income-source filtering, manual Save Draft without autosave, Print, and five navigation sections.",
+        "status": "Designer-confirmed rationale and supplied screenshots"
       },
       {
         "title": "Working documents",
@@ -97,24 +97,24 @@ export const ereturnExpansion = {
     ],
     "findings": [
       {
-        "title": "Phone ownership gates self-registration",
-        "body": "The phone must be registered under the same taxpayer’s NID before this route can continue to OTP.",
-        "evidence": "Designer confirmation and original registration flows"
+        "title": "Explain the phone-ownership rule",
+        "body": "The registration screen tells users when their phone is not registered under their NID.",
+        "evidence": "Designer explanation and prototype image 1"
       },
       {
-        "title": "Only applicable forms should be completed",
-        "body": "Filing circumstances determine required forms; additional or non-applicable forms can be skipped.",
-        "evidence": "Designer-confirmed requirement; context questions and category forms"
+        "title": "Select income sources before showing forms",
+        "body": "Checkboxes filter the filing journey so users can exclude unnecessary forms.",
+        "evidence": "Designer explanation and prototype image 2"
       },
       {
-        "title": "Preparation must stand apart from submission",
-        "body": "A taxpayer can prepare a full return file without being required to submit it online.",
-        "evidence": "Project requirement confirmed by the designer"
+        "title": "Saving and submission are separate decisions",
+        "body": "With no autosave, Save Draft preserves inputs manually. Print supports obtaining a completed return without submitting online.",
+        "evidence": "Designer explanation; Print in image 3 and Save Draft in images 2, 4, and 6"
       },
       {
-        "title": "Four paper-form groups need one structure",
-        "body": "Income, Rebate, Expenditure, and Assets & Liabilities contain different paper forms that must connect digitally.",
-        "evidence": "Designer-confirmed scope and reviewed prototype"
+        "title": "Five sections organize the digital forms",
+        "body": "Income, Rebate, Expenditure, Assets & Liabilities, and Tax & Payment hold the forms; Home and Return View are separate destinations.",
+        "evidence": "Designer explanation and prototype image 4"
       },
       {
         "title": "Handoffs need continuity",
@@ -135,44 +135,84 @@ export const ereturnExpansion = {
   },
   "challenges": [
     {
-      "title": "Verify phone ownership under the same NID",
-      "detail": "NID-based self-registration was restricted to a phone number registered under that taxpayer’s NID.",
-      "response": "Check NID–phone ownership before OTP and explain how to correct a mismatch."
+      "title": "Verify phone ownership",
+      "detail": "NID-based self-registration needed a phone number registered under the taxpayer’s own NID.",
+      "response": "I limited NID-based self-registration to a phone registered under the taxpayer’s own NID, with a clear mismatch message to guide correction.",
+      "pictures": [
+        {
+          "image": "/projects/ereturn/prototype-solution-1.webp",
+          "fullSize": "/projects/ereturn/prototype-solution-1.png",
+          "title": "Verify phone ownership",
+          "alt": "Original registration screen showing the NID-linked phone mismatch message",
+          "caption": "The registration screen explains when a phone is not registered under the taxpayer’s NID.",
+          "basis": "Original prototype"
+        }
+      ]
     },
     {
-      "title": "Show required forms only",
-      "detail": "Different circumstances require different paper forms. Users should not have to fill additional forms that do not apply.",
-      "response": "Use context questions to guide users to required forms and let them skip non-applicable forms."
+      "title": "Filter forms by income source",
+      "detail": "Taxpayers should complete only the forms relevant to their income.",
+      "response": "I used income-source checkboxes to identify applicable forms and exclude unnecessary ones from the filing journey.",
+      "pictures": [
+        {
+          "image": "/projects/ereturn/prototype-solution-2.webp",
+          "fullSize": "/projects/ereturn/prototype-solution-2.png",
+          "title": "Filter forms by income source",
+          "alt": "Assessment screen with income-source checkboxes that determine relevant forms",
+          "caption": "Income-source checkboxes identify the forms relevant to the taxpayer.",
+          "basis": "Privacy-edited prototype screenshot"
+        }
+      ]
     },
     {
-      "title": "Prepare without online submission",
-      "detail": "Some users need a complete return file but do not want to submit it online.",
-      "response": "Keep full return preparation and review independent of online submission."
+      "title": "Save progress and prepare without online submission",
+      "detail": "Users needed a full return file without mandatory online submission, and the system had no autosave.",
+      "response": "Because there was no autosave, I included Save Draft so users could save their inputs whenever needed. Print supported obtaining a completed copy for download or printing without submitting online.",
+      "pictures": [
+        {
+          "image": "/projects/ereturn/prototype-solution-3.webp",
+          "fullSize": "/projects/ereturn/prototype-solution-3.png",
+          "title": "Prepare a return without submitting online",
+          "alt": "Return View with a Print button and personal taxpayer details hidden",
+          "caption": "Return View shows Print. Save Draft is visible in the form-entry screenshots.",
+          "basis": "Privacy-edited prototype screenshot"
+        }
+      ]
     },
     {
-      "title": "Unify four groups of paper forms",
-      "detail": "Income, Rebate, Expenditure, and Assets & Liabilities each contain different paper forms.",
-      "response": "Connect the four sections through consistent navigation, relevant forms, and one return review."
+      "title": "Organize forms into five sections",
+      "detail": "Different paper forms needed a consistent digital structure.",
+      "response": "I grouped forms into Income, Rebate, Expenditure, Assets & Liabilities, and Tax & Payment, giving users a consistent way to find forms and review their information.",
+      "pictures": [
+        {
+          "image": "/projects/ereturn/prototype-solution-4.webp",
+          "fullSize": "/projects/ereturn/prototype-solution-4.png",
+          "title": "Find forms within five sections",
+          "alt": "Income Details screen with five filing-section links and grouped income forms",
+          "caption": "Income, Rebate, Expenditure, Assets & Liabilities, and Tax & Payment organize the forms.",
+          "basis": "Privacy-edited prototype screenshot"
+        }
+      ]
     }
   ],
   "personasIntro": "Reconstructed scenario personas describe overlapping tasks. One taxpayer may encounter more than one scenario.",
   "personas": [
     {
       "role": "The taxpayer preparing a full return file",
-      "goal": "Prepare a complete return file without mandatory online submission.",
-      "context": "Relevant forms across the four filing sections; online submission is optional.",
-      "story": "A taxpayer wants a complete return file but does not plan to submit it online. They need only the forms required for their circumstances and one review across the four filing sections.",
-      "userStory": "As a taxpayer, I need applicable forms and a complete return file without being forced to submit online.",
+      "goal": "Save inputs and prepare a complete return without mandatory online submission.",
+      "context": "Relevant forms, manual saving, and a completed return copy.",
+      "story": "A taxpayer wants a completed return without submitting it online. They need relevant forms, Save Draft to preserve inputs manually, and Print to obtain the completed copy.",
+      "userStory": "As a taxpayer, I need to save my work and obtain my completed return without being forced to submit online.",
       "needs": [
-        "Required forms only; skip non-applicable forms",
-        "One review across the four filing sections",
-        "Full return preparation without mandatory online submission"
+        "Income-source filtering to exclude extra forms",
+        "Explicit Save Draft; no autosave",
+        "Print or download a completed copy"
       ],
       "frictions": [
         "Completing irrelevant forms or being forced into online submission."
       ],
-      "designResponse": "Context-guided forms and a connected review separate return preparation from the submission decision.",
-      "basis": "Scenario reconstructed from requirements confirmed by the designer and the filing prototype."
+      "designResponse": "Income-source checkboxes, manual Save Draft, and Print support return preparation independently of online submission.",
+      "basis": "Scenario reconstructed from the designer’s rationale and original prototype screens."
     },
     {
       "role": "The taxpayer facing a mobile-record mismatch",
@@ -339,26 +379,26 @@ export const ereturnExpansion = {
   "process": [
     {
       "stage": "Understand",
-      "activity": "Confirm access rules, applicable forms, preparation needs, and the four paper-form groups with the client.",
+      "activity": "Confirm access rules, income-source filtering, manual saving, and return-preparation needs with the client.",
       "output": "Clear project requirements and scope.",
       "basis": "Recorded activity and requirements"
     },
     {
       "stage": "Define",
-      "activity": "Separate phone-ownership checks, required-form selection, return preparation, and online submission.",
-      "output": "Access constraints and a required-form preparation journey.",
+      "activity": "Map verification, income-source filtering, manual saving, and preparation independently of submission.",
+      "output": "A relevant-form journey across five sections.",
       "basis": "Retrospective structure from artifacts"
     },
     {
       "stage": "Explore",
-      "activity": "Explore how the four paper-form groups share navigation and review.",
-      "output": "Connected sections, sketches, and flow planning.",
+      "activity": "Develop checkbox filtering and explicit Save Draft and Print actions.",
+      "output": "Sketches, access flows, and a five-section structure.",
       "basis": "Original supplied material"
     },
     {
       "stage": "Prototype",
-      "activity": "Represent eligible access, applicable forms, and complete return preparation.",
-      "output": "Shared Adobe XD prototype.",
+      "activity": "Represent the decisions in registration, assessment, entry, and Return View screens.",
+      "output": "Prototype screens linking the four challenges to their responses.",
       "basis": "Original team design artifact"
     },
     {
@@ -439,8 +479,8 @@ export const ereturnExpansion = {
     ]
   },
   "sitemap": {
-    "intro": "Explore NID-based access, required-form selection, the four filing sections, and complete return preparation.",
-    "note": "Reconstructed functional map informed by project requirements and artifacts; Tax Circle review remains an external handoff.",
+    "intro": "Explore access, income-source filtering, five filing sections, and Return View.",
+    "note": "Five filing sections plus separate entry/review destinations. Tax Circle verification remains an external handoff.",
     "nodes": [
       {
         "label": "eTax Services",
@@ -467,6 +507,10 @@ export const ereturnExpansion = {
                 "description": "Registration and continuation before financial entry."
               },
               {
+                "label": "Home",
+                "description": "A separate starting destination outside the five filing sections."
+              },
+              {
                 "label": "Filing context",
                 "children": [
                   {
@@ -479,55 +523,51 @@ export const ereturnExpansion = {
                     "label": "Additional questions"
                   },
                   {
-                    "label": "Required-form selection",
-                    "description": "Identify applicable forms and skip additional forms that do not apply."
+                    "label": "Income-source checkboxes",
+                    "description": "Select applicable income sources to filter forms and exclude unnecessary ones."
                   }
                 ],
-                "description": "Use filing circumstances to select only required forms."
+                "description": "Income-source selection identifies relevant forms."
               },
               {
                 "label": "Financial information",
                 "children": [
                   {
                     "label": "Income",
-                    "description": "Applicable income forms and repeated entries."
+                    "description": "Relevant income forms, repeated entries, and manual Save Draft."
                   },
                   {
                     "label": "Rebate",
-                    "description": "Applicable rebate forms."
+                    "description": "Relevant rebate forms."
                   },
                   {
                     "label": "Expenditure",
-                    "description": "Applicable expenditure forms."
+                    "description": "Relevant expenditure forms."
                   },
                   {
                     "label": "Assets & Liabilities",
-                    "description": "Applicable asset and liability forms."
+                    "description": "Relevant asset and liability forms."
+                  },
+                  {
+                    "label": "Tax & Payment",
+                    "description": "Tax computation, payment information, and the separate submission action."
                   }
                 ],
-                "description": "Four filing sections bring different paper forms into one digital structure."
+                "description": "Five navigation sections hold the digital forms; saving inputs is manual rather than automatic."
               },
               {
                 "label": "Review",
                 "children": [
                   {
-                    "label": "Summaries and computation"
+                    "label": "Return View",
+                    "description": "Review the completed return."
                   },
                   {
-                    "label": "Tax and payment information"
-                  },
-                  {
-                    "label": "Payment information and follow-up"
-                  },
-                  {
-                    "label": "Return view"
-                  },
-                  {
-                    "label": "Complete return file",
-                    "description": "Return preparation does not require online submission."
+                    "label": "Print completed return",
+                    "description": "Obtain a completed copy for download or printing without mandatory online submission."
                   }
                 ],
-                "description": "Review and prepare a complete return file; online submission remains optional."
+                "description": "Return View and Print support obtaining the completed file independently of submission."
               }
             ]
           }
@@ -585,15 +625,15 @@ export const ereturnExpansion = {
       },
       {
         "title": "Complete only required forms",
-        "body": "Use a filing scenario to identify required forms and skip additional forms that do not apply."
+        "body": "Select income-source checkboxes and explain which forms are included or excluded."
       },
       {
-        "title": "Prepare a full file without submitting online",
-        "body": "Explain how to complete and review the full return file without choosing online submission."
+        "title": "Save and obtain a return without submitting online",
+        "body": "Identify Save Draft as the manual saving action, explain the lack of autosave, and locate Print without choosing Submit Return."
       },
       {
-        "title": "Navigate the four filing sections",
-        "body": "Place example paper forms within Income, Rebate, Expenditure, and Assets & Liabilities, then locate their shared review."
+        "title": "Navigate the five sections",
+        "body": "Find forms within Income, Rebate, Expenditure, Assets & Liabilities, and Tax & Payment, then locate Return View."
       },
       {
         "title": "Explain the Tax Circle handoff",
@@ -601,5 +641,5 @@ export const ereturnExpansion = {
       }
     ]
   },
-  "challengesNote": "Four project requirements and the design responses they called for."
+  "challengesNote": "Four challenges, the design decisions I made, and the prototype screens that illustrate them."
 };

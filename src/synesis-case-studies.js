@@ -136,7 +136,7 @@ export const synesisCaseStudies = {
   ereturn: {
     ...ereturnExpansion,
     sectionTitles: sectionTitles,
-    lead: "Bringing four groups of paper forms into one digital return-preparation journey.",
+    lead: "Turning paper tax forms into a guided digital return-preparation journey.",
     facts: [
       {
         "label": "My role",
@@ -148,8 +148,8 @@ export const synesisCaseStudies = {
       }
     ],
     context: {
-      "heading": "Connect four groups of paper forms.",
-      "body": "Income, Rebate, Expenditure, and Assets & Liabilities contained different paper forms. The design needed to connect them digitally, show only applicable forms, and support a full return file without mandatory online submission."
+      "heading": "Make paper forms easier to navigate digitally.",
+      "body": "Five sections organize the forms: Income, Rebate, Expenditure, Assets & Liabilities, and Tax & Payment. Users filter relevant forms, save inputs manually, and obtain a completed return without mandatory online submission."
     },
     storyboardIntro: "From eligible account access to a complete return file, with online submission optional.",
     storyboard: [
@@ -159,19 +159,19 @@ export const synesisCaseStudies = {
       },
       {
         "title": "Set the context",
-        "description": "Identify required forms from filing circumstances and skip non-applicable forms."
+        "description": "Select income-source checkboxes to exclude unnecessary forms."
       },
       {
         "title": "Enter financial details",
-        "description": "Complete applicable Income forms and add another item when needed."
+        "description": "Complete relevant forms and use Save Draft to save inputs manually."
       },
       {
         "title": "Complete supporting sections",
-        "description": "Complete relevant Rebate, Expenditure, and Assets & Liabilities forms."
+        "description": "Move through Rebate, Expenditure, Assets & Liabilities, and Tax & Payment."
       },
       {
         "title": "Prepare the full return file",
-        "description": "Review the complete return file without being required to submit online."
+        "description": "Use Return View and Print to obtain a completed copy without submitting online."
       }
     ],
     decisions: [
@@ -207,13 +207,29 @@ export const synesisCaseStudies = {
       "body": "The team delivered the design work before the deadline and demonstrated it to the client."
     },
     reflection: "The lasting lesson: make the required information, next actor, and next action clear.",
-    showcaseNote: "Original service-entry preview; the walkthrough explains the wider filing prototype.",
+    showcaseNote: "Original prototype views, with personal details hidden where needed.",
     showcase: [
       {
         "image": "/projects/ereturn.webp",
         "title": "A clear entry into the service",
         "alt": "Original eTax Services landing-page prototype with an eReturn entry",
         "caption": "The eTax Services entry page from the shared team prototype. This image shows the starting point, rather than the detailed tax-filing forms."
+      },
+      {
+        "image": "/projects/ereturn/prototype-registration.webp",
+        "fullSize": "/projects/ereturn/prototype-registration.png",
+        "title": "Registration and verification",
+        "alt": "Original prototype montage of registration, mismatch feedback, OTP entry and password setup",
+        "caption": "Registration, correction, OTP verification, and password setup.",
+        "basis": "Original prototype"
+      },
+      {
+        "image": "/projects/ereturn/prototype-overview.webp",
+        "fullSize": "/projects/ereturn/prototype-overview.png",
+        "title": "Forms and tax/payment overview",
+        "alt": "Original prototype montage of financial entry, assets and liabilities, and tax/payment views with personal information hidden",
+        "caption": "Financial forms, manual saving, and tax/payment review.",
+        "basis": "Privacy-edited prototype screenshot"
       }
     ],
   },

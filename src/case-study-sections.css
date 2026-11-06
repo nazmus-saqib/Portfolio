@@ -255,6 +255,7 @@
 .study-challenge>summary .study-disclosure-mark { margin-top:3px; }
 .study-challenge-detail { color:var(--study-muted); }
 .study-challenge .study-challenge-response { margin-top:15px; padding:15px; border:0; border-radius:7px; }
+.study-challenge .study-picture-gallery { margin:18px 0 0; }
 .study-research-methods,.study-more-findings,.study-structure-details { margin-top:17px; }
 .study-research-methods>.study-methods { padding-top:0; }
 .study-findings-primary { margin-top:0; }

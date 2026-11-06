@@ -101,6 +101,7 @@ function renderCaseStudy(project, options) {
   const navigation = [
     study.personas?.length && { id: 'personas', label: 'Personas' },
     study.process?.length && { id: 'process', label: 'Design thinking' },
+    study.challenges?.some(item => item.pictures?.length) && { id: 'challenges', label: 'Design solutions' },
     study.registrationJourneys && { id: 'registrationJourneys', label: 'Registration journeys' },
     study.sketches && { id: 'sketches', label: 'Sketches' },
     showcase.length && { id: 'showcase', label: 'Explore the prototype screens' },
