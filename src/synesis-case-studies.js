@@ -28,131 +28,193 @@ export const synesisCaseStudies = {
   biwta: {
     ...biwtaExpansion,
     sectionTitles: { ...sectionTitles, needs: 'Client needs and user stories' },
-    lead: 'One ticketing service, several perspectives. My individual design assignment connected passenger booking with the agent, vessel-owner, and authority work around it.',
+    lead: "A ship-ticketing service connecting passengers, agents, vessel owners, and authority reviewers.",
     facts: [
-      { label: 'My role', value: 'Individual UX / UI design contribution' },
-      { label: 'Organization', value: 'Synesis IT · BIWTA, Bangladesh' },
-      { label: 'Starting point', value: 'Software requirements specification' },
-      { label: 'Delivered', value: 'Role-specific Adobe XD prototypes and client demonstration' },
+      {
+        "label": "My role",
+        "value": "Individual UX / UI design assignment"
+      },
+      {
+        "label": "Client",
+        "value": "BIWTA · Synesis IT, Bangladesh"
+      }
     ],
     context: {
-      heading: 'Understand the whole service before drawing the screens.',
-      body: [
-        'A ship-ticketing service involves more than finding a departure and choosing a seat. Passengers need booking and follow-up actions. Agents support ticket purchases. Vessel owners need operational information, while the authority needs to review timetable requests.',
-        'At Synesis IT, I reviewed the software requirements specification, identified the design scope, and developed personas and user stories around user and client needs. My design work covered two user portals and two administration panels. The supplied prototypes show how those responsibilities appear across the service.',
-      ],
+      "heading": "One booking connects several roles.",
+      "body": "Passengers book tickets, agents assist purchases, owners monitor services, and the authority reviews timetable requests. The design needed clear responsibilities and handoffs."
     },
-    storyboardIntro: 'A representative passenger journey through the historical prototype, with a separate follow-up branch for changes and recovery.',
+    storyboardIntro: "Follow the passenger task, then explore the role-specific screens.",
     storyboard: [
-      { actor: 'Passenger', title: 'Find a journey', description: 'Search by route and date, then compare vessels, departure times, and fares.' },
-      { actor: 'Passenger', title: 'Choose a place', description: 'Review a vessel layout and select an available seat, bed, or deck option.' },
-      { actor: 'Passenger', title: 'Review and pay', description: 'Enter passenger information, check the fare breakdown, and choose a payment method.' },
-      { actor: 'Passenger', title: 'Receive the ticket', description: 'The design set includes successful-payment, transaction-detail, and ticket views.' },
-      { actor: 'Follow-up', title: 'Handle a change', description: 'Separate screens represent payment failure, ticket changes, cancellation, and verification.' },
+      {
+        "title": "Find a journey",
+        "description": "Compare vessels, times, and fares by route and date."
+      },
+      {
+        "title": "Choose a place",
+        "description": "Select an available seat, bed, or deck option."
+      },
+      {
+        "title": "Review and pay",
+        "description": "Check passenger details and fare, then choose payment."
+      },
+      {
+        "title": "Receive the ticket",
+        "description": "Inspect the payment result, transaction details, and ticket."
+      },
+      {
+        "title": "Manage a change",
+        "description": "Separate flows cover failed payment, changes, cancellation, and verification."
+      }
     ],
     decisions: [
       {
-        title: 'A shared booking task can require different payment steps.',
-        situation: 'A passenger buying directly and an agent selling on someone’s behalf both need a ticket, but their checkout responsibilities differ.',
-        decision: 'The passenger prototype includes payment-method and gateway choices. The agent checkout includes passenger details and a “Received Payment” action.',
-        reason: 'The comparison makes the role boundary visible. A similar end result does not mean every participant needs the same sequence of actions.',
+        "title": "A shared booking task can require different payment steps.",
+        "situation": "A passenger buying directly and an agent selling on someone’s behalf both need a ticket, but their checkout responsibilities differ.",
+        "decision": "The passenger prototype includes payment-method and gateway choices",
+        "reason": "The comparison makes the role boundary visible"
       },
       {
-        title: 'Make a timetable request traceable across the handoff.',
-        situation: 'A timetable request needs to move from the person supplying expected journey details to the authority reviewing them.',
-        decision: 'The request views include identifiers, dates, and status. Review screens distinguish requested information from provided departure, arrival, and berthing information, with a fare-chart upload.',
-        reason: 'This gives the handoff concrete information: what was requested, where the request stands, and what information comes back after review.',
+        "title": "Make a timetable request traceable across the handoff.",
+        "situation": "A timetable request needs to move from the person supplying expected journey details to the authority reviewing them.",
+        "decision": "The request views include identifiers, dates, and status",
+        "reason": "This gives the handoff concrete information: what was requested, where the request stands, and what information comes back after review."
       },
       {
-        title: 'Include the work after the main booking path.',
-        situation: 'The initial purchase is only one part of a ticket’s lifecycle.',
-        decision: 'The design set represents failed payment, change and cancellation confirmations, and verification-code states alongside the successful booking sequence.',
-        reason: 'Showing follow-up states makes the next action reviewable when a transaction or request needs another step.',
-      },
+        "title": "Include the work after the main booking path.",
+        "situation": "The initial purchase is only one part of a ticket’s lifecycle.",
+        "decision": "The design set represents failed payment, change and cancellation confirmations, and verification-code states alongside the successful booking sequence.",
+        "reason": "Showing follow-up states makes the next action reviewable when a transaction or request needs another step."
+      }
     ],
     contribution: {
-      heading: 'From a written scope to something the client could review.',
-      paragraphs: [
-        'I translated the SRS into a design scope, developed personas and user stories, and designed the user and administration interfaces. I then demonstrated the Adobe XD prototype to the client and delivered the design work.',
-        'The examples above explain what is visible in those deliverables. They show how requirements, responsibilities, and exceptions were represented across a connected service.',
-      ],
-      items: ['Requirements interpretation and scope definition', 'Role-specific flows, personas, and user stories', 'Interface and prototype design', 'Client demonstration and design delivery'],
+      "items": [
+        "Interpreted the SRS and defined scope",
+        "Developed personas and role-specific flows",
+        "Designed user and administration interfaces",
+        "Demonstrated the prototype to the client"
+      ]
     },
     outcome: {
-      heading: 'A design deliverable spanning booking and operations.',
-      body: 'The completed work was a set of Adobe XD prototypes for ticketing and administrative workflows, demonstrated to the client. It brought the passenger-facing journey and the operational views into a concrete design deliverable.',
+      "heading": "Delivered for client review",
+      "body": "I delivered role-specific Adobe XD prototypes and demonstrated the service to the client."
     },
-    reflection: 'This earlier work connects to how I coordinate projects today: clarify who needs to act, make the information at each handoff explicit, and follow the task beyond its first successful step.',
-    showcaseNote: 'Original design previews from the supplied Adobe XD files. Each image represents a different part of the service; the walkthrough above summarizes the wider prototype.',
+    reflection: "Clear responsibilities and explicit handoffs remain central to my coordination work today.",
+    showcaseNote: "Original previews from the five supplied Adobe XD files.",
     showcase: [
-      { image: '/projects/biwta.webp', title: 'The passenger entry point', alt: 'Original BIWTA passenger ticketing landing-page prototype', caption: 'The public-facing starting point for finding a journey. Source: BIWTA.xd.' },
-      { image: '/projects/biwta-agent.webp', title: 'Assisted ticket purchases', alt: 'Original BIWTA agent interface with vessel search results', caption: 'The agent perspective on searching for a vessel and supporting a booking. Source: BIWTA AGENT_Ticket Purchase.xd.' },
-      { image: '/projects/biwta-owner.webp', title: 'The vessel-owner perspective', alt: 'Original BIWTA vessel-owner launch-services prototype', caption: 'An operational view of launch services. The wider file also represents seat totals, sales, balances, and transactions. Source: BIWTA_ Ship Owner.xd.' },
-      { image: '/projects/biwta-authority.webp', title: 'Submit timetable information', alt: 'Original BIWTA timetable request form', caption: 'The request side of a timetable handoff, with vessel, route, and expected-time fields. Source: BIWTA. Time Table - Vessel Authority.xd.' },
-      { image: '/projects/biwta-admin.webp', title: 'Review the request', alt: 'Original BIWTA administration timetable request list', caption: 'The authority-side request list makes the review task and request status visible. Source: BIWTA admin portal.xd.' },
+      {
+        "image": "/projects/biwta.webp",
+        "title": "The passenger entry point",
+        "alt": "Original BIWTA passenger ticketing landing-page prototype",
+        "caption": "The public-facing starting point for finding a journey."
+      },
+      {
+        "image": "/projects/biwta-agent.webp",
+        "title": "Assisted ticket purchases",
+        "alt": "Original BIWTA agent interface with vessel search results",
+        "caption": "The agent perspective on searching for a vessel and supporting a booking."
+      },
+      {
+        "image": "/projects/biwta-owner.webp",
+        "title": "The vessel-owner perspective",
+        "alt": "Original BIWTA vessel-owner launch-services prototype",
+        "caption": "An operational view of launch services."
+      },
+      {
+        "image": "/projects/biwta-authority.webp",
+        "title": "Submit timetable information",
+        "alt": "Original BIWTA timetable request form",
+        "caption": "The request side of a timetable handoff, with vessel, route, and expected-time fields."
+      },
+      {
+        "image": "/projects/biwta-admin.webp",
+        "title": "Review the request",
+        "alt": "Original BIWTA administration timetable request list",
+        "caption": "The authority-side request list makes the review task and request status visible."
+      }
     ],
   },
   ereturn: {
     ...ereturnExpansion,
-    sectionTitles,
-    lead: 'Turn a detailed tax-filing process into a sequence people can work through. My contribution combined client requirements, UX research, prototyping, and usability-testing work within the Synesis IT team.',
+    sectionTitles: sectionTitles,
+    lead: "Making registration and tax-filing tasks easier to follow, from account access to return review.",
     facts: [
-      { label: 'My role', value: 'UX designer within the project team' },
-      { label: 'Client', value: 'National Board of Revenue, Bangladesh' },
-      { label: 'Scope', value: 'Registration, taxpayer information, filing sections, and tax/payment views' },
-      { label: 'Delivered', value: 'Team design work and client demonstration before the deadline' },
+      {
+        "label": "My role",
+        "value": "UX designer within the project team"
+      },
+      {
+        "label": "Client",
+        "value": "National Board of Revenue · Synesis IT"
+      }
     ],
     context: {
-      heading: 'Give a complex process a workable structure.',
-      body: [
-        'An income-tax return brings together different kinds of information: personal and assessment details, income sources, assets and liabilities, investments, expenditure, and payments. The design challenge was to make that breadth understandable within one digital service.',
-        'I visited the client to gather requirements, identified the work scope, challenges, and possible solutions, and contributed UX research, wireframes, prototypes, and usability testing. Our team performed requirements analysis using the project documentation. The shared Adobe XD file represents the broader design set.',
-      ],
+      "heading": "Make a complex return manageable.",
+      "body": "Taxpayers need to establish access, find relevant financial sections, and review their information together. The design connects verification routes, organized forms, and summaries."
     },
-    storyboardIntro: 'A high-level walkthrough of the filing tasks represented in the historical prototype. Detailed forms and conditional branches sit within these stages.',
+    storyboardIntro: "From service entry to a consolidated return review.",
     storyboard: [
-      { actor: 'Taxpayer', title: 'Enter the service', description: 'Reach eReturn from the eTax Services entry page, then register or sign in.' },
-      { actor: 'Account setup', title: 'Establish the context', description: 'Registration uses identification and mobile information. Assessment views and additional questions establish the filing period, income sources, and supporting-information context.' },
-      { actor: 'Income reporting', title: 'Work through the details', description: 'The prototype separates different income types and their associated entry forms.' },
-      { actor: 'Supporting information', title: 'Complete the wider return', description: 'Assets and liabilities, rebates, and expenditure appear as distinct parts of the filing experience.' },
-      { actor: 'Review', title: 'Bring the information together', description: 'Tax/payment summaries and a return view bring the entered information into an overview for review.' },
+      {
+        "title": "Enter the service",
+        "description": "Reach eReturn from eTax Services and establish account access."
+      },
+      {
+        "title": "Set the context",
+        "description": "Identify assessment and income circumstances through relevant questions."
+      },
+      {
+        "title": "Enter financial details",
+        "description": "Use category forms and add another item when needed."
+      },
+      {
+        "title": "Complete supporting sections",
+        "description": "Work through assets, liabilities, rebates, and expenditure."
+      },
+      {
+        "title": "Review the return",
+        "description": "Inspect summaries, tax/payment information, and the consolidated return."
+      }
     ],
     decisions: [
       {
-        title: 'Organize by the information someone needs to provide.',
-        situation: 'The filing scope contains many related categories and a large number of detailed forms.',
-        decision: 'The prototype groups the work into recognizable areas, including income, assets and liabilities, rebate, expenditure, and tax/payment.',
-        reason: 'The structure gives a reviewer a way to understand the overall scope before inspecting individual fields. It also makes the relationship between detailed entry and summary information visible.',
+        "title": "Organize by the information someone needs to provide.",
+        "situation": "The filing scope contains many related categories and a large number of detailed forms.",
+        "decision": "The prototype groups the work into recognizable areas, including income, assets and liabilities, rebate, expenditure, and tax/payment.",
+        "reason": "The structure gives a reviewer a way to understand the overall scope before inspecting individual fields"
       },
       {
-        title: 'Represent the differences within an income category.',
-        situation: 'An income category can contain several situations that require different information.',
-        decision: 'The design set includes distinct salary variants, multiple business and agricultural income forms, and “add more” states rather than a single generic income screen.',
-        reason: 'Those variants show the detail behind a high-level requirement. They make the scope more concrete for discussion with business and technical stakeholders.',
+        "title": "Represent the differences within an income category.",
+        "situation": "An income category can contain several situations that require different information.",
+        "decision": "The design set includes distinct salary variants, multiple business and agricultural income forms, and “add more” states rather than a single generic income screen.",
+        "reason": "Those variants show the detail behind a high-level requirement"
       },
       {
-        title: 'Treat access, verification, and review as part of the service.',
-        situation: 'Completing a form depends on getting into the right account and understanding the information and payment status shown at the end.',
-        decision: 'The prototype includes registration, password and verification states, a mobile-number mismatch state, payment-verification actions, and return-summary views.',
-        reason: 'The workflow can be assessed beyond data entry alone: how someone starts, where a mismatch needs attention, and how the information comes together for review.',
-      },
+        "title": "Treat access, verification, and review as part of the service.",
+        "situation": "Completing a form depends on getting into the right account and understanding the information and payment status shown at the end.",
+        "decision": "The prototype includes registration, password and verification states, a mobile-number mismatch state, payment-verification actions, and return-summary views.",
+        "reason": "The workflow can be assessed beyond data entry alone: how someone starts, where a mismatch needs attention, and how the information comes together for review."
+      }
     ],
     contribution: {
-      heading: 'Connect client requirements with a reviewable prototype.',
-      paragraphs: [
-        'My contribution began with client visits and requirements gathering. I worked on defining the scope and identifying challenges and possible solutions, then contributed research, wireframes, prototypes, and usability testing.',
-        'I also supported the client demonstration and delivery before the deadline. The shared prototype illustrates the breadth of the team’s work; my contribution was the UX work described here, rather than sole authorship of every screen.',
-      ],
-      items: ['Client requirements, team analysis, and scope clarification', 'UX research and wireframing', 'Prototype and usability-testing contribution', 'Client demonstration and design delivery'],
+      "items": [
+        "Gathered client requirements and contributed to team analysis",
+        "Contributed research, wireframes, and prototypes",
+        "Supported usability testing",
+        "Demonstrated and delivered the design with the team"
+      ]
     },
     outcome: {
-      heading: 'A comprehensive team prototype, delivered for review.',
-      body: 'The design work was delivered before the deadline and demonstrated to the client. The supplied prototype covers registration and assessment information through detailed filing sections, return review, and tax/payment views.',
+      "heading": "Delivered before the deadline",
+      "body": "The team delivered the design work before the deadline and demonstrated it to the client."
     },
-    reflection: 'The coordination skill this work brings forward is making a large requirement manageable: clarify the scope with stakeholders, break it into understandable parts, and connect detailed work back to the overall deliverable.',
-    showcaseNote: 'The available exported preview shows the service entry point. The filing walkthrough is based on the other artboards in the supplied prototype, rather than a recreated interface.',
+    reflection: "The lasting lesson: make the required information, next actor, and next action clear.",
+    showcaseNote: "Original service-entry preview; the walkthrough explains the wider filing prototype.",
     showcase: [
-      { image: '/projects/ereturn.webp', title: 'A clear entry into the service', alt: 'Original eTax Services landing-page prototype with an eReturn entry', caption: 'The eTax Services entry page from the shared team prototype. This image shows the starting point, rather than the detailed tax-filing forms. Source: e-Return_Full Version Prototype.xdc.' },
+      {
+        "image": "/projects/ereturn.webp",
+        "title": "A clear entry into the service",
+        "alt": "Original eTax Services landing-page prototype with an eReturn entry",
+        "caption": "The eTax Services entry page from the shared team prototype. This image shows the starting point, rather than the detailed tax-filing forms."
+      }
     ],
   },
   convay: {

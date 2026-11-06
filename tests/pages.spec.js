@@ -30,7 +30,7 @@ test('single-viewport company journey preserves public assets and résumé links
   await page.getByRole('button', { name: 'Visit company 2: Synesis IT', exact: true }).click();
   await page.getByRole('button', { name: 'Read BIWTA project story' }).click();
   await page.getByText('Explore the prototype screens', { exact: true }).click();
-  const previews = await page.locator('.project-gallery img').evaluateAll(images => images.map(image => image.getAttribute('src')));
+  const previews = await page.locator('.project-gallery figure img').evaluateAll(images => images.map(image => image.getAttribute('src')));
   expect(previews).toHaveLength(5);
   for (const path of previews) {
     expect(path).toMatch(new RegExp(`^${site.pathname}projects/`));

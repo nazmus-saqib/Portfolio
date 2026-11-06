@@ -58,16 +58,25 @@ function sketchDrawing(variant, wireframe, regionCount) {
   return `${top}${content}`;
 }
 
+let pictureGallerySequence = 0;
 function renderPictures(pictures, assetUrl, label) {
   const available = pictures?.filter(picture => picture?.image) || [];
   if (!available.length) return '';
-  return `<div class="study-picture-gallery" role="group" aria-label="${escapeHtml(label)}">${available.map((picture, index) => {
+  const galleryId = `study-picture-gallery-${++pictureGallerySequence}`;
+  const resolve = value => (typeof assetUrl === 'function' ? assetUrl : path => path)(value);
+  const controls = available.length > 1 ? `<div class="study-picture-controls" role="group" aria-label="Choose an image">${available.map((picture,index)=>{
+    const title = picture.title || picture.alt || `Project picture ${index+1}`;
+    return `<button type="button" data-study-picture-select="${index}" aria-pressed="${index===0}" aria-controls="${galleryId}-image-${index}" aria-label="Show ${escapeHtml(title)}"><img src="${escapeHtml(resolve(picture.image))}" alt="" loading="lazy" decoding="async"><span><span class="study-picture-index">${number(index)}</span><strong>${escapeHtml(title)}</strong></span></button>`;
+  }).join('')}</div>` : '';
+  return `<div class="study-picture-gallery" role="group" aria-label="${escapeHtml(label)}" data-study-gallery>${controls}<div class="study-picture-panels">${available.map((picture, index) => {
     const image = (typeof assetUrl === 'function' ? assetUrl : value => value)(picture.image);
     const fullSize = (typeof assetUrl === 'function' ? assetUrl : value => value)(picture.fullSize || picture.image);
     const title = picture.title || picture.alt || `Project picture ${index + 1}`;
-    return `<figure class="study-picture"><a class="study-picture-link case-screen-link" href="${escapeHtml(fullSize)}" target="_blank" rel="noopener noreferrer" aria-label="Open ${escapeHtml(title)} at full size (opens in a new tab)"><img src="${escapeHtml(image)}" alt="${escapeHtml(picture.alt || title)}" loading="lazy" decoding="async"><span class="study-picture-open">View full-size image <span aria-hidden="true">↗</span></span></a><figcaption>${picture.basis ? `<p class="study-picture-basis">${escapeHtml(picture.basis)}</p>` : ''}<h4>${escapeHtml(title)}</h4>${picture.caption ? `<p>${escapeHtml(picture.caption)}</p>` : ''}</figcaption></figure>`;
-  }).join('')}</div>`;
+    return `<figure class="study-picture" id="${galleryId}-image-${index}" data-study-picture-detail="${index}"><a class="study-picture-link case-screen-link" href="${escapeHtml(fullSize)}" target="_blank" rel="noopener noreferrer" aria-label="Open ${escapeHtml(title)} at full size (opens in a new tab)"><img src="${escapeHtml(image)}" alt="${escapeHtml(picture.alt || title)}" loading="lazy" decoding="async"><span class="study-picture-open">View full-size image <span aria-hidden="true">↗</span></span></a><figcaption>${picture.basis ? `<p class="study-picture-basis">${escapeHtml(picture.basis)}</p>` : ''}<h4>${escapeHtml(title)}</h4>${picture.caption ? `<p>${escapeHtml(picture.caption)}</p>` : ''}</figcaption></figure>`;
+  }).join('')}</div>${available.length>1?`<p class="study-gallery-status" role="status" aria-live="polite" data-study-picture-status>Image 1 of ${available.length}</p>`:''}</div>`;
 }
+
+export const renderStudyPictures = (pictures, assetUrl, label = 'Project images') => renderPictures(pictures, assetUrl, label);
 
 function renderSketch(study, key, projectId, assetUrl) {
   const data = study[key];
@@ -75,27 +84,24 @@ function renderSketch(study, key, projectId, assetUrl) {
   const wireframe = key === 'wireframe';
   const annotations = data.annotations || [];
   const visualId = `case-${projectId}-${key}-visual`;
-  const body = `${renderPictures(data.pictures, assetUrl, wireframe ? 'Wireframe pictures' : 'Sketch pictures')}
-    <div class="study-reconstruction-tag">Reconstructed structure study <span>${escapeHtml(data.reconstructionNote || `The interactive layout below was created for this portfolio; it is not an archived ${wireframe ? 'wireframe' : 'sketch'}.`)}</span></div>
-    ${data.pictures?.length ? '<h4 class="study-layout-heading">Explore the structure</h4>' : ''}
+  const structure = `<div class="study-reconstruction-tag">Reconstructed structure study <span>${escapeHtml(data.reconstructionNote || `The interactive layout below was created for this portfolio; it is not an archived ${wireframe ? 'wireframe' : 'sketch'}.`)}</span></div>
     <div class="study-sketch-layout" data-study-sketch>
       <figure class="study-sketch-figure ${wireframe ? 'study-wireframe-figure' : ''}"><svg id="${escapeHtml(visualId)}" viewBox="0 0 700 ${data.variant === 'booking' ? 495 : 410}" role="img" aria-label="${escapeHtml(wireframe ? 'Reconstructed wireframe layout study' : 'Reconstructed low-fidelity sketch study')}">${sketchDrawing(data.variant || 'meetings', wireframe, annotations.length)}</svg><figcaption>${wireframe ? 'A clean layout study showing hierarchy, navigation, and working areas.' : 'A low-fidelity structure study showing how the tasks could be organized.'}</figcaption></figure>
       ${annotations.length ? `<div class="study-sketch-annotations" aria-label="Explore the layout">${annotations.map((annotation,index)=>`<button type="button" data-study-sketch-select="${index}" aria-pressed="${index===0}" aria-controls="${escapeHtml(visualId)}"><span class="study-control-number">${number(index)}</span><span><strong>${escapeHtml(annotation.title)}</strong><span>${escapeHtml(annotation.body)}</span></span></button>`).join('')}</div><p class="study-interaction-status" role="status" aria-live="polite" data-study-sketch-status>Focus: ${escapeHtml(annotations[0].title)}</p>` : ''}
     </div>`;
+  const body = `${renderPictures(data.pictures, assetUrl, wireframe ? 'Wireframe pictures' : 'Sketch pictures')}${data.pictures?.length ? `<details class="study-disclosure study-structure-details"><summary>Explore the layout <span aria-hidden="true">+</span></summary><div class="study-disclosure-body">${structure}</div></details>` : structure}`;
   return section(study, key, projectId, body, data.intro);
 }
 
-function renderPersona(persona, index, assetUrl) {
-  return `<article class="study-persona ${index===0?'is-selected':''}"><button type="button" data-study-persona-select="${index}" data-persona-goal="${escapeHtml(persona.goal)}" aria-pressed="${index===0}"><span class="study-persona-symbol" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="16" cy="10" r="5"/><path d="M6 28v-3a10 10 0 0 1 20 0v3"/></svg></span><span><span class="study-mini-label">Role profile ${number(index)}</span><strong>${escapeHtml(persona.role)}</strong></span><span class="study-persona-select-mark" aria-hidden="true">↗</span></button>
+function renderPersona(persona, index, assetUrl, prefix) {
+  return `<article class="study-persona ${index===0?'is-selected':''}" id="${prefix}-detail-${index}" data-study-persona-detail="${index}" aria-labelledby="${prefix}-control-${index}">
     <div class="study-persona-copy">
+      <h4 class="study-persona-role">${escapeHtml(persona.role)}</h4>
       ${persona.story ? `<div class="study-persona-story"><h4>Their story</h4>${paragraphs(persona.story)}</div>` : ''}
       <h4>Goal</h4><p>${escapeHtml(persona.goal)}</p>
-      ${persona.context ? `<h4>Context</h4><p class="study-persona-context">${escapeHtml(persona.context)}</p>` : ''}
-      ${persona.userStory ? `<h4>Task story</h4><p class="study-persona-user-story">${escapeHtml(persona.userStory)}</p>` : ''}
       ${persona.needs?.length ? `<h4>Needs</h4>${list(persona.needs)}` : ''}
-      ${persona.frictions?.length ? `<h4>Potential friction</h4>${list(persona.frictions)}` : ''}
       ${persona.designResponse ? `<h4>Design response</h4>${paragraphs(persona.designResponse)}` : ''}
-      ${persona.basis ? `<p class="study-source-note">${escapeHtml(persona.basis)}</p>` : ''}
+      ${persona.context || persona.userStory || persona.frictions?.length || persona.basis ? `<details class="study-disclosure study-persona-evidence"><summary>Task story and design notes <span aria-hidden="true">+</span></summary><div class="study-disclosure-body">${persona.userStory ? `<h4>Task story</h4><p class="study-persona-user-story">${escapeHtml(persona.userStory)}</p>` : ''}${persona.context ? `<h4>Context</h4><p>${escapeHtml(persona.context)}</p>` : ''}${persona.frictions?.length ? `<h4>Potential friction</h4>${list(persona.frictions)}` : ''}${persona.basis ? `<p class="study-source-note">${escapeHtml(persona.basis)}</p>` : ''}</div></details>` : ''}
       ${renderPictures(persona.pictures,assetUrl,`${persona.role} persona pictures`)}
     </div></article>`;
 }
@@ -136,19 +142,26 @@ export function renderStudySection(study, key, { projectId = 'project', assetUrl
     return section(study,key,projectId,body ? `<div class="study-needs">${body}</div>` : '',data.intro);
   }
   if (key === 'requirements') {
-    return section(study,key,projectId,data.length ? `<p class="study-analysis-note">Organized from the documented scope and the archived screens.</p><div class="study-requirements">${data.map((item,index)=>`<article class="study-requirement"><div class="study-card-heading"><span class="study-card-number" aria-hidden="true">${number(index)}</span><h4>${escapeHtml(item.need)}</h4></div><dl><div><dt>In the source</dt><dd>${escapeHtml(item.evidence)}</dd></div><div><dt>Design response</dt><dd>${escapeHtml(item.response)}</dd></div></dl></article>`).join('')}</div>` : '');
+    const cards = data.map((item,index)=>`<details class="study-requirement study-disclosure"><summary class="study-card-heading"><span class="study-card-number" aria-hidden="true">${number(index)}</span><h4>${escapeHtml(item.need)}</h4><span class="study-disclosure-mark" aria-hidden="true">+</span></summary><dl class="study-disclosure-body"><div><dt>Design response</dt><dd>${escapeHtml(item.response)}</dd></div><div><dt>Source</dt><dd>${escapeHtml(item.evidence)}</dd></div></dl></details>`).join('');
+    return section(study,key,projectId,cards ? `<div class="study-requirements">${cards}</div>` : '');
   }
   if (key === 'research') {
-    const methods = data.methods?.length ? `<div class="study-methods">${data.methods.map(method=>`<article><p class="study-evidence-tag">${escapeHtml(method.status || 'Documented activity')}</p><h4>${escapeHtml(method.title)}</h4><p>${escapeHtml(method.body)}</p></article>`).join('')}</div>` : '';
-    const findings = data.findings?.length ? `<div class="study-findings"><h4>What the material reveals</h4>${data.findings.map((finding,index)=>`<article><span class="study-finding-mark" aria-hidden="true">${number(index)}</span><div><h5>${escapeHtml(finding.title)}</h5><p>${escapeHtml(finding.body)}</p>${finding.evidence ? `<p class="study-source-note">${escapeHtml(finding.evidence)}</p>` : ''}</div></article>`).join('')}</div>` : '';
-    return section(study,key,projectId,methods+findings,data.intro);
+    const methods = data.methods?.length ? `<details class="study-disclosure study-research-methods"><summary>Research approach and sources <span aria-hidden="true">+</span></summary><div class="study-methods study-disclosure-body">${data.methods.map(method=>`<article><p class="study-evidence-tag">${escapeHtml(method.status || 'Documented activity')}</p><h4>${escapeHtml(method.title)}</h4><p>${escapeHtml(method.body)}</p></article>`).join('')}</div></details>` : '';
+    const renderFinding = (finding,index) => `<article><span class="study-finding-mark" aria-hidden="true">${number(index)}</span><div><h5>${escapeHtml(finding.title)}</h5><p>${escapeHtml(finding.body)}</p>${finding.evidence ? `<details class="study-evidence"><summary>Source</summary><p class="study-source-note">${escapeHtml(finding.evidence)}</p></details>` : ''}</div></article>`;
+    const findings = data.findings || [];
+    const visible = findings.slice(0,3).map(renderFinding).join('');
+    const more = findings.length>3 ? `<details class="study-disclosure study-more-findings"><summary>More findings <span aria-hidden="true">+</span></summary><div class="study-findings study-disclosure-body">${findings.slice(3).map((finding,index)=>renderFinding(finding,index+3)).join('')}</div></details>` : '';
+    return section(study,key,projectId,`${visible ? `<div class="study-findings study-findings-primary">${visible}</div>` : ''}${more}${methods}`,data.intro);
   }
   if (key === 'challenges') {
-    return section(study,key,projectId,data.length ? `<p class="study-analysis-note">A retrospective mapping of the challenges represented in the designs and the prototype responses.</p><div class="study-challenges">${data.map((item,index)=>`<article><div class="study-challenge-problem"><span class="study-mini-label">Challenge ${number(index)}</span><h4>${escapeHtml(item.title)}</h4><p>${escapeHtml(item.detail)}</p></div><span class="study-challenge-arrow" aria-hidden="true">↓</span><div class="study-challenge-response"><span class="study-mini-label">Design response</span><p>${escapeHtml(item.response)}</p></div></article>`).join('')}</div>` : '');
+    const cards = data.map((item,index)=>`<details class="study-challenge study-disclosure"><summary><span><span class="study-mini-label">Challenge ${number(index)}</span><h4>${escapeHtml(item.title)}</h4></span><span class="study-disclosure-mark" aria-hidden="true">+</span></summary><div class="study-disclosure-body"><p class="study-challenge-detail">${escapeHtml(item.detail)}</p><div class="study-challenge-response"><span class="study-mini-label">Design response</span><p>${escapeHtml(item.response)}</p></div></div></details>`).join('');
+    return section(study,key,projectId,cards ? `<div class="study-challenges">${cards}</div>` : '');
   }
   if (key === 'personas') {
     const first = data[0];
-    const body = data.length ? `<p class="study-reconstruction-tag">Reconstructed role profiles <span>Based on the service tasks, without invented interview quotes or demographics.</span></p><div class="study-personas" data-study-personas>${data.map((persona,index)=>renderPersona(persona,index,assetUrl)).join('')}<p class="study-interaction-status" role="status" aria-live="polite" data-study-persona-status>Selected goal: ${escapeHtml(first.goal)}</p></div>` : '';
+    const prefix = `case-${projectId}-persona`;
+    const controls = data.map((persona,index)=>`<button type="button" id="${prefix}-control-${index}" data-study-persona-select="${index}" data-persona-goal="${escapeHtml(persona.goal)}" aria-pressed="${index===0}" aria-controls="${prefix}-detail-${index}"><span class="study-control-number" aria-hidden="true">${number(index)}</span><strong>${escapeHtml(persona.role)}</strong></button>`).join('');
+    const body = data.length ? `${renderPictures(study.personasPictures,assetUrl,'Persona overview images')}<p class="study-reconstruction-tag">Reconstructed role profiles <span>Based on the tasks represented in the project artifacts.</span></p><div class="study-personas" data-study-personas><div class="study-persona-controls" role="group" aria-label="Choose a persona">${controls}</div><div class="study-persona-panels">${data.map((persona,index)=>renderPersona(persona,index,assetUrl,prefix)).join('')}</div><p class="study-interaction-status" role="status" aria-live="polite" data-study-persona-status>Selected goal: ${escapeHtml(first.goal)}</p></div>` : '';
     return section(study,key,projectId,body,study.personasIntro);
   }
   if (key === 'process') {
@@ -195,12 +208,47 @@ export function bindStudyInteractions(container) {
     journeys.dataset.studyEnhanced = 'true';
     journeys.querySelectorAll('[data-study-journey-detail]').forEach((panel,index) => { panel.hidden = index !== 0; });
   });
+  container.querySelectorAll('[data-study-personas]').forEach(personas => {
+    if (personas.dataset.studyEnhanced) return;
+    personas.dataset.studyEnhanced = 'true';
+    personas.querySelectorAll('[data-study-persona-detail]').forEach((panel,index) => { panel.hidden = index !== 0; });
+  });
+  container.querySelectorAll('[data-study-gallery]').forEach(gallery => {
+    if (gallery.dataset.studyEnhanced) return;
+    gallery.dataset.studyEnhanced = 'true';
+    gallery.querySelectorAll('[data-study-picture-detail]').forEach((panel,index) => { panel.hidden = index !== 0; });
+  });
   if (boundContainers.has(container)) return;
   boundContainers.add(container);
   container.addEventListener('click', event => {
+    const navigation = event.target.closest('a[data-case-nav]');
+    if (navigation && container.contains(navigation)) {
+      const href = navigation.getAttribute('href') || '';
+      if (!href.startsWith('#')) return;
+      const target = document.getElementById(href.slice(1));
+      if (!target || !container.contains(target)) return;
+      event.preventDefault();
+      let ancestor = target;
+      while (ancestor && container.contains(ancestor)) {
+        if (ancestor.tagName === 'DETAILS') ancestor.open = true;
+        ancestor = ancestor.parentElement;
+      }
+      const heading = target.querySelector('h2,h3,h4') || target;
+      heading.setAttribute('tabindex','-1');
+      target.scrollIntoView({ block:'start', behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      heading.focus({ preventScroll:true });
+      return;
+    }
     const button = event.target.closest('button');
     if (!button || !container.contains(button)) return;
-    if (button.hasAttribute('data-study-journey-select')) {
+    if (button.hasAttribute('data-study-picture-select')) {
+      const gallery = button.closest('[data-study-gallery]');
+      const selected = button.dataset.studyPictureSelect;
+      gallery.querySelectorAll('[data-study-picture-select]').forEach(item => item.setAttribute('aria-pressed',String(item===button)));
+      const panels = gallery.querySelectorAll('[data-study-picture-detail]');
+      panels.forEach(panel => { panel.hidden = panel.dataset.studyPictureDetail !== selected; });
+      gallery.querySelector('[data-study-picture-status]').textContent = `Image ${Number(selected)+1} of ${panels.length}: ${button.querySelector('strong').textContent}`;
+    } else if (button.hasAttribute('data-study-journey-select')) {
       const journeys = button.closest('[data-study-journeys]');
       const selected = button.dataset.studyJourneySelect;
       journeys.querySelectorAll('[data-study-journey-select]').forEach(item => item.setAttribute('aria-pressed',String(item===button)));
@@ -214,7 +262,8 @@ export function bindStudyInteractions(container) {
       process.querySelector('[data-study-process-status]').textContent = `Selected stage: ${button.querySelector('strong').textContent}`;
     } else if (button.hasAttribute('data-study-persona-select')) {
       const personas = button.closest('[data-study-personas]');
-      personas.querySelectorAll('[data-study-persona-select]').forEach(item => { item.setAttribute('aria-pressed',String(item===button)); item.closest('.study-persona').classList.toggle('is-selected',item===button); });
+      personas.querySelectorAll('[data-study-persona-select]').forEach(item => item.setAttribute('aria-pressed',String(item===button)));
+      personas.querySelectorAll('[data-study-persona-detail]').forEach(panel => { panel.hidden = panel.dataset.studyPersonaDetail !== button.dataset.studyPersonaSelect; panel.classList.toggle('is-selected',!panel.hidden); });
       personas.querySelector('[data-study-persona-status]').textContent = `Selected goal: ${button.dataset.personaGoal}`;
     } else if (button.hasAttribute('data-study-sketch-select')) {
       const sketch = button.closest('[data-study-sketch]');

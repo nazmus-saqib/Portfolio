@@ -286,7 +286,7 @@ test('BIWTA and eReturn connect needs, persona stories, and design evidence with
     await trigger.click();
     const dialog = page.getByRole('dialog');
     for (const heading of ['Requirements analysis', 'Research, learnings, and findings', 'User personas', 'Design thinking process', 'Initial sketch study', 'From challenges to design solutions', 'Site map and information architecture', 'Inspiration board']) {
-      await expect(dialog.getByRole('heading', { name: heading, exact: true })).toHaveCount(1);
+      await expect(dialog.getByRole('heading', { name: heading, exact: true, includeHidden: true })).toHaveCount(1);
     }
     await expect(dialog.locator(`#case-${id}-personas .study-reconstruction-tag`)).toContainText('Reconstructed role profiles');
     const stage = dialog.locator('[data-study-process-select]').nth(1);
@@ -295,22 +295,29 @@ test('BIWTA and eReturn connect needs, persona stories, and design evidence with
     await expect(stage).toHaveAttribute('aria-pressed', 'true');
     await expect(dialog.locator('[data-study-process-detail="1"]')).toBeVisible();
 
-    const persona = dialog.locator('[data-study-persona-select]').last();
-    await persona.click();
-    await expect(persona).toHaveAttribute('aria-pressed', 'true');
-    for (const profile of await dialog.locator('.study-persona-copy').all()) {
-      await expect(profile).toBeVisible();
-      await expect(profile.locator('.study-persona-story')).not.toBeEmpty();
-      await expect(profile.locator('.study-persona-user-story')).not.toBeEmpty();
+    const personaControls = dialog.locator('[data-study-persona-select]');
+    for (let index = 0; index < await personaControls.count(); index += 1) {
+      const control = personaControls.nth(index);
+      await control.focus();
+      await page.keyboard.press('Enter');
+      await expect(control).toHaveAttribute('aria-pressed', 'true');
+      await expect(dialog.locator('[data-study-persona-detail]:visible')).toHaveCount(1);
+      const profile = dialog.locator('[data-study-persona-detail]').nth(index);
+      await expect(profile.locator('.study-persona-story')).toBeVisible();
+      await expect(profile.locator('.study-persona-evidence')).not.toHaveAttribute('open', '');
+      await profile.locator('.study-persona-evidence > summary').click();
+      await expect(profile.locator('.study-persona-user-story')).toBeVisible();
       await expect(profile.getByRole('heading', { name: 'Design response', exact: true })).toHaveCount(1);
     }
 
     const sketch = dialog.locator(`#case-${id}-sketches`);
+    await sketch.locator('.study-structure-details > summary').click();
     const annotation = sketch.locator('[data-study-sketch-select]').last();
     await annotation.focus();
     await page.keyboard.press('Space');
     await expect(annotation).toHaveAttribute('aria-pressed', 'true');
     await expect(sketch.locator('[data-sketch-region].is-selected')).toHaveCount(1);
+    await dialog.locator('.case-study-disclosure > summary').filter({ hasText: 'Site map and information architecture' }).click();
     const leaf = dialog.locator('[data-study-map-select]').last();
     await leaf.click();
     await expect(leaf).toHaveAttribute('aria-pressed', 'true');
@@ -318,6 +325,29 @@ test('BIWTA and eReturn connect needs, persona stories, and design evidence with
     const direction = dialog.locator('[data-study-inspiration-select]').last();
     await direction.click();
     await expect(direction).toHaveAttribute('aria-pressed', 'true');
+    await dialog.locator(`a[href="#case-${id}-requirements"]`).click();
+    const requirements = dialog.locator(`#case-${id}-requirements`);
+    await expect(requirements.getByRole('heading', { name: 'Requirements analysis', exact: true })).toBeFocused();
+    const requirement = requirements.locator('.study-requirement').first();
+    await expect(requirement).not.toHaveAttribute('open', '');
+    await requirement.locator(':scope > summary').click();
+    await expect(requirement.locator('dd').first()).toBeVisible();
+    const prototypeGallery = dialog.locator('.project-gallery [data-study-gallery]');
+    if (id === 'biwta') {
+      await expect(prototypeGallery.locator('[data-study-picture-detail]:visible')).toHaveCount(1);
+      const lastImage = prototypeGallery.locator('[data-study-picture-select]').last();
+      await lastImage.focus();
+      await page.keyboard.press('Space');
+      await expect(lastImage).toHaveAttribute('aria-pressed', 'true');
+      await expect(prototypeGallery.locator('[data-study-picture-detail]:visible')).toHaveCount(1);
+      await expect(prototypeGallery.locator('[data-study-picture-status]')).toContainText('5 of 5');
+    } else {
+      const sketchGallery = sketch.locator('[data-study-gallery]').first();
+      await expect(sketchGallery.locator('[data-study-picture-select]')).toHaveCount(2);
+      await sketchGallery.locator('[data-study-picture-select]').last().click();
+      await expect(sketchGallery.locator('[data-study-picture-detail]:visible')).toHaveCount(1);
+      await expect(sketchGallery.locator('[data-study-picture-status]')).toContainText('2 of 2');
+    }
     const ids = await dialog.locator('[id]').evaluateAll(elements => elements.map(element => element.id));
     expect(new Set(ids).size, 'Case-study controls and sections have unique IDs').toBe(ids.length);
     await page.keyboard.press('Escape');
@@ -361,9 +391,9 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 360, height: 740
       if (index === 1) await expect(panel).toContainText(/correct|another/i);
       if (index === 2) {
         await expect(panel).toContainText('DCT');
-        await expect(panel.locator('img[src$="registration-circle-original.webp"]')).toHaveCount(1);
+        await expect(panel.locator('.study-picture img[src$="registration-circle-original.webp"]')).toHaveCount(1);
       }
-      const sourceImage = panel.locator(`img[src$="${sourceFiles[index]}"]`);
+      const sourceImage = panel.locator(`.study-picture img[src$="${sourceFiles[index]}"]`);
       await sourceImage.scrollIntoViewIfNeeded();
       await expect.poll(() => sourceImage.evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
       await expect(sourceImage.locator('..')).toHaveAttribute('target', '_blank');

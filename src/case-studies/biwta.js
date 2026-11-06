@@ -1,146 +1,410 @@
-// Historical work is separated from retrospective interpretation and the
-// explanatory studies created for this portfolio.
+// Historical artifacts and retrospective explanations remain distinguished in the presentation.
 export const biwtaExpansion = {
-  needs: {
-    intro: 'The client-facing task was to translate the software requirements specification into ticketing and administration designs. The service connected a passenger choosing a journey with assisted sales, vessel operations, and timetable review. These task stories summarize needs represented in the original artifacts.',
-    stories: [
-      { role: 'Passenger', need: 'Compare journeys and understand the selected place and fare before payment', soThat: 'I can make a booking with the relevant trip and cost information in view.', source: 'Task story reconstructed from passenger designs' },
-      { role: 'Ticketing agent', need: 'Enter passenger details, record received payment, and retrieve a purchase', soThat: 'I can support a passenger’s booking and its later follow-up.', source: 'Task story reconstructed from agent designs' },
-      { role: 'Vessel owner', need: 'See seat totals, sales, remaining capacity, and transaction information', soThat: 'I can review the operational picture represented by the service.', source: 'Task story reconstructed from owner designs' },
-      { role: 'Authority reviewer', need: 'Connect requested timetable details with the information being provided', soThat: 'I can review a request and return a traceable response.', source: 'Task story reconstructed from timetable and administration designs' },
-    ],
+  "needs": {
+    "intro": "Connect passenger booking, assisted sales, vessel operations, and timetable review within one ticketing service.",
+    "stories": [
+      {
+        "role": "Passenger",
+        "need": "Compare journeys, places, and fares",
+        "soThat": "I can choose and manage a booking.",
+        "source": "Passenger designs · reconstructed task"
+      },
+      {
+        "role": "Ticketing agent",
+        "need": "Enter passenger details and record received payment",
+        "soThat": "I can support the purchase and follow-up.",
+        "source": "Agent designs · reconstructed task"
+      },
+      {
+        "role": "Vessel owner",
+        "need": "Review capacity, sales, and transactions",
+        "soThat": "I can understand the service’s operational picture.",
+        "source": "Owner designs · reconstructed task"
+      },
+      {
+        "role": "Authority reviewer",
+        "need": "Connect timetable requests with returned information",
+        "soThat": "I can provide a traceable response.",
+        "source": "Timetable designs · reconstructed task"
+      }
+    ]
   },
-  requirements: [
-    { need: 'Define different responsibilities', evidence: 'The project record identifies two user portals and two administration panels. The artifacts show booking, assisted sales, owner information, and timetable review.', response: 'Separate the role-specific actions while retaining shared journey, ticket, and request information.' },
-    { need: 'Explain the booking commitment', evidence: 'Vessel results, seat/deck layouts, passenger entry, and itemized fare views.', response: 'Keep journey comparison, place selection, passenger information, and cost review understandable as connected tasks.' },
-    { need: 'Distinguish direct and assisted payment', evidence: 'Passenger payment-method and gateway choices appear alongside an agent Received Payment action.', response: 'Give each participant the payment action represented by their responsibility in the prototype.' },
-    { need: 'Make operations information inspectable', evidence: 'Owner views contain seat totals, sold and remaining places, sold amounts, balances, and transactions.', response: 'Bring service, capacity, sales, and account information into the owner’s working perspective.' },
-    { need: 'Represent a timetable handoff', evidence: 'Expected times, request identifiers/status, provided times, berthing information, and fare-chart fields.', response: 'Distinguish submission, tracking, review, and returned information.' },
-    { need: 'Cover the ticket lifecycle', evidence: 'Payment-failure, ticket-change, cancellation, and passenger verification states.', response: 'Include follow-up and recovery alongside the successful booking sequence.' },
-  ],
-  research: {
-    intro: 'My documented starting point was SRS interpretation, followed by scope definition, personas, and user stories. The learnings below come from reviewing the preserved designs for this case study; they explain the material without attributing findings to unrecorded interviews or usability tests.',
-    methods: [
-      { title: 'Interpret the requirements', body: 'I reviewed the SRS and identified the design scope for the user portals and administration panels.', status: 'Documented activity' },
-      { title: 'Represent user and client needs', body: 'I developed personas and user stories to connect the required functions with the people using them.', status: 'Documented activity' },
-      { title: 'Explore the booking structure', body: 'The supplied notebook reference explores route/date search, vessel results, deck/floor choices, and seat selection.', status: 'Original sketch evidence' },
-      { title: 'Read across the service', body: 'For this retrospective, the passenger, agent, owner, and timetable files were compared by task, information, and state.', status: 'Retrospective artifact review' },
-    ],
-    findings: [
-      { title: 'A similar result can require different actions', body: 'Passengers and agents both contribute to a ticket purchase, but the passenger chooses a payment method while the agent has a received-payment control.', evidence: 'Passenger Payment Method and agent Payment Details views' },
-      { title: 'A booking needs context before commitment', body: 'The designs separate journey selection, vessel/place choices, passenger information, and fare information.', evidence: 'Passenger search, layout, passenger-entry, and fare views' },
-      { title: 'A handoff needs more than a submission form', body: 'Request lists and returned-information views accompany timetable submission. The request remains identifiable across the handoff.', evidence: 'Timetable request, request-list, response, and administration files' },
-      { title: 'Operations need a different level of detail', body: 'The owner file brings capacity, sales, balances, and transactions into the service view, rather than repeating the passenger checkout.', evidence: 'Owner service, seat-detail, balance, and transaction views' },
-      { title: 'Follow-up belongs in scope', body: 'Payment failure, changes, cancellation, and passenger verification appear as explicit design states.', evidence: 'Passenger and agent follow-up artboards' },
-    ],
-  },
-  challenges: [
-    { title: 'One service, several responsibilities', detail: 'Passengers, agents, owners, and reviewers need different information and actions to carry out their part of the service.', response: 'Use role-specific views while keeping shared journey, ticket, and request information recognizable.' },
-    { title: 'Keep a booking choice connected to its cost', detail: 'A route, departure, vessel, and selected place all contribute to the booking being considered.', response: 'Represent comparison, seat/deck selection, passenger entry, and fare review as connected steps before payment.' },
-    { title: 'Distinguish direct and assisted purchase', detail: 'A passenger choosing a payment method has a different responsibility from an agent recording a received payment.', response: 'Provide the payment controls shown for each role instead of treating the checkout tasks as interchangeable.' },
-    { title: 'Separate requested and provided schedule information', detail: 'Expected journey times and returned timetable information represent different points in a review handoff.', response: 'Keep requested and provided fields explicit, supported by request identifiers, status, berthing information, and the fare-chart reference.' },
-    { title: 'Make capacity and sales understandable together', detail: 'The owner needs to relate a service’s available places to its sold places and financial information.', response: 'Provide owner views for seat totals, sold and remaining places, sold amounts, balances, and transactions.' },
-    { title: 'Continue beyond a successful transaction', detail: 'A ticket may require payment recovery, a change, or cancellation after the initial booking task.', response: 'Represent these as distinct follow-up states with their relevant confirmation, status, or next action.' },
-  ],
-  personasIntro: 'These scenario personas are reconstructed from the original service tasks. Each story connects a person’s goal with system needs and a visible design response; they are not presented as interview participants or demographic research.',
-  personas: [
+  "requirements": [
     {
-      role: 'The passenger',
-      story: 'A passenger starts with a route and travel date, then compares the journeys represented in the search results. After choosing a vessel, they need to understand the selected seat or deck option, passenger details, and fare before payment. Once a ticket exists, their needs can continue through payment recovery, a requested change, or cancellation.',
-      userStory: 'As a passenger, I need to compare a journey, review my selected place and fare, and understand the relevant follow-up action, so that I can make and manage the booking.',
-      goal: 'Find a suitable journey and understand the booking and its follow-up.',
-      context: 'Direct booking, from route/date search to ticket information.',
-      needs: ['Journey and fare comparison', 'Seat/deck selection in context', 'Passenger and cost review', 'Ticket and follow-up information'],
-      frictions: ['A selected place becoming disconnected from the journey or total cost', 'An unclear next step after a failed payment or requested change'],
-      designResponse: 'The passenger designs connect vessel results, place selection, passenger entry, and payment choices, with separate ticket, failure, change, cancellation, and verification states.',
-      basis: 'Reconstructed scenario from passenger booking and follow-up screens; potential friction is a design hypothesis.',
+      "need": "Separate responsibilities",
+      "evidence": "Two user portals and two administration panels cover different tasks.",
+      "response": "Give each role relevant actions and shared booking context."
     },
     {
-      role: 'The ticketing agent',
-      story: 'An agent supports a passenger’s purchase by finding the journey and entering the passenger’s details. The assisted-sale flow includes a Received Payment action, so the agent needs a clear distinction between the passenger information and the payment action they perform. Later, purchase history helps them locate the booking when follow-up is needed.',
-      userStory: 'As a ticketing agent, I need to enter a passenger’s details, record received payment, and retrieve the purchase, so that I can support the booking and its follow-up.',
-      goal: 'Support a purchase and retrieve its details when needed.',
-      context: 'Assisted booking on behalf of a passenger.',
-      needs: ['Passenger entry', 'A clear received-payment action', 'Purchase history', 'Relevant ticket follow-up'],
-      frictions: ['Confusing the agent’s payment task with the passenger’s payment-method selection', 'Difficulty finding a prior purchase for follow-up'],
-      designResponse: 'The agent prototype provides assisted purchase, passenger/payment details, a Received Payment action, and history and follow-up views.',
-      basis: 'Reconstructed scenario from the agent ticket-purchase designs; no agent-specific OTP requirement is inferred.',
+      "need": "Explain the booking",
+      "evidence": "Search, vessel layouts, passenger details, and fare views.",
+      "response": "Connect journey choice with place, passenger, and cost review."
     },
     {
-      role: 'The vessel owner',
-      story: 'A vessel owner looks across the services represented in the owner interface. For a service, they need to understand total places, sold places, remaining capacity, and sold amounts. Balance and transaction views provide another part of that operational picture, connecting service information with the financial information available in the design.',
-      userStory: 'As a vessel owner, I need service, capacity, sales, and transaction information in an understandable structure, so that I can review the operation represented by the system.',
-      goal: 'Review service, capacity, sales, and account information.',
-      context: 'The owner’s operational perspective across services and their details.',
-      needs: ['Service and seat details', 'Sold and remaining places', 'Sold amounts', 'Balances and transactions'],
-      frictions: ['Capacity figures becoming disconnected from sales information', 'Unclear relationships between service and account views'],
-      designResponse: 'The owner file groups launch services, seat totals and sales, balance information, disbursement, and transaction views.',
-      basis: 'Reconstructed scenario from the owner designs; operational benefits have not been measured.',
+      "need": "Distinguish payment tasks",
+      "evidence": "Passengers choose payment methods; agents record received payment.",
+      "response": "Keep direct and assisted checkout responsibilities clear."
     },
     {
-      role: 'The authority reviewer',
-      story: 'A reviewer receives a timetable request containing vessel, route, and expected journey information. They need to keep the original request identifiable while reviewing it and providing schedule, berthing, and fare-chart information. The requester then needs to understand how the returned information relates to what was submitted.',
-      userStory: 'As a timetable reviewer, I need to connect the requested details with the information I provide, so that the request and response remain traceable across the handoff.',
-      goal: 'Review a timetable request and provide understandable returned information.',
-      context: 'The administrative side of the timetable request and response.',
-      needs: ['Requested vessel, route, and time details', 'Request identity and status', 'Provided schedule and berthing information', 'A connection between submission and response'],
-      frictions: ['Losing the relationship between the request and its response', 'Confusing expected times with provided timetable information'],
-      designResponse: 'The timetable and administration designs expose request identifiers/status and distinguish expected information from provided times, berthing, and the fare-chart reference.',
-      basis: 'Reconstructed review-task scenario. The request-side file uses both Vessel Authority and Vessel Owner labels, so exact organizational role mapping is not asserted.',
+      "need": "Show the operational picture",
+      "evidence": "Owner views include capacity, sales, balances, and transactions.",
+      "response": "Group service and financial information for review."
     },
+    {
+      "need": "Make handoffs traceable",
+      "evidence": "Timetable views include request identity, status, and provided information.",
+      "response": "Separate submission, review, and returned information."
+    },
+    {
+      "need": "Cover follow-up",
+      "evidence": "Failure, change, cancellation, and passenger verification states.",
+      "response": "Show the next action beyond the successful booking."
+    }
   ],
-  process: [
-    { stage: 'Understand', activity: 'Review the SRS and identify the user and client needs within the assignment.', output: 'A design scope covering two user portals and two administration panels.', basis: 'Documented activity' },
-    { stage: 'Define', activity: 'Represent the people, tasks, and responsibilities through personas and user stories.', output: 'Role-specific needs for booking, assisted purchase, operational information, and timetable review.', basis: 'Documented activity, explained through the preserved artifacts' },
-    { stage: 'Explore', activity: 'Explore the booking hierarchy in notebook studies: route/date search, vessel results, deck/floor choices, and seat selection.', output: 'Early layout exploration, supplemented here by clearly labeled reconstructed studies and maps.', basis: 'Original sketch evidence and portfolio reconstructions' },
-    { stage: 'Prototype', activity: 'Develop the ticketing and administration interfaces in Adobe XD.', output: 'Booking, owner information, timetable, and follow-up views.', basis: 'Documented activity and original artifacts' },
-    { stage: 'Review and deliver', activity: 'Demonstrate the prototype to the client and deliver the design work.', output: 'A concrete design deliverable for client review.', basis: 'Documented client demonstration and delivery; detailed feedback and production results are not preserved' },
+  "research": {
+    "intro": "SRS review established the scope. The artifact observations below explain the preserved designs.",
+    "methods": [
+      {
+        "title": "Requirements",
+        "body": "Reviewed the SRS and defined the interface scope.",
+        "status": "Documented activity"
+      },
+      {
+        "title": "User needs",
+        "body": "Developed personas and task stories for user and client needs.",
+        "status": "Documented activity"
+      },
+      {
+        "title": "Early structure",
+        "body": "Notebook studies explore search, vessel results, decks, and seats.",
+        "status": "Original sketch evidence"
+      },
+      {
+        "title": "Service review",
+        "body": "Compared tasks and handoffs across the archived design files.",
+        "status": "Retrospective review"
+      }
+    ],
+    "findings": [
+      {
+        "title": "Shared outcome, different actions",
+        "body": "Passenger payment choices differ from the agent’s received-payment action.",
+        "evidence": "Passenger and agent payment views"
+      },
+      {
+        "title": "Context before commitment",
+        "body": "Journey, selected place, passenger details, and fare need to stay connected.",
+        "evidence": "Passenger booking views"
+      },
+      {
+        "title": "Trace the handoff",
+        "body": "Request lists and returned information keep timetable review identifiable.",
+        "evidence": "Timetable and administration views"
+      },
+      {
+        "title": "Operations need their own view",
+        "body": "Capacity, sales, balances, and transactions serve the owner’s review task.",
+        "evidence": "Owner views"
+      },
+      {
+        "title": "Include follow-up",
+        "body": "Failure, change, cancellation, and verification appear as explicit states.",
+        "evidence": "Booking follow-up views"
+      }
+    ]
+  },
+  "challenges": [
+    {
+      "title": "Different responsibilities",
+      "detail": "Each participant needs different information and actions.",
+      "response": "Use role-specific views with recognizable shared booking information."
+    },
+    {
+      "title": "Choice and cost",
+      "detail": "Journey and selected place must retain their fare context.",
+      "response": "Connect search, selection, passenger entry, and fare review."
+    },
+    {
+      "title": "Direct and assisted sales",
+      "detail": "Passengers and agents perform different payment tasks.",
+      "response": "Give each role its own checkout actions."
+    },
+    {
+      "title": "Requested and provided times",
+      "detail": "A timetable request and its response contain different information.",
+      "response": "Use request identity, status, and distinct requested/provided fields."
+    },
+    {
+      "title": "Capacity and sales",
+      "detail": "Owners need to relate remaining places to sales information.",
+      "response": "Group capacity, sales, balances, and transactions."
+    },
+    {
+      "title": "After the purchase",
+      "detail": "Payment recovery, changes, and cancellation need separate next steps.",
+      "response": "Represent each follow-up state and its relevant action."
+    }
   ],
-  sketches: {
-    intro: 'The original notebook reference explores route/date search, vessel results, deck/floor tabs, and seat selection. The supplementary notebook-style study and interactive structure below explain the wider booking task and are present-day reconstructions.',
-    variant: 'booking',
-    pictures: [
-      { image: '/projects/biwta/sketch-study.webp', alt: 'Reconstructed blue-ballpoint BIWTA booking sketches on a cream lined spiral notebook', title: 'Booking layout study', caption: 'A new explanatory study connecting journey search, vessel/place selection, passenger and fare review, and ticket follow-up. The photograph-style study is generated for this case study.', basis: 'Reconstructed study · not an original historical sketch' },
+  "personasIntro": "Reconstructed role stories connect the archived tasks to system needs; they are not interview-derived personas.",
+  "personas": [
+    {
+      "role": "The passenger",
+      "story": "A passenger compares journeys for a route and date. Before paying, they need to check the selected place and fare, then understand ticket follow-up.",
+      "userStory": "As a passenger, I need clear journey, place, and fare information to book and manage a ticket.",
+      "goal": "Choose and manage a booking.",
+      "context": "Direct passenger booking.",
+      "needs": [
+        "Journey and fare comparison",
+        "Seat/deck and passenger review",
+        "Ticket follow-up"
+      ],
+      "frictions": [
+        "An unclear next step after payment failure or a change."
+      ],
+      "designResponse": "The designs connect search and fare review with ticket, failure, change, and cancellation states.",
+      "basis": "Reconstructed from passenger screens; friction is a hypothesis."
+    },
+    {
+      "role": "The ticketing agent",
+      "story": "An agent finds a journey and enters a passenger’s details. They record received payment and later use purchase history for follow-up.",
+      "userStory": "As an agent, I need passenger details, received-payment controls, and history to support a booking.",
+      "goal": "Support and retrieve a purchase.",
+      "context": "Assisted ticket purchase.",
+      "needs": [
+        "Passenger details",
+        "Received-payment action",
+        "History and follow-up"
+      ],
+      "frictions": [
+        "Confusing assisted payment with passenger checkout."
+      ],
+      "designResponse": "The agent prototype groups assisted purchase, received payment, history, and follow-up.",
+      "basis": "Reconstructed from agent screens."
+    },
+    {
+      "role": "The vessel owner",
+      "story": "A vessel owner reviews services, sold places, and remaining capacity. They need sales, balance, and transaction information alongside that operational picture.",
+      "userStory": "As an owner, I need connected capacity, sales, and account information to review services.",
+      "goal": "Review service operations.",
+      "context": "Owner service and account views.",
+      "needs": [
+        "Capacity and seat details",
+        "Sales information",
+        "Balances and transactions"
+      ],
+      "frictions": [
+        "Capacity and financial figures losing their context."
+      ],
+      "designResponse": "Owner views connect launch services with capacity, sales, balances, and transactions.",
+      "basis": "Reconstructed from owner screens."
+    },
+    {
+      "role": "The authority reviewer",
+      "story": "A reviewer receives vessel, route, and expected-time details. They need to return schedule and berthing information while keeping the request identifiable.",
+      "userStory": "As a reviewer, I need identifiable requests and clear returned information to complete the timetable handoff.",
+      "goal": "Review and respond to timetable requests.",
+      "context": "Timetable administration.",
+      "needs": [
+        "Request details",
+        "Identity and status",
+        "Provided timetable information"
+      ],
+      "frictions": [
+        "Confusing expected times with provided times."
+      ],
+      "designResponse": "The designs distinguish requested and provided information using request identity and status.",
+      "basis": "Reconstructed review task; organizational role labels vary across source files."
+    }
+  ],
+  "process": [
+    {
+      "stage": "Understand",
+      "activity": "Review the SRS and user/client needs.",
+      "output": "Scope for two user portals and two administration panels.",
+      "basis": "Documented activity"
+    },
+    {
+      "stage": "Define",
+      "activity": "Describe the people, tasks, and responsibilities.",
+      "output": "Personas and role-specific task stories.",
+      "basis": "Documented activity"
+    },
+    {
+      "stage": "Explore",
+      "activity": "Explore search, vessel results, decks, and seats.",
+      "output": "Early layout studies.",
+      "basis": "Original sketch evidence; supplementary reconstructions labeled"
+    },
+    {
+      "stage": "Prototype",
+      "activity": "Design the interfaces in Adobe XD.",
+      "output": "Booking, operations, timetable, and follow-up views.",
+      "basis": "Original design artifacts"
+    },
+    {
+      "stage": "Review and deliver",
+      "activity": "Demonstrate the prototype and deliver the work.",
+      "output": "Client demonstration and design delivery.",
+      "basis": "Documented outcome; detailed feedback unavailable"
+    }
+  ],
+  "sketches": {
+    "intro": "Original studies explored booking structure. This generated notebook study explains search, selection, review, and follow-up.",
+    "variant": "booking",
+    "pictures": [
+      {
+        "image": "/projects/biwta/sketch-study.webp",
+        "alt": "Reconstructed blue-ballpoint BIWTA booking sketches on a cream lined spiral notebook",
+        "title": "Booking study",
+        "caption": "Search, place selection, fare review, and ticket follow-up in one reconstructed study.",
+        "basis": "Generated reconstruction"
+      }
     ],
-    annotations: [
-      { title: 'Start with the journey', body: 'Place route and date before vessel comparison so the selected service retains its travel context.' },
-      { title: 'Show the choice in context', body: 'Keep the vessel and seat/deck selection connected rather than presenting a place without its journey.' },
-      { title: 'Pause before commitment', body: 'Give passenger details and fare information a distinct review step before payment.' },
-      { title: 'Leave room for follow-up', body: 'Represent payment failure, ticket changes, and cancellation as distinct tasks in the wider lifecycle.' },
-    ],
+    "annotations": [
+      {
+        "title": "Start with the journey",
+        "body": "Start with route and date."
+      },
+      {
+        "title": "Show the choice in context",
+        "body": "Keep vessel and place choices connected."
+      },
+      {
+        "title": "Pause before commitment",
+        "body": "Review passenger details and fare before payment."
+      },
+      {
+        "title": "Leave room for follow-up",
+        "body": "Give changes and cancellation separate paths."
+      }
+    ]
   },
-  wireframe: {
-    intro: 'This reconstructed wireframe translates the task hierarchy into working areas. It is an explanatory bridge between early exploration and the original prototype, rather than a recovered historical wireframe.',
-    variant: 'booking',
-    annotations: [
-      { title: 'Journey context', body: 'Use a recognizable starting area for route and travel-date information.' },
-      { title: 'Vessel and place choices', body: 'Keep comparison and the selected vessel’s layout connected.' },
-      { title: 'Passenger and fare review', body: 'Bring the information needed before payment into a clear review area.' },
-      { title: 'Ticket follow-up', body: 'Keep failure, requested changes, and cancellation separate within the ticket lifecycle.' },
-    ],
+  "wireframe": {
+    "intro": "A reconstructed bridge from early layout questions to the original prototype.",
+    "variant": "booking",
+    "annotations": [
+      {
+        "title": "Journey context",
+        "body": "Keep route and date visible."
+      },
+      {
+        "title": "Vessel and place choices",
+        "body": "Connect vessel comparison with layout selection."
+      },
+      {
+        "title": "Passenger and fare review",
+        "body": "Group passenger and fare information."
+      },
+      {
+        "title": "Ticket follow-up",
+        "body": "Separate recovery, changes, and cancellation."
+      }
+    ]
   },
-  sitemap: {
-    intro: 'A reconstructed functional map of the working perspectives in the reviewed files. Branches include related information, actions, and states as well as screens; the owner/requester grouping is an explanatory organization of the artifacts.',
-    nodes: [
-      { label: 'Passenger booking', children: [{ label: 'Route/date search and vessel results' }, { label: 'Seat / deck selection' }, { label: 'Passenger and fare review' }, { label: 'Payment and ticket information' }, { label: 'Payment failure, change, and cancellation' }] },
-      { label: 'Agent booking', children: [{ label: 'Assisted purchase' }, { label: 'Passenger and payment details' }, { label: 'Received payment' }, { label: 'History and follow-up' }] },
-      { label: 'Owner operations', children: [{ label: 'Services and seat details' }, { label: 'Capacity and sales information' }, { label: 'Balance and transactions' }] },
-      { label: 'Timetable handoff', children: [{ label: 'Vessel, route, and expected times' }, { label: 'Submit and track request' }, { label: 'Authority review' }, { label: 'Returned timetable and berthing information' }] },
+  "sitemap": {
+    "intro": "Explore the service’s booking, sales, operations, and review areas.",
+    "nodes": [
+      {
+        "label": "Passenger booking",
+        "children": [
+          {
+            "label": "Route/date search and vessel results"
+          },
+          {
+            "label": "Seat / deck selection"
+          },
+          {
+            "label": "Passenger and fare review"
+          },
+          {
+            "label": "Payment and ticket information"
+          },
+          {
+            "label": "Payment failure, change, and cancellation"
+          }
+        ]
+      },
+      {
+        "label": "Agent booking",
+        "children": [
+          {
+            "label": "Assisted purchase"
+          },
+          {
+            "label": "Passenger and payment details"
+          },
+          {
+            "label": "Received payment"
+          },
+          {
+            "label": "History and follow-up"
+          }
+        ]
+      },
+      {
+        "label": "Owner operations",
+        "children": [
+          {
+            "label": "Services and seat details"
+          },
+          {
+            "label": "Capacity and sales information"
+          },
+          {
+            "label": "Balance and transactions"
+          }
+        ]
+      },
+      {
+        "label": "Timetable handoff",
+        "children": [
+          {
+            "label": "Vessel, route, and expected times"
+          },
+          {
+            "label": "Submit and track request"
+          },
+          {
+            "label": "Authority review"
+          },
+          {
+            "label": "Returned timetable and berthing information"
+          }
+        ]
+      }
     ],
-    note: 'The timetable-request file uses different role labels in its filename and artboards. This map describes the visible tasks without treating the grouping as a verified organizational chart.',
+    "note": "Reconstructed functional grouping; some branches represent actions or states. Source role labels vary."
   },
-  inspiration: {
-    intro: 'A retrospective principle board created to explain the design. It connects the source artifacts with three practical concerns: comparison, traceability, and recovery.',
-    cards: [
-      { title: 'Compare', principle: 'Bring decision information together.', application: 'Keep route, timing, vessel, selected place, and fare understandable in the booking context.' },
-      { title: 'Track', principle: 'Give a request a visible identity and state.', application: 'Use the request number, date, status, and review information to explain the timetable handoff.' },
-      { title: 'Recover', principle: 'Make the next action understandable.', application: 'Treat payment failure, ticket changes, verification, and cancellation as visible follow-up states.' },
-    ],
+  "inspiration": {
+    "intro": "Three retrospective principles explain the service structure.",
+    "cards": [
+      {
+        "title": "Compare",
+        "principle": "Bring decision information together.",
+        "application": "Connect journey, selected place, and fare."
+      },
+      {
+        "title": "Track",
+        "principle": "Make identity and state visible.",
+        "application": "Trace timetable requests through review."
+      },
+      {
+        "title": "Recover",
+        "principle": "Explain the next action.",
+        "application": "Include failure, changes, and cancellation."
+      }
+    ]
   },
-  planningArtifacts: {
-    intro: 'The supplied payment-planning diagram is an original supporting reference. It uses a general commerce vocabulary, so it helps explain planning structure without establishing BIWTA-specific payment policy.',
-    pictures: [
-      { image: '/projects/biwta-payment-flow.svg', alt: 'Original generic purchase and payment planning diagram supplied with the BIWTA materials', title: 'Original payment-planning reference', caption: 'A source diagram showing item selection, registration/login, order placement, and payment alternatives. Labels such as cart and cash on delivery belong to this generic planning reference; they are not evidence of BIWTA ticketing features or policy.', basis: 'Original planning artifact · exported from the supplied draw.io file' },
-    ],
-  },
+  "planningArtifacts": {
+    "intro": "Original generic-commerce planning reference; it does not establish BIWTA payment policy.",
+    "pictures": [
+      {
+        "image": "/projects/biwta-payment-flow.svg",
+        "alt": "Original generic purchase and payment planning diagram supplied with the BIWTA materials",
+        "title": "Original payment-planning reference",
+        "caption": "Original purchase-flow reference. Cart and cash-on-delivery labels are not verified BIWTA features.",
+        "basis": "Original supporting artifact"
+      }
+    ]
+  }
 };
