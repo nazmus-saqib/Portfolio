@@ -267,7 +267,7 @@ export const biwtaExpansion = {
       "stage": "Explore",
       "activity": "Sketch route/date search, vessel results, deck admission, and floor selection.",
       "output": "Early booking layouts.",
-      "basis": "Original notebook photographs; supplied reconstruction labeled"
+      "basis": "Original notebook studies; restyled reconstructions labeled"
     },
     {
       "stage": "Prototype",
@@ -283,24 +283,24 @@ export const biwtaExpansion = {
     }
   ],
   "sketches": {
-    "intro": "Two original notebook photographs show the early booking structure. The supplied reconstructed study brings the journey and follow-up together.",
+    "intro": "The two early sketches are restyled to match the supplied study’s handwriting and notebook background. Together, they trace search, accommodation, and ticket follow-up.",
     "variant": "booking",
     "pictures": [
       {
-        "image": "/projects/biwta/sketch-original-search.webp",
-        "fullSize": "/projects/biwta/sketch-original-search.jpg",
-        "title": "Original: search and vessel results",
-        "alt": "Original BIWTA notebook photograph showing search and vessel-results sketches",
+        "image": "/projects/biwta/sketch-search-matched.webp",
+        "fullSize": "/projects/biwta/sketch-search-matched.png",
+        "title": "Search and vessel results",
+        "alt": "Restyled BIWTA notebook sketch showing route/date search and vessel results in blue handwriting",
         "caption": "Route/date search leads to a vessel list with departure, arrival, and fare comparison.",
-        "basis": "Original notebook photograph · Portfolio.pdf"
+        "basis": "Style-matched reconstruction from original sketch"
       },
       {
-        "image": "/projects/biwta/sketch-original-accommodation.webp",
-        "fullSize": "/projects/biwta/sketch-original-accommodation.jpg",
-        "title": "Original: deck and floor selection",
-        "alt": "Original BIWTA notebook photograph showing deck admission and floor-selection sketches",
-        "caption": "The early sketch separates deck passenger quantity from the selectable floor layout.",
-        "basis": "Original notebook photograph · Portfolio.pdf"
+        "image": "/projects/biwta/sketch-accommodation-matched.webp",
+        "fullSize": "/projects/biwta/sketch-accommodation-matched.png",
+        "title": "Deck and floor selection",
+        "alt": "Restyled BIWTA notebook sketch showing deck admission and floor selection in blue handwriting",
+        "caption": "The early sketch separates deck passenger quantity from the selectable floor layout. Route, time, and fare values are illustrative.",
+        "basis": "Style-matched reconstruction from original sketch"
       },
       {
         "image": "/projects/biwta/sketch-booking-supplied.webp",

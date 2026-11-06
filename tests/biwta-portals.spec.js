@@ -75,7 +75,7 @@ for (const width of [1440, 360]) {
       const figure = sketches.locator('[data-study-picture-detail]:visible');
       await figure.locator('img').scrollIntoViewIfNeeded();
       await expect.poll(() => figure.locator('img').evaluate(node => node.complete && node.naturalWidth > 0)).toBe(true);
-      await expect(figure.locator('.study-picture-basis')).toContainText(index < 2 ? 'Original notebook photograph' : 'Supplied generated reconstruction');
+      await expect(figure.locator('.study-picture-basis')).toContainText(index < 2 ? 'Style-matched reconstruction from original sketch' : 'Supplied generated reconstruction');
     }
     const overflow = await dialog.locator('#dialog-content, .study-portals, .study-portal-panel:visible, .study-persona:visible').evaluateAll(nodes => nodes.filter(node => node.scrollWidth > node.clientWidth + 1).map(node => node.className));
     expect(overflow).toEqual([]);
