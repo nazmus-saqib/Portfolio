@@ -278,6 +278,120 @@ test('company project actions open details and return focus to the selected empl
   await assertSingleViewport(page);
 });
 
+test('BIWTA and eReturn connect needs, persona stories, and design evidence with keyboard controls', async ({ page, baseURL }) => {
+  await loadWorld(page, baseURL);
+  await page.locator('[data-panel="projects"]').click();
+  for (const [id, title] of [['biwta', 'BIWTA'], ['ereturn', 'eReturn']]) {
+    const trigger = page.getByRole('button', { name: `Read ${title} project story`, exact: true });
+    await trigger.click();
+    const dialog = page.getByRole('dialog');
+    for (const heading of ['Requirements analysis', 'Research, learnings, and findings', 'User personas', 'Design thinking process', 'Initial sketch study', 'From challenges to design solutions', 'Site map and information architecture', 'Inspiration board']) {
+      await expect(dialog.getByRole('heading', { name: heading, exact: true })).toHaveCount(1);
+    }
+    await expect(dialog.locator(`#case-${id}-personas .study-reconstruction-tag`)).toContainText('Reconstructed role profiles');
+    const stage = dialog.locator('[data-study-process-select]').nth(1);
+    await stage.focus();
+    await page.keyboard.press('Enter');
+    await expect(stage).toHaveAttribute('aria-pressed', 'true');
+    await expect(dialog.locator('[data-study-process-detail="1"]')).toBeVisible();
+
+    const persona = dialog.locator('[data-study-persona-select]').last();
+    await persona.click();
+    await expect(persona).toHaveAttribute('aria-pressed', 'true');
+    for (const profile of await dialog.locator('.study-persona-copy').all()) {
+      await expect(profile).toBeVisible();
+      await expect(profile.locator('.study-persona-story')).not.toBeEmpty();
+      await expect(profile.locator('.study-persona-user-story')).not.toBeEmpty();
+      await expect(profile.getByRole('heading', { name: 'Design response', exact: true })).toHaveCount(1);
+    }
+
+    const sketch = dialog.locator(`#case-${id}-sketches`);
+    const annotation = sketch.locator('[data-study-sketch-select]').last();
+    await annotation.focus();
+    await page.keyboard.press('Space');
+    await expect(annotation).toHaveAttribute('aria-pressed', 'true');
+    await expect(sketch.locator('[data-sketch-region].is-selected')).toHaveCount(1);
+    const leaf = dialog.locator('[data-study-map-select]').last();
+    await leaf.click();
+    await expect(leaf).toHaveAttribute('aria-pressed', 'true');
+    await expect(dialog.locator('[data-study-map-status]')).not.toContainText('Select an area');
+    const direction = dialog.locator('[data-study-inspiration-select]').last();
+    await direction.click();
+    await expect(direction).toHaveAttribute('aria-pressed', 'true');
+    const ids = await dialog.locator('[id]').evaluateAll(elements => elements.map(element => element.id));
+    expect(new Set(ids).size, 'Case-study controls and sections have unique IDs').toBe(ids.length);
+    await page.keyboard.press('Escape');
+    await expect(trigger).toBeFocused();
+  }
+  await assertSingleViewport(page);
+});
+
+for (const viewport of [{ width: 1440, height: 1000 }, { width: 360, height: 740 }]) {
+  test(`eReturn ${viewport.width}px registration scenarios preserve the source handoffs and readable evidence`, async ({ page, request, baseURL }) => {
+    await page.setViewportSize(viewport);
+    await loadWorld(page, baseURL);
+    await page.locator('[data-panel="projects"]').click();
+    const trigger = page.getByRole('button', { name: 'Read eReturn project story', exact: true });
+    await trigger.click();
+    const dialog = page.getByRole('dialog');
+    const journeys = dialog.locator('#case-ereturn-registrationJourneys');
+    await expect(journeys).toHaveCount(1);
+    await expect(dialog.locator('.study-persona-story')).toHaveCount(3);
+    await expect(dialog.locator('.study-persona-user-story')).toHaveCount(3);
+    await expect(dialog.locator('#case-ereturn-planningArtifacts img')).not.toHaveCount(0);
+    expect(await page.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches)).toBe(true);
+
+    const controls = journeys.locator('[data-study-journey-select]');
+    const panels = journeys.locator('[data-study-journey-detail]');
+    await expect(controls).toHaveCount(3);
+    const sourceFiles = ['registration-matched-original.webp', 'registration-mismatch-original.webp', 'registration-non-nid-original.webp'];
+    for (let index = 0; index < 3; index += 1) {
+      const control = controls.nth(index);
+      await control.focus();
+      await page.keyboard.press(index % 2 ? 'Space' : 'Enter');
+      await expect(control).toBeFocused();
+      await expect(control).toHaveAttribute('aria-pressed', 'true');
+      await expect(journeys.locator('[data-study-journey-select][aria-pressed="true"]')).toHaveCount(1);
+      await expect(journeys.locator('[data-study-journey-detail]:visible')).toHaveCount(1);
+      const panel = panels.nth(index);
+      await expect(panel).toBeVisible();
+      await expect(control).toHaveAttribute('aria-controls', await panel.getAttribute('id'));
+      await expect(journeys.locator('[data-study-journey-status]')).toContainText(await control.locator('strong').textContent());
+      await expect(panel.locator('.study-journey-steps')).toContainText(index === 2 ? 'Tax Circle' : 'OTP');
+      if (index === 1) await expect(panel).toContainText(/correct|another/i);
+      if (index === 2) {
+        await expect(panel).toContainText('DCT');
+        await expect(panel.locator('img[src$="registration-circle-original.webp"]')).toHaveCount(1);
+      }
+      const sourceImage = panel.locator(`img[src$="${sourceFiles[index]}"]`);
+      await sourceImage.scrollIntoViewIfNeeded();
+      await expect.poll(() => sourceImage.evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
+      await expect(sourceImage.locator('..')).toHaveAttribute('target', '_blank');
+    }
+
+    const prefix = new URL(baseURL || page.url()).pathname.replace(/\/?$/, '/');
+    const sources = await dialog.locator('img').evaluateAll(images => [...new Set(images.map(image => image.src))]);
+    expect(sources.length, 'The case study includes original source diagrams and sketch/prototype evidence').toBeGreaterThan(5);
+    for (const source of sources) {
+      expect(new URL(source).pathname.startsWith(prefix), 'Case-study assets respect the deployment base path').toBe(true);
+      if (viewport.width === 1440) {
+        const response = await request.get(source);
+        expect(response.ok(), `Case-study image resolves: ${new URL(source).pathname}`).toBe(true);
+        expect(response.headers()['content-type']).toMatch(/^image\//);
+      }
+    }
+    for (const image of await dialog.locator('img:visible').all()) {
+      await image.scrollIntoViewIfNeeded();
+      await expect.poll(() => image.evaluate(element => element.complete && element.naturalWidth > 0)).toBe(true);
+    }
+    const overflow = await dialog.locator('#dialog-content, .study-persona, .study-journey-panel:visible, .study-picture, .study-sitemap').evaluateAll(elements => elements.filter(element => element.scrollWidth > element.clientWidth + 1).map(element => ({ className: element.className, width: element.clientWidth, scrollWidth: element.scrollWidth })));
+    expect(overflow, 'Stories, routes, maps, and source images remain readable without horizontal overflow').toEqual([]);
+    await assertSingleViewport(page);
+    await page.keyboard.press('Escape');
+    await expect(trigger).toBeFocused();
+  });
+}
+
 test('profile, qualifications, projects, and contact remain in the same viewport', async ({ page, request, baseURL }) => {
   await loadWorld(page, baseURL);
   await expect(page.locator('#about-card')).toContainText('Assistant Project Manager');

@@ -2,11 +2,13 @@ import '@fontsource-variable/dm-sans';
 import '@fontsource/instrument-serif/latin-400-italic.css';
 import { aboutMe, careerStops, professionalSummary, formatTenure, projects, skills, education, certificates, teaching } from './content.js';
 import { renderProjectCard, renderProjectDetail } from './project-view.js';
+import { bindStudyInteractions } from './case-study-sections.js';
 import { renderStoryJourney, activateStoryMilestone } from './story-view.js';
 import { renderProfile, activateProfileTab } from './profile-view.js';
 import { renderRoleContributions, activateRoleContribution } from './contribution-view.js';
 import { renderIdentifyWorkflow } from './workflow-view.js';
 import './project-view.css';
+import './case-study-sections.css';
 import './story-view.css';
 import './profile-view.css';
 import './contribution-view.css';
@@ -231,7 +233,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){stopSpeech
 document.querySelector('#listen').addEventListener('click',()=>{if(speaking){stopSpeech();return;}const stop=careerStops[active];const text=active===-1?`${aboutMe.name}. ${aboutMe.position}. ${aboutMe.professionalStatement} ${aboutMe.motivation} ${aboutMe.goal} ${aboutMe.story.join(' ')}`:`${stop.company}. ${stop.role}. ${stop.period}. ${stop.story}`;const utterance=new SpeechSynthesisUtterance(text);utterance.lang='en-CA';utterance.rate=.94;utterance.onend=utterance.onerror=()=>{speaking=false;document.querySelector('#listen').classList.remove('speaking');document.querySelector('#listen').setAttribute('aria-label',active===-1?'Listen to my story':'Listen to this company story');};speaking=true;document.querySelector('#listen').classList.add('speaking');document.querySelector('#listen').setAttribute('aria-label','Stop narration');window.speechSynthesis.speak(utterance);});
 if(!('speechSynthesis' in window))document.querySelector('#listen').hidden=true;
 
-function openProject(id,trigger) {const project=projects.find(item=>item.id===id);if(!project)return;stopSpeech();dialogTrigger=trigger;document.querySelector('#dialog-content').innerHTML=renderProjectDetail(project,{assetUrl});document.querySelector('#project-dialog').showModal();document.querySelector('#dialog-content').scrollTop=0;updateMotion();}
+function openProject(id,trigger) {const project=projects.find(item=>item.id===id);if(!project)return;stopSpeech();dialogTrigger=trigger;document.querySelector('#dialog-content').innerHTML=renderProjectDetail(project,{assetUrl});bindStudyInteractions(document.querySelector('#dialog-content'));document.querySelector('#project-dialog').showModal();document.querySelector('#dialog-content').scrollTop=0;updateMotion();}
 function closeProject() {document.querySelector('#project-dialog').close();}
 document.querySelector('#dialog-close').addEventListener('click',closeProject);
 document.querySelector('#project-dialog').addEventListener('click',event=>{if(event.target.closest('[data-contact]')){closeProject();panel='contact';renderPanel();return;}if(event.target===event.currentTarget){const rect=event.currentTarget.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)closeProject();}});

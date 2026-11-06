@@ -1,5 +1,6 @@
 // Public portfolio copy grounded in the owner's career record and uploaded work.
 // Private source material and unresolved source questions stay outside this site.
+import { synesisCaseStudies } from './synesis-case-studies.js';
 
 const storyMilestones = [
   {
@@ -109,6 +110,7 @@ export const projects = [
   },
   {
     id: 'biwta',
+    richCaseStudy: synesisCaseStudies.biwta,
     title: 'BIWTA',
     category: 'Public service · UX / UI',
     year: '2020–2021',
@@ -179,6 +181,7 @@ export const projects = [
   },
   {
     id: 'ereturn',
+    richCaseStudy: synesisCaseStudies.ereturn,
     title: 'eReturn',
     category: 'Government service · UX / UI',
     year: '2020–2021',

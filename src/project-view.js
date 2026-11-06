@@ -1,5 +1,6 @@
 // Project presentation only. Selection, focus management, and dialogs belong
 // to the application shell so the entire portfolio stays in one viewport.
+import { renderStudySection } from './case-study-sections.js';
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
 }[character]));
@@ -77,8 +78,87 @@ export function renderProjectCard(project, options = {}) {
   return `<article class="case-card"><button class="case-open" type="button" data-project="${escapeHtml(project.id)}" aria-label="Read ${escapeHtml(project.title)} project story"><span class="case-thumb" aria-hidden="true" style="--case-accent:${escapeHtml(project.accent || '#e3e9dd')}">${thumbnail}</span><span class="case-card-copy"><span class="case-card-company">${escapeHtml(project.company)}</span><strong>${escapeHtml(project.title)}</strong><span class="case-card-summary">${escapeHtml(project.summary)}</span><span class="case-card-context">${escapeHtml(project.collaboration)}</span></span><span class="case-card-arrow">${arrow}</span></button></article>`;
 }
 
+const paragraphs = value => (Array.isArray(value) ? value : value ? [value] : [])
+  .map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join('');
+
+function renderCaseStudy(project, options) {
+  const study = project.richCaseStudy;
+  const studyOptions = { projectId: project.id, assetUrl: path => resolveAsset(path, options) };
+  const sectionId = suffix => `case-${project.id}-${suffix}`;
+  const facts = study.facts?.length ? study.facts : [
+    { label: 'Context', value: isAcademic(project) ? 'Academic project' : 'Earlier digital work' },
+    { label: 'My contribution', value: project.role },
+  ];
+  const showcase = study.showcase?.length ? study.showcase : (project.gallery || []).map(image => ({
+    image: image.src, alt: image.alt, caption: image.alt,
+  }));
+  const navigation = [
+    study.needs && { id: 'needs', label: 'Needs' },
+    study.requirements?.length && { id: 'requirements', label: 'Requirements' },
+    study.research && { id: 'research', label: 'Research' },
+    study.process?.length && { id: 'process', label: 'Design thinking' },
+    study.personas?.length && { id: 'personas', label: 'Personas' },
+    study.challenges?.length && { id: 'challenges', label: 'Challenges and solutions' },
+    study.registrationJourneys && { id: 'registrationJourneys', label: 'Registration journeys' },
+    study.sitemap && { id: 'sitemap', label: 'Site map' },
+    study.inspiration && { id: 'inspiration', label: 'Inspiration' },
+    study.sketches && { id: 'sketches', label: 'Sketches' },
+    study.planningArtifacts && { id: 'planningArtifacts', label: 'Original planning' },
+    study.wireframe && { id: 'wireframe', label: 'Wireframe study' },
+    study.evaluation && { id: 'evaluation', label: 'Evaluation' },
+    study.storyboard?.length && { id: 'storyboard', label: 'Prototype walkthrough' },
+    study.decisions?.length && { id: 'thinking', label: 'Design questions' },
+    showcase.length && { id: 'showcase', label: 'Explore the prototype screens' },
+  ].filter(Boolean);
+  const contribution = typeof study.contribution === 'string'
+    ? { paragraphs: [study.contribution] } : study.contribution;
+
+  return `<article class="case-detail case-study-detail">
+    <header class="case-study-intro">
+      <div class="case-study-topline"><p class="case-eyebrow">${escapeHtml(project.company)} / ${escapeHtml(project.collaboration)}</p>${project.year ? `<span class="case-study-year">${escapeHtml(project.year)}</span>` : ''}</div>
+      <p class="case-study-label">Project case study</p>
+      <h2 id="dialog-title">${escapeHtml(project.title)}</h2>
+      <div class="case-study-lead">${paragraphs(study.lead || project.summary)}</div>
+      <dl class="case-study-facts">${facts.map(fact => `<div><dt>${escapeHtml(fact.label)}</dt><dd>${escapeHtml(fact.value)}</dd></div>`).join('')}</dl>
+      ${navigation.length ? `<nav class="case-study-navigation" aria-label="${escapeHtml(project.title)} case study">${navigation.map(item => `<a href="#${escapeHtml(sectionId(item.id))}"><span>${escapeHtml(item.label)}</span><span aria-hidden="true">↓</span></a>`).join('')}</nav>` : ''}
+    </header>
+    <div class="case-body case-study-body">
+      ${study.context ? `<section class="case-study-section case-study-context"><p class="case-study-label">The context</p><h3>${escapeHtml(study.context.heading || 'The problem to work through')}</h3><div class="case-study-prose">${paragraphs(study.context.body)}</div></section>` : ''}
+      ${contribution ? `<section class="case-study-section case-study-contribution"><p class="case-study-label">My responsibilities</p><h3>${escapeHtml(contribution.heading || 'What I contributed')}</h3><div class="case-study-prose">${paragraphs(contribution.paragraphs || contribution.body)}</div>${contribution.items?.length ? `<ul class="case-contribution-list">${contribution.items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>` : ''}</section>` : ''}
+      ${renderStudySection(study, 'productDetails', studyOptions)}
+      ${renderStudySection(study, 'needs', studyOptions)}
+      ${renderStudySection(study, 'process', studyOptions)}
+      ${renderStudySection(study, 'requirements', studyOptions)}
+      ${renderStudySection(study, 'research', studyOptions)}
+      ${renderStudySection(study, 'competitive', studyOptions)}
+      ${renderStudySection(study, 'personas', studyOptions)}
+      ${renderStudySection(study, 'challenges', studyOptions)}
+      ${renderStudySection(study, 'registrationJourneys', studyOptions)}
+      ${renderStudySection(study, 'sitemap', studyOptions)}
+      ${renderStudySection(study, 'inspiration', studyOptions)}
+      ${renderStudySection(study, 'sketches', studyOptions)}
+      ${renderStudySection(study, 'planningArtifacts', studyOptions)}
+      ${renderStudySection(study, 'wireframe', studyOptions)}
+      ${renderStudySection(study, 'evaluation', studyOptions)}
+      ${study.storyboard?.length ? `<section class="case-study-section" id="${escapeHtml(sectionId('storyboard'))}" aria-labelledby="${escapeHtml(sectionId('storyboard-heading'))}"><div class="case-study-section-heading"><span class="case-study-section-number" aria-hidden="true">01</span><div><p class="case-study-label">Prototype walkthrough</p><h3 id="${escapeHtml(sectionId('storyboard-heading'))}">How the work connects</h3></div></div><div class="case-study-prose case-storyboard-note">${paragraphs(study.storyboardIntro || 'This sequence follows the tasks represented in the designs.')}</div><ol class="case-storyboard">${study.storyboard.map((step, index) => `<li><span class="case-story-number" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span>${step.actor ? `<p class="case-story-actor">${escapeHtml(step.actor)}</p>` : ''}<h4>${escapeHtml(step.title)}</h4><p class="case-story-description">${escapeHtml(step.description)}</p></li>`).join('')}</ol></section>` : ''}
+      ${study.decisions?.length ? `<section class="case-study-section" id="${escapeHtml(sectionId('thinking'))}" aria-labelledby="${escapeHtml(sectionId('thinking-heading'))}"><div class="case-study-section-heading"><span class="case-study-section-number" aria-hidden="true">02</span><div><p class="case-study-label">Reading the prototype</p><h3 id="${escapeHtml(sectionId('thinking-heading'))}">Design questions and responses</h3></div></div><div class="case-decision-list">${study.decisions.map((decision, index) => `<article class="case-decision"><div class="case-decision-heading"><span aria-hidden="true">${String(index + 1).padStart(2, '0')}</span><h4>${escapeHtml(decision.title)}</h4></div><dl>${[['The question', decision.situation], ['In the prototype', decision.decision], ['Why it matters', decision.reason]].filter(([, value]) => value).map(([label, value]) => `<div><dt>${label}</dt><dd>${escapeHtml(value)}</dd></div>`).join('')}</dl></article>`).join('')}</div></section>` : ''}
+      ${showcase.length ? `<section class="case-study-section case-study-showcase" id="${escapeHtml(sectionId('showcase'))}" aria-labelledby="${escapeHtml(sectionId('showcase-heading'))}"><div class="case-study-section-heading"><span class="case-study-section-number" aria-hidden="true">03</span><div><p class="case-study-label">Mockup showcase</p><h3 id="${escapeHtml(sectionId('showcase-heading'))}">${escapeHtml(study.sectionTitles?.showcase || 'A closer look at the work')}</h3></div></div>${study.showcaseNote ? `<div class="case-study-prose case-showcase-note">${paragraphs(study.showcaseNote)}</div>` : ''}<div class="case-showcase-gallery project-gallery">${showcase.map((screen, index) => {
+        const image = resolveAsset(screen.image, options);
+        const title = screen.title || screen.alt || `Project screen ${index + 1}`;
+        return `<figure><div class="case-screen-frame"><div class="case-screen-chrome" aria-hidden="true"><span class="case-screen-dots"><i></i><i></i><i></i></span><span>${escapeHtml(project.title)} / ${String(index + 1).padStart(2, '0')}</span><span class="case-screen-chrome-mark">↗</span></div><a class="case-screen-link" href="${escapeHtml(image)}" target="_blank" rel="noopener noreferrer" aria-label="Open ${escapeHtml(title)} at full size (opens in a new tab)"><span class="case-screen-viewport"><img src="${escapeHtml(image)}" alt="${escapeHtml(screen.alt || title)}" loading="lazy" decoding="async"></span><span class="case-screen-open">View full-size screen ${arrow}</span></a></div><figcaption><span class="case-screen-number" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span><div>${screen.title ? `<h4>${escapeHtml(screen.title)}</h4>` : ''}${screen.caption ? `<p>${escapeHtml(screen.caption)}</p>` : ''}</div></figcaption></figure>`;
+      }).join('')}</div></section>` : ''}
+      ${study.outcome ? `<section class="case-study-section case-study-outcome"><p class="case-study-label">The work in perspective</p><h3>${escapeHtml(study.outcome.heading || 'Where the work reached')}</h3><div class="case-study-prose">${paragraphs(study.outcome.body)}</div></section>` : ''}
+      ${study.reflection ? `<section class="case-study-section case-study-reflection"><span class="case-reflection-symbol" aria-hidden="true">↗</span><div><p class="case-study-label">What I carry forward</p><div class="case-study-prose">${paragraphs(study.reflection)}</div></div></section>` : ''}
+      ${project.confidential ? '<p class="case-confidential">A high-level overview. Internal product details stay confidential.</p>' : ''}
+      ${project.tools?.length ? `<ul class="case-tools" aria-label="Project tools and methods">${project.tools.map(tool => `<li>${escapeHtml(tool)}</li>`).join('')}</ul>` : ''}
+      <button class="case-contact" type="button" data-contact>Let’s talk about the work ${arrow}</button>
+    </div>
+  </article>`;
+}
+
 /** Case-study markup; the shell supplies the accessible dialog and close button. */
 export function renderProjectDetail(project, options = {}) {
+  if (project.richCaseStudy) return renderCaseStudy(project, options);
   const context = project.id === 'identify' ? 'Current role' : isAcademic(project) ? 'Academic project' : 'Earlier digital work';
   return `<article class="case-detail">${cover(project, options)}<div class="case-body"><p class="case-eyebrow">${escapeHtml(project.company)} / ${escapeHtml(project.collaboration)}</p><h2 id="dialog-title">${escapeHtml(project.title)}</h2><p class="case-summary">${escapeHtml(project.summary)}</p><dl class="case-facts"><div><dt>Context</dt><dd>${context}</dd></div><div><dt>My contribution</dt><dd>${escapeHtml(project.role)}</dd></div></dl><section class="case-section"><h3>The challenge</h3><p>${escapeHtml(project.challenge)}</p></section><section class="case-section"><h3>The approach</h3><ul>${project.approach.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul></section><section class="case-section"><h3>The work in perspective</h3><p>${escapeHtml(project.outcome)}</p></section>${project.gallery?.length ? `<details class="case-prototype"><summary>Explore the prototype screens ${plus}</summary><div class="case-gallery project-gallery">${project.gallery.map(image => `<figure><img src="${escapeHtml(resolveAsset(image.src, options))}" alt="${escapeHtml(image.alt)}" loading="lazy" decoding="async"><figcaption>${escapeHtml(image.alt)}</figcaption></figure>`).join('')}</div></details>` : ''}${project.confidential ? '<p class="case-confidential">A high-level overview. Internal product details stay confidential.</p>' : ''}${!project.image ? '<p class="case-art-note">Cover illustration created for this portfolio.</p>' : ''}<ul class="case-tools" aria-label="Project tools and methods">${project.tools.map(tool => `<li>${escapeHtml(tool)}</li>`).join('')}</ul><button class="case-contact" type="button" data-contact>Let’s talk about the work ${arrow}</button></div></article>`;
 }

@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="746" height="801" viewBox="23 55 745.5 801" role="img" aria-labelledby="payment-title payment-description">
+<title id="payment-title">BIWTA payment-flow planning diagram</title>
+<desc id="payment-description">Source-derived export of the supplied draw.io file. Original labels, node positions and connector relationships are retained, including the coordinate-only Add to Cart branch. This digital flowchart is not a hand sketch or a verified final payment-policy specification.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="9" markerHeight="8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 9 4 0 8 2 4Z" fill="#000"/></marker><marker id="open-arrow" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="9" markerHeight="8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 9 4 0 8Z" fill="#fff" stroke="#000" stroke-width="1"/></marker></defs>
+<rect x="23" y="55" width="745.5" height="801" fill="#fff"/>
+<g fill="none" stroke="#000" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt">
+<path data-source-edge="WIyWlLk6GJQsqaUBKTNV-2" d="M296 120 L296 170" marker-end="url(#open-arrow)"/>
+<path data-source-edge="I--HQaVgSsL7XYWcxs2E-0" d="M246 210 L168 210" marker-end="url(#arrow)"/>
+<path data-source-edge="I--HQaVgSsL7XYWcxs2E-1" d="M346 210 L424 210" marker-end="url(#arrow)"/>
+<path data-source-edge="I--HQaVgSsL7XYWcxs2E-4" d="M484 230 L484 273" marker-end="url(#arrow)"/>
+<path data-source-edge="I--HQaVgSsL7XYWcxs2E-2" d="M108 230 L108 291 L297 291 L296.666667 253" marker-end="url(#arrow)"/>
+<path data-source-edge="I--HQaVgSsL7XYWcxs2E-6" d="M484 313 L484 353" marker-end="url(#arrow)"/>
+<path data-source-edge="I--HQaVgSsL7XYWcxs2E-8" d="M484 388 L484 418" marker-end="url(#arrow)"/>
+<path data-source-edge="I--HQaVgSsL7XYWcxs2E-14" d="M484 456 L484 483 L484.5 483 L484.5 509" marker-end="url(#arrow)"/>
+<path data-source-edge="I--HQaVgSsL7XYWcxs2E-18" d="M484.5 600 L484.5 695.5" marker-end="url(#arrow)"/>
+<path data-source-edge="I--HQaVgSsL7XYWcxs2E-20" d="M544 554.5 L623.5 554.5" marker-end="url(#arrow)"/>
+<path data-source-edge="I--HQaVgSsL7XYWcxs2E-22" d="M425 554.5 L345.5 554.5" marker-end="url(#arrow)"/>
+<path data-source-edge="I--HQaVgSsL7XYWcxs2E-26" d="M484.5 755.5 L484.5 778.75 L485 778.75 L485 802" marker-end="url(#arrow)"/>
+<path data-source-edge="I--HQaVgSsL7XYWcxs2E-24" d="M683.5 584.5 L683.5 619" marker-end="url(#arrow)"/>
+<path data-source-edge="I--HQaVgSsL7XYWcxs2E-28" d="M285.5 584.5 L285.5 627" marker-end="url(#arrow)"/>
+</g>
+<g fill="#fff" stroke="#000" stroke-width="1">
+<rect data-source-node="WIyWlLk6GJQsqaUBKTNV-3" x="236" y="80" width="120" height="40" rx="6"/>
+<polygon data-source-node="WIyWlLk6GJQsqaUBKTNV-6" points="296,170 346,210 296,250 246,210"/>
+<rect data-source-node="WIyWlLk6GJQsqaUBKTNV-7" x="424" y="190" width="120" height="40" rx="6"/>
+<rect data-source-node="WIyWlLk6GJQsqaUBKTNV-12" x="48" y="190" width="120" height="40" rx="6"/>
+<rect data-source-node="I--HQaVgSsL7XYWcxs2E-3" x="424" y="273" width="120" height="40" rx="6"/>
+<rect data-source-node="I--HQaVgSsL7XYWcxs2E-5" x="424" y="353" width="120" height="35" rx="5.25"/>
+<rect data-source-node="I--HQaVgSsL7XYWcxs2E-7" x="424" y="418" width="120" height="38" rx="5.7"/>
+<polygon data-source-node="I--HQaVgSsL7XYWcxs2E-13" points="484.5,509 544,554.5 484.5,600 425,554.5"/>
+<rect data-source-node="I--HQaVgSsL7XYWcxs2E-17" x="424.5" y="695.5" width="120" height="60" rx="0"/>
+<rect data-source-node="I--HQaVgSsL7XYWcxs2E-19" x="623.5" y="524.5" width="120" height="60" rx="0"/>
+<rect data-source-node="I--HQaVgSsL7XYWcxs2E-21" x="225.5" y="524.5" width="120" height="60" rx="0"/>
+<rect data-source-node="I--HQaVgSsL7XYWcxs2E-23" x="623.5" y="619" width="120" height="29" rx="0"/>
+<rect data-source-node="I--HQaVgSsL7XYWcxs2E-25" x="425" y="802" width="120" height="29" rx="0"/>
+<rect data-source-node="I--HQaVgSsL7XYWcxs2E-27" x="225.5" y="627" width="120" height="29" rx="0"/>
+</g>
+<g fill="#000" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" text-anchor="middle">
+<text data-source-label="WIyWlLk6GJQsqaUBKTNV-3" x="296" y="104">Home</text>
+<text data-source-label="WIyWlLk6GJQsqaUBKTNV-6" x="296" y="212">Select Item</text>
+<text data-source-label="WIyWlLk6GJQsqaUBKTNV-7" x="484" y="214">Buy Now</text>
+<text data-source-label="WIyWlLk6GJQsqaUBKTNV-12" x="108" y="214">Add to Cart</text>
+<text data-source-label="I--HQaVgSsL7XYWcxs2E-3" x="484" y="297">Login/ Register</text>
+<text data-source-label="I--HQaVgSsL7XYWcxs2E-5" x="484" y="374.5">Select Quantity</text>
+<text data-source-label="I--HQaVgSsL7XYWcxs2E-7" x="484" y="441">Place Order</text>
+<text data-source-label="I--HQaVgSsL7XYWcxs2E-13" aria-label="Select Payment Method" x="484.5" y="548.5"><tspan x="484.5">Select Payment </tspan><tspan x="484.5" dy="14">Method</tspan></text>
+<text data-source-label="I--HQaVgSsL7XYWcxs2E-17" x="484.5" y="727.5">Mobile Banking</text>
+<text data-source-label="I--HQaVgSsL7XYWcxs2E-19" x="683.5" y="556.5">Cash On Delivery</text>
+<text data-source-label="I--HQaVgSsL7XYWcxs2E-21" x="285.5" y="556.5">Credit/Debit Card</text>
+<text data-source-label="I--HQaVgSsL7XYWcxs2E-23" x="683.5" y="635.5">Submit</text>
+<text data-source-label="I--HQaVgSsL7XYWcxs2E-25" x="485" y="818.5">Submit</text>
+<text data-source-label="I--HQaVgSsL7XYWcxs2E-27" x="285.5" y="643.5">Submit</text>
+</g>
+</svg>
