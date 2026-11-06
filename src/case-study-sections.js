@@ -78,6 +78,18 @@ function renderPictures(pictures, assetUrl, label) {
 
 export const renderStudyPictures = (pictures, assetUrl, label = 'Project images') => renderPictures(pictures, assetUrl, label);
 
+/** Keep each role's screens together while retaining all content without JavaScript. */
+export function renderStudyPortals(portals, assetUrl, projectId = 'project') {
+  const available = portals?.filter(portal => portal?.pictures?.some(picture => picture?.image)) || [];
+  if (!available.length) return '';
+  const prefix = `case-${projectId}-portal`;
+  return `<div class="study-portals" data-study-portals>
+    <div class="study-portal-controls" role="group" aria-label="Choose a portal">${available.map((portal,index) => `<button type="button" id="${escapeHtml(prefix)}-control-${index}" data-study-portal-select="${index}" aria-pressed="${index===0}" aria-controls="${escapeHtml(prefix)}-detail-${index}"><span class="study-control-number" aria-hidden="true">${number(index)}</span><span><strong>${escapeHtml(portal.label || portal.title)}</strong><span class="study-portal-count">${portal.pictures.filter(picture => picture?.image).length} screen${portal.pictures.filter(picture => picture?.image).length===1?'':'s'}</span></span></button>`).join('')}</div>
+    <div class="study-portal-panels">${available.map((portal,index) => `<article class="study-portal-panel" id="${escapeHtml(prefix)}-detail-${index}" data-study-portal-detail="${index}" aria-labelledby="${escapeHtml(prefix)}-control-${index}"><header class="study-portal-intro"><h4>${escapeHtml(portal.title || portal.label)}</h4>${portal.summary ? paragraphs(portal.summary) : ''}</header>${portal.steps?.length ? `<ol class="study-portal-steps" aria-label="${escapeHtml(portal.label || portal.title)} workflow">${portal.steps.map((step,stepIndex) => `<li><span aria-hidden="true">${number(stepIndex)}</span>${escapeHtml(step)}</li>`).join('')}</ol>` : ''}${renderPictures(portal.pictures,assetUrl,`${portal.label || portal.title} prototype screens`)}</article>`).join('')}</div>
+    <p class="study-interaction-status" role="status" aria-live="polite" data-study-portal-status>Selected portal: ${escapeHtml(available[0].label || available[0].title)}</p>
+  </div>`;
+}
+
 function renderSketch(study, key, projectId, assetUrl) {
   const data = study[key];
   if (!data) return '';
@@ -198,6 +210,11 @@ const boundContainers = new WeakSet();
 /** Call after rendering into a reused container; event registration is idempotent. */
 export function bindStudyInteractions(container) {
   if (!container?.addEventListener) return;
+  container.querySelectorAll('[data-study-portals]').forEach(portals => {
+    if (portals.dataset.studyEnhanced) return;
+    portals.dataset.studyEnhanced = 'true';
+    portals.querySelectorAll('[data-study-portal-detail]').forEach((panel,index) => { panel.hidden = index !== 0; });
+  });
   container.querySelectorAll('[data-study-process]').forEach(process => {
     if (process.dataset.studyEnhanced) return;
     process.dataset.studyEnhanced = 'true';
@@ -241,7 +258,13 @@ export function bindStudyInteractions(container) {
     }
     const button = event.target.closest('button');
     if (!button || !container.contains(button)) return;
-    if (button.hasAttribute('data-study-picture-select')) {
+    if (button.hasAttribute('data-study-portal-select')) {
+      const portals = button.closest('[data-study-portals]');
+      const selected = button.dataset.studyPortalSelect;
+      portals.querySelectorAll('[data-study-portal-select]').forEach(item => item.setAttribute('aria-pressed',String(item===button)));
+      portals.querySelectorAll('[data-study-portal-detail]').forEach(panel => { panel.hidden = panel.dataset.studyPortalDetail !== selected; });
+      portals.querySelector('[data-study-portal-status]').textContent = `Selected portal: ${button.querySelector('strong').textContent}`;
+    } else if (button.hasAttribute('data-study-picture-select')) {
       const gallery = button.closest('[data-study-gallery]');
       const selected = button.dataset.studyPictureSelect;
       gallery.querySelectorAll('[data-study-picture-select]').forEach(item => item.setAttribute('aria-pressed',String(item===button)));

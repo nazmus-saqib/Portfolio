@@ -31,7 +31,7 @@ test('single-viewport company journey preserves public assets and résumé links
   await page.getByRole('button', { name: 'Read BIWTA project story' }).click();
   await page.getByText('Explore the prototype screens', { exact: true }).click();
   const previews = await page.locator('.project-gallery figure img').evaluateAll(images => images.map(image => image.getAttribute('src')));
-  expect(previews).toHaveLength(5);
+  expect(previews).toHaveLength(17);
   for (const path of previews) {
     expect(path).toMatch(new RegExp(`^${site.pathname}projects/`));
     const preview = await request.get(new URL(path, site).href);

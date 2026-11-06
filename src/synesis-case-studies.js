@@ -2,6 +2,7 @@
 // Reconstructed explanations are labeled separately from original evidence.
 // Keep source documents, personal records, and editorial questions outside the site.
 import { biwtaExpansion } from './case-studies/biwta.js';
+import { biwtaPortalPrototypes } from './case-studies/biwta-prototypes.js';
 import { ereturnExpansion } from './case-studies/ereturn.js';
 import { convayExpansion } from './case-studies/convay.js';
 
@@ -28,7 +29,7 @@ export const synesisCaseStudies = {
   biwta: {
     ...biwtaExpansion,
     sectionTitles: { ...sectionTitles, needs: 'Client needs and user stories' },
-    lead: "A ship-ticketing service connecting passengers, agents, vessel owners, and authority reviewers.",
+    lead: "Four connected portals for passenger booking, assisted sales, vessel scheduling, and owner operations.",
     facts: [
       {
         "label": "My role",
@@ -41,7 +42,7 @@ export const synesisCaseStudies = {
     ],
     context: {
       "heading": "One booking connects several roles.",
-      "body": "Passengers book tickets, agents assist purchases, owners monitor services, and the authority reviews timetable requests. The design needed clear responsibilities and handoffs."
+      "body": "Passengers book journeys, agents assist purchases, vessel authorities request schedules from BIWTA, and owners monitor vessel sales and disbursements."
     },
     storyboardIntro: "Follow the passenger task, then explore the role-specific screens.",
     storyboard: [
@@ -51,7 +52,7 @@ export const synesisCaseStudies = {
       },
       {
         "title": "Choose a place",
-        "description": "Select an available seat, bed, or deck option."
+        "description": "Choose deck admission or a selectable chair, sofa, bed, or cabin option."
       },
       {
         "title": "Review and pay",
@@ -88,7 +89,8 @@ export const synesisCaseStudies = {
     ],
     contribution: {
       "items": [
-        "Interpreted the SRS and defined scope",
+        "Interpreted the SRS and defined four portals",
+        "Visited a launch terminal to understand layouts",
         "Developed personas and role-specific flows",
         "Designed user and administration interfaces",
         "Demonstrated the prototype to the client"
@@ -99,39 +101,8 @@ export const synesisCaseStudies = {
       "body": "I delivered role-specific Adobe XD prototypes and demonstrated the service to the client."
     },
     reflection: "Clear responsibilities and explicit handoffs remain central to my coordination work today.",
-    showcaseNote: "Original previews from the five supplied Adobe XD files.",
-    showcase: [
-      {
-        "image": "/projects/biwta.webp",
-        "title": "The passenger entry point",
-        "alt": "Original BIWTA passenger ticketing landing-page prototype",
-        "caption": "The public-facing starting point for finding a journey."
-      },
-      {
-        "image": "/projects/biwta-agent.webp",
-        "title": "Assisted ticket purchases",
-        "alt": "Original BIWTA agent interface with vessel search results",
-        "caption": "The agent perspective on searching for a vessel and supporting a booking."
-      },
-      {
-        "image": "/projects/biwta-owner.webp",
-        "title": "The vessel-owner perspective",
-        "alt": "Original BIWTA vessel-owner launch-services prototype",
-        "caption": "An operational view of launch services."
-      },
-      {
-        "image": "/projects/biwta-authority.webp",
-        "title": "Submit timetable information",
-        "alt": "Original BIWTA timetable request form",
-        "caption": "The request side of a timetable handoff, with vessel, route, and expected-time fields."
-      },
-      {
-        "image": "/projects/biwta-admin.webp",
-        "title": "Review the request",
-        "alt": "Original BIWTA administration timetable request list",
-        "caption": "The authority-side request list makes the review task and request status visible."
-      }
-    ],
+    showcaseNote: "Choose a portal, then explore its screens. Extracted from the supplied PDF, with an additional preserved XD preview for the agent. Personal and account details are hidden where needed.",
+    showcasePortals: biwtaPortalPrototypes,
   },
   ereturn: {
     ...ereturnExpansion,

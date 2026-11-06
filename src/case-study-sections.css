@@ -64,7 +64,7 @@
 .study-process-note { margin:0 0 21px; color:var(--study-muted); }
 .study-process-controls { display:flex; gap:7px; flex-wrap:wrap; }
 .study-process-controls>button { display:flex; align-items:center; gap:8px; flex:1 1 100px; min-height:48px; padding:10px 12px; border:1px solid #bdcea9; border-radius:7px; background:#f5f8ed; text-align:left; }
-.study-process-controls>button>span { color:#819868; font-size:.6875rem; }
+.study-process-controls>button>span { flex-shrink:0; white-space:nowrap; color:#819868; font-size:.6875rem; }
 .study-process-controls>button>strong { font-size:.8125rem; line-height:1.5; font-weight:500; }
 .study-process-controls>button[aria-pressed=true] { background:#405e3b; color:#f3f8eb; border-color:#405e3b; }
 .study-process-controls>button[aria-pressed=true]>span { color:#c2d5a9; }
@@ -291,7 +291,7 @@
 .study-picture-controls>button>img { display:block; width:100%; height:74px; object-fit:cover; background:#e8eddf; }
 .study-picture-controls>button>span { display:flex; align-items:flex-start; gap:8px; padding:10px; }
 .study-picture-controls strong { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; font-size:.75rem; font-weight:500; line-height:1.45; color:#526c43; }
-.study-picture-index { color:#849473; font-size:.6875rem; line-height:1.6; }
+.study-picture-index { flex-shrink:0; white-space:nowrap; color:#849473; font-size:.6875rem; line-height:1.6; }
 .study-picture-controls>button[aria-pressed=true] { border-color:#597845; box-shadow:inset 0 0 0 1px #597845; background:#e9f0df; }
 .study-picture-panels { min-width:0; }
 .study-picture-panels .study-picture+.study-picture { margin-top:24px; }
@@ -299,6 +299,38 @@
 .study-gallery-status { margin:0!important; color:#718362; font-size:.75rem!important; line-height:1.5!important; }
 .study-structure-details .study-reconstruction-tag { margin:0 0 16px; }
 .study-structure-details .study-sketch-annotations { gap:8px; }
+
+/* The portal switch sits outside expanded evidence sections. */
+.study-portals { --study-ink:#36513b; --study-muted:#5e7451; --study-line:#c6d4b7; --study-paper:#fbfcf6; min-width:0; }
+.study-portal-controls { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; margin-bottom:22px; }
+.study-portal-controls>button { display:flex; align-items:flex-start; gap:10px; min-width:0; min-height:73px; padding:14px 12px; border:1px solid #bdcea9; border-radius:9px; background:#f5f8ed; color:var(--study-ink); text-align:left; font:inherit; cursor:pointer; }
+.study-portal-controls>button>span:last-child { min-width:0; }
+.study-portal-controls strong { display:block; margin:2px 0 5px; font-size:.875rem; font-weight:550; line-height:1.45; }
+.study-portal-count { display:block; color:#738562; font-size:.6875rem; line-height:1.5; }
+.study-portal-controls>button[aria-pressed=true] { border-color:#405e3b; background:#405e3b; color:#f3f8eb; }
+.study-portal-controls>button[aria-pressed=true] .study-control-number { border-color:#a5be8e; color:#e3edd7; }
+.study-portal-controls>button[aria-pressed=true] .study-portal-count { color:#d0dfc2; }
+.study-portals button:focus-visible { outline:2px solid #627f41; outline-offset:4px; }
+.study-portal-panels,.study-portal-panel { min-width:0; }
+.study-portal-panel[hidden] { display:none!important; }
+.study-portal-panel+.study-portal-panel { margin-top:30px; }
+.study-portals[data-study-enhanced=true] .study-portal-panel { margin-top:0; }
+.study-portal-intro h4 { margin:0 0 10px; color:var(--study-ink); font-size:1.1875rem; font-weight:550; line-height:1.45; }
+.study-portal-intro p { margin:0; color:var(--study-muted); font-size:1rem; line-height:1.75; }
+.study-portal-steps { display:flex; flex-wrap:wrap; gap:9px; padding:0; margin:17px 0 23px; list-style:none; }
+.study-portal-steps>li { display:flex; align-items:baseline; gap:7px; padding:8px 10px; border:1px solid #d3dfc5; border-radius:6px; background:#f1f6e9; color:#526c43; font-size:.75rem; line-height:1.55; }
+.study-portal-steps>li>span { color:#82966e; font-size:.625rem; }
+.study-portal-panel .study-picture-controls>button { font:inherit; cursor:pointer; }
+.study-portal-panel .study-picture>figcaption h4 { color:var(--study-ink); font-size:1.0625rem; line-height:1.5; }
+.study-portal-panel .study-picture>figcaption p { font-size:.9375rem; line-height:1.75; }
+.study-portals>.study-interaction-status { margin-top:0; }
+@media(max-width:620px) {
+  .study-portal-controls { grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; margin-bottom:19px; }
+  .study-portal-controls>button { min-height:72px; padding:11px 10px; gap:8px; }
+  .study-portal-controls strong { font-size:.8125rem; }
+  .study-portal-steps { gap:6px; margin:14px 0 19px; }
+  .study-portal-steps>li { padding:7px 8px; font-size:.6875rem; }
+}
 @media(max-width:620px) {
   .study-challenges { grid-template-columns:1fr; }
   .study-challenge>summary { min-height:84px; }

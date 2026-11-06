@@ -250,7 +250,7 @@ test('company project actions open details and return focus to the selected empl
   await expect(page.locator('#dialog-title')).toHaveText('BIWTA');
   await expect(page.getByRole('dialog')).toContainText('Individual project');
   await page.getByText('Explore the prototype screens', { exact: true }).click();
-  await expect(page.locator('.project-gallery figure')).toHaveCount(5);
+  await expect(page.locator('.project-gallery figure')).toHaveCount(17);
   for (const src of await page.locator('.project-gallery img').evaluateAll(images => images.map(image => image.src))) {
     const result = await request.get(src);
     expect(result.status()).toBe(200);
@@ -332,15 +332,15 @@ test('BIWTA and eReturn connect needs, persona stories, and design evidence with
     await expect(requirement).not.toHaveAttribute('open', '');
     await requirement.locator(':scope > summary').click();
     await expect(requirement.locator('dd').first()).toBeVisible();
-    const prototypeGallery = dialog.locator('.project-gallery [data-study-gallery]');
     if (id === 'biwta') {
+      const prototypeGallery = dialog.locator('.project-gallery [data-study-portal-detail]:visible [data-study-gallery]');
       await expect(prototypeGallery.locator('[data-study-picture-detail]:visible')).toHaveCount(1);
       const lastImage = prototypeGallery.locator('[data-study-picture-select]').last();
       await lastImage.focus();
       await page.keyboard.press('Space');
       await expect(lastImage).toHaveAttribute('aria-pressed', 'true');
       await expect(prototypeGallery.locator('[data-study-picture-detail]:visible')).toHaveCount(1);
-      await expect(prototypeGallery.locator('[data-study-picture-status]')).toContainText('5 of 5');
+      await expect(prototypeGallery.locator('[data-study-picture-status]')).toContainText('8 of 8');
     } else {
       const sketchGallery = sketch.locator('[data-study-gallery]').first();
       await expect(sketchGallery.locator('[data-study-picture-select]')).toHaveCount(3);
