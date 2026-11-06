@@ -1,53 +1,59 @@
 // Historical artifacts and retrospective explanations remain distinguished in the presentation.
 export const ereturnExpansion = {
   "needs": {
-    "intro": "Help taxpayers establish access, complete relevant financial sections, and review the return together.",
+    "intro": "Register with an NID-linked mobile, complete only applicable forms, and prepare a full return file with online submission optional.",
     "stories": [
       {
-        "role": "Preparing and reviewing a return",
-        "need": "Find relevant sections and review my entries",
-        "soThat": "I can understand the return as a whole.",
-        "basis": "Reconstructed from requirements and filing designs"
+        "role": "NID-based self-registration",
+        "need": "Use a phone number registered under my own NID",
+        "soThat": "I can pass the ownership check before OTP.",
+        "basis": "Project requirement confirmed by the designer; original registration flows"
       },
       {
-        "role": "Continuing after a mobile-record mismatch",
-        "need": "Understand the mismatch and correction action",
-        "soThat": "I know how registration can continue.",
-        "basis": "Reconstructed from Journey 2"
+        "role": "Required forms only",
+        "need": "Complete the forms required for my circumstances and skip additional forms",
+        "soThat": "I do not work through irrelevant paperwork.",
+        "basis": "Designer-confirmed requirement; context questions and category-specific forms"
       },
       {
-        "role": "Continuing through Tax Circle verification",
-        "need": "Connect my form, token, and office visit",
-        "soThat": "I can complete the verification handoff.",
-        "basis": "Reconstructed from Journeys 3 and 3.1"
+        "role": "Preparing without online submission",
+        "need": "Prepare a complete return file without having to submit it online",
+        "soThat": "Return preparation remains useful when I choose another submission route.",
+        "basis": "Project requirement confirmed by the designer"
+      },
+      {
+        "role": "One digital return",
+        "need": "Work across Income, Rebate, Expenditure, and Assets & Liabilities",
+        "soThat": "Different paper forms come together in one connected experience.",
+        "basis": "Designer-confirmed scope and reviewed filing sections"
       }
     ]
   },
   "requirements": [
     {
-      "need": "Explain access",
-      "evidence": "Registration flows include mobile, eTIN, CAPTCHA, checks, and OTP.",
-      "response": "Show the required information and next action."
+      "need": "Verify phone ownership under the same NID",
+      "evidence": "The designer confirmed that NID-based self-registration required a phone registered under the taxpayer’s NID; original flows map the matching check.",
+      "response": "Allow this self-registration route to reach OTP only after ownership matches; explain correction when it does not."
     },
     {
-      "need": "Support correction",
-      "evidence": "Journey 2 includes another-number entry and a mismatch prompt.",
-      "response": "Explain record mismatch and its correction path."
+      "need": "Show required forms only",
+      "evidence": "The designer confirmed that users should fill required forms and skip additional or non-applicable forms.",
+      "response": "Use filing context and income circumstances to identify applicable forms and let users skip the rest."
+    },
+    {
+      "need": "Prepare without online submission",
+      "evidence": "The designer confirmed that users must be able to prepare a full return file even when they do not submit online.",
+      "response": "Separate complete return-file preparation and review from the decision to submit online."
+    },
+    {
+      "need": "Unify four groups of paper forms",
+      "evidence": "Income, Rebate, Expenditure, and Assets & Liabilities each contain different paper forms.",
+      "response": "Bring the four sections into one digital structure with consistent navigation, applicable fields, and a shared review."
     },
     {
       "need": "Connect the office handoff",
       "evidence": "Journeys 3 and 3.1 connect a token with Tax Circle review.",
       "response": "Identify preparation, the next actor, and account continuation."
-    },
-    {
-      "need": "Establish filing context",
-      "evidence": "Workbook factors include assessment, residency, location, and income sources.",
-      "response": "Ask relevant context questions before detailed entry."
-    },
-    {
-      "need": "Accommodate income variations",
-      "evidence": "NBR notes and workbook schedules distinguish financial circumstances.",
-      "response": "Use category-specific and repeatable entry patterns."
     },
     {
       "need": "Clarify amount types",
@@ -58,20 +64,20 @@ export const ereturnExpansion = {
       "need": "Separate progress actions",
       "evidence": "Sketches distinguish adding, Back, Save Draft, and Save and Continue.",
       "response": "Make adding, saving, and navigation distinct."
-    },
-    {
-      "need": "Connect detail and review",
-      "evidence": "Workbook totals and prototype summaries bring information together.",
-      "response": "Link financial entry with computation and return review."
     }
   ],
   "research": {
-    "intro": "Client visits and team requirements analysis informed the work. These findings summarize the preserved artifacts.",
+    "intro": "Client visits, team requirements analysis, and the designer’s clarified project requirements shaped these decisions.",
     "methods": [
       {
         "title": "Client requirements",
         "body": "Gathered requirements and clarified scope, challenges, and possible solutions.",
         "status": "Documented team activity"
+      },
+      {
+        "title": "Clarified project requirements",
+        "body": "Confirmed NID-linked phone ownership, required-only form paths, preparation without online submission, and the four groups of paper forms.",
+        "status": "Confirmed by the project designer"
       },
       {
         "title": "Working documents",
@@ -91,24 +97,29 @@ export const ereturnExpansion = {
     ],
     "findings": [
       {
-        "title": "Access has alternatives",
-        "body": "Matched information, mobile mismatch, and non-NID verification need different continuations.",
-        "evidence": "Original registration diagrams"
+        "title": "Phone ownership gates self-registration",
+        "body": "The phone must be registered under the same taxpayer’s NID before this route can continue to OTP.",
+        "evidence": "Designer confirmation and original registration flows"
+      },
+      {
+        "title": "Only applicable forms should be completed",
+        "body": "Filing circumstances determine required forms; additional or non-applicable forms can be skipped.",
+        "evidence": "Designer-confirmed requirement; context questions and category forms"
+      },
+      {
+        "title": "Preparation must stand apart from submission",
+        "body": "A taxpayer can prepare a full return file without being required to submit it online.",
+        "evidence": "Project requirement confirmed by the designer"
+      },
+      {
+        "title": "Four paper-form groups need one structure",
+        "body": "Income, Rebate, Expenditure, and Assets & Liabilities contain different paper forms that must connect digitally.",
+        "evidence": "Designer-confirmed scope and reviewed prototype"
       },
       {
         "title": "Handoffs need continuity",
         "body": "The token connects online information with officer review and subsequent access.",
         "evidence": "Journeys 3 and 3.1"
-      },
-      {
-        "title": "Context changes the detail",
-        "body": "Income circumstances determine relevant fields and repeated items.",
-        "evidence": "NBR notes, workbook, and prototype"
-      },
-      {
-        "title": "Inputs need an overview",
-        "body": "Detailed amounts must remain connected to totals, adjustments, and review.",
-        "evidence": "Workbook schedules and Return worksheet"
       },
       {
         "title": "Some requirements remain open",
@@ -124,77 +135,67 @@ export const ereturnExpansion = {
   },
   "challenges": [
     {
-      "title": "Different access scenarios",
-      "detail": "Verification circumstances require different next steps.",
-      "response": "Map matched, correction, and non-NID routes."
+      "title": "Verify phone ownership under the same NID",
+      "detail": "NID-based self-registration was restricted to a phone number registered under that taxpayer’s NID.",
+      "response": "Check NID–phone ownership before OTP and explain how to correct a mismatch."
     },
     {
-      "title": "Interrupted registration",
-      "detail": "Mobile information may not match verification records.",
-      "response": "Provide correction guidance and continuation when matching succeeds."
+      "title": "Show required forms only",
+      "detail": "Different circumstances require different paper forms. Users should not have to fill additional forms that do not apply.",
+      "response": "Use context questions to guide users to required forms and let them skip non-applicable forms."
     },
     {
-      "title": "Digital-to-office handoff",
-      "detail": "Non-NID verification moves from a form to officer review.",
-      "response": "Connect form, token, Tax Circle, and account continuation."
+      "title": "Prepare without online submission",
+      "detail": "Some users need a complete return file but do not want to submit it online.",
+      "response": "Keep full return preparation and review independent of online submission."
     },
     {
-      "title": "Conditional financial detail",
-      "detail": "Different circumstances require different fields.",
-      "response": "Use named sections, category forms, and repeated entries."
-    },
-    {
-      "title": "Amounts need context",
-      "detail": "Entered, exempted, and taxable amounts contribute to summaries.",
-      "response": "Use clear labels and connected review views."
-    },
-    {
-      "title": "Progress and review",
-      "detail": "Adding, saving, continuing, and reviewing have different purposes.",
-      "response": "Separate actions and reconnect entries in the return view."
+      "title": "Unify four groups of paper forms",
+      "detail": "Income, Rebate, Expenditure, and Assets & Liabilities each contain different paper forms.",
+      "response": "Connect the four sections through consistent navigation, relevant forms, and one return review."
     }
   ],
   "personasIntro": "Reconstructed scenario personas describe overlapping tasks. One taxpayer may encounter more than one scenario.",
   "personas": [
     {
-      "role": "The taxpayer assembling a complete return",
-      "goal": "Complete and review relevant sections.",
-      "context": "Several financial categories and entries.",
-      "story": "A taxpayer has information in several financial categories, including repeated items. They need to enter the details and check how everything contributes to the return.",
-      "userStory": "As a taxpayer, I need organized entry and a connected review to understand my return.",
+      "role": "The taxpayer preparing a full return file",
+      "goal": "Prepare a complete return file without mandatory online submission.",
+      "context": "Relevant forms across the four filing sections; online submission is optional.",
+      "story": "A taxpayer wants a complete return file but does not plan to submit it online. They need only the forms required for their circumstances and one review across the four filing sections.",
+      "userStory": "As a taxpayer, I need applicable forms and a complete return file without being forced to submit online.",
       "needs": [
-        "Recognizable financial groups",
-        "Clear add, save, and continue actions",
-        "Connected summaries and review"
+        "Required forms only; skip non-applicable forms",
+        "One review across the four filing sections",
+        "Full return preparation without mandatory online submission"
       ],
       "frictions": [
-        "Losing context between detailed entries and the overall return."
+        "Completing irrelevant forms or being forced into online submission."
       ],
-      "designResponse": "Category forms and repeated-entry patterns connect detailed information with summaries and Return View.",
-      "basis": "Reconstructed from requirements, notebook studies, and prototype; friction is a hypothesis."
+      "designResponse": "Context-guided forms and a connected review separate return preparation from the submission decision.",
+      "basis": "Scenario reconstructed from requirements confirmed by the designer and the filing prototype."
     },
     {
       "role": "The taxpayer facing a mobile-record mismatch",
-      "goal": "Resolve the access interruption.",
-      "context": "Mobile information does not match records.",
-      "story": "A taxpayer reaches a mobile-record mismatch during registration. They need to understand the interruption, correct the information, and know how to continue.",
-      "userStory": "As a taxpayer facing a mismatch, I need clear correction guidance to continue registering.",
+      "goal": "Register with a phone number registered under the same NID.",
+      "context": "The phone’s registered NID does not match the taxpayer’s NID.",
+      "story": "A taxpayer’s phone ownership does not match their NID during self-registration. They need to understand the rule and provide a phone number registered under that same NID.",
+      "userStory": "As a taxpayer facing an NID–phone mismatch, I need clear correction guidance before I can continue to OTP.",
       "needs": [
-        "Understand the matching issue",
-        "Correct appropriate information",
-        "Know the next verification step"
+        "Understand the NID–phone ownership rule",
+        "Provide a number registered under the same NID",
+        "Pass the ownership check before OTP"
       ],
       "frictions": [
         "A message that does not explain the issue or next action."
       ],
-      "designResponse": "Journey 2 provides correction and continuation toward OTP when matching succeeds.",
-      "basis": "Reconstructed from Journey 2 and the combined flow."
+      "designResponse": "Journey 2 explains correction; the self-registration route continues only when the ownership check passes.",
+      "basis": "Scenario reconstructed from designer-confirmed registration requirements and Journey 2."
     },
     {
       "role": "The taxpayer needing Tax Circle verification",
       "goal": "Complete verification and reach account access.",
       "context": "Online information continues through Tax Circle review.",
-      "story": "A taxpayer completes the non-NID form and receives a token. They need clear preparation for officer review and an explanation of how account access continues.",
+      "story": "A taxpayer follows the separately mapped non-NID Tax Circle route. They need clear preparation for officer review and an explanation of how account access continues.",
       "userStory": "As a taxpayer needing office verification, I need a clear token handoff to complete the next stage.",
       "needs": [
         "Preparation for the office stage",
@@ -215,7 +216,7 @@ export const ereturnExpansion = {
       {
         "label": "Information matches",
         "title": "Continue with OTP",
-        "summary": "Matching information follows the OTP route.",
+        "summary": "NID-based self-registration continues only with a phone registered under the same taxpayer’s NID.",
         "steps": [
           {
             "title": "Enter registration details",
@@ -223,9 +224,9 @@ export const ereturnExpansion = {
             "body": "Mobile number, eTIN, and CAPTCHA."
           },
           {
-            "title": "Compare records",
+            "title": "Match NID and phone ownership",
             "actor": "Planned service check",
-            "body": "Check the identity and mobile information shown in planning."
+            "body": "Compare the phone’s registered NID with the taxpayer’s NID; proceed only when they match."
           },
           {
             "title": "Verify OTP",
@@ -238,7 +239,7 @@ export const ereturnExpansion = {
             "body": "Create and confirm a password before the dashboard."
           }
         ],
-        "outcome": "Password setup leads to the dashboard.",
+        "outcome": "After the ownership check and OTP, password setup leads to the dashboard.",
         "basis": "Original Journey 1",
         "pictures": [
           {
@@ -253,25 +254,25 @@ export const ereturnExpansion = {
       {
         "label": "Mobile mismatch",
         "title": "Correct a mobile mismatch",
-        "summary": "A matching issue needs an understandable correction path.",
+        "summary": "A phone registered under a different NID cannot continue on this self-registration route.",
         "steps": [
           {
             "title": "Identify the mismatch",
             "actor": "Planned service check",
-            "body": "Entered mobile information does not match the records."
+            "body": "The phone’s registered NID does not match the taxpayer’s NID."
           },
           {
             "title": "Correct the information",
             "actor": "Taxpayer",
-            "body": "Use the another-number entry route shown in the flow."
+            "body": "Provide a phone number registered under the same taxpayer’s NID."
           },
           {
             "title": "Check the matching outcome",
             "actor": "Planned service check",
-            "body": "If matched, continue to OTP; otherwise, show correction guidance."
+            "body": "Continue to OTP only after the ownership check passes; otherwise, keep correction guidance visible."
           }
         ],
-        "outcome": "Matching information continues to OTP; unmatched information needs correction.",
+        "outcome": "A different active number is insufficient unless it is registered under the same NID.",
         "basis": "Original Journey 2",
         "pictures": [
           {
@@ -286,7 +287,7 @@ export const ereturnExpansion = {
       {
         "label": "Tax Circle handoff",
         "title": "Continue through officer review",
-        "summary": "The non-NID route connects online registration with a Tax Circle visit.",
+        "summary": "The original plans map non-NID cases through a separate Tax Circle verification route.",
         "steps": [
           {
             "title": "Complete the form",
@@ -338,25 +339,25 @@ export const ereturnExpansion = {
   "process": [
     {
       "stage": "Understand",
-      "activity": "Visit the client and analyze requirements with the team.",
-      "output": "Shared scope and open questions.",
+      "activity": "Confirm access rules, applicable forms, preparation needs, and the four paper-form groups with the client.",
+      "output": "Clear project requirements and scope.",
       "basis": "Recorded activity and requirements"
     },
     {
       "stage": "Define",
-      "activity": "Clarify tasks, information, and responsible actors.",
-      "output": "Access scenarios and information groups.",
+      "activity": "Separate phone-ownership checks, required-form selection, return preparation, and online submission.",
+      "output": "Access constraints and a required-form preparation journey.",
       "basis": "Retrospective structure from artifacts"
     },
     {
       "stage": "Explore",
-      "activity": "Explore references, layout groups, and progress actions.",
-      "output": "Reference board, sketches, and flow planning.",
+      "activity": "Explore how the four paper-form groups share navigation and review.",
+      "output": "Connected sections, sketches, and flow planning.",
       "basis": "Original supplied material"
     },
     {
       "stage": "Prototype",
-      "activity": "Represent access, financial entry, and review.",
+      "activity": "Represent eligible access, applicable forms, and complete return preparation.",
       "output": "Shared Adobe XD prototype.",
       "basis": "Original team design artifact"
     },
@@ -438,8 +439,8 @@ export const ereturnExpansion = {
     ]
   },
   "sitemap": {
-    "intro": "Explore access, filing context, financial information, and review.",
-    "note": "Reconstructed functional map. Branches include actions and states; Tax Circle review is an external handoff.",
+    "intro": "Explore NID-based access, required-form selection, the four filing sections, and complete return preparation.",
+    "note": "Reconstructed functional map informed by project requirements and artifacts; Tax Circle review remains an external handoff.",
     "nodes": [
       {
         "label": "eTax Services",
@@ -476,30 +477,35 @@ export const ereturnExpansion = {
                   },
                   {
                     "label": "Additional questions"
+                  },
+                  {
+                    "label": "Required-form selection",
+                    "description": "Identify applicable forms and skip additional forms that do not apply."
                   }
                 ],
-                "description": "Questions establish relevant filing circumstances."
+                "description": "Use filing circumstances to select only required forms."
               },
               {
                 "label": "Financial information",
                 "children": [
                   {
-                    "label": "Income categories and repeated entries"
+                    "label": "Income",
+                    "description": "Applicable income forms and repeated entries."
                   },
                   {
-                    "label": "Assets and liabilities"
+                    "label": "Rebate",
+                    "description": "Applicable rebate forms."
                   },
                   {
-                    "label": "Expenditure"
+                    "label": "Expenditure",
+                    "description": "Applicable expenditure forms."
                   },
                   {
-                    "label": "Rebate"
-                  },
-                  {
-                    "label": "Tax and payment information"
+                    "label": "Assets & Liabilities",
+                    "description": "Applicable asset and liability forms."
                   }
                 ],
-                "description": "Category forms and repeated-entry patterns."
+                "description": "Four filing sections bring different paper forms into one digital structure."
               },
               {
                 "label": "Review",
@@ -508,13 +514,20 @@ export const ereturnExpansion = {
                     "label": "Summaries and computation"
                   },
                   {
+                    "label": "Tax and payment information"
+                  },
+                  {
                     "label": "Payment information and follow-up"
                   },
                   {
                     "label": "Return view"
+                  },
+                  {
+                    "label": "Complete return file",
+                    "description": "Return preparation does not require online submission."
                   }
                 ],
-                "description": "Summaries connect the entered details."
+                "description": "Review and prepare a complete return file; online submission remains optional."
               }
             ]
           }
@@ -567,17 +580,26 @@ export const ereturnExpansion = {
     "intro": "Proposed checks derived from the persona stories, not historical test results.",
     "tasks": [
       {
-        "title": "Prepare and review several entries",
-        "body": "Find two income categories, add an item, distinguish saving from continuing, and locate review."
+        "title": "Check NID–phone ownership",
+        "body": "Explain why a phone registered under a different NID cannot continue to OTP, then identify the correction action."
       },
       {
-        "title": "Continue after a mobile-record mismatch",
-        "body": "Explain the mismatch, find correction, and describe what follows a successful match."
+        "title": "Complete only required forms",
+        "body": "Use a filing scenario to identify required forms and skip additional forms that do not apply."
+      },
+      {
+        "title": "Prepare a full file without submitting online",
+        "body": "Explain how to complete and review the full return file without choosing online submission."
+      },
+      {
+        "title": "Navigate the four filing sections",
+        "body": "Place example paper forms within Income, Rebate, Expenditure, and Assets & Liabilities, then locate their shared review."
       },
       {
         "title": "Explain the Tax Circle handoff",
-        "body": "Explain online steps, the token, office review, and account continuation."
+        "body": "Explain the separate online steps, token, officer review, and account continuation."
       }
     ]
-  }
+  },
+  "challengesNote": "Four project requirements and the design responses they called for."
 };

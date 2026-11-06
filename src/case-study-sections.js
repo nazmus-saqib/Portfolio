@@ -155,7 +155,7 @@ export function renderStudySection(study, key, { projectId = 'project', assetUrl
   }
   if (key === 'challenges') {
     const cards = data.map((item,index)=>`<details class="study-challenge study-disclosure"><summary><span><span class="study-mini-label">Challenge ${number(index)}</span><h4>${escapeHtml(item.title)}</h4></span><span class="study-disclosure-mark" aria-hidden="true">+</span></summary><div class="study-disclosure-body"><p class="study-challenge-detail">${escapeHtml(item.detail)}</p><div class="study-challenge-response"><span class="study-mini-label">Design response</span><p>${escapeHtml(item.response)}</p></div></div></details>`).join('');
-    return section(study,key,projectId,cards ? `<div class="study-challenges">${cards}</div>` : '');
+    return section(study,key,projectId,cards ? `<div class="study-challenges">${cards}</div>` : '',study.challengesNote);
   }
   if (key === 'personas') {
     const first = data[0];

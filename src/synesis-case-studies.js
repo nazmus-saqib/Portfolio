@@ -136,7 +136,7 @@ export const synesisCaseStudies = {
   ereturn: {
     ...ereturnExpansion,
     sectionTitles: sectionTitles,
-    lead: "Making registration and tax-filing tasks easier to follow, from account access to return review.",
+    lead: "Bringing four groups of paper forms into one digital return-preparation journey.",
     facts: [
       {
         "label": "My role",
@@ -148,30 +148,30 @@ export const synesisCaseStudies = {
       }
     ],
     context: {
-      "heading": "Make a complex return manageable.",
-      "body": "Taxpayers need to establish access, find relevant financial sections, and review their information together. The design connects verification routes, organized forms, and summaries."
+      "heading": "Connect four groups of paper forms.",
+      "body": "Income, Rebate, Expenditure, and Assets & Liabilities contained different paper forms. The design needed to connect them digitally, show only applicable forms, and support a full return file without mandatory online submission."
     },
-    storyboardIntro: "From service entry to a consolidated return review.",
+    storyboardIntro: "From eligible account access to a complete return file, with online submission optional.",
     storyboard: [
       {
         "title": "Enter the service",
-        "description": "Reach eReturn from eTax Services and establish account access."
+        "description": "Use NID-based phone verification or the separately mapped Tax Circle route."
       },
       {
         "title": "Set the context",
-        "description": "Identify assessment and income circumstances through relevant questions."
+        "description": "Identify required forms from filing circumstances and skip non-applicable forms."
       },
       {
         "title": "Enter financial details",
-        "description": "Use category forms and add another item when needed."
+        "description": "Complete applicable Income forms and add another item when needed."
       },
       {
         "title": "Complete supporting sections",
-        "description": "Work through assets, liabilities, rebates, and expenditure."
+        "description": "Complete relevant Rebate, Expenditure, and Assets & Liabilities forms."
       },
       {
-        "title": "Review the return",
-        "description": "Inspect summaries, tax/payment information, and the consolidated return."
+        "title": "Prepare the full return file",
+        "description": "Review the complete return file without being required to submit online."
       }
     ],
     decisions: [
