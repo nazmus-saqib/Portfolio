@@ -1,6 +1,7 @@
 // Public portfolio copy grounded in the owner's career record and uploaded work.
 // Private source material and unresolved source questions stay outside this site.
 import { synesisCaseStudies } from './synesis-case-studies.js';
+import { signfyCaseStudy } from './case-studies/signfy.js';
 
 const storyMilestones = [
   {
@@ -160,6 +161,7 @@ export const projects = [
   },
   {
     id: 'signfy',
+    richCaseStudy: signfyCaseStudy,
     title: 'Signfy',
     category: 'Accessibility · Academic concept',
     year: '2023',

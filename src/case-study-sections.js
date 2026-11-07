@@ -66,13 +66,13 @@ function renderPictures(pictures, assetUrl, label) {
   const resolve = value => (typeof assetUrl === 'function' ? assetUrl : path => path)(value);
   const controls = available.length > 1 ? `<div class="study-picture-controls" role="group" aria-label="Choose an image">${available.map((picture,index)=>{
     const title = picture.title || picture.alt || `Project picture ${index+1}`;
-    return `<button type="button" data-study-picture-select="${index}" aria-pressed="${index===0}" aria-controls="${galleryId}-image-${index}" aria-label="Show ${escapeHtml(title)}"><img src="${escapeHtml(resolve(picture.image))}" alt="" loading="lazy" decoding="async"><span><span class="study-picture-index">${number(index)}</span><strong>${escapeHtml(title)}</strong></span></button>`;
+    return `<button type="button"${picture.kind === 'phone' ? ' class="study-picture-select--phone"' : ''} data-study-picture-select="${index}" aria-pressed="${index===0}" aria-controls="${galleryId}-image-${index}" aria-label="Show ${escapeHtml(title)}"><img src="${escapeHtml(resolve(picture.image))}" alt="" loading="lazy" decoding="async"><span><span class="study-picture-index">${number(index)}</span><strong>${escapeHtml(title)}</strong></span></button>`;
   }).join('')}</div>` : '';
   return `<div class="study-picture-gallery" role="group" aria-label="${escapeHtml(label)}" data-study-gallery>${controls}<div class="study-picture-panels">${available.map((picture, index) => {
     const image = (typeof assetUrl === 'function' ? assetUrl : value => value)(picture.image);
     const fullSize = (typeof assetUrl === 'function' ? assetUrl : value => value)(picture.fullSize || picture.image);
     const title = picture.title || picture.alt || `Project picture ${index + 1}`;
-    return `<figure class="study-picture" id="${galleryId}-image-${index}" data-study-picture-detail="${index}"><a class="study-picture-link case-screen-link" href="${escapeHtml(fullSize)}" target="_blank" rel="noopener noreferrer" aria-label="Open ${escapeHtml(title)} at full size (opens in a new tab)"><img src="${escapeHtml(image)}" alt="${escapeHtml(picture.alt || title)}" loading="lazy" decoding="async"><span class="study-picture-open">View full-size image <span aria-hidden="true">↗</span></span></a><figcaption>${picture.basis ? `<p class="study-picture-basis">${escapeHtml(picture.basis)}</p>` : ''}<h4>${escapeHtml(title)}</h4>${picture.caption ? `<p>${escapeHtml(picture.caption)}</p>` : ''}</figcaption></figure>`;
+    return `<figure class="study-picture${picture.kind === 'phone' ? ' study-picture--phone' : ''}" id="${galleryId}-image-${index}" data-study-picture-detail="${index}"><a class="study-picture-link case-screen-link" href="${escapeHtml(fullSize)}" target="_blank" rel="noopener noreferrer" aria-label="Open ${escapeHtml(title)} at full size (opens in a new tab)"><img src="${escapeHtml(image)}" alt="${escapeHtml(picture.alt || title)}" loading="lazy" decoding="async"><span class="study-picture-open">View full-size image <span aria-hidden="true">↗</span></span></a><figcaption>${picture.basis ? `<p class="study-picture-basis">${escapeHtml(picture.basis)}</p>` : ''}<h4>${escapeHtml(title)}</h4>${picture.caption ? `<p>${escapeHtml(picture.caption)}</p>` : ''}</figcaption></figure>`;
   }).join('')}</div>${available.length>1?`<p class="study-gallery-status" role="status" aria-live="polite" data-study-picture-status>Image 1 of ${available.length}</p>`:''}</div>`;
 }
 
@@ -94,6 +94,9 @@ function renderSketch(study, key, projectId, assetUrl) {
   const data = study[key];
   if (!data) return '';
   const wireframe = key === 'wireframe';
+  if (data.showStructure === false) {
+    return section(study,key,projectId,renderPictures(data.pictures,assetUrl,wireframe ? 'Wireframe pictures' : 'Sketch pictures'),data.intro);
+  }
   const annotations = data.annotations || [];
   const visualId = `case-${projectId}-${key}-visual`;
   const structure = `<div class="study-reconstruction-tag">Reconstructed structure study <span>${escapeHtml(data.reconstructionNote || `The interactive layout below was created for this portfolio; it is not an archived ${wireframe ? 'wireframe' : 'sketch'}.`)}</span></div>
@@ -170,6 +173,11 @@ export function renderStudySection(study, key, { projectId = 'project', assetUrl
     return section(study,key,projectId,cards ? `<div class="study-challenges">${cards}</div>` : '',study.challengesNote);
   }
   if (key === 'personas') {
+    if (study.personasPresentation === 'source-artifacts') {
+      const pictures = renderPictures(study.personasPictures,assetUrl,'Original persona designs');
+      const note = study.personasNote ? `<div class="study-source-note study-personas-note">${paragraphs(study.personasNote)}</div>` : '';
+      return section(study,key,projectId,pictures ? `${pictures}${note}` : '',study.personasIntro,'study-persona-artifacts');
+    }
     const first = data[0];
     const prefix = `case-${projectId}-persona`;
     const controls = data.map((persona,index)=>`<button type="button" id="${prefix}-control-${index}" data-study-persona-select="${index}" data-persona-goal="${escapeHtml(persona.goal)}" aria-pressed="${index===0}" aria-controls="${prefix}-detail-${index}"><span class="study-control-number" aria-hidden="true">${number(index)}</span><strong>${escapeHtml(persona.role)}</strong></button>`).join('');
@@ -194,13 +202,18 @@ export function renderStudySection(study, key, { projectId = 'project', assetUrl
   }
   if (key === 'competitive') {
     const columns = data.columns?.length===4 ? data.columns.map(column=>typeof column==='object'?column.label:column) : ['Product pattern','Strength','Trade-off','Implication for this work'];
-    return section(study,key,projectId,data.rows?.length ? `<p class="study-reconstruction-tag">Retrospective comparison <span>A new explanatory framework, not a recovered competitive-research report.</span></p><div class="study-comparison-wrap"><table class="study-comparison"><caption>Compare approaches to meeting and organization work</caption><thead><tr>${columns.map(column=>`<th scope="col">${escapeHtml(column)}</th>`).join('')}</tr></thead><tbody>${data.rows.map(row=>`<tr>${[row.pattern,row.strength,row.tradeoff,row.implication].map((value,index)=>`<${index===0?'th scope="row"':'td'} data-label="${escapeHtml(columns[index])}">${escapeHtml(value)}</${index===0?'th':'td'}>`).join('')}</tr>`).join('')}</tbody></table></div>${data.takeaways?.length ? `<div class="study-competitive-takeaways"><h4>What this comparison highlights</h4>${list(data.takeaways)}</div>` : ''}` : '',data.intro);
+    const caption = data.caption || 'Compare approaches to meeting and organization work';
+    const note = data.note || 'A new explanatory framework, not a recovered competitive-research report.';
+    const sourceLabel = data.caption || data.note ? 'Historical audit criteria' : 'Retrospective comparison';
+    return section(study,key,projectId,data.rows?.length ? `<p class="study-reconstruction-tag">${sourceLabel} <span>${escapeHtml(note)}</span></p><div class="study-comparison-wrap"><table class="study-comparison"><caption>${escapeHtml(caption)}</caption><thead><tr>${columns.map(column=>`<th scope="col">${escapeHtml(column)}</th>`).join('')}</tr></thead><tbody>${data.rows.map(row=>`<tr>${[row.pattern,row.strength,row.tradeoff,row.implication].map((value,index)=>`<${index===0?'th scope="row"':'td'} data-label="${escapeHtml(columns[index])}">${escapeHtml(value)}</${index===0?'th':'td'}>`).join('')}</tr>`).join('')}</tbody></table></div>${data.takeaways?.length ? `<div class="study-competitive-takeaways"><h4>What this comparison highlights</h4>${list(data.takeaways)}</div>` : ''}` : '',data.intro);
   }
   if (key === 'productDetails') {
     return section(study,key,projectId,data.areas?.length ? `<div class="study-product-areas">${data.areas.map((area,index)=>`<article><span class="study-card-number" aria-hidden="true">${number(index)}</span><h4>${escapeHtml(area.title)}</h4><p>${escapeHtml(area.body)}</p></article>`).join('')}</div>` : '',data.intro);
   }
   if (key === 'evaluation') {
-    return section(study,key,projectId,data.tasks?.length ? `<p class="study-analysis-note">Proposed evaluation tasks for this case study; these are not reported historical test results.</p><div class="study-evaluation">${data.tasks.map((task,index)=>`<article><span class="study-card-number" aria-hidden="true">${number(index)}</span><div><h4>${escapeHtml(task.title)}</h4>${paragraphs(task.body)}${task.criteria ? `<h5>What to look for</h5>${paragraphs(task.criteria)}` : ''}</div></article>`).join('')}</div>` : '',data.intro);
+    const documented = data.type === 'documented';
+    const note = data.note || (documented ? 'Documented formative prototype testing; the feedback below records qualitative observations.' : 'Proposed evaluation tasks for this case study; these are not reported historical test results.');
+    return section(study,key,projectId,data.tasks?.length ? `<p class="study-analysis-note">${escapeHtml(note)}</p><div class="study-evaluation">${data.tasks.map((task,index)=>`<article><span class="study-card-number" aria-hidden="true">${number(index)}</span><div><h4>${escapeHtml(task.title)}</h4>${paragraphs(task.body)}${task.criteria ? `<h5>${documented ? 'Recorded feedback' : 'What to look for'}</h5>${paragraphs(task.criteria)}` : ''}</div></article>`).join('')}</div>` : '',data.intro);
   }
   return '';
 }

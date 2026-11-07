@@ -104,6 +104,13 @@
 .case-decision dt { color:#73875e; font-size:.75rem; line-height:1.7; letter-spacing:.5px; text-transform:uppercase; padding-top:3px; }
 .case-decision dd { margin:0; color:#526b45; font-size:1rem; line-height:1.75; }
 .case-showcase-note { margin:-7px 0 23px; }
+.case-prototype-entry { display:grid; gap:12px; margin:0 0 24px; padding:19px; border:1px solid #becfa9; border-radius:10px; background:#eef4e4; }
+.case-prototype-launch { display:flex; align-items:center; flex-wrap:wrap; gap:9px; width:fit-content; max-width:100%; min-height:44px; padding:11px 15px; border:1px solid #405e3b; border-radius:7px; background:#405e3b; color:#f3f8eb; font-size:.9375rem; line-height:1.5; text-decoration:none; }
+.case-prototype-launch>svg { flex-shrink:0; width:17px; height:17px; }
+.case-prototype-launch:hover { background:#314c2d; }
+.case-prototype-launch:focus-visible { outline:2px solid #627f41; outline-offset:4px; }
+.case-prototype-new-tab { display:block; flex-basis:100%; font-size:.6875rem; color:#d3e0c7; }
+.case-prototype-description p { margin:0; color:#5b744c; font-size:.875rem; line-height:1.7; }
 .case-showcase-gallery { display:grid; gap:30px; }
 .case-showcase-gallery>figure { margin:0; min-width:0; }
 .case-screen-frame { border:1px solid #bdcbb0; border-radius:12px; background:#e6ecdf; box-shadow:0 8px 25px #324c3810; }

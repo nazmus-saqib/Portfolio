@@ -1,0 +1,197 @@
+// Source-backed capstone narrative. Original artwork is supplied separately;
+// proposed product capabilities and planning targets are not treated as results.
+import { signfyArtifacts } from './signfy-artifacts.js';
+
+export const signfyCaseStudy = {
+  lead: 'Helping signers and non-signers keep a conversation going.',
+  facts: [
+    { label: 'My role', value: 'Individual UX / UI capstone project' },
+    { label: 'Context', value: 'Interactive Media Management · Centennial College' },
+    { label: 'Period', value: 'January–June 2023' },
+    { label: 'Mentor', value: 'Fariha Fairuz Chowdhury' },
+  ],
+  sectionTitles: {
+    needs: 'User stories and needs',
+    requirements: 'Requirements analysis',
+    research: 'Research and findings',
+    challenges: 'From challenges to design solutions',
+    personas: 'Original user personas',
+    process: 'Design thinking process',
+    sketches: 'Early design explorations',
+    wireframe: 'Wireframes and iterations',
+    sitemap: 'Site map',
+    inspiration: 'Inspiration and visual direction',
+    competitive: 'Competitive research',
+    evaluation: 'User testing and learnings',
+    showcase: 'Explore the prototype',
+    productDetails: 'Product planning',
+  },
+  context: {
+    heading: 'Keep everyday communication within reach.',
+    body: 'I explored how a mobile app could bring translation, video calling, and learning into one place. The capstone focused on the interface and interaction flow for everyday conversations between signers and non-signers.',
+  },
+  contribution: {
+    items: [
+      'Conducted surveys, interviews, and competitive research',
+      'Framed user needs and created four personas',
+      'Designed wireframes and a Figma prototype',
+      'Conducted task-based prototype testing',
+      'Prepared product and project-planning proposals',
+    ],
+  },
+  personasPresentation: 'source-artifacts',
+  personasPictures: signfyArtifacts.personas,
+  personasIntro: 'Four original persona designs connect communication needs to relationships, family life, and everyday work. They are reproduced as supplied.',
+  personas: [
+    { role: 'Mark & Jenny', goal: 'Keep a remote conversation going without repeated typing.' },
+    { role: 'Miller', goal: 'Communicate with his sister when he cannot recall a sign.' },
+    { role: 'Henry & Rose', goal: 'Learn sign language to communicate with their child.' },
+    { role: 'Lily', goal: 'Communicate more comfortably with signers in her work.' },
+  ],
+  needs: {
+    intro: 'I used the research to connect each proposed feature to a specific conversation or learning need.',
+    stories: [
+      { role: 'A couple communicating remotely', need: 'Understand each other during a video call', soThat: 'Typing does not repeatedly interrupt our conversation.', source: 'Mark & Jenny persona · Signfy page.pdf' },
+      { role: 'A sibling who knows some signs', need: 'Get help when I cannot recall or understand a sign', soThat: 'I can continue the conversation with my sister.', source: 'Miller persona · Signfy page.pdf' },
+      { role: 'Parents learning sign language', need: 'Find an approachable place to start learning', soThat: 'We can build communication with our child.', source: 'Henry & Rose persona · Signfy page.pdf' },
+      { role: 'An occasional non-signing contact', need: 'Use a familiar input such as text or speech', soThat: 'I can take part in a conversation with a signer.', source: 'Lily persona · Signfy page.pdf' },
+    ],
+  },
+  requirements: [
+    { need: 'Support both sides of a conversation', evidence: 'The brief and research describe needs shared by signers and non-signers.', response: 'Separate text/speech-to-sign translation from camera-based sign conversion.' },
+    { need: 'Make input choices recognizable', evidence: 'The testing tasks distinguish typed input, microphone input, and recording.', response: 'Give text, microphone, and camera actions clear places in the interface.' },
+    { need: 'Keep calls and conversation together', evidence: 'Interview themes and the couple persona describe typing interruptions during calls.', response: 'Explore a video-call view with the translated conversation visible alongside it.' },
+    { need: 'Offer an entry into learning', evidence: 'Interviews and family personas describe difficulty remembering signs and finding suitable learning support.', response: 'Provide a Tutorial destination with topic-based learning content.' },
+    { need: 'Keep the main tasks accessible', evidence: 'Early screens and the testing report use five recurring navigation destinations.', response: 'Keep Translate, Convert, Inbox, Tutorial, and Menu available through shared navigation.' },
+  ],
+  research: {
+    intro: 'I combined accessibility learning, an exploratory survey, and approximately nine interviews to understand communication and learning needs.',
+    methods: [
+      { title: 'Domain and accessibility learning', body: 'I studied sign-language communication and reviewed WCAG 2.1 and AODA guidance.', status: 'Documented learning · Signfy page.pdf' },
+      { title: 'Exploratory survey', body: 'I recruited through Facebook and used Google Forms with five closed and five open questions. The supplied record does not state the response count.', status: 'Documented method · Signfy page.pdf' },
+      { title: 'Interviews', body: 'I interviewed approximately nine signers and non-signers about conversations, frustrations, learning, and existing tools.', status: 'Documented method · Signfy page.pdf' },
+      { title: 'Prototype walkthroughs', body: 'I asked acquaintances, many from the initial survey, to explore translation, conversion, calling, and tutorials.', status: 'User Testing report · PDF pp3–4' },
+      { title: 'Prototype flow review', body: 'For this case study, I traced the original Figma archive’s connections across translation, calls, and learning.', status: 'Archive review · original prototype connections' },
+    ],
+    findings: [
+      { title: 'Remembering a sign can interrupt a conversation', body: 'Interview accounts and the sibling persona describe difficulty recalling or understanding signs in the moment.', evidence: 'Signfy page.pdf · Interviews and Miller persona' },
+      { title: 'Typing adds friction to remote conversations', body: 'People described using text or another device during calls to bridge their different communication modes.', evidence: 'Signfy page.pdf · Interviews and Mark & Jenny persona' },
+      { title: 'Learning needs a manageable starting point', body: 'Families wanted to learn; interview feedback also raised difficulty knowing whether practice was correct.', evidence: 'Signfy page.pdf · Interviews, Henry & Rose persona, and problem statements' },
+      { title: 'Task labels and icons helped navigation', body: 'The testing report describes participants finding the required options and completing the documented prototype tasks.', evidence: 'User Testing report · PDF p4' },
+    ],
+  },
+  challenges: [
+    { title: 'Help when a sign is unfamiliar', detail: 'People may know some signs but still struggle to recall or understand them during a conversation.', response: 'I separated the two directions: Translate for text or speech input, and Convert for the camera-based sign-to-text/speech concept.' },
+    { title: 'Reduce typing interruptions during calls', detail: 'Remote conversations became harder when people had to switch between signing, typing, and another device.', response: 'I explored a call interface with a visible translated-conversation area reached from Inbox.' },
+    { title: 'Make learning approachable', detail: 'People wanted to learn without feeling overwhelmed or searching through unrelated material.', response: 'I gave Tutorial its own destination and organized learning around selectable topics.' },
+    { title: 'Keep five different tasks easy to find', detail: 'Translation, conversion, messaging, learning, and settings needed clear boundaries within one small screen.', response: 'I used persistent navigation and familiar text, microphone, camera, and call controls. The testing report records positive navigation feedback.' },
+  ],
+  process: [
+    { stage: 'Understand', activity: 'I reviewed accessibility guidance, surveyed potential users, and interviewed signers and non-signers.', output: 'Communication, recall, and learning needs.', basis: 'Signfy page.pdf · Initial research and interviews' },
+    { stage: 'Define', activity: 'I grouped the findings into four personas and three main design questions.', output: 'User stories and a focused communication challenge.', basis: 'Original persona designs and problem statements' },
+    { stage: 'Explore', activity: 'I worked through early screens, input controls, and the shared navigation.', output: 'Annotated interface explorations and wireframes.', basis: 'Initial design.pdf; Signfy page.pdf · Wireframes V1 and V2' },
+    { stage: 'Prototype', activity: 'I developed the visual interface and connected the proposed tasks in Figma.', output: 'A high-fidelity mobile prototype.', basis: 'Original prototype and final design artifacts' },
+    { stage: 'Evaluate', activity: 'I used task-based walkthroughs to observe how people found and used the main features.', output: 'Qualitative navigation feedback across five documented scenarios.', basis: 'User Testing report · PDF pp3–4' },
+  ],
+  sketches: {
+    intro: 'The early interface explorations show how I organized input controls, output areas, and shared navigation.',
+    showStructure: false,
+    pictures: signfyArtifacts.sketches,
+  },
+  wireframe: {
+    intro: 'The preserved early and later designs make the progression of the interface reviewable. They do not establish a measured improvement in translation accuracy.',
+    showStructure: false,
+    pictures: [...signfyArtifacts.wireframes, signfyArtifacts.presentation],
+  },
+  sitemap: {
+    intro: 'Five task destinations provide a consistent structure across the prototype.',
+    note: 'Reconstructed functional grouping based on the supplied designs and testing tasks; some branches describe interactions or states.',
+    nodes: [
+      { label: 'Translate', children: [{ label: 'Choose sign language' }, { label: 'Enter text or use microphone' }, { label: 'Review the sign-visualization concept' }] },
+      { label: 'Convert', children: [{ label: 'Open camera / recording' }, { label: 'Review text and speech output concept' }] },
+      { label: 'Inbox', children: [{ label: 'Messages and search' }, { label: 'Open a conversation' }, { label: 'Start a video call' }, { label: 'View translated-conversation area' }] },
+      { label: 'Tutorial', children: [{ label: 'Choose a topic' }, { label: 'Watch learning content' }] },
+      { label: 'Menu', children: [{ label: 'Supporting options and settings' }] },
+    ],
+  },
+  planningArtifacts: {
+    intro: 'A readable map of the connected tasks in the original Figma archive.',
+    pictures: [{
+      image: '/projects/signfy/prototype-flow-map.svg',
+      title: 'How the prototype tasks connect',
+      alt: 'Five Signfy prototype paths: typed input, speech input, camera conversion, video calling, and topic-based learning',
+      caption: 'A simplified map traced from the original connections. The archive contains multiple screen variants and proposed subscription states.',
+      basis: 'Flow map reconstructed from original Figma connections',
+    }],
+  },
+  inspiration: {
+    intro: 'Original theme references and visual principles connect the proposed interactions to the communication goal.',
+    note: 'The accompanying theme reference is an original project artifact; the principles below explain its direction.',
+    showIllustrations: false,
+    pictures: signfyArtifacts.inspiration,
+    cards: [
+      { title: 'Two-way communication', principle: 'Support both people in the conversation.', application: 'Pair text/speech input with the camera-based conversion concept.' },
+      { title: 'Visible sign output', principle: 'Make the proposed response understandable.', application: 'Use a character to visualize the text/speech-to-sign concept.' },
+      { title: 'An approachable starting point', principle: 'Keep learning within reach.', application: 'Give tutorials a clear destination alongside the communication tasks.' },
+    ],
+  },
+  competitive: {
+    intro: 'I audited existing translation and learning tools using criteria relevant to the research. This is a historical comparison, rather than a current product ranking.',
+    caption: 'How the historical audit informed translation and learning',
+    note: 'A summary of criteria from the supplied audit; individual product capabilities are not revalidated here.',
+    columns: ['Audit criterion', 'Question', 'User need', 'Design implication'],
+    rows: [
+      { pattern: 'Translation direction', strength: 'Does the experience cover text/speech-to-sign and sign-to-text/speech?', tradeoff: 'Both people need a way into the conversation.', implication: 'Distinguish Translate and Convert.' },
+      { pattern: 'Learning structure', strength: 'Can people find topic-based or personalized learning material?', tradeoff: 'A beginner needs a manageable starting point.', implication: 'Provide a dedicated Tutorial destination.' },
+      { pattern: 'Practice and feedback', strength: 'Can a learner tell whether they are practicing correctly?', tradeoff: 'Watching a demonstration alone leaves uncertainty.', implication: 'Treat feedback quality as a requirement for further learning development.' },
+      { pattern: 'Reference and progress', strength: 'Are dictionary and progress features represented?', tradeoff: 'People need ways to revisit signs and understand their learning.', implication: 'Keep these as criteria for assessing future learning scope.' },
+    ],
+    takeaways: ['The audit helped me compare conversation support with learning support.', 'Prototype scope and future learning features remain distinct.'],
+  },
+  storyboardIntro: 'Explore the five tasks represented in the prototype and the testing report.',
+  showcase: signfyArtifacts.showcase,
+  showcaseNote: 'Explore the presentation design and the earlier annotated screens that explain the five tested tasks.',
+  prototypeLink: {
+    url: 'https://www.figma.com/proto/i1UJEmA3i0ksX3CrHL76AN/Signfy?node-id=102-1434&t=GhWbig2JsKRiyqr8-0&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=78%3A1387',
+    label: 'Open Figma prototype',
+    description: 'Explore the connected mobile prototype in Figma. The screen gallery below preserves the supplied design artifacts.',
+  },
+  storyboard: [
+    { title: 'Translate typed text', description: 'Enter a sentence and use the sign-visualization concept.' },
+    { title: 'Translate speech', description: 'Use the microphone input within Translate.' },
+    { title: 'Convert signing', description: 'Explore the camera-based sign-to-text/speech flow.' },
+    { title: 'Start a video call', description: 'Open a conversation in Inbox and use its video-call action.' },
+    { title: 'Learn a topic', description: 'Choose learning content through Tutorial.' },
+  ],
+  decisions: [
+    { title: 'Separate the direction of translation.', situation: 'Typed or spoken input and camera-based signing require different controls.', decision: 'I gave Translate and Convert distinct destinations.', reason: 'The entry point makes the expected input clearer.' },
+    { title: 'Keep conversation context visible.', situation: 'Switching to text can interrupt a video conversation.', decision: 'I explored translated content within the call experience.', reason: 'The prototype brings the conversation and its support into one view.' },
+    { title: 'Treat learning as a recurring need.', situation: 'The research included people who wanted to learn as well as communicate.', decision: 'I kept Tutorial in the shared navigation.', reason: 'Learning remains accessible alongside the immediate conversation tasks.' },
+  ],
+  evaluation: {
+    type: 'documented',
+    intro: 'The formative testing report records five task scenarios and qualitative feedback about navigation and recognizable controls.',
+    note: 'Participants were acquaintances, many from the initial survey. The record does not provide completion times, a calculated success rate, or a translation-accuracy benchmark. These observations concern the prototype experience.',
+    tasks: [
+      { title: 'Translate text to sign', body: 'Open Translate, enter a sentence such as “How are you?”, and send it.', criteria: 'The report describes successful task completion and notes that Translate was easy to find as the first option.' },
+      { title: 'Translate speech to sign', body: 'Open Translate, use the microphone, and send the spoken input.', criteria: 'The report records successful navigation to the speech-input task and its demonstrated output.' },
+      { title: 'Convert sign to text / speech', body: 'Open Convert and use the record control to explore the proposed output.', criteria: 'The report describes the recording icon as recognizable and the task as completed.' },
+      { title: 'Make a video call', body: 'Open an Inbox conversation and use the video-camera control.', criteria: 'The report records successful use of the recognizable call control and the demonstrated translated-text area.' },
+      { title: 'Open a tutorial', body: 'Choose Tutorial, select a topic, and open its video content.', criteria: 'The report states that the tutorial was easy to find and open.' },
+    ],
+  },
+  productDetails: {
+    intro: 'The capstone also included a proposal for taking the concept beyond the design stage.',
+    areas: [
+      { title: 'Delivery planning', body: 'I proposed development phases, an Agile approach, risks, and a budget. These were planning outputs rather than records of a launched product.' },
+      { title: 'Future evaluation', body: 'The proposal identified usage, engagement, learning, and translation quality as areas to assess. Its adoption and revenue figures were targets.' },
+      { title: 'Further validation', body: 'A working service would need language-output validation with fluent signers and accessibility testing in realistic conversation settings.' },
+      { title: 'Service access concept', body: 'The prototype also explores subscription, sign-up, payment, and confirmation screens as a proposed service-access path.' },
+    ],
+  },
+  outcome: {
+    heading: 'A research-led capstone and interactive prototype',
+    body: 'I developed a high-fidelity prototype connecting translation, calling, and learning. The testing report records positive navigation feedback across five scenarios. Translation quality and real-world communication outcomes still require technical and linguistic validation.',
+  },
+  reflection: 'I learned to connect each interface choice to a communication need and use task-based feedback to assess navigation. Further work would validate the language output with fluent signers.',
+};

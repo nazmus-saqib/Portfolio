@@ -10,6 +10,14 @@ const plus = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M
 const isAcademic = project => /academic|centennial/i.test(`${project.category} ${project.company}`);
 const resolveAsset = (path, options) => (options.assetUrl || (value => value))(path);
 
+function renderPrototypeLink(link) {
+  if (!link?.url) return '';
+  let url;
+  try { url = new URL(link.url); } catch { return ''; }
+  if (url.protocol !== 'https:' || url.username || url.password) return '';
+  return `<aside class="case-prototype-entry" aria-label="Interactive prototype"><a class="case-prototype-launch" href="${escapeHtml(url.href)}" target="_blank" rel="noopener noreferrer"><span>${escapeHtml(link.label || 'Open Figma prototype')}</span>${arrow}<span class="case-prototype-new-tab">Opens in a new tab</span></a>${link.description ? `<div class="case-prototype-description">${paragraphs(link.description)}</div>` : ''}</aside>`;
+}
+
 function illustration(project) {
   const open = '<svg class="case-illustration" viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">';
   if (project.id === 'identify') {
@@ -99,7 +107,8 @@ function renderCaseStudy(project, options) {
     image: image.src, alt: image.alt, caption: image.alt,
   }));
   const showcasePortals = study.showcasePortals?.filter(portal => portal?.pictures?.some(picture => picture?.image)) || [];
-  const hasShowcase = showcasePortals.length || showcase.length;
+  const prototypeLink = renderPrototypeLink(study.prototypeLink);
+  const hasShowcase = showcasePortals.length || showcase.length || Boolean(prototypeLink);
   const navigation = [
     study.personas?.length && { id: 'personas', label: 'Personas' },
     study.process?.length && { id: 'process', label: 'Design thinking' },
@@ -107,6 +116,7 @@ function renderCaseStudy(project, options) {
     study.registrationJourneys && { id: 'registrationJourneys', label: 'Registration journeys' },
     study.sketches && { id: 'sketches', label: 'Sketches' },
     hasShowcase && { id: 'showcase', label: 'Explore the prototype screens' },
+    study.evaluation?.type === 'documented' && { id: 'evaluation', label: 'Testing and learnings' },
     study.requirements?.length && { id: 'requirements', label: 'Requirements and evidence' },
   ].filter(Boolean);
   const contribution = typeof study.contribution === 'string'
@@ -134,7 +144,7 @@ function renderCaseStudy(project, options) {
       ${renderStudySection(study, 'sketches', studyOptions)}
       ${renderStudySection(study, 'inspiration', studyOptions)}
       ${study.storyboard?.length ? `<section class="case-study-section" id="${escapeHtml(sectionId('storyboard'))}" aria-labelledby="${escapeHtml(sectionId('storyboard-heading'))}"><div class="case-study-section-heading"><span class="case-study-section-number" aria-hidden="true">01</span><div><p class="case-study-label">Prototype walkthrough</p><h3 id="${escapeHtml(sectionId('storyboard-heading'))}">How the work connects</h3></div></div><div class="case-study-prose case-storyboard-note">${paragraphs(study.storyboardIntro || 'This sequence follows the tasks represented in the designs.')}</div><ol class="case-storyboard">${study.storyboard.map((step, index) => `<li><span class="case-story-number" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span>${step.actor ? `<p class="case-story-actor">${escapeHtml(step.actor)}</p>` : ''}<h4>${escapeHtml(step.title)}</h4><p class="case-story-description">${escapeHtml(step.description)}</p></li>`).join('')}</ol></section>` : ''}
-      ${hasShowcase ? `<section class="case-study-section case-study-showcase" id="${escapeHtml(sectionId('showcase'))}" aria-labelledby="${escapeHtml(sectionId('showcase-heading'))}"><p class="case-study-label">The prototype</p><h3 id="${escapeHtml(sectionId('showcase-heading'))}">${escapeHtml(study.sectionTitles?.showcase || 'Prototype screens')}</h3>${study.showcaseNote ? `<div class="case-study-prose case-showcase-note">${paragraphs(study.showcaseNote)}</div>` : ''}<div class="project-gallery">${showcasePortals.length ? renderStudyPortals(showcasePortals,path=>resolveAsset(path,options),project.id) : renderStudyPictures(showcase,path=>resolveAsset(path,options),'Prototype screens')}</div></section>` : ''}
+      ${hasShowcase ? `<section class="case-study-section case-study-showcase" id="${escapeHtml(sectionId('showcase'))}" aria-labelledby="${escapeHtml(sectionId('showcase-heading'))}"><p class="case-study-label">The prototype</p><h3 id="${escapeHtml(sectionId('showcase-heading'))}">${escapeHtml(study.sectionTitles?.showcase || 'Prototype screens')}</h3>${study.showcaseNote ? `<div class="case-study-prose case-showcase-note">${paragraphs(study.showcaseNote)}</div>` : ''}${prototypeLink}<div class="project-gallery">${showcasePortals.length ? renderStudyPortals(showcasePortals,path=>resolveAsset(path,options),project.id) : renderStudyPictures(showcase,path=>resolveAsset(path,options),'Prototype screens')}</div></section>` : ''}
       <section class="case-study-evidence"><h3>Explore the details</h3><p class="case-evidence-intro">Open the supporting research, structure, and source material.</p>${['needs','requirements','research','sitemap','planningArtifacts','wireframe','evaluation','competitive','productDetails'].map(key=>studyDisclosure(study,key,renderStudySection(study,key,studyOptions))).join('')}</section>
       ${study.outcome ? `<section class="case-study-section case-study-outcome"><p class="case-study-label">The work in perspective</p><h3>${escapeHtml(study.outcome.heading || 'Where the work reached')}</h3><div class="case-study-prose">${paragraphs(study.outcome.body)}</div></section>` : ''}
       ${study.reflection ? `<section class="case-study-section case-study-reflection"><span class="case-reflection-symbol" aria-hidden="true">↗</span><div><p class="case-study-label">What I carry forward</p><div class="case-study-prose">${paragraphs(study.reflection)}</div></div></section>` : ''}
