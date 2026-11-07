@@ -122,7 +122,7 @@ function renderCaseStudy(project, options) {
   const contribution = typeof study.contribution === 'string'
     ? { paragraphs: [study.contribution] } : study.contribution;
 
-  return `<article class="case-detail case-study-detail">
+  return `<article class="case-detail case-study-detail">${cover(project, options)}
     <header class="case-study-intro">
       <div class="case-study-topline"><p class="case-eyebrow">${escapeHtml(project.company)} / ${escapeHtml(project.collaboration)}</p>${project.year ? `<span class="case-study-year">${escapeHtml(project.year)}</span>` : ''}</div>
       <p class="case-study-label">Project case study</p>
