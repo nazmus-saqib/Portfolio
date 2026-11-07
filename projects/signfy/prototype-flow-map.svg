@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title description">
+<title id="title">Signfy prototype task flow</title><desc id="description">Selected connections traced from the original Figma archive: text and speech input to an outcome, sign conversion to text, Inbox to a video call, and navigation to tutorial topics.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0L6 3L0 6" fill="none" stroke="#649786" stroke-width="1.3"/></marker></defs>
+<rect width="1200" height="800" rx="20" fill="#f7fbf8"/>
+<g font-family="Arial,sans-serif" fill="#214d40">
+<text x="44" y="56" font-size="17" fill="#348369" letter-spacing="1.4">SIGNFY / PROTOTYPE FLOW</text>
+<text x="44" y="104" font-size="30" font-weight="600">Five tasks. Clear paths into the conversation.</text>
+<text x="44" y="141" font-size="16" fill="#55796c">Opening sequence → Translate workspace</text>
+<text x="44" y="231" font-size="17" font-weight="600">Text input</text>
+<rect x="213" y="190" width="206" height="70" rx="12" fill="#16ad7d" stroke="#16ad7d"/>
+<text x="316" y="231" text-anchor="middle" font-size="15" fill="#fff">Translate</text>
+<path d="M423 225h17" fill="none" stroke="#649786" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="445" y="190" width="206" height="70" rx="12" fill="#e8f3ed" stroke="#b8d9c8"/>
+<text x="548" y="231" text-anchor="middle" font-size="15" fill="#214d40">Writing text</text>
+<path d="M655 225h17" fill="none" stroke="#649786" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="677" y="190" width="206" height="70" rx="12" fill="#e8f3ed" stroke="#b8d9c8"/>
+<text x="780" y="231" text-anchor="middle" font-size="15" fill="#214d40">Outcome</text>
+<text x="44" y="336" font-size="17" font-weight="600">Speech input</text>
+<rect x="213" y="295" width="206" height="70" rx="12" fill="#16ad7d" stroke="#16ad7d"/>
+<text x="316" y="336" text-anchor="middle" font-size="15" fill="#fff">Translate</text>
+<path d="M423 330h17" fill="none" stroke="#649786" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="445" y="295" width="206" height="70" rx="12" fill="#e8f3ed" stroke="#b8d9c8"/>
+<text x="548" y="336" text-anchor="middle" font-size="15" fill="#214d40">Speech input</text>
+<path d="M655 330h17" fill="none" stroke="#649786" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="677" y="295" width="206" height="70" rx="12" fill="#e8f3ed" stroke="#b8d9c8"/>
+<text x="780" y="336" text-anchor="middle" font-size="15" fill="#214d40">Outcome</text>
+<text x="44" y="441" font-size="17" font-weight="600">Sign input</text>
+<rect x="213" y="400" width="206" height="70" rx="12" fill="#16ad7d" stroke="#16ad7d"/>
+<text x="316" y="441" text-anchor="middle" font-size="15" fill="#fff">Scan to Convert</text>
+<path d="M423 435h17" fill="none" stroke="#649786" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="445" y="400" width="206" height="70" rx="12" fill="#e8f3ed" stroke="#b8d9c8"/>
+<text x="548" y="441" text-anchor="middle" font-size="15" fill="#214d40">Converted text</text>
+<text x="44" y="546" font-size="17" font-weight="600">Video call</text>
+<rect x="213" y="505" width="206" height="70" rx="12" fill="#16ad7d" stroke="#16ad7d"/>
+<text x="316" y="546" text-anchor="middle" font-size="15" fill="#fff">Inbox</text>
+<path d="M423 540h17" fill="none" stroke="#649786" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="445" y="505" width="206" height="70" rx="12" fill="#e8f3ed" stroke="#b8d9c8"/>
+<text x="548" y="546" text-anchor="middle" font-size="15" fill="#214d40">Chat</text>
+<path d="M655 540h17" fill="none" stroke="#649786" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="677" y="505" width="206" height="70" rx="12" fill="#e8f3ed" stroke="#b8d9c8"/>
+<text x="780" y="546" text-anchor="middle" font-size="15" fill="#214d40">Video Call</text>
+<path d="M887 540h17" fill="none" stroke="#649786" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="909" y="505" width="206" height="70" rx="12" fill="#e8f3ed" stroke="#b8d9c8"/>
+<text x="1012" y="546" text-anchor="middle" font-size="15" fill="#214d40">On Call</text>
+<text x="44" y="651" font-size="17" font-weight="600">Learning</text>
+<rect x="213" y="610" width="206" height="70" rx="12" fill="#16ad7d" stroke="#16ad7d"/>
+<text x="316" y="651" text-anchor="middle" font-size="15" fill="#fff">Navigation</text>
+<path d="M423 645h17" fill="none" stroke="#649786" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="445" y="610" width="206" height="70" rx="12" fill="#e8f3ed" stroke="#b8d9c8"/>
+<text x="548" y="651" text-anchor="middle" font-size="15" fill="#214d40">Tutorial topics</text>
+<text x="44" y="757" font-size="14" fill="#55796c">Selected routes reconstructed from original connections. Multiple screen and access variants coexist.</text>
+</g></svg>
