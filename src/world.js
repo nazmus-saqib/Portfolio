@@ -37,13 +37,13 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
   sunlight.shadow.normalBias = 0.025;
   sunlight.shadow.radius = 4;
   scene.add(sunlight);
-  const coolLight = new THREE.DirectionalLight(0xf3f6ff, 1.2);
+  const coolLight = new THREE.DirectionalLight(0xf0faff, 1.2);
   coolLight.position.set(8, 6, -8);
   scene.add(coolLight);
 
   const palette = {
-    stone: 0xffffff, edge: 0xe8ebef, chalk: 0xffffff, navy: 0x24334d,
-    sage: 0xb9c8b5, moss: 0x7b9474, terracotta: 0xd69c7a, amber: 0x3457d5,
+    stone: 0xffffff, edge: 0xe8ebef, chalk: 0xffffff, navy: 0x173a55,
+    sage: 0xb9c8b5, moss: 0x7b9474, terracotta: 0xd69c7a, amber: 0x1479b8,
     paper: 0xffffff, gray: 0x8694a7, dark: 0x222c2d, skin: 0xb87b52,
     wood: 0xe5c79e, white: 0xffffff,
   };
@@ -89,7 +89,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), b.sub(a).normalize());
     return mesh;
   }
-  function signTexture(text, background = '#ffffff', color = '#24334d', width = 512, height = 160) {
+  function signTexture(text, background = '#ffffff', color = '#173a55', width = 512, height = 160) {
     const element = document.createElement('canvas');
     element.width = width; element.height = height;
     const ctx = element.getContext('2d');
@@ -140,7 +140,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
   const shadowCanvas = document.createElement('canvas'); shadowCanvas.width = 128; shadowCanvas.height = 128;
   const sctx = shadowCanvas.getContext('2d');
   const gradient = sctx.createRadialGradient(64, 64, 12, 64, 64, 63);
-  gradient.addColorStop(0, 'rgba(36,51,77,0.08)'); gradient.addColorStop(1, 'rgba(36,51,77,0)');
+  gradient.addColorStop(0, 'rgba(23,58,85,0.08)'); gradient.addColorStop(1, 'rgba(23,58,85,0)');
   sctx.fillStyle = gradient; sctx.fillRect(0, 0, 128, 128);
   const groundShadow = new THREE.Mesh(new THREE.PlaneGeometry(21, 18), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(shadowCanvas), transparent: true, depthWrite: false }));
   groundShadow.rotation.x = -Math.PI / 2; groundShadow.position.y = -1.3; scene.add(groundShadow);
@@ -218,7 +218,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     const group = stationGroups[1] || stationGroups[0];
     box(group, 2.65, 1.92, 0.16, 0, 1.25, -0.97, 'navy', 0.09);
     box(group, 2.2, 1.35, 0.045, 0, 1.34, -0.87, 'sage', 0.04);
-    sign(group, 'STUDIO', 1.06, 0.3, 0, 2, -0.872, '#3457d5', '#ffffff');
+    sign(group, 'STUDIO', 1.06, 0.3, 0, 2, -0.872, '#1479b8', '#ffffff');
     [-0.68, 0, 0.68].forEach((x, i) => {
       const sheet = box(group, 0.46, 0.66, 0.025, x, 1.34, -0.83, i === 1 ? 'paper' : 'chalk', 0.015);
       sheet.rotation.z = (i - 1) * 0.04;
@@ -250,9 +250,9 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
   {
     const group = stationGroups[3] || stationGroups[0];
     group.name = 'automated-fulfillment-cell';
-    const alloy = material(0xe9edf4, { metalness: 0.32, roughness: 0.42 });
-    const cyan = material(0xb7c6fa, { emissive: 0x3457d5, emissiveIntensity: 0.45, roughness: 0.35 });
-    const graphite = material(0x243b6b, { metalness: 0.35, roughness: 0.48 });
+    const alloy = material(0xe8f2f8, { metalness: 0.32, roughness: 0.42 });
+    const cyan = material(0xa6ddf8, { emissive: 0x3aa7de, emissiveIntensity: 0.45, roughness: 0.35 });
+    const graphite = material(0x1e5273, { metalness: 0.35, roughness: 0.48 });
     const parcel = (parent, x, y, z, size = 0.34) => {
       const item = new THREE.Group(); item.position.set(x, y, z); parent.add(item);
       box(item, size, size * 0.8, size * 0.86, 0, 0, 0, 'wood', 0.025);
@@ -281,7 +281,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     });
     box(scanner, 0.25, 0.21, 1.25, 0, 1.89, 0.6, graphite, 0.04);
     box(scanner, 0.05, 0.035, 1.02, -0.139, 1.86, 0.6, cyan, 0.009);
-    const scanMaterial = new THREE.MeshBasicMaterial({ color: 0xa9bcff, transparent: true, opacity: 0.13, side: THREE.DoubleSide, depthWrite: false });
+    const scanMaterial = new THREE.MeshBasicMaterial({ color: 0x70c7f0, transparent: true, opacity: 0.13, side: THREE.DoubleSide, depthWrite: false });
     const scan = new THREE.Mesh(new THREE.PlaneGeometry(1.02, 0.89), scanMaterial);
     scan.rotation.y = Math.PI / 2; scan.position.set(0, 1.34, 0.6); scanner.add(scan);
 
@@ -312,7 +312,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
       box(group, 0.62, 0.32, 0.045, 1.02, y, -0.445, alloy, 0.025);
       box(group, 0.42, 0.025, 0.02, 1.02, y - 0.09, -0.413, cyan, 0.006);
     });
-    sign(group, 'AUTO FULFILLMENT', 1.55, 0.25, 0.08, 2.21, -0.66, '#24334d', '#ffffff');
+    sign(group, 'AUTO FULFILLMENT', 1.55, 0.25, 0.08, 2.21, -0.66, '#173a55', '#ffffff');
     box(group, 1.74, 0.35, 0.1, 0.08, 2.21, -0.73, graphite, 0.04);
     cylinder(group, 0.035, 0.035, 0.39, 0.8, 1.87, -0.75, alloy, 12);
 
@@ -339,7 +339,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     const group = stationGroups[0];
     box(group, 2.4, 1.55, 0.14, 0, 1.23, -0.67, 'terracotta', 0.09);
     box(group, 2.1, 1.28, 0.03, 0, 1.24, -0.58, 'paper');
-    sign(group, 'CREATE', 1.45, 0.27, 0, 1.72, -0.56, '#ffffff', '#3457d5');
+    sign(group, 'CREATE', 1.45, 0.27, 0, 1.72, -0.56, '#ffffff', '#1479b8');
     [-0.65, 0, 0.65].forEach((x, i) => {
       box(group, 0.46, 0.66, 0.025, x, 1.14, -0.54, ['navy', 'sage', 'wood'][i], 0.03);
       cylinder(group, 0.12, 0.12, 0.015, x, 1.22, -0.52, 'paper', 20).rotation.x = Math.PI / 2;
@@ -358,7 +358,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     const group = stationGroups[2];
     box(group, 2.45, 1.68, 0.16, 0, 1.15, -0.67, 'sage', 0.1);
     box(group, 2.17, 1.37, 0.035, 0, 1.16, -0.57, 'chalk');
-    sign(group, 'CONNECTED', 1.8, 0.24, 0, 1.73, -0.54, '#ffffff', '#3457d5');
+    sign(group, 'CONNECTED', 1.8, 0.24, 0, 1.73, -0.54, '#ffffff', '#1479b8');
     box(group, 0.53, 0.32, 0.04, 0, 1.43, -0.53, 'navy');
     [-0.67, 0, 0.67].forEach((x, i) => {
       lineBetween(group, [0, 1.25, -0.5], [x, 0.9, -0.5], 0.014, 'wood');
@@ -406,7 +406,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     cable([[-1.1, 1.91, -0.27], [-1.1, 1.72, -0.13], [-0.64, 1.7, -0.11], [-0.64, 1.58, -0.26]], 'amber');
     cable([[-0.89, 1.91, -0.27], [-0.89, 1.62, -0.09], [-0.53, 1.55, -0.08], [-0.53, 1.26, -0.26]], 'sage');
     cable([[-0.52, 0.64, -0.27], [-0.33, 0.41, -0.14], [0.35, 0.32, -0.1], [1.15, 0.42, 0.19]], 'navy', 0.023);
-    sign(rack, 'NETWORK', 0.83, 0.22, 0, 2.22, 0.392, '#24334d', '#ffffff');
+    sign(rack, 'NETWORK', 0.83, 0.22, 0, 2.22, 0.392, '#173a55', '#ffffff');
 
     // A desktop computer, keyboard, tower and setup screen explain the other
     // half of the role without borrowing the laptop used by the UX workplaces.
@@ -422,7 +422,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     box(group, 0.27, 0.55, 0.43, 1.27, 0.6, 0.44, 'gray', 0.035);
     box(group, 0.19, 0.43, 0.025, 1.27, 0.62, 0.67, 'navy', 0.015);
     sphere(group, 0.018, 1.27, 0.77, 0.691, 'sage');
-    sign(group, 'SETUP', 0.53, 0.14, 0.93, 1.55, 0.351, '#ffffff', '#3457d5');
+    sign(group, 'SETUP', 0.53, 0.14, 0.93, 1.55, 0.351, '#ffffff', '#1479b8');
     box(group, 0.5, 0.045, 0.015, 0.93, 1.4, 0.355, 'stone', 0.008);
     box(group, 0.37, 0.045, 0.018, 0.865, 1.4, 0.367, 'sage', 0.008);
     box(group, 0.32, 0.025, 0.012, 0.93, 1.3, 0.355, 'gray', 0.005);
@@ -437,7 +437,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     box(group, 2.38, 1.48, 0.14, 0, 1.08, -0.76, 'chalk', 0.08);
     box(group, 2.63, 0.14, 0.66, 0, 1.91, -0.48, 'terracotta');
     [-0.9, -0.45, 0, 0.45, 0.9].forEach(x => box(group, 0.23, 0.04, 0.66, x, 2, -0.48, 'paper', 0.01));
-    sign(group, 'CUSTOMER FIRST', 1.9, 0.25, 0, 1.53, -0.67, '#ffffff', '#24334d');
+    sign(group, 'CUSTOMER FIRST', 1.9, 0.25, 0, 1.53, -0.67, '#ffffff', '#173a55');
     box(group, 2.35, 0.8, 0.8, 0, 0.7, 0.52, 'wood', 0.08);
     box(group, 2.52, 0.1, 0.95, 0, 1.14, 0.52, 'navy', 0.05);
     const register = box(group, 0.53, 0.42, 0.06, 0.5, 1.45, 0.39, 'navy'); register.rotation.x = -0.15;
@@ -455,7 +455,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     const group = stationGroups[6] || stationGroups.at(-1);
     box(group, 2.4, 1.55, 0.12, -0.05, 1.38, -0.7, 'wood', 0.05);
     box(group, 2.2, 1.35, 0.035, -0.05, 1.38, -0.615, 'paper', 0.025);
-    sign(group, 'MAKE IT HAPPEN', 1.75, 0.23, -0.05, 1.89, -0.59, '#ffffff', '#24334d');
+    sign(group, 'MAKE IT HAPPEN', 1.75, 0.23, -0.05, 1.89, -0.59, '#ffffff', '#173a55');
     for (let i = 0; i < 3; i++) {
       const x = -0.76 + i * 0.71;
       box(group, 0.5, 0.045, 0.018, x, 1.65, -0.59, i === 2 ? 'sage' : 'terracotta', 0.01);
@@ -588,7 +588,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     const brow = box(personBody, 0.07, 0.025, 0.025, x, 1.62, 0.215, darkHair, 0.01);
     brow.rotation.z = x > 0 ? 0.06 : -0.06;
   });
-  // The cobalt location halo stays under the person as he walks.
+  // The sky-blue location halo stays under the person as he walks.
   const halo = new THREE.Mesh(new THREE.RingGeometry(0.35, 0.39, 48), new THREE.MeshBasicMaterial({ color: palette.amber, transparent: true, opacity: 0.72, side: THREE.DoubleSide, depthWrite: false }));
   halo.rotation.x = -Math.PI / 2; halo.position.y = 0.194; world.add(halo);
   person.position.set(...stationData[0].stop);

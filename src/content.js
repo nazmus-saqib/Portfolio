@@ -106,7 +106,7 @@ export const projects = [
     outcome: 'Ongoing end-to-end coordination of client projects—from a clear requirement and supplier decision through production, delivery, and financial follow-up—with clients and internal colleagues kept informed throughout.',
     tools: ['Trello', 'Microsoft Excel', 'Wave', 'Email & phone'],
     image: null,
-    accent: '#F1F3F8',
+    accent: '#EAF6FD',
     featured: true,
   },
   {
@@ -128,7 +128,7 @@ export const projects = [
     outcome: 'A connected set of Adobe XD prototypes across the ticketing and administration experience, presented to the client.',
     tools: ['Adobe XD', 'User flows', 'Wireframing', 'Prototyping'],
     image: '/projects/biwta.webp',
-    accent: '#F1F3F8',
+    accent: '#EAF6FD',
     featured: false,
     gallery: [
       { src: '/projects/biwta.webp', alt: 'BIWTA passenger ticketing landing-page prototype' },
@@ -156,7 +156,7 @@ export const projects = [
     outcome: 'Design contributions to a team product, with prototype material covering the dashboard, rooms, roles, users, subscriptions, and billing.',
     tools: ['Adobe XD', 'Competitive analysis', 'Wireframing', 'Prototyping'],
     image: '/projects/convay.webp',
-    accent: '#F1F3F8',
+    accent: '#EAF6FD',
     featured: false,
   },
   {
@@ -178,7 +178,7 @@ export const projects = [
     outcome: 'An academic concept and prototype with a supporting product and delivery proposal. The work explores translation features; it does not represent a deployed or technically validated translation engine.',
     tools: ['Figma', 'User research', 'Project planning', 'Product strategy'],
     image: '/projects/signfy.webp',
-    accent: '#F1F3F8',
+    accent: '#EAF6FD',
     featured: false,
   },
   {
@@ -200,7 +200,7 @@ export const projects = [
     outcome: 'A comprehensive team prototype covering registration, taxpayer profiles, income reporting, assets and liabilities, rebates, expenditure, and tax/payment flows.',
     tools: ['Adobe XD', 'Requirements gathering', 'Wireframing', 'Usability testing'],
     image: '/projects/ereturn.webp',
-    accent: '#F1F3F8',
+    accent: '#EAF6FD',
     featured: false,
   },
   {
@@ -221,7 +221,7 @@ export const projects = [
     outcome: 'A landing-page design and supporting UI material for Qare, an iQuantile healthcare initiative.',
     tools: ['Adobe XD', 'Visual hierarchy', 'UI components'],
     image: '/projects/qare.webp',
-    accent: '#F1F3F8',
+    accent: '#EAF6FD',
     featured: false,
   },
   {
@@ -242,7 +242,7 @@ export const projects = [
     outcome: 'Individual design work on the ODIN warehouse and fulfillment system at iStoreiSend.',
     tools: ['Figma', 'Requirements', 'Enterprise UX'],
     image: null,
-    accent: '#F1F3F8',
+    accent: '#EAF6FD',
     featured: false,
   },
   {
@@ -263,7 +263,7 @@ export const projects = [
     outcome: 'Website and organization-management design work at iQuantile. Internal system materials remain confidential.',
     tools: ['Adobe XD', 'User research', 'Information architecture', 'Prototyping'],
     image: null,
-    accent: '#F1F3F8',
+    accent: '#EAF6FD',
     featured: false,
     confidential: true,
   },
@@ -285,7 +285,7 @@ export const projects = [
     outcome: 'A group academic audit and redesign proposal, presented as a pitch project rather than a commissioned or launched website.',
     tools: ['Figma', 'UX audit', 'Prototyping'],
     image: null,
-    accent: '#F1F3F8',
+    accent: '#EAF6FD',
     featured: false,
   },
 ];
