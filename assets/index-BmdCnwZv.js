@@ -128,7 +128,7 @@
       </section>
       <section class="profile-view" id="profile-view-1" role="tabpanel" aria-labelledby="profile-tab-1" tabindex="0" ${r===1?"":"hidden"}>
         <p class="profile-view-label">WHAT I BRING TO A PROJECT</p><h3>Explore my working strengths.</h3>
-        <div class="profile-skill-list">${t.map((c,g)=>`<details class="profile-skill-card" ${g===0?"open":""}><summary><span class="profile-skill-symbol">${A(["plan","vendor","people","delivery"][g])}</span><span>${k(c.title)}</span><b aria-hidden="true">+</b></summary><div class="profile-skill-body"><p>${k(c.description)}</p><div class="profile-skill-tags">${c.items.map(h=>`<span>${k(h)}</span>`).join("")}</div></div></details>`).join("")}</div>
+        <div class="profile-skill-list">${t.map((c,g)=>`<article class="profile-skill-card"><h4 class="profile-skill-heading"><span class="profile-skill-symbol">${A(["plan","vendor","people","delivery"][g])}</span><span>${k(c.title)}</span></h4><div class="profile-skill-body"><p>${k(c.description)}</p><div class="profile-skill-tags">${c.items.map(h=>`<span>${k(h)}</span>`).join("")}</div></div></article>`).join("")}</div>
       </section>
       <section class="profile-view" id="profile-view-2" role="tabpanel" aria-labelledby="profile-tab-2" tabindex="0" ${r===2?"":"hidden"}>
         <p class="profile-view-label">TECHNICAL FOUNDATION + PROJECT TRAINING</p><h3>Learning that supports delivery.</h3>
