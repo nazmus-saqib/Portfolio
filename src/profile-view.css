@@ -40,10 +40,7 @@
 .profile-case-link > svg { width: 16px; height: 16px; }
 .profile-skill-list { display: grid; gap: 10px; }
 .profile-skill-card { min-width: 0; border: 1px solid #D2E6F2; border-radius: 8px; background: #FFFFFF; }
-.profile-skill-card > summary { display: flex; align-items: center; gap: 10px; padding: 14px 12px; list-style: none; cursor: pointer; color: #526E82; font-size: 1rem; line-height: 1.5; }
-.profile-skill-card > summary::-webkit-details-marker { display: none; }
-.profile-skill-card > summary > b { margin-left: auto; font-size: 20px; line-height: 1; font-weight: 350; color: #1072AE; }
-.profile-skill-card[open] > summary > b { transform: rotate(45deg); }
+.profile-skill-heading { display: flex; align-items: center; gap: 10px; margin: 0; padding: 14px 12px; color: #526E82; font-size: 1rem; font-weight: 500; line-height: 1.5; }
 .profile-skill-symbol { display: grid; place-items: center; flex-shrink: 0; width: 30px; height: 30px; border: 1px solid #D2E6F2; border-radius: 7px; background: #F2F9FE; color: #1072AE; }
 .profile-skill-symbol > svg { width: 19px; height: 19px; }
 .profile-skill-body { padding: 0 14px 16px; }

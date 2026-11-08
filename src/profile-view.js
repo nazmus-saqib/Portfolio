@@ -43,7 +43,7 @@ export function renderProfile({ professionalSummary = {}, skills = [], education
       </section>
       <section class="profile-view" id="profile-view-1" role="tabpanel" aria-labelledby="profile-tab-1" tabindex="0" ${selected === 1 ? '' : 'hidden'}>
         <p class="profile-view-label">WHAT I BRING TO A PROJECT</p><h3>Explore my working strengths.</h3>
-        <div class="profile-skill-list">${skills.map((skill, index) => `<details class="profile-skill-card" ${index === 0 ? 'open' : ''}><summary><span class="profile-skill-symbol">${icon(['plan', 'vendor', 'people', 'delivery'][index])}</span><span>${escapeHtml(skill.title)}</span><b aria-hidden="true">+</b></summary><div class="profile-skill-body"><p>${escapeHtml(skill.description)}</p><div class="profile-skill-tags">${skill.items.map(item => `<span>${escapeHtml(item)}</span>`).join('')}</div></div></details>`).join('')}</div>
+        <div class="profile-skill-list">${skills.map((skill, index) => `<article class="profile-skill-card"><h4 class="profile-skill-heading"><span class="profile-skill-symbol">${icon(['plan', 'vendor', 'people', 'delivery'][index])}</span><span>${escapeHtml(skill.title)}</span></h4><div class="profile-skill-body"><p>${escapeHtml(skill.description)}</p><div class="profile-skill-tags">${skill.items.map(item => `<span>${escapeHtml(item)}</span>`).join('')}</div></div></article>`).join('')}</div>
       </section>
       <section class="profile-view" id="profile-view-2" role="tabpanel" aria-labelledby="profile-tab-2" tabindex="0" ${selected === 2 ? '' : 'hidden'}>
         <p class="profile-view-label">TECHNICAL FOUNDATION + PROJECT TRAINING</p><h3>Learning that supports delivery.</h3>

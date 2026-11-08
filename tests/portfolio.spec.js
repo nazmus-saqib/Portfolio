@@ -435,9 +435,15 @@ test('profile, qualifications, projects, and contact remain in the same viewport
   await page.locator('[data-profile-tab="1"]').click();
   const skillsPanel = page.locator('#profile-view-1');
   await expect(skillsPanel).toBeVisible();
-  const vendorSkills = skillsPanel.locator('details').filter({ hasText: 'Connect the right partners.' });
-  await vendorSkills.locator('summary').click();
-  await expect(vendorSkills.getByText('Pricing negotiation', { exact: true })).toBeVisible();
+  const strengthCards = skillsPanel.locator('.profile-skill-card');
+  await expect(strengthCards).toHaveCount(4);
+  await expect(skillsPanel.locator('details, summary')).toHaveCount(0);
+  for (const card of await strengthCards.all()) {
+    await expect(card.getByRole('heading', { level: 4 })).toBeVisible();
+    await expect(card.locator('.profile-skill-body > p')).toBeVisible();
+    for (const tag of await card.locator('.profile-skill-tags > span').all()) await expect(tag).toBeVisible();
+  }
+  await expect(skillsPanel.getByText('Pricing negotiation', { exact: true })).toBeVisible();
   await page.locator('[data-profile-tab="1"]').focus();
   await page.keyboard.press('ArrowRight');
   await expect(page.locator('[data-profile-tab="2"]')).toBeFocused();
