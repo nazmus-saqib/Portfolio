@@ -1,36 +1,36 @@
-.role-contributions { min-width: 0; margin-top: 25px; padding-top: 22px; border-top: 1px solid #cbd7bb; }
+.role-contributions { min-width: 0; margin-top: 25px; padding-top: 22px; border-top: 1px solid #B7DDDA; }
 .contribution-heading { display: flex; align-items: flex-start; gap: 11px; margin-bottom: 17px; }
 .contribution-heading > div { min-width: 0; }
-.contribution-heading h3 { margin: 0; color: #304b32; font-size: 1.125rem; line-height: 1.4; font-weight: 550; letter-spacing: -.25px; }
-.contribution-heading p { margin-top: 5px; color: #60764e; font-size: .875rem; line-height: 1.5; }
-.contribution-heading-symbol { display: grid; place-items: center; flex-shrink: 0; width: 32px; height: 32px; border: 1px solid #c3d1b0; border-radius: 9px; background: #f6f9ec; color: #667f4e; }
+.contribution-heading h3 { margin: 0; color: #123E3D; font-size: 1.125rem; line-height: 1.4; font-weight: 550; letter-spacing: -.25px; }
+.contribution-heading p { margin-top: 5px; color: #496B6A; font-size: .875rem; line-height: 1.5; }
+.contribution-heading-symbol { display: grid; place-items: center; flex-shrink: 0; width: 32px; height: 32px; border: 1px solid #B7DDDA; border-radius: 9px; background: #F2FAFA; color: #047C79; }
 .contribution-heading-symbol > svg { width: 20px; height: 20px; }
 .contribution-cards { position: relative; display: grid; gap: 11px; min-width: 0; }
-.contribution-cards::before { content: ''; position: absolute; top: 31px; bottom: 31px; left: 31px; width: 1px; background: repeating-linear-gradient(to bottom, #9eb687 0 4px, transparent 4px 8px); }
-.contribution-card { position: relative; display: flex; align-items: flex-start; gap: 13px; width: 100%; min-width: 0; padding: 15px 15px 16px 12px; border: 1px solid #c8d5b8; border-radius: 11px; background: linear-gradient(115deg, #f8faef, #edf3e2); color: #3b5733; text-align: left; transition: border-color .18s ease, background .18s ease, box-shadow .18s ease; }
-.contribution-card:nth-child(even):not(.is-active) { background: linear-gradient(115deg, #f9f8ed, #f0efdf); }
-.contribution-card:hover { border-color: #9db881; box-shadow: 0 3px 11px #344f2b0a; }
-.contribution-card.is-active { border-color: #7d9c5d; background: linear-gradient(115deg, #edf4dd, #dfeacb); box-shadow: inset 0 0 0 1px #7d9c5d; }
-.contribution-card:focus-visible { outline: 2px solid #526f3b; outline-offset: 3px; }
-.contribution-node { display: grid; place-items: center; position: relative; flex-shrink: 0; width: 37px; height: 37px; border: 1px solid #bfd1a6; border-radius: 50%; background: #fbfcf3; color: #62804b; box-shadow: 0 3px 7px #29432908; transition: color .18s ease, background .18s ease, border-color .18s ease; }
+.contribution-cards::before { content: ''; position: absolute; top: 31px; bottom: 31px; left: 31px; width: 1px; background: repeating-linear-gradient(to bottom, #047C79 0 4px, transparent 4px 8px); }
+.contribution-card { position: relative; display: flex; align-items: flex-start; gap: 13px; width: 100%; min-width: 0; padding: 15px 15px 16px 12px; border: 1px solid #B7DDDA; border-radius: 11px; background: linear-gradient(115deg, #FFFFFF, #F2FAFA); color: #496B6A; text-align: left; transition: border-color .18s ease, background .18s ease, box-shadow .18s ease; }
+.contribution-card:nth-child(even):not(.is-active) { background: linear-gradient(115deg, #FFFFFF, #F7FCFC); }
+.contribution-card:hover { border-color: #047C79; box-shadow: 0 3px 11px #0B504E0A; }
+.contribution-card.is-active { border-color: #047C79; background: linear-gradient(115deg, #F2FAFA, #D9F1F0); box-shadow: inset 0 0 0 1px #047C79; }
+.contribution-card:focus-visible { outline: 2px solid #047C79; outline-offset: 3px; }
+.contribution-node { display: grid; place-items: center; position: relative; flex-shrink: 0; width: 37px; height: 37px; border: 1px solid #B7DDDA; border-radius: 50%; background: #FFFFFF; color: #047C79; box-shadow: 0 3px 7px #0B504E08; transition: color .18s ease, background .18s ease, border-color .18s ease; }
 .contribution-node > svg { width: 21px; height: 21px; }
-.contribution-card.is-active .contribution-node { background: #3d5e38; border-color: #3d5e38; color: #f4f9e8; }
+.contribution-card.is-active .contribution-node { background: #047C79; border-color: #047C79; color: #FFFFFF; }
 .contribution-card-body { display: block; min-width: 0; flex: 1; }
 .contribution-card-topline { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
-.contribution-card-topline > strong { min-width: 0; font-size: 1rem; line-height: 1.4; font-weight: 550; color: #345032; }
-.contribution-number { margin-left: auto; flex-shrink: 0; color: #6c8255; font-size: .875rem; line-height: 1.4; font-variant-numeric: tabular-nums; }
-.contribution-description { display: block; color: #526c43; font-size: 1rem; line-height: 1.6; overflow-wrap: anywhere; }
-.contribution-takeaway { min-width: 0; margin-top: 18px; padding: 17px 15px 12px; border: 1px solid #cbd8ba; border-radius: 10px; background: #f7f8ed; }
+.contribution-card-topline > strong { min-width: 0; font-size: 1rem; line-height: 1.4; font-weight: 550; color: #123E3D; }
+.contribution-number { margin-left: auto; flex-shrink: 0; color: #047C79; font-size: .875rem; line-height: 1.4; font-variant-numeric: tabular-nums; }
+.contribution-description { display: block; color: #496B6A; font-size: 1rem; line-height: 1.6; overflow-wrap: anywhere; }
+.contribution-takeaway { min-width: 0; margin-top: 18px; padding: 17px 15px 12px; border: 1px solid #B7DDDA; border-radius: 10px; background: #FFFFFF; }
 .contribution-takeaway-heading { display: flex; align-items: center; gap: 11px; margin-bottom: 10px; }
-.contribution-takeaway-mark { display: grid; place-items: center; flex-shrink: 0; width: 30px; height: 30px; border: 1px solid #d1dabe; border-radius: 8px; background: #eaf0dc; color: #6e8654; }
+.contribution-takeaway-mark { display: grid; place-items: center; flex-shrink: 0; width: 30px; height: 30px; border: 1px solid #B7DDDA; border-radius: 8px; background: #F2FAFA; color: #047C79; }
 .contribution-takeaway-mark > svg { width: 19px; height: 19px; }
-.contribution-takeaway-label { margin: 0; color: #4a653b; font-size: 1rem; line-height: 1.5; font-weight: 500; }
+.contribution-takeaway-label { margin: 0; color: #496B6A; font-size: 1rem; line-height: 1.5; font-weight: 500; }
 .contribution-takeaway-list { display: grid; gap: 3px; min-width: 0; margin: 0; padding: 0; list-style: none; }
-.contribution-takeaway-item { display: grid; grid-template-columns: 24px minmax(0, 1fr); align-items: start; gap: 10px; min-width: 0; padding: 12px 10px 12px 8px; border-left: 2px solid transparent; border-bottom: 1px solid #dce3d0; border-radius: 6px; transition: background .18s ease, border-color .18s ease; }
+.contribution-takeaway-item { display: grid; grid-template-columns: 24px minmax(0, 1fr); align-items: start; gap: 10px; min-width: 0; padding: 12px 10px 12px 8px; border-left: 2px solid transparent; border-bottom: 1px solid #B7DDDA; border-radius: 6px; transition: background .18s ease, border-color .18s ease; }
 .contribution-takeaway-item:last-child { border-bottom-color: transparent; }
-.contribution-takeaway-item.is-active { border-left-color: #7d9c5d; background: #eaf1de; }
-.contribution-takeaway-number { padding-top: 2px; color: #70875a; font-size: .875rem; line-height: 1.6; font-weight: 500; font-variant-numeric: tabular-nums; }
-.contribution-takeaway-copy { margin: 0; color: #526c43; font-size: 1rem; line-height: 1.6; overflow-wrap: anywhere; }
+.contribution-takeaway-item.is-active { border-left-color: #047C79; background: #F2FAFA; }
+.contribution-takeaway-number { padding-top: 2px; color: #047C79; font-size: .875rem; line-height: 1.6; font-weight: 500; font-variant-numeric: tabular-nums; }
+.contribution-takeaway-copy { margin: 0; color: #496B6A; font-size: 1rem; line-height: 1.6; overflow-wrap: anywhere; }
 @media (max-width: 620px) {
   .role-contributions { margin-top: 22px; padding-top: 19px; }
   .contribution-heading { gap: 9px; }
