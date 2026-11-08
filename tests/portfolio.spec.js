@@ -225,7 +225,12 @@ test('contribution cards keep all takeaways together after the work and remain i
 
   await page.locator('#reading-toggle').click();
   await expect(page.locator('#reading-view .profile-stat-grid')).toHaveCount(1);
-  await expect(page.locator('#reading-view [data-stop="identify"] .profile-stat-grid')).toBeVisible();
+  const readingIdentify = page.locator('#reading-view [data-stop="identify"]');
+  await expect(readingIdentify.locator('.profile-stat-grid')).toBeVisible();
+  await expect(readingIdentify.locator('.profile-stat-grid > .profile-stat')).toHaveCount(2);
+  await expect(readingIdentify.getByRole('list', { name: /coordination workflow/i })).toHaveCount(1);
+  await expect(readingIdentify.locator('.identify-workflow-stages')).toHaveCount(1);
+  await expect(readingIdentify.locator('[data-project="identify"]')).toHaveCount(1);
   await expect(page.locator('#reading-view .role-contributions')).toHaveCount(7);
   await expect(page.locator('#reading-view .contribution-takeaway')).toHaveCount(7);
   await expect(page.locator('#reading-view .contribution-takeaway-item')).toHaveCount(21);
@@ -502,12 +507,18 @@ test('personal profile, qualifications, Identify coordination, projects, and con
   await expect(page.locator('#company-name')).toHaveText('Identify BDA');
   const coordination = page.locator('#company-card');
   await expect(coordination.locator('.profile-stat-grid')).toBeVisible();
+  await expect(coordination.locator('.profile-stat-grid > .profile-stat')).toHaveCount(2);
   await expect(coordination.getByText('6–10', { exact: true })).toBeVisible();
   await expect(coordination.getByText('20+', { exact: true })).toBeVisible();
-  for (const stage of ['Plan', 'Align', 'Deliver']) {
-    await expect(coordination.locator('.profile-workflow').getByText(stage, { exact: true })).toBeVisible();
+  await expect(coordination.getByText('Project & Operations Coordinator', { exact: true })).toHaveCount(1);
+  await expect(coordination.getByRole('list', { name: /coordination workflow/i })).toHaveCount(1);
+  const workflow = coordination.locator('.identify-workflow-stages');
+  await expect(workflow).toHaveCount(1);
+  for (const stage of ['Understand', 'Source', 'Coordinate', 'Deliver']) {
+    await expect(workflow.getByText(stage, { exact: true })).toBeVisible();
   }
-  const coordinationStory = coordination.getByRole('button', { name: 'Read From request to delivery project story', exact: true });
+  await expect(coordination.locator('[data-project="identify"]')).toHaveCount(1);
+  const coordinationStory = coordination.getByRole('button', { name: 'Explore the flow: From request to delivery', exact: true });
   await coordinationStory.click();
   await expect(page.locator('#dialog-title')).toHaveText('From request to delivery');
   await page.locator('#dialog-close').click();

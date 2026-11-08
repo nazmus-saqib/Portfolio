@@ -4,7 +4,7 @@ import { aboutMe, careerStops, professionalSummary, formatTenure, projects, skil
 import { renderProjectCard, renderProjectDetail } from './project-view.js';
 import { bindStudyInteractions } from './case-study-sections.js';
 import { renderStoryJourney, activateStoryMilestone } from './story-view.js';
-import { renderProfile, renderCoordinationProfile, activateProfileTab } from './profile-view.js';
+import { renderProfile, renderCoordinationMetrics, activateProfileTab } from './profile-view.js';
 import { renderRoleContributions, activateRoleContribution } from './contribution-view.js';
 import { renderIdentifyWorkflow } from './workflow-view.js';
 import './project-view.css';
@@ -93,14 +93,16 @@ function companyProjectsMarkup(stop) {
 }
 
 function companyMarkup(stop, index, compact = false) {
+  const isIdentify = stop.id === 'identify';
   return `<article class="company-card ${compact?'reading-company':''} ${index===active?'is-current':''}" ${compact?'':`id="company-card"`} data-stop="${esc(stop.id)}">
     <div class="card-topline"><p class="eyebrow">${number(index)} / ${esc(stop.location)}</p><span class="employment-type">${esc(stop.employment)}</span></div>
     <h2 ${compact?'':'id="company-name"'}>${esc(stop.company)}</h2><p class="company-role" ${compact?'':'id="company-role"'}>${esc(stop.role)}</p>
     <div class="job-dates"><span ${compact?'':'id="company-dates"'}>${esc(stop.period)}</span><span class="tenure" ${compact?'':'id="company-tenure"'} title="Based on the supplied month-level dates">${esc(formatTenure(stop.start,stop.end))}</span></div>
-    ${companyProjectsMarkup(stop)}
-    <div class="company-story" ${compact?'':'id="story-copy"'}><h3>${esc(stop.headline)}</h3><p>${esc(stop.story)}</p></div>
-    ${stop.id==='identify'?renderCoordinationProfile(professionalSummary):''}
+    ${isIdentify?'':companyProjectsMarkup(stop)}
+    <div class="company-story${isIdentify?' identify-overview':''}" ${compact?'':'id="story-copy"'}>${isIdentify?'':`<h3>${esc(stop.headline)}</h3>`}<p>${esc(stop.story)}</p></div>
+    ${isIdentify?renderCoordinationMetrics():''}
     ${renderRoleContributions(stop, { selectedIndex: selectedContributions.get(stop.id) ?? 0 })}
+    ${isIdentify?companyProjectsMarkup(stop):''}
   </article>`;
 }
 

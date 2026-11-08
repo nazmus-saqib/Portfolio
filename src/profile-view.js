@@ -9,8 +9,6 @@ const iconPaths = {
   people: '<circle cx="9" cy="8" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3m2-16a3 3 0 0 1 0 6m1 4a5 5 0 0 1 3 4v2"/>',
   delivery: '<path d="m3 7 9-4 9 4-9 4-9-4Zm0 0v10l9 4 9-4V7M12 11v10m-5-16 9 4"/>',
   vendor: '<path d="m3 12 5-7h8l5 7-9 9-9-9Zm0 0h18M8 5l4 16 4-16"/>',
-  check: '<path d="m5 12 4 4L19 6"/>',
-  arrow: '<path d="M5 12h14m-6-6 6 6-6 6"/>',
   download: '<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>',
 };
 const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${iconPaths[name] || iconPaths.work}</svg>`;
@@ -20,22 +18,11 @@ const tabs = [
   { label: 'Learning', icon: 'learning' },
 ];
 
-export function renderCoordinationProfile(professionalSummary = {}) {
-  const summary = String(professionalSummary.body || 'I connect client requirements, vendors, approvals, timelines, and delivery.').split('. ')[0].replace(/\.$/, '') + '.';
-  return `<section class="profile-coordination" aria-label="Coordination at Identify BDA">
-    <p class="eyebrow">${escapeHtml(professionalSummary.headline || 'Project & Operations Coordinator')}</p>
-    <h3 class="profile-coordination-heading">People, plans,<br><em>progress.</em></h3>
-    <p class="profile-summary">${escapeHtml(summary)}</p>
-    <p class="profile-view-label">COORDINATION IN PRACTICE</p><h4 class="profile-coordination-subheading">Keep each step connected.</h4>
-    <div class="profile-stat-grid" aria-label="Current coordination experience">
-      <div class="profile-stat"><span class="profile-stat-icon">${icon('plan')}</span><strong>6–10</strong><span>Projects / month</span></div>
-      <div class="profile-stat"><span class="profile-stat-icon">${icon('people')}</span><strong>20+</strong><span>External vendors</span></div>
-    </div>
-    <ol class="profile-workflow" aria-label="Typical coordination workflow">${[['plan', 'Plan'], ['people', 'Align'], ['delivery', 'Deliver']].map(([symbol, label], index) => `<li><span class="profile-workflow-icon">${icon(symbol)}</span><strong>${label}</strong><span>${String(index + 1).padStart(2, '0')}</span></li>`).join('')}</ol>
-    <p class="profile-view-copy">At Identify BDA, I connect the client brief, vendor options, approvals, production, delivery, and financial follow-up—keeping people informed when requirements or timelines change.</p>
-    <div class="profile-work-tags"><span>${icon('check')}Clear requirements</span><span>${icon('check')}Shared next steps</span><span>${icon('check')}Dependable follow-through</span></div>
-    <button type="button" class="profile-case-link" data-project="identify" aria-label="Read From request to delivery project story">See my coordination workflow ${icon('arrow')}</button>
-  </section>`;
+export function renderCoordinationMetrics() {
+  return `<div class="profile-stat-grid" aria-label="Current coordination experience">
+    <div class="profile-stat"><span class="profile-stat-icon">${icon('plan')}</span><strong>6–10</strong><span>Projects / month</span></div>
+    <div class="profile-stat"><span class="profile-stat-icon">${icon('people')}</span><strong>20+</strong><span>External vendors</span></div>
+  </div>`;
 }
 
 export function renderProfile({ professionalSummary = {}, skills = [], education = [], certificates = [], teaching = {} } = {}, { selectedIndex = 0, assetUrl = path => path, aboutHtml = '' } = {}) {

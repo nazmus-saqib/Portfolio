@@ -32,9 +32,9 @@ const contributionThemes = {
     { title: 'Follow through', icon: 'cycle', takeaway: 'Stay in the conversation while customer issues are worked through.' },
   ],
   identify: [
-    { title: 'Align people and projects', icon: 'people', takeaway: 'Keep clients and external partners connected as projects move.' },
-    { title: 'Track decisions and timelines', icon: 'plan', takeaway: 'Keep quotations, approvals, timing, and open issues in view.' },
-    { title: 'Complete the handoff', icon: 'delivery', takeaway: 'Carry coordination through delivery and financial follow-up.' },
+    { title: 'Align people and projects', icon: 'people', takeaway: 'A shared brief gives everyone the same starting point.' },
+    { title: 'Track decisions and timelines', icon: 'plan', takeaway: 'Recording decisions makes changes easier to manage.' },
+    { title: 'Complete the handoff', icon: 'delivery', takeaway: 'The handoff is complete when the next owner has what they need.' },
   ],
 };
 

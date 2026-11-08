@@ -517,9 +517,9 @@ export const careerStops = [
     location: 'Canada',
     employment: 'Full-time · Permanent',
     headline: 'Turn the plan into progress.',
-    story: 'Today, I bring clients, vendors, designers, and delivery partners together at Identify BDA. I coordinate the work from the first request through sourcing, approvals, production, delivery, and financial follow-up, keeping people informed when plans change.',
+    story: 'I coordinate client projects from brief to delivery, keeping clients, vendors, and production partners aligned.',
     highlights: [
-      'Coordinate a typical 6–10 client projects per month and work with 20+ external vendors.',
+      'Clarify client briefs and align stakeholders on scope, priorities, and next steps.',
       'Compare quotations, negotiate pricing, track approvals and timelines, and resolve production issues.',
       'Arrange fulfillment, communicate shipment updates, and coordinate invoicing and cost reconciliation.',
     ],
