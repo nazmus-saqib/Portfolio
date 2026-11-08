@@ -115,12 +115,12 @@
     <div class="profile-explorer" id="profile-explorer" data-profile-view="${r}">
       <div class="profile-tabs" role="tablist" aria-label="Explore my professional profile">${ee.map((c,g)=>`<button type="button" class="profile-tab" id="profile-tab-${g}" data-profile-tab="${g}" role="tab" aria-controls="profile-view-${g}" aria-selected="${g===r}" tabindex="${g===r?0:-1}"><span class="profile-tab-icon">${A(c.icon)}</span><strong>${c.label}</strong></button>`).join("")}</div>
       <div class="profile-explorer-status"><span class="profile-explorer-count" aria-live="polite">View ${String(r+1).padStart(2,"0")} / 03</span><span class="profile-explorer-progress" aria-hidden="true"><i style="width:${(r+1)/ee.length*100}%"></i></span></div>
-      <div class="profile-stat-grid" aria-label="Current coordination experience">
-        <div class="profile-stat"><span class="profile-stat-icon">${A("plan")}</span><strong>6–10</strong><span>Projects / month</span></div>
-        <div class="profile-stat"><span class="profile-stat-icon">${A("people")}</span><strong>20+</strong><span>External vendors</span></div>
-      </div>
       <section class="profile-view" id="profile-view-0" role="tabpanel" aria-labelledby="profile-tab-0" tabindex="0" ${r===0?"":"hidden"}>
         <p class="profile-view-label">COORDINATION IN PRACTICE</p><h3>Keep each step connected.</h3>
+        <div class="profile-stat-grid" aria-label="Current coordination experience">
+          <div class="profile-stat"><span class="profile-stat-icon">${A("plan")}</span><strong>6–10</strong><span>Projects / month</span></div>
+          <div class="profile-stat"><span class="profile-stat-icon">${A("people")}</span><strong>20+</strong><span>External vendors</span></div>
+        </div>
         <ol class="profile-workflow" aria-label="Typical coordination workflow">${[["plan","Plan"],["people","Align"],["delivery","Deliver"]].map(([c,g],h)=>`<li><span class="profile-workflow-icon">${A(c)}</span><strong>${g}</strong><span>${String(h+1).padStart(2,"0")}</span></li>`).join("")}</ol>
         <p class="profile-view-copy">At Identify BDA, I connect the client brief, vendor options, approvals, production, delivery, and financial follow-up—keeping people informed when requirements or timelines change.</p>
         <div class="profile-work-tags"><span>${A("check")}Clear requirements</span><span>${A("check")}Shared next steps</span><span>${A("check")}Dependable follow-through</span></div>
