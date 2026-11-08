@@ -17,6 +17,7 @@ test('single-viewport company journey preserves public assets and résumé links
   await expect(page.locator('#company-card .eyebrow')).toHaveText('01 / Dhaka, Bangladesh');
   await expect(page.locator('#about-card')).toHaveCount(0);
   await expect(page.locator('#world')).toHaveAttribute('data-active-station', '0');
+  await expect(page.locator('#panel-nav [data-panel="profile"]')).toHaveText('About Me');
   await expect(page.locator('.world-label')).toHaveCount(7);
 
   const icon = await page.locator('link[rel="icon"]').getAttribute('href');

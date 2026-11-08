@@ -66,7 +66,7 @@ async function assertContributionDescriptionsVisible(page, stop) {
   return contribution;
 }
 
-test('Journey starts at the first employer and About Me lives under Profile', async ({ page, baseURL }) => {
+test('Journey starts at the first employer and About Me contains the personal Profile', async ({ page, baseURL }) => {
   await loadWorld(page, baseURL);
   await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
   await expect(page.locator('#company-card .eyebrow')).toHaveText('01 / Dhaka, Bangladesh');
@@ -75,12 +75,14 @@ test('Journey starts at the first employer and About Me lives under Profile', as
   await expect(page.locator('#previous-stop')).toBeDisabled();
   await expect(page.locator('#stop-counter')).toHaveText('01 / 07');
 
+  await expect(page.locator('#panel-nav [data-panel="profile"]')).toHaveText('About Me');
   await page.locator('[data-panel="profile"]').click();
-  await expect(page.getByRole('tab', { name: 'About Me', exact: true })).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('tab', { name: 'Profile', exact: true })).toHaveAttribute('aria-selected', 'true');
   const about = page.locator('#profile-view-0 #about-card');
   await expect(about).toBeVisible();
-  await expect(page.locator('.profile-stat-grid')).toBeHidden();
-  for (const text of ['About Me & My Story', 'Nazmus Saqib', 'Project & Operations Coordinator', 'Identify BDA', 'Bringing it all together.', 'Bangladesh', 'Canada', '2022', 'Centennial College', 'Sir Sandford Fleming College', 'October 2024', 'Assistant Project Manager']) {
+  await expect(page.locator('.profile-stat-grid')).toHaveCount(0);
+  await expect(about.locator('.about-position')).toHaveCount(0);
+  for (const text of ['About Me & My Story', 'Nazmus Saqib', 'Bringing it all together.', 'Bangladesh', 'Canada', '2022', 'Centennial College', 'Sir Sandford Fleming College', 'October 2024', 'Assistant Project Manager']) {
     await expect(about).toContainText(text);
   }
   await page.getByRole('button', { name: 'Read my story: Bangladesh to Canada', exact: true }).click();
@@ -123,7 +125,7 @@ test('Journey starts at the first employer and About Me lives under Profile', as
   await expect(page.locator('#previous-stop')).toBeDisabled();
 
   await page.locator('[data-panel="profile"]').click();
-  await page.getByRole('tab', { name: 'About Me', exact: true }).click();
+  await page.getByRole('tab', { name: 'Profile', exact: true }).click();
   await expect(page.locator('#panel-nav [data-panel="profile"]')).toHaveAttribute('aria-pressed', 'true');
   await expect(about).toBeVisible();
   await page.locator('[data-panel="journey"]').click();
@@ -138,7 +140,7 @@ test('Journey starts at the first employer and About Me lives under Profile', as
   await expect(page.locator('#reading-view > .reading-company').first()).toContainText('01 / Dhaka, Bangladesh');
   await expect(page.locator('#reading-view #about-card')).toHaveCount(0);
   await page.locator('[data-panel="profile"]').click();
-  await page.getByRole('tab', { name: 'About Me', exact: true }).click();
+  await page.getByRole('tab', { name: 'Profile', exact: true }).click();
   await expect(about).toBeVisible();
   await page.locator('[data-story-milestone="2"]').click();
   await about.getByText('In October 2024,', { exact: false }).scrollIntoViewIfNeeded();
@@ -152,6 +154,7 @@ test('seven employer cards preserve chronology, accurate roles, and always-visib
   await expect(page.locator('#company-dates')).toHaveText('Jan 2018–Jul 2020');
   await expect(page.locator('#company-tenure')).toHaveText('2 yrs 7 mos');
   await expect(page.locator('#previous-stop')).toBeDisabled();
+  await expect(page.locator('.profile-stat-grid')).toHaveCount(0);
   await assertContributionDescriptionsVisible(page, careerStops[0]);
 
   for (let index = 1; index < companies.length; index += 1) {
@@ -160,6 +163,7 @@ test('seven employer cards preserve chronology, accurate roles, and always-visib
     await expect(page.locator('#world')).toHaveAttribute('data-active-company', companies[index]);
     await expect(page.getByRole('button', { name: `Visit company ${index + 1}: ${companies[index]}`, exact: true })).toHaveAttribute('aria-pressed', 'true');
     await assertContributionDescriptionsVisible(page, careerStops[index]);
+    await expect(page.locator('#company-card .profile-stat-grid')).toHaveCount(index === companies.length - 1 ? 1 : 0);
   }
   await expect(page.locator('#company-role')).toHaveText('Project & Operations Coordinator');
   await expect(page.locator('#company-dates')).toHaveText('Oct 2024–Present');
@@ -220,6 +224,8 @@ test('contribution cards keep all takeaways together after the work and remain i
   await assertContributionDescriptionsVisible(page, careerStops[0]);
 
   await page.locator('#reading-toggle').click();
+  await expect(page.locator('#reading-view .profile-stat-grid')).toHaveCount(1);
+  await expect(page.locator('#reading-view [data-stop="identify"] .profile-stat-grid')).toBeVisible();
   await expect(page.locator('#reading-view .role-contributions')).toHaveCount(7);
   await expect(page.locator('#reading-view .contribution-takeaway')).toHaveCount(7);
   await expect(page.locator('#reading-view .contribution-takeaway-item')).toHaveCount(21);
@@ -439,25 +445,22 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 360, height: 740
   });
 }
 
-test('profile, qualifications, projects, and contact remain in the same viewport', async ({ page, request, baseURL }) => {
+test('personal profile, qualifications, Identify coordination, projects, and contact remain in one viewport', async ({ page, request, baseURL }) => {
   await loadWorld(page, baseURL);
   await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
+  await expect(page.locator('.profile-stat-grid')).toHaveCount(0);
+  await expect(page.locator('#panel-nav [data-panel="profile"]')).toHaveText('About Me');
   await page.locator('[data-panel="profile"]').click();
-  await expect(page.locator('#profile-view-0 #about-card')).toContainText('Assistant Project Manager');
-  await expect(page.locator('.profile-stat-grid')).toBeHidden();
-  await page.locator('[data-profile-tab="1"]').click();
   const detail = page.locator('#sidebar-body');
-  await expect(page.locator('#profile-view-1')).toBeVisible();
-  const experienceMetrics = detail.locator('.profile-stat-grid');
-  await expect(experienceMetrics).toBeVisible();
-  await expect(detail.getByText('6–10', { exact: true })).toBeVisible();
-  await expect(detail.getByText('20+', { exact: true })).toBeVisible();
-  await expect(detail).toContainText('Assistant Project Manager');
+  await expect(page.locator('#profile-view-0 #about-card')).toContainText('Assistant Project Manager');
+  await expect(page.locator('.profile-stat-grid')).toHaveCount(0);
+  await expect(page.locator('#profile-view-0')).toBeVisible();
+  await expect(page.locator('#profile-explorer > [role="tablist"] [role="tab"]')).toHaveText(['Profile', 'Skills', 'Learning']);
 
-  await page.locator('[data-profile-tab="2"]').click();
-  const skillsPanel = page.locator('#profile-view-2');
+  await page.locator('[data-profile-tab="1"]').click();
+  const skillsPanel = page.locator('#profile-view-1');
   await expect(skillsPanel).toBeVisible();
-  await expect(experienceMetrics).toBeHidden();
+  await expect(page.locator('.profile-stat-grid')).toHaveCount(0);
   const strengthCards = skillsPanel.locator('.profile-skill-card');
   await expect(strengthCards).toHaveCount(4);
   await expect(skillsPanel.locator('details, summary')).toHaveCount(0);
@@ -467,13 +470,13 @@ test('profile, qualifications, projects, and contact remain in the same viewport
     for (const tag of await card.locator('.profile-skill-tags > span').all()) await expect(tag).toBeVisible();
   }
   await expect(skillsPanel.getByText('Pricing negotiation', { exact: true })).toBeVisible();
-  await page.locator('[data-profile-tab="2"]').focus();
+  await page.locator('[data-profile-tab="1"]').focus();
   await page.keyboard.press('ArrowRight');
-  await expect(page.locator('[data-profile-tab="3"]')).toBeFocused();
-  await expect(page.locator('[data-profile-tab="3"]')).toHaveAttribute('aria-selected', 'true');
-  const learningPanel = page.locator('#profile-view-3');
+  await expect(page.locator('[data-profile-tab="2"]')).toBeFocused();
+  await expect(page.locator('[data-profile-tab="2"]')).toHaveAttribute('aria-selected', 'true');
+  const learningPanel = page.locator('#profile-view-2');
   await expect(learningPanel).toBeVisible();
-  await expect(experienceMetrics).toBeHidden();
+  await expect(page.locator('.profile-stat-grid')).toHaveCount(0);
   for (const qualification of ['Computer Science & Engineering', 'Sir Sandford Fleming College', 'Centennial College']) {
     await expect(learningPanel.getByText(qualification, { exact: true })).toBeVisible();
   }
@@ -482,26 +485,33 @@ test('profile, qualifications, projects, and contact remain in the same viewport
   await expect(credentials.getByText('CalArts · Coursera', { exact: false })).toBeVisible();
   await expect(credentials).toContainText('August 17, 2021');
   await expect(page.locator('#profile-explorer > .profile-view:visible')).toHaveCount(1);
-  await page.locator('[data-profile-tab="3"]').focus();
+  await page.locator('[data-profile-tab="2"]').focus();
   await page.keyboard.press('Home');
   await expect(page.locator('[data-profile-tab="0"]')).toBeFocused();
   await expect(page.locator('#profile-view-0')).toBeVisible();
-  await expect(experienceMetrics).toBeHidden();
-  await page.keyboard.press('ArrowRight');
-  await expect(page.locator('[data-profile-tab="1"]')).toBeFocused();
-  await expect(page.locator('#profile-view-1')).toBeVisible();
-  await expect(experienceMetrics).toBeVisible();
-  const coordinationStory = page.locator('#profile-view-1').getByRole('button', { name: 'Read From request to delivery project story', exact: true });
-  await coordinationStory.click();
-  await expect(page.locator('#dialog-title')).toHaveText('From request to delivery');
-  await page.locator('#dialog-close').click();
-  await expect(coordinationStory).toBeFocused();
+  await expect(page.locator('.profile-stat-grid')).toHaveCount(0);
 
   await detail.evaluate(element => element.scrollTop = element.scrollHeight);
   await expect(page.getByRole('link', { name: 'Download my résumé' })).toBeVisible();
   const pdf = await request.get(await page.getByRole('link', { name: 'Download my résumé' }).getAttribute('href'));
   expect(pdf.status()).toBe(200);
   expect((await pdf.body()).subarray(0, 5).toString()).toBe('%PDF-');
+  await assertSingleViewport(page);
+
+  await page.locator('#go-today').click();
+  await expect(page.locator('#company-name')).toHaveText('Identify BDA');
+  const coordination = page.locator('#company-card');
+  await expect(coordination.locator('.profile-stat-grid')).toBeVisible();
+  await expect(coordination.getByText('6–10', { exact: true })).toBeVisible();
+  await expect(coordination.getByText('20+', { exact: true })).toBeVisible();
+  for (const stage of ['Plan', 'Align', 'Deliver']) {
+    await expect(coordination.locator('.profile-workflow').getByText(stage, { exact: true })).toBeVisible();
+  }
+  const coordinationStory = coordination.getByRole('button', { name: 'Read From request to delivery project story', exact: true });
+  await coordinationStory.click();
+  await expect(page.locator('#dialog-title')).toHaveText('From request to delivery');
+  await page.locator('#dialog-close').click();
+  await expect(coordinationStory).toBeFocused();
   await assertSingleViewport(page);
 
   await page.locator('[data-panel="projects"]').click();
@@ -532,7 +542,7 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 640 }
     await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
     await expect(page.locator('#company-card .eyebrow')).toHaveText('01 / Dhaka, Bangladesh');
     await page.locator('[data-panel="profile"]').click();
-    await page.getByRole('tab', { name: 'About Me', exact: true }).click();
+    await page.getByRole('tab', { name: 'Profile', exact: true }).click();
     await expect(page.locator('#about-card')).toBeVisible();
     await page.locator('[data-story-milestone="2"]').click();
     await expect(page.locator('#story-panel-2')).toBeVisible();
@@ -560,10 +570,10 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 640 }
     await page.locator('#dialog-close').click();
     await assertSingleViewport(page);
     await page.locator('[data-panel="profile"]').click();
-    await page.locator('[data-profile-tab="3"]').click();
-    await expect(page.locator('#profile-view-3')).toBeVisible();
-    await expect(page.locator('#profile-view-3')).toContainText('Centennial College');
-    expect(await page.locator('#profile-view-3').evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);
+    await page.locator('[data-profile-tab="2"]').click();
+    await expect(page.locator('#profile-view-2')).toBeVisible();
+    await expect(page.locator('#profile-view-2')).toContainText('Centennial College');
+    expect(await page.locator('#profile-view-2').evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);
     await page.locator('#sidebar-body').evaluate(element => element.scrollTop = element.scrollHeight);
     await expect(page.getByRole('link', { name: 'Download my résumé' })).toBeVisible();
     await assertSingleViewport(page);
@@ -601,7 +611,7 @@ test('without WebGL the complete career and clickable projects remain available 
   await expect(page.locator('#dialog-title')).toHaveText('From request to delivery');
   await page.locator('#dialog-close').click();
   await page.locator('[data-panel="profile"]').click();
-  await page.getByRole('tab', { name: 'About Me', exact: true }).click();
+  await page.getByRole('tab', { name: 'Profile', exact: true }).click();
   await expect(page.locator('#about-card')).toContainText('Bangladesh');
   await expect(page.locator('#about-card')).toContainText('Canada');
   await assertSingleViewport(page);

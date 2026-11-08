@@ -15,42 +15,42 @@ const iconPaths = {
 };
 const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${iconPaths[name] || iconPaths.work}</svg>`;
 const tabs = [
-  { label: 'About Me', icon: 'about' },
-  { label: 'Work', icon: 'work' },
+  { label: 'Profile', icon: 'about' },
   { label: 'Skills', icon: 'skills' },
   { label: 'Learning', icon: 'learning' },
 ];
 
+export function renderCoordinationProfile(professionalSummary = {}) {
+  const summary = String(professionalSummary.body || 'I connect client requirements, vendors, approvals, timelines, and delivery.').split('. ')[0].replace(/\.$/, '') + '.';
+  return `<section class="profile-coordination" aria-label="Coordination at Identify BDA">
+    <p class="eyebrow">${escapeHtml(professionalSummary.headline || 'Project & Operations Coordinator')}</p>
+    <h3 class="profile-coordination-heading">People, plans,<br><em>progress.</em></h3>
+    <p class="profile-summary">${escapeHtml(summary)}</p>
+    <p class="profile-view-label">COORDINATION IN PRACTICE</p><h4 class="profile-coordination-subheading">Keep each step connected.</h4>
+    <div class="profile-stat-grid" aria-label="Current coordination experience">
+      <div class="profile-stat"><span class="profile-stat-icon">${icon('plan')}</span><strong>6–10</strong><span>Projects / month</span></div>
+      <div class="profile-stat"><span class="profile-stat-icon">${icon('people')}</span><strong>20+</strong><span>External vendors</span></div>
+    </div>
+    <ol class="profile-workflow" aria-label="Typical coordination workflow">${[['plan', 'Plan'], ['people', 'Align'], ['delivery', 'Deliver']].map(([symbol, label], index) => `<li><span class="profile-workflow-icon">${icon(symbol)}</span><strong>${label}</strong><span>${String(index + 1).padStart(2, '0')}</span></li>`).join('')}</ol>
+    <p class="profile-view-copy">At Identify BDA, I connect the client brief, vendor options, approvals, production, delivery, and financial follow-up—keeping people informed when requirements or timelines change.</p>
+    <div class="profile-work-tags"><span>${icon('check')}Clear requirements</span><span>${icon('check')}Shared next steps</span><span>${icon('check')}Dependable follow-through</span></div>
+    <button type="button" class="profile-case-link" data-project="identify" aria-label="Read From request to delivery project story">See my coordination workflow ${icon('arrow')}</button>
+  </section>`;
+}
+
 export function renderProfile({ professionalSummary = {}, skills = [], education = [], certificates = [], teaching = {} } = {}, { selectedIndex = 0, assetUrl = path => path, aboutHtml = '' } = {}) {
   const selected = Number.isInteger(selectedIndex) ? Math.max(0, Math.min(tabs.length - 1, selectedIndex)) : 0;
-  const summary = String(professionalSummary.body || 'I connect client requirements, vendors, approvals, timelines, and delivery.').split('. ')[0].replace(/\.$/, '') + '.';
   const targets = professionalSummary.targets?.length ? professionalSummary.targets : ['Project Coordinator', 'Assistant Project Manager'];
-  return `<section class="profile-detail" aria-label="Professional profile">
-    <header class="profile-intro" ${selected === 0 ? 'hidden' : ''}>
-      <p class="eyebrow">${escapeHtml(professionalSummary.headline || 'Project & Operations Coordinator')}</p>
-      <h2 id="profile-title">People, plans,<br><em>progress.</em></h2>
-      <p class="profile-summary">${escapeHtml(summary)}</p>
-    </header>
+  return `<section class="profile-detail" aria-label="About Me &amp; My Story">
     <div class="profile-explorer" id="profile-explorer" data-profile-view="${selected}">
-      <div class="profile-tabs" role="tablist" aria-label="Explore my professional profile">${tabs.map((tab, index) => `<button type="button" class="profile-tab" id="profile-tab-${index}" data-profile-tab="${index}" role="tab" aria-controls="profile-view-${index}" aria-selected="${index === selected}" tabindex="${index === selected ? 0 : -1}"><span class="profile-tab-icon">${icon(tab.icon)}</span><strong>${tab.label}</strong></button>`).join('')}</div>
+      <div class="profile-tabs" role="tablist" aria-label="Explore About Me">${tabs.map((tab, index) => `<button type="button" class="profile-tab" id="profile-tab-${index}" data-profile-tab="${index}" role="tab" aria-controls="profile-view-${index}" aria-selected="${index === selected}" tabindex="${index === selected ? 0 : -1}"><span class="profile-tab-icon">${icon(tab.icon)}</span><strong>${tab.label}</strong></button>`).join('')}</div>
       <div class="profile-explorer-status"><span class="profile-explorer-count" aria-live="polite">View ${String(selected + 1).padStart(2, '0')} / ${String(tabs.length).padStart(2, '0')}</span><span class="profile-explorer-progress" aria-hidden="true"><i style="width:${((selected + 1) / tabs.length) * 100}%"></i></span></div>
       <section class="profile-view profile-view-about" id="profile-view-0" role="tabpanel" aria-labelledby="profile-tab-0" tabindex="0" ${selected === 0 ? '' : 'hidden'}>${aboutHtml}</section>
       <section class="profile-view" id="profile-view-1" role="tabpanel" aria-labelledby="profile-tab-1" tabindex="0" ${selected === 1 ? '' : 'hidden'}>
-        <p class="profile-view-label">COORDINATION IN PRACTICE</p><h3>Keep each step connected.</h3>
-        <div class="profile-stat-grid" aria-label="Current coordination experience">
-          <div class="profile-stat"><span class="profile-stat-icon">${icon('plan')}</span><strong>6–10</strong><span>Projects / month</span></div>
-          <div class="profile-stat"><span class="profile-stat-icon">${icon('people')}</span><strong>20+</strong><span>External vendors</span></div>
-        </div>
-        <ol class="profile-workflow" aria-label="Typical coordination workflow">${[['plan', 'Plan'], ['people', 'Align'], ['delivery', 'Deliver']].map(([symbol, label], index) => `<li><span class="profile-workflow-icon">${icon(symbol)}</span><strong>${label}</strong><span>${String(index + 1).padStart(2, '0')}</span></li>`).join('')}</ol>
-        <p class="profile-view-copy">At Identify BDA, I connect the client brief, vendor options, approvals, production, delivery, and financial follow-up—keeping people informed when requirements or timelines change.</p>
-        <div class="profile-work-tags"><span>${icon('check')}Clear requirements</span><span>${icon('check')}Shared next steps</span><span>${icon('check')}Dependable follow-through</span></div>
-        <button type="button" class="profile-case-link" data-project="identify" aria-label="Read From request to delivery project story">See my coordination workflow ${icon('arrow')}</button>
-      </section>
-      <section class="profile-view" id="profile-view-2" role="tabpanel" aria-labelledby="profile-tab-2" tabindex="0" ${selected === 2 ? '' : 'hidden'}>
         <p class="profile-view-label">WHAT I BRING TO A PROJECT</p><h3>Explore my working strengths.</h3>
         <div class="profile-skill-list">${skills.map((skill, index) => `<article class="profile-skill-card"><h4 class="profile-skill-heading"><span class="profile-skill-symbol">${icon(['plan', 'vendor', 'people', 'delivery'][index])}</span><span>${escapeHtml(skill.title)}</span></h4><div class="profile-skill-body"><p>${escapeHtml(skill.description)}</p><div class="profile-skill-tags">${skill.items.map(item => `<span>${escapeHtml(item)}</span>`).join('')}</div></div></article>`).join('')}</div>
       </section>
-      <section class="profile-view" id="profile-view-3" role="tabpanel" aria-labelledby="profile-tab-3" tabindex="0" ${selected === 3 ? '' : 'hidden'}>
+      <section class="profile-view" id="profile-view-2" role="tabpanel" aria-labelledby="profile-tab-2" tabindex="0" ${selected === 2 ? '' : 'hidden'}>
         <p class="profile-view-label">TECHNICAL FOUNDATION + PROJECT TRAINING</p><h3>Learning that supports delivery.</h3>
         <div class="profile-education">${education.map(item => `<article class="profile-education-card"><span class="profile-education-icon">${icon('learning')}</span><div><p class="profile-qualification">${escapeHtml(item.qualification)}</p><h4>${escapeHtml(item.title)}</h4><p>${escapeHtml(item.school)}</p></div></article>`).join('')}</div>
         <details class="profile-learning-credentials credentials"><summary>Courses & knowledge sharing <span aria-hidden="true">+</span></summary>${certificates.map(certificate => `<article><h4>${escapeHtml(certificate.title)}</h4><p>${escapeHtml(certificate.issuer)} · <span>${escapeHtml(certificate.date)}</span></p></article>`).join('')}${teaching.description ? `<article><h4>${escapeHtml(teaching.title || 'Knowledge sharing')}</h4><p>${escapeHtml(teaching.description)}</p></article>` : ''}</details>
@@ -66,8 +66,6 @@ export function activateProfileTab(container, index, { focus = false } = {}) {
   const buttons = [...container.querySelectorAll('[data-profile-tab]')];
   if (!Number.isInteger(index) || index < 0 || index >= buttons.length) return false;
   container.dataset.profileView = String(index);
-  const intro = container.parentElement?.querySelector(':scope > .profile-intro');
-  if (intro) intro.hidden = index === 0;
   buttons.forEach((button, buttonIndex) => {
     const selected = buttonIndex === index;
     button.setAttribute('aria-selected', String(selected));

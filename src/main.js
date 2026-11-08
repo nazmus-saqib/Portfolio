@@ -4,7 +4,7 @@ import { aboutMe, careerStops, professionalSummary, formatTenure, projects, skil
 import { renderProjectCard, renderProjectDetail } from './project-view.js';
 import { bindStudyInteractions } from './case-study-sections.js';
 import { renderStoryJourney, activateStoryMilestone } from './story-view.js';
-import { renderProfile, activateProfileTab } from './profile-view.js';
+import { renderProfile, renderCoordinationProfile, activateProfileTab } from './profile-view.js';
 import { renderRoleContributions, activateRoleContribution } from './contribution-view.js';
 import { renderIdentifyWorkflow } from './workflow-view.js';
 import './project-view.css';
@@ -55,8 +55,8 @@ document.querySelector('#app').innerHTML = `
         <div class="touch-controls" id="touch-controls" aria-label="Move character" hidden><button type="button" data-direction="up" aria-label="Move forward">↑</button><button type="button" data-direction="left" aria-label="Move left">←</button><button type="button" data-direction="down" aria-label="Move back">↓</button><button type="button" data-direction="right" aria-label="Move right">→</button></div>
       </section>
 
-      <aside class="sidebar" aria-label="Professional profile and career details">
-        <nav class="panel-nav" id="panel-nav" aria-label="Portfolio sections"><button type="button" data-panel="journey" class="active" aria-pressed="true">Journey</button><button type="button" data-panel="profile" aria-pressed="false">Profile</button><button type="button" data-panel="projects" aria-pressed="false">Projects <span>${projects.length}</span></button><button type="button" data-panel="contact" aria-pressed="false">Contact</button></nav>
+      <aside class="sidebar" aria-label="About me and career details">
+        <nav class="panel-nav" id="panel-nav" aria-label="Portfolio sections"><button type="button" data-panel="journey" class="active" aria-pressed="true">Journey</button><button type="button" data-panel="profile" aria-pressed="false">About Me</button><button type="button" data-panel="projects" aria-pressed="false">Projects <span>${projects.length}</span></button><button type="button" data-panel="contact" aria-pressed="false">Contact</button></nav>
         <div class="sidebar-body" id="sidebar-body" tabindex="-1" role="region" aria-label="Career details"></div>
         <div class="company-navigation" id="company-navigation"><button type="button" class="icon-button" id="previous-stop" aria-label="Previous chapter">${icons.previous}</button><span id="stop-counter" aria-live="polite">01 / ${number(latest)}</span><button type="button" class="button button-secondary" id="next-stop">Next company ${icons.next}</button><button type="button" class="icon-button" id="listen" aria-label="Listen to this company story">${icons.sound}</button></div>
       </aside>
@@ -73,7 +73,7 @@ function projectNames(stop) {
 
 function aboutMarkup() {
   return `<article class="about-story" id="about-card" aria-labelledby="about-title">
-    <div class="about-overview"><header><p class="eyebrow">About Me &amp; My Story</p><h1 id="about-title">${esc(aboutMe.name)}</h1><p class="about-position"><strong>${esc(aboutMe.position)}</strong>, <span class="about-company">${esc(aboutMe.company)}</span></p><div class="about-links"><button type="button" data-about-jump="story" aria-label="Read my story: Bangladesh to Canada">My story ${icons.next}</button><button type="button" data-about-jump="goal" aria-label="My career goal">My goal ${icons.next}</button></div></header>
+    <div class="about-overview"><header><p class="eyebrow">About Me &amp; My Story</p><h1 id="about-title">${esc(aboutMe.name)}</h1><div class="about-links"><button type="button" data-about-jump="story" aria-label="Read my story: Bangladesh to Canada">My story ${icons.next}</button><button type="button" data-about-jump="goal" aria-label="My career goal">My goal ${icons.next}</button></div></header>
     <h3 class="about-tagline">${esc(aboutMe.tagline)}</h3><p class="about-statement">${esc(aboutMe.professionalStatement)}</p>
     <section class="about-motivation"><h3>What drives me</h3><p>${esc(aboutMe.motivation)}</p></section>
     <section class="about-goal"><h3 id="about-goal-title" tabindex="-1">Where I’m headed</h3><p>${esc(aboutMe.goal)}</p></section><footer class="about-signature"><span>THE WORLD OF MY WORK</span><span aria-hidden="true">/</span><strong>PEOPLE. PLANS. FOLLOW-THROUGH.</strong></footer></div>
@@ -99,6 +99,7 @@ function companyMarkup(stop, index, compact = false) {
     <div class="job-dates"><span ${compact?'':'id="company-dates"'}>${esc(stop.period)}</span><span class="tenure" ${compact?'':'id="company-tenure"'} title="Based on the supplied month-level dates">${esc(formatTenure(stop.start,stop.end))}</span></div>
     ${companyProjectsMarkup(stop)}
     <div class="company-story" ${compact?'':'id="story-copy"'}><h3>${esc(stop.headline)}</h3><p>${esc(stop.story)}</p></div>
+    ${stop.id==='identify'?renderCoordinationProfile(professionalSummary):''}
     ${renderRoleContributions(stop, { selectedIndex: selectedContributions.get(stop.id) ?? 0 })}
   </article>`;
 }
@@ -123,7 +124,7 @@ function renderPanel(resetScroll = true) {
   if(panel==='profile') body.innerHTML=profileMarkup();
   if(panel==='projects') body.innerHTML=projectsMarkup();
   if(panel==='contact') body.innerHTML=contactMarkup();
-  body.setAttribute('aria-label',`${panel==='journey'?'Company story':panel} details`);
+  body.setAttribute('aria-label',`${panel==='journey'?'Company story':panel==='profile'?'About me and my story':panel} details`);
   document.querySelectorAll('#panel-nav [data-panel]').forEach(button=>{const selected=button.dataset.panel===panel;button.classList.toggle('active',selected);button.setAttribute('aria-pressed',selected);});
   document.querySelector('#company-navigation').hidden=panel!=='journey'||reading;
   document.querySelector('.portfolio-shell').dataset.panel=panel;
