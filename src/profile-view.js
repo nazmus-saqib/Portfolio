@@ -30,12 +30,12 @@ export function renderProfile({ professionalSummary = {}, skills = [], education
     <div class="profile-explorer" id="profile-explorer" data-profile-view="${selected}">
       <div class="profile-tabs" role="tablist" aria-label="Explore my professional profile">${tabs.map((tab, index) => `<button type="button" class="profile-tab" id="profile-tab-${index}" data-profile-tab="${index}" role="tab" aria-controls="profile-view-${index}" aria-selected="${index === selected}" tabindex="${index === selected ? 0 : -1}"><span class="profile-tab-icon">${icon(tab.icon)}</span><strong>${tab.label}</strong></button>`).join('')}</div>
       <div class="profile-explorer-status"><span class="profile-explorer-count" aria-live="polite">View ${String(selected + 1).padStart(2, '0')} / 03</span><span class="profile-explorer-progress" aria-hidden="true"><i style="width:${((selected + 1) / tabs.length) * 100}%"></i></span></div>
-      <div class="profile-stat-grid" aria-label="Current coordination experience">
-        <div class="profile-stat"><span class="profile-stat-icon">${icon('plan')}</span><strong>6–10</strong><span>Projects / month</span></div>
-        <div class="profile-stat"><span class="profile-stat-icon">${icon('people')}</span><strong>20+</strong><span>External vendors</span></div>
-      </div>
       <section class="profile-view" id="profile-view-0" role="tabpanel" aria-labelledby="profile-tab-0" tabindex="0" ${selected === 0 ? '' : 'hidden'}>
         <p class="profile-view-label">COORDINATION IN PRACTICE</p><h3>Keep each step connected.</h3>
+        <div class="profile-stat-grid" aria-label="Current coordination experience">
+          <div class="profile-stat"><span class="profile-stat-icon">${icon('plan')}</span><strong>6–10</strong><span>Projects / month</span></div>
+          <div class="profile-stat"><span class="profile-stat-icon">${icon('people')}</span><strong>20+</strong><span>External vendors</span></div>
+        </div>
         <ol class="profile-workflow" aria-label="Typical coordination workflow">${[['plan', 'Plan'], ['people', 'Align'], ['delivery', 'Deliver']].map(([symbol, label], index) => `<li><span class="profile-workflow-icon">${icon(symbol)}</span><strong>${label}</strong><span>${String(index + 1).padStart(2, '0')}</span></li>`).join('')}</ol>
         <p class="profile-view-copy">At Identify BDA, I connect the client brief, vendor options, approvals, production, delivery, and financial follow-up—keeping people informed when requirements or timelines change.</p>
         <div class="profile-work-tags"><span>${icon('check')}Clear requirements</span><span>${icon('check')}Shared next steps</span><span>${icon('check')}Dependable follow-through</span></div>

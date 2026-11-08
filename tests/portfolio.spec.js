@@ -428,6 +428,8 @@ test('profile, qualifications, projects, and contact remain in the same viewport
   await page.locator('[data-panel="profile"]').click();
   const detail = page.locator('#sidebar-body');
   await expect(page.locator('#profile-view-0')).toBeVisible();
+  const experienceMetrics = detail.locator('.profile-stat-grid');
+  await expect(experienceMetrics).toBeVisible();
   await expect(detail.getByText('6–10', { exact: true })).toBeVisible();
   await expect(detail.getByText('20+', { exact: true })).toBeVisible();
   await expect(detail).toContainText('Assistant Project Manager');
@@ -435,6 +437,7 @@ test('profile, qualifications, projects, and contact remain in the same viewport
   await page.locator('[data-profile-tab="1"]').click();
   const skillsPanel = page.locator('#profile-view-1');
   await expect(skillsPanel).toBeVisible();
+  await expect(experienceMetrics).toBeHidden();
   const strengthCards = skillsPanel.locator('.profile-skill-card');
   await expect(strengthCards).toHaveCount(4);
   await expect(skillsPanel.locator('details, summary')).toHaveCount(0);
@@ -450,6 +453,7 @@ test('profile, qualifications, projects, and contact remain in the same viewport
   await expect(page.locator('[data-profile-tab="2"]')).toHaveAttribute('aria-selected', 'true');
   const learningPanel = page.locator('#profile-view-2');
   await expect(learningPanel).toBeVisible();
+  await expect(experienceMetrics).toBeHidden();
   for (const qualification of ['Computer Science & Engineering', 'Sir Sandford Fleming College', 'Centennial College']) {
     await expect(learningPanel.getByText(qualification, { exact: true })).toBeVisible();
   }
@@ -462,6 +466,7 @@ test('profile, qualifications, projects, and contact remain in the same viewport
   await page.keyboard.press('Home');
   await expect(page.locator('[data-profile-tab="0"]')).toBeFocused();
   await expect(page.locator('#profile-view-0')).toBeVisible();
+  await expect(experienceMetrics).toBeVisible();
   const coordinationStory = page.locator('#profile-view-0').getByRole('button', { name: 'Read From request to delivery project story', exact: true });
   await coordinationStory.click();
   await expect(page.locator('#dialog-title')).toHaveText('From request to delivery');
