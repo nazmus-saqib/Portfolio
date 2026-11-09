@@ -56,7 +56,7 @@ document.querySelector('#app').innerHTML = `
       </section>
 
       <aside class="sidebar" aria-label="About me and career details">
-        <nav class="panel-nav" id="panel-nav" aria-label="Portfolio sections"><button type="button" data-panel="journey" aria-pressed="false">Journey</button><button type="button" data-panel="profile" class="active" aria-pressed="true">About Me</button><button type="button" data-panel="projects" aria-pressed="false">Projects <span>${projects.length}</span></button><button type="button" data-panel="contact" aria-pressed="false">Contact</button></nav>
+        <nav class="panel-nav" id="panel-nav" aria-label="Portfolio sections"><button type="button" data-panel="journey" aria-pressed="false">Journey</button><button type="button" data-panel="profile" class="active" aria-pressed="true">About Me</button><button type="button" data-panel="projects" aria-pressed="false">Projects <span>${projects.length}</span></button><button type="button" data-panel="contact" aria-pressed="false">Let’s Talk</button></nav>
         <div class="sidebar-body" id="sidebar-body" tabindex="-1" role="region" aria-label="Career details"></div>
         <div class="company-navigation" id="company-navigation" hidden><button type="button" class="icon-button" id="previous-stop" aria-label="Previous chapter">${icons.previous}</button><span id="stop-counter" aria-live="polite">01 / ${number(latest)}</span><button type="button" class="button button-secondary" id="next-stop">Next company ${icons.next}</button><button type="button" class="icon-button" id="listen" aria-label="Listen to this company story">${icons.sound}</button></div>
       </aside>
@@ -117,7 +117,7 @@ function projectsMarkup() {
 }
 
 function contactMarkup() {
-  return `<section class="contact-panel"><p class="eyebrow">THE NEXT CONNECTION</p><h2>Let’s move<br><em>things forward.</em></h2><p>I bring a technical foundation, hands-on coordination experience, and a clear line of communication between clients, vendors, and teams.</p><p>If you’re hiring a Project Coordinator or Assistant Project Manager, I’d welcome a conversation.</p><a class="button button-dark" href="mailto:${email}">Start a conversation ${icons.arrow}</a><a class="contact-email" href="mailto:${email}">${email}</a><button type="button" class="copy-email" data-copy-email>Copy email address</button><div class="contact-links"><a href="${assetUrl('Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf')}" download>Résumé ${icons.download}</a><a href="https://github.com/nazmus-saqib" target="_blank" rel="noopener noreferrer">GitHub ${icons.arrow}</a></div><p class="contact-location">Based in Ontario, Canada.</p></section>`;
+  return `<section class="contact-panel"><p class="eyebrow">THE NEXT CONNECTION</p><h2>Let’s move<br><em>things forward.</em></h2><p>I’m a project and operations coordinator who brings clients, vendors, and teams together—from a clear brief to a completed delivery. My technical education, project management training, and hands-on experience help me coordinate requirements, approvals, timelines, costs, and changes.</p><p>I’m motivated by making the next step clear, keeping people informed, and following through to delivery.</p><p>I’m looking for Project Coordinator or Assistant Project Manager opportunities where I can help teams plan clearly, communicate well, and deliver dependable results.</p><a class="button button-dark" href="mailto:${email}">Start a conversation ${icons.arrow}</a><a class="contact-email" href="mailto:${email}">${email}</a><button type="button" class="copy-email" data-copy-email>Copy email address</button><div class="contact-links"><a href="${assetUrl('Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf')}" download>Résumé ${icons.download}</a><a href="https://github.com/nazmus-saqib" target="_blank" rel="noopener noreferrer">GitHub ${icons.arrow}</a></div><p class="contact-location">Based in Ontario, Canada.</p></section>`;
 }
 
 function renderPanel(resetScroll = true) {
@@ -126,7 +126,7 @@ function renderPanel(resetScroll = true) {
   if(panel==='profile') body.innerHTML=profileMarkup();
   if(panel==='projects') body.innerHTML=projectsMarkup();
   if(panel==='contact') body.innerHTML=contactMarkup();
-  body.setAttribute('aria-label',`${panel==='journey'?'Company story':panel==='profile'?'About me and my story':panel} details`);
+  body.setAttribute('aria-label',`${panel==='journey'?'Company story':panel==='profile'?'About me and my story':panel==='contact'?'Let’s Talk':panel} details`);
   document.querySelectorAll('#panel-nav [data-panel]').forEach(button=>{const selected=button.dataset.panel===panel;button.classList.toggle('active',selected);button.setAttribute('aria-pressed',selected);});
   document.querySelector('#company-navigation').hidden=panel!=='journey'||reading;
   document.querySelector('.portfolio-shell').dataset.panel=panel;

@@ -623,7 +623,11 @@ test('personal profile, qualifications, Identify coordination, projects, and con
   await expect(page.getByRole('dialog')).toContainText('Academic project');
   await page.locator('#dialog-close').click();
 
-  await page.locator('[data-panel="contact"]').click();
+  await page.getByRole('button', { name: 'Let’s Talk', exact: true }).click();
+  await expect(page.locator('#panel-nav [data-panel="contact"]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#sidebar-body')).toHaveAttribute('aria-label', 'Let’s Talk details');
+  await expect(page.locator('.contact-panel')).toContainText('technical education, project management training, and hands-on experience');
+  await expect(page.locator('.contact-panel')).toContainText('making the next step clear, keeping people informed, and following through to delivery');
   await expect(page.getByRole('link', { name: 'Start a conversation' })).toHaveAttribute('href', 'mailto:saqib.uxui@gmail.com');
   await expect(page.locator('#sidebar-body')).toContainText('Assistant Project Manager');
   await assertSingleViewport(page);
