@@ -25,9 +25,8 @@ export function renderCoordinationMetrics() {
   </div>`;
 }
 
-export function renderProfile({ professionalSummary = {}, skills = [], education = [], certificates = [], teaching = {} } = {}, { selectedIndex = 0, assetUrl = path => path, aboutHtml = '' } = {}) {
+export function renderProfile({ skills = [], education = [], certificates = [], teaching = {} } = {}, { selectedIndex = 0, assetUrl = path => path, aboutHtml = '' } = {}) {
   const selected = Number.isInteger(selectedIndex) ? Math.max(0, Math.min(tabs.length - 1, selectedIndex)) : 0;
-  const targets = professionalSummary.targets?.length ? professionalSummary.targets : ['Project Coordinator', 'Assistant Project Manager'];
   return `<section class="profile-detail" aria-label="About Me &amp; My Story">
     <div class="profile-explorer" id="profile-explorer" data-profile-view="${selected}">
       <div class="profile-tabs" role="tablist" aria-label="Explore About Me">${tabs.map((tab, index) => `<button type="button" class="profile-tab" id="profile-tab-${index}" data-profile-tab="${index}" role="tab" aria-controls="profile-view-${index}" aria-selected="${index === selected}" tabindex="${index === selected ? 0 : -1}"><span class="profile-tab-icon">${icon(tab.icon)}</span><strong>${tab.label}</strong></button>`).join('')}</div>
@@ -43,7 +42,6 @@ export function renderProfile({ professionalSummary = {}, skills = [], education
         <details class="profile-learning-credentials credentials"><summary>Courses & knowledge sharing <span aria-hidden="true">+</span></summary>${certificates.map(certificate => `<article><h4>${escapeHtml(certificate.title)}</h4><p>${escapeHtml(certificate.issuer)} · <span>${escapeHtml(certificate.date)}</span></p></article>`).join('')}${teaching.description ? `<article><h4>${escapeHtml(teaching.title || 'Knowledge sharing')}</h4><p>${escapeHtml(teaching.description)}</p></article>` : ''}</details>
       </section>
     </div>
-    <p class="profile-target"><span>MY NEXT OPPORTUNITY</span>${escapeHtml(targets.join(' / '))}</p>
     <a class="button button-dark profile-download" href="${escapeHtml(assetUrl('Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf'))}" download>Download my résumé ${icon('download')}</a>
   </section>`;
 }

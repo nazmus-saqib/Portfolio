@@ -1,6 +1,6 @@
 import '@fontsource-variable/dm-sans';
 import '@fontsource/instrument-serif/latin-400-italic.css';
-import { aboutMe, careerStops, professionalSummary, formatTenure, projects, skills, education, certificates, teaching } from './content.js';
+import { aboutMe, careerStops, formatTenure, projects, skills, education, certificates, teaching } from './content.js';
 import { renderProjectCard, renderProjectDetail } from './project-view.js';
 import { bindStudyInteractions } from './case-study-sections.js';
 import { renderStoryJourney, activateStoryMilestone } from './story-view.js';
@@ -73,10 +73,10 @@ function projectNames(stop) {
 
 function aboutMarkup() {
   return `<article class="about-story" id="about-card" aria-labelledby="about-title">
-    <div class="about-overview"><header><p class="eyebrow">About Me &amp; My Story</p><h1 id="about-title">${esc(aboutMe.name)}</h1><div class="about-links"><button type="button" data-about-jump="story" aria-label="Read my story: Bangladesh to Canada">My story ${icons.next}</button><button type="button" data-about-jump="goal" aria-label="My career goal">My goal ${icons.next}</button></div></header>
-    <h3 class="about-tagline">${esc(aboutMe.tagline)}</h3><p class="about-statement">${esc(aboutMe.professionalStatement)}</p>
-    <section class="about-motivation"><h3>What drives me</h3><p>${esc(aboutMe.motivation)}</p></section>
-    <section class="about-goal"><h3 id="about-goal-title" tabindex="-1">Where I’m headed</h3><p>${esc(aboutMe.goal)}</p></section><footer class="about-signature"><span>THE WORLD OF MY WORK</span><span aria-hidden="true">/</span><strong>PEOPLE. PLANS. FOLLOW-THROUGH.</strong></footer></div>
+    <div class="about-overview"><header><p class="eyebrow">About Me &amp; My Story</p><h1 id="about-title">${esc(aboutMe.name)}</h1><div class="about-links"><button type="button" data-about-jump="story" aria-label="Read my story: Bangladesh to Canada">My story ${icons.next}</button><button type="button" data-about-jump="learning" aria-label="Read about my auto repair learning">Beyond the screen ${icons.next}</button></div></header>
+    <h3 class="about-tagline">${esc(aboutMe.tagline)}</h3><p class="about-statement">${esc(aboutMe.introduction)}</p>
+    <section class="about-motivation"><h3>What keeps me curious</h3><p>${esc(aboutMe.motivation)}</p></section>
+    <section class="about-learning"><h3 id="about-learning-title" tabindex="-1">${esc(aboutMe.handsOnLearning.title)}</h3><p>${esc(aboutMe.handsOnLearning.introduction)} <a href="${esc(aboutMe.handsOnLearning.url)}" target="_blank" rel="noopener noreferrer">${esc(aboutMe.handsOnLearning.organization)}</a>.</p></section></div>
     ${renderStoryJourney(aboutMe,{selectedIndex:selectedStoryMilestone})}
   </article>`;
 }
@@ -107,7 +107,7 @@ function companyMarkup(stop, index, compact = false) {
 }
 
 function profileMarkup() {
-  return renderProfile({professionalSummary,skills,education,certificates,teaching},{selectedIndex:selectedProfileTab,assetUrl,aboutHtml:aboutMarkup()});
+  return renderProfile({skills,education,certificates,teaching},{selectedIndex:selectedProfileTab,assetUrl,aboutHtml:aboutMarkup()});
 }
 
 let projectFilter = 'all';
@@ -206,7 +206,7 @@ document.querySelector('#app').addEventListener('click',event=>{
   const contribution=event.target.closest('[data-contribution-index]');if(contribution){showRoleContribution(contribution.closest('[data-role-contributions]'),Number(contribution.dataset.contributionIndex));return;}
   const profileTab=event.target.closest('[data-profile-tab]');if(profileTab){showProfileTab(Number(profileTab.dataset.profileTab));return;}
   const milestone=event.target.closest('[data-story-milestone]');if(milestone){showStoryMilestone(Number(milestone.dataset.storyMilestone));return;}
-  const aboutJump=event.target.closest('[data-about-jump]');if(aboutJump){stopSpeech();const body=document.querySelector('#sidebar-body');const target=body.querySelector(aboutJump.dataset.aboutJump==='story'?'#about-story-title':'#about-goal-title');if(target){target.focus({preventScroll:true});body.scrollTo({top:body.scrollTop+target.getBoundingClientRect().top-body.getBoundingClientRect().top-12,behavior:motionPreference.matches?'instant':'smooth'});}return;}
+  const aboutJump=event.target.closest('[data-about-jump]');if(aboutJump){stopSpeech();const body=document.querySelector('#sidebar-body');const target=body.querySelector(aboutJump.dataset.aboutJump==='story'?'#about-story-title':'#about-learning-title');if(target){target.focus({preventScroll:true});body.scrollTo({top:body.scrollTop+target.getBoundingClientRect().top-body.getBoundingClientRect().top-12,behavior:motionPreference.matches?'instant':'smooth'});}return;}
   const project=event.target.closest('[data-project]');if(project){openProject(project.dataset.project,project);return;}
   const section=event.target.closest('button[data-panel]');if(section){if(section.dataset.panel==='profile'){selectAbout(false);}else if(section.dataset.panel==='journey'){selectStop(active);}else{stopSpeech();panel=section.dataset.panel;renderPanel();}return;}
   const category=event.target.closest('[data-filter]');if(category){projectFilter=category.dataset.filter;renderPanel(false);return;}

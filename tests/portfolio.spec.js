@@ -83,9 +83,14 @@ test('About Me opens at the centre and preserves the personal story outside the 
   await expect(about).toBeVisible();
   await expect(page.locator('.profile-stat-grid')).toHaveCount(0);
   await expect(about.locator('.about-position')).toHaveCount(0);
-  for (const text of ['About Me & My Story', 'Nazmus Saqib', 'Bringing it all together.', 'Bangladesh', 'Canada', '2022', 'Centennial College', 'Sir Sandford Fleming College', 'October 2024', 'Assistant Project Manager']) {
+  for (const text of ['About Me & My Story', 'Nazmus Saqib', 'Bringing it all together.', 'Bangladesh', 'Canada', '2022', 'Centennial College', 'Sir Sandford Fleming College', 'October 2024', 'Fine Tuned Autos']) {
     await expect(about).toContainText(text);
   }
+  await expect(about).toContainText(/two months/i);
+  await expect(about.getByRole('link', { name: 'Fine Tuned Autos', exact: true })).toHaveAttribute('href', 'https://finetunedautos.ca/');
+  await expect(about).not.toContainText('Assistant Project Manager');
+  await expect(about).not.toContainText('Where I’m headed');
+  await expect(page.locator('.profile-target')).toHaveCount(0);
   await page.getByRole('button', { name: 'Read my story: Bangladesh to Canada', exact: true }).click();
   await expect(page.locator('#about-story-title')).toBeInViewport();
   await expect(page.locator('#about-story-title')).toBeFocused();
@@ -109,9 +114,9 @@ test('About Me opens at the centre and preserves the personal story outside the 
   await page.keyboard.press('End');
   await expect(page.locator('[data-story-milestone="2"]')).toBeFocused();
   await expect(page.locator('#story-panel-2')).toBeVisible();
-  await page.getByRole('button', { name: 'My career goal', exact: true }).click();
-  await expect(page.locator('#about-goal-title')).toBeInViewport();
-  await expect(page.locator('#about-goal-title')).toBeFocused();
+  await page.getByRole('button', { name: 'Read about my auto repair learning', exact: true }).click();
+  await expect(page.locator('#about-learning-title')).toBeInViewport();
+  await expect(page.locator('#about-learning-title')).toBeFocused();
   await assertSingleViewport(page);
 
   await page.locator('[data-panel="journey"]').click();
@@ -537,7 +542,7 @@ test('personal profile, qualifications, Identify coordination, projects, and con
   await expect(page.locator('#panel-nav [data-panel="profile"]')).toHaveText('About Me');
   await page.locator('[data-panel="profile"]').click();
   const detail = page.locator('#sidebar-body');
-  await expect(page.locator('#profile-view-0 #about-card')).toContainText('Assistant Project Manager');
+  await expect(page.locator('#profile-view-0 #about-card')).toContainText('Fine Tuned Autos');
   await expect(page.locator('.profile-stat-grid')).toHaveCount(0);
   await expect(page.locator('#profile-view-0')).toBeVisible();
   await expect(page.locator('#profile-explorer > [role="tablist"] [role="tab"]')).toHaveText(['Profile', 'Skills', 'Learning']);
