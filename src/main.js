@@ -56,7 +56,7 @@ document.querySelector('#app').innerHTML = `
       </section>
 
       <aside class="sidebar" aria-label="About me and career details">
-        <nav class="panel-nav" id="panel-nav" aria-label="Portfolio sections"><button type="button" data-panel="journey" aria-pressed="false">Journey</button><button type="button" data-panel="profile" class="active" aria-pressed="true">About Me</button><button type="button" data-panel="projects" aria-pressed="false">Projects <span>${projects.length}</span></button><button type="button" data-panel="contact" aria-pressed="false">Let’s Talk</button></nav>
+        <nav class="panel-nav" id="panel-nav" aria-label="Portfolio sections"><button type="button" data-panel="profile" class="active" aria-pressed="true">About Me</button><button type="button" data-panel="journey" aria-pressed="false">Journey</button><button type="button" data-panel="projects" aria-pressed="false">Projects <span>${projects.length}</span></button><button type="button" data-panel="contact" aria-pressed="false">Contact</button></nav>
         <div class="sidebar-body" id="sidebar-body" tabindex="-1" role="region" aria-label="Career details"></div>
         <div class="company-navigation" id="company-navigation" hidden><button type="button" class="icon-button" id="previous-stop" aria-label="Previous chapter">${icons.previous}</button><span id="stop-counter" aria-live="polite">01 / ${number(latest)}</span><button type="button" class="button button-secondary" id="next-stop">Next company ${icons.next}</button><button type="button" class="icon-button" id="listen" aria-label="Listen to this company story">${icons.sound}</button></div>
       </aside>
@@ -126,7 +126,7 @@ function renderPanel(resetScroll = true) {
   if(panel==='profile') body.innerHTML=profileMarkup();
   if(panel==='projects') body.innerHTML=projectsMarkup();
   if(panel==='contact') body.innerHTML=contactMarkup();
-  body.setAttribute('aria-label',`${panel==='journey'?'Company story':panel==='profile'?'About me and my story':panel==='contact'?'Let’s Talk':panel} details`);
+  body.setAttribute('aria-label',`${panel==='journey'?'Company story':panel==='profile'?'About me and my story':panel==='contact'?'Contact':panel} details`);
   document.querySelectorAll('#panel-nav [data-panel]').forEach(button=>{const selected=button.dataset.panel===panel;button.classList.toggle('active',selected);button.setAttribute('aria-pressed',selected);});
   document.querySelector('#company-navigation').hidden=panel!=='journey'||reading;
   document.querySelector('.portfolio-shell').dataset.panel=panel;
