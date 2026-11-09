@@ -21,6 +21,14 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
   canvas.setAttribute('aria-label', 'A three-dimensional journey through Saqib’s employers, in career order. Choose a company to visit its workplace.');
   canvas.style.cssText = 'display:block;width:100%;height:100%;outline-offset:-5px;touch-action:pan-y;';
   container.append(canvas);
+  const homeTarget = document.createElement('button');
+  homeTarget.type = 'button'; homeTarget.className = 'world-home-target';
+  homeTarget.dataset.worldHome = '';
+  homeTarget.setAttribute('aria-label', 'Go to About Me');
+  homeTarget.setAttribute('aria-pressed', 'true');
+  homeTarget.title = 'About Me';
+  homeTarget.addEventListener('click', () => onSelect(-1));
+  container.append(homeTarget);
 
   const camera = new THREE.OrthographicCamera(-8, 8, 6, -6, 0.1, 100);
   const cameraBase = new THREE.Vector3(13, 15, 18);
@@ -187,7 +195,9 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
   introductionPlaza.rotation.y = Math.PI / 4;
   introductionPlaza.userData.station = -1;
   hits.push(introductionPlaza);
-  cylinder(world, 0.39, 0.39, 0.018, 0, 0.207, 0, 'amber', 48);
+  const homeMarker = cylinder(world, 0.39, 0.39, 0.018, 0, 0.207, 0, 'amber', 48);
+  homeMarker.userData.station = -1;
+  hits.push(homeMarker);
   for (let i = 0; i < 4; i++) {
     const inset = box(world, 0.05, 0.015, 0.22, Math.sin(i * Math.PI / 2) * 0.57, 0.205, Math.cos(i * Math.PI / 2) * 0.57, 'navy', 0.01);
     inset.rotation.y = i * Math.PI / 2;
@@ -493,13 +503,13 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
   // The sky-blue location halo stays under the person as he walks.
   const halo = new THREE.Mesh(new THREE.RingGeometry(0.35, 0.39, 48), new THREE.MeshBasicMaterial({ color: palette.amber, transparent: true, opacity: 0.72, side: THREE.DoubleSide, depthWrite: false }));
   halo.rotation.x = -Math.PI / 2; halo.position.y = 0.194; world.add(halo);
-  person.position.set(...stationData[0].stop);
+  person.position.set(0, 0.08, 0);
   // The character's boot soles rest just above the platform's walking surface.
   person.position.y = 0.08;
   person.rotation.y = 0.45;
 
   const clock = new THREE.Clock();
-  let frame, disposed = false, paused = false, exploring = false, activeIndex = 0;
+  let frame, disposed = false, paused = false, exploring = false, activeIndex = -1;
   let desiredYaw = 0.45, walkPhase = 0, walkPath = [], pointer = new THREE.Vector2();
   const heldKeys = new Set();
   const moveVector = new THREE.Vector3();
@@ -523,6 +533,11 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     }
   }
   function updateLabels() {
+    projected.set(0, 0.23, 0); world.localToWorld(projected); projected.project(camera);
+    homeTarget.style.left = `${(projected.x * 0.5 + 0.5) * size.width}px`;
+    homeTarget.style.top = `${(-projected.y * 0.5 + 0.5) * size.height}px`;
+    homeTarget.hidden = size.width < 44 || size.height < 44;
+    homeTarget.setAttribute('aria-pressed', String(activeIndex === -1));
     stationData.forEach((station, index) => {
       projected.copy(station.labelAnchor); world.localToWorld(projected); projected.project(camera);
       const label = labels[index];
@@ -562,7 +577,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
   function updateCanvasDescription() {
     const controls = exploring
       ? 'Explore Saqib’s career world. Move using the arrow keys or W, A, S and D.'
-      : 'A three-dimensional world of Saqib’s career. Choose a company button to move between workplaces.';
+      : 'A three-dimensional world of Saqib’s career. Choose a company to visit a workplace, or the centre point to return to About Me.';
     const workplace = activeIndex === -1
       ? ' Meet Saqib at the central compass for About Me & My Story: his journey from Bangladesh to Canada and into project coordination.'
       : activeIndex === 3
@@ -745,7 +760,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     updateFulfillment(fulfillmentTime);
     checkStation(); renderOnce();
   }
-  resize(); select(0); animate(); onReady();
+  resize(); select(-1); animate(); onReady();
 
   return {
     goTo: select,
@@ -782,7 +797,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
         }
       });
       geometrySet.forEach(item => item.dispose()); textureSet.forEach(item => item.dispose()); materialSet.forEach(item => item.dispose());
-      renderer.dispose(); labels.forEach(label => label.remove()); canvas.remove();
+      renderer.dispose(); labels.forEach(label => label.remove()); homeTarget.remove(); canvas.remove();
     },
   };
 }

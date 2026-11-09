@@ -15,11 +15,16 @@ test.afterEach(async ({ page }) => {
   expect(errorsByPage.get(page), 'No uncaught browser errors').toEqual([]);
 });
 
-async function loadWorld(page, baseURL) {
+async function loadHome(page, baseURL) {
   await page.goto(baseURL || '/');
   await expect(page.locator('#world-loading')).toHaveClass(/loaded/);
   await expect(page.locator('canvas.world-canvas')).toBeVisible();
   await expect(page.locator('.world-label')).toHaveCount(7);
+}
+
+async function loadWorld(page, baseURL) {
+  await loadHome(page, baseURL);
+  await page.locator('[data-panel="journey"]').click();
 }
 
 async function assertSingleViewport(page) {
@@ -66,17 +71,13 @@ async function assertContributionDescriptionsVisible(page, stop) {
   return contribution;
 }
 
-test('Journey starts at the first employer and About Me contains the personal Profile', async ({ page, baseURL }) => {
-  await loadWorld(page, baseURL);
-  await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
-  await expect(page.locator('#company-card .eyebrow')).toHaveText('01 / Dhaka, Bangladesh');
-  await expect(page.locator('#about-card')).toHaveCount(0);
-  await expect(page.locator('#world')).toHaveAttribute('data-active-station', '0');
-  await expect(page.locator('#previous-stop')).toBeDisabled();
-  await expect(page.locator('#stop-counter')).toHaveText('01 / 07');
-
+test('About Me opens at the centre and preserves the personal story outside the employer Journey', async ({ page, baseURL }) => {
+  await loadHome(page, baseURL);
+  await expect(page.locator('#world')).toHaveAttribute('data-active-station', '-1');
+  await expect(page.locator('#world')).toHaveAttribute('data-traveling', 'false');
+  await expect(page.locator('[data-world-home]')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#panel-nav [data-panel="profile"]')).toHaveText('About Me');
-  await page.locator('[data-panel="profile"]').click();
+  await expect(page.locator('#panel-nav [data-panel="profile"]')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByRole('tab', { name: 'Profile', exact: true })).toHaveAttribute('aria-selected', 'true');
   const about = page.locator('#profile-view-0 #about-card');
   await expect(about).toBeVisible();
@@ -113,8 +114,10 @@ test('Journey starts at the first employer and About Me contains the personal Pr
   await expect(page.locator('#about-goal-title')).toBeFocused();
   await assertSingleViewport(page);
 
-  await page.getByRole('button', { name: 'Nazmus Saqib, start of journey', exact: true }).click();
+  await page.locator('[data-panel="journey"]').click();
   await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
+  await expect(page.locator('#company-card .eyebrow')).toHaveText('01 / Dhaka, Bangladesh');
+  await expect(page.locator('#stop-counter')).toHaveText('01 / 07');
   await expect(page.locator('#about-card')).toHaveCount(0);
   await expect(page.locator('#previous-stop')).toBeDisabled();
   await page.locator('#next-stop').click();
@@ -132,8 +135,11 @@ test('Journey starts at the first employer and About Me contains the personal Pr
   await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
   await page.locator('#go-today').click();
   await expect(page.locator('#company-name')).toHaveText('Identify BDA');
-  await page.getByRole('button', { name: 'Nazmus Saqib, start of journey', exact: true }).click();
-  await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
+  await page.getByRole('button', { name: 'Nazmus Saqib, About Me', exact: true }).click();
+  await expect(about).toBeVisible();
+  await expect(page.locator('#world')).toHaveAttribute('data-active-station', '-1');
+  await page.locator('[data-panel="journey"]').click();
+  await expect(page.locator('#company-name')).toHaveText('Identify BDA');
 
   await page.locator('#reading-toggle').click();
   await expect(page.locator('#reading-view .reading-company')).toHaveCount(7);
@@ -144,6 +150,72 @@ test('Journey starts at the first employer and About Me contains the personal Pr
   await expect(about).toBeVisible();
   await page.locator('[data-story-milestone="2"]').click();
   await about.getByText('In October 2024,', { exact: false }).scrollIntoViewIfNeeded();
+  await assertSingleViewport(page);
+});
+
+test('the centre About Me control returns from every workplace and preserves the remembered Journey stop', async ({ page, baseURL }) => {
+  await loadHome(page, baseURL);
+  const home = page.getByRole('button', { name: 'Go to About Me', exact: true });
+  await expect(home).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#world')).toHaveAttribute('data-active-station', '-1');
+  await expect(page.locator('#world')).toHaveAttribute('data-traveling', 'false');
+
+  for (const [index, company] of companies.entries()) {
+    await page.getByRole('button', { name: `Visit company ${index + 1}: ${company}`, exact: true }).click();
+    await expect(page.locator('#company-name')).toHaveText(company);
+    await expect(home).toHaveAttribute('aria-pressed', 'false');
+    await home.click();
+    await expect(page.locator('#world')).toHaveAttribute('data-active-station', '-1');
+    await expect(home).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('#panel-nav [data-panel="profile"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByRole('tab', { name: 'Profile', exact: true })).toHaveAttribute('aria-selected', 'true');
+    await expect(page.locator('#profile-view-0 #about-card')).toBeVisible();
+    await page.locator('[data-panel="journey"]').click();
+    await expect(page.locator('#company-name')).toHaveText(company);
+    await expect(page.locator('#world')).toHaveAttribute('data-active-station', String(index));
+  }
+
+  await page.locator('[data-panel="profile"]').click();
+  await page.getByRole('tab', { name: 'Skills', exact: true }).click();
+  await page.locator('[data-panel="journey"]').click();
+  await expect(page.locator('#company-name')).toHaveText('Identify BDA');
+  await page.locator('[data-panel="profile"]').click();
+  await expect(page.getByRole('tab', { name: 'Skills', exact: true })).toHaveAttribute('aria-selected', 'true');
+  await expect(page.locator('#world')).toHaveAttribute('data-active-station', '-1');
+  await page.locator('[data-panel="journey"]').click();
+  await expect(page.locator('#company-name')).toHaveText('Identify BDA');
+  await home.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('tab', { name: 'Profile', exact: true })).toHaveAttribute('aria-selected', 'true');
+  await expect(page.locator('#world')).toHaveAttribute('data-active-station', '-1');
+  await page.locator('[data-panel="journey"]').click();
+  await expect(page.locator('#company-name')).toHaveText('Identify BDA');
+  await page.getByRole('button', { name: 'Nazmus Saqib, About Me', exact: true }).click();
+  await expect(page.locator('#profile-view-0 #about-card')).toBeVisible();
+  await expect(home).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#world')).toHaveAttribute('data-active-station', '-1');
+  await assertSingleViewport(page);
+});
+
+test('returning to the centre walks home and exits free exploration', async ({ page, baseURL }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await loadHome(page, baseURL);
+  const campus = page.locator('#world');
+  await expect(campus).toHaveAttribute('data-active-station', '-1');
+  await expect(campus).toHaveAttribute('data-traveling', 'false');
+  await page.locator('#go-today').click();
+  await expect(page.locator('#company-name')).toHaveText('Identify BDA');
+  await expect(campus).toHaveAttribute('data-traveling', 'false', { timeout: 15_000 });
+  await page.locator('#explore-toggle').click();
+  await expect(page.locator('#explore-toggle')).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: 'Go to About Me', exact: true }).click();
+  await expect(campus).toHaveAttribute('data-traveling', 'true');
+  await expect(campus).toHaveAttribute('data-active-station', '-1');
+  await expect(page.locator('#explore-toggle')).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator('#touch-controls')).toBeHidden();
+  await expect(page.locator('#profile-view-0 #about-card')).toBeVisible();
+  await expect(campus).toHaveAttribute('data-traveling', 'false', { timeout: 15_000 });
+  await expect(page.getByRole('button', { name: 'Go to About Me', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await assertSingleViewport(page);
 });
 

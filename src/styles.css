@@ -48,6 +48,9 @@ button:focus-visible, a:focus-visible, summary:focus-visible, canvas:focus-visib
 .world-meta { position: absolute; top: 26px; right: 24px; z-index: 3; display: flex; flex-direction: column; align-items: flex-end; gap: 9px; pointer-events: none; }
 .world-meta > span:first-child { font-size: .875rem; letter-spacing: 1.2px; color: #526E82; }
 #travel-status { font-size: .875rem; color: #526E82; background: #FFFFFFcc; border: 1px solid #D2E6F2; padding: 5px 8px; border-radius: 20px; }
+.world-home-target { position: absolute; z-index: 1; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; transform: translate(-50%, -50%); background: transparent; }
+.world-home-target:hover { background: #1072AE0D; box-shadow: 0 0 0 2px #1072AE26; }
+.world-home-target:focus-visible { outline: 2px solid #1072AE; outline-offset: 3px; }
 .world-label { width: max-content; max-width: calc(100% - 16px); white-space: nowrap; border: 1px solid #D2E6F2; background: #FFFFFFf5; box-shadow: 0 2px 9px #173A5512; color: #173A55; border-radius: 20px; padding: 6px 10px; font-size: .875rem; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: color .2s, background .2s; }
 .world-label span { font-size: .875rem; color: #526E82; }
 .world-label:hover { background: #E3F3FD; }

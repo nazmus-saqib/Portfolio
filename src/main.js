@@ -31,7 +31,7 @@ const number = index => String(index + 1).padStart(2, '0');
 const email = 'saqib.uxui@gmail.com';
 const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 const latest = careerStops.length - 1;
-let world, active = 0, panel = 'journey', reading = false, exploring = false, paused = motionPreference.matches;
+let world, active = 0, worldStation = -1, panel = 'profile', reading = false, exploring = false, paused = motionPreference.matches;
 let toastTimer, speaking = false, dialogTrigger, disposed = false;
 let selectedStoryMilestone = 0;
 let selectedProfileTab = 0;
@@ -41,14 +41,14 @@ document.querySelector('#app').innerHTML = `
   <a class="skip-link" href="#sidebar-body">Skip to career details</a>
   <main class="portfolio-shell" aria-label="Nazmus Saqib’s interactive portfolio">
     <header class="shell-header">
-      <button type="button" class="wordmark" data-home aria-label="Nazmus Saqib, start of journey">saqib<span></span></button>
+      <button type="button" class="wordmark" data-home aria-label="Nazmus Saqib, About Me">saqib<span></span></button>
       <div class="header-actions"><a href="${assetUrl('Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf')}" class="resume-link" download>Résumé ${icons.download}</a><button type="button" class="view-toggle" id="reading-toggle" aria-pressed="false">${icons.cube}<span>Reading view</span></button></div>
     </header>
 
     <div class="experience-layout" id="scene-layout">
       <section class="world-pane" id="world-pane" aria-label="Explore my workplaces">
         <div class="world-note"><span class="monogram">S.</span><p>Different workplaces.<br>One connected journey.</p></div>
-        <div class="world-meta"><span>MY STORY + ${careerStops.length} WORKPLACES</span><span id="travel-status" role="status">At ${esc(careerStops[0].company)}</span></div>
+        <div class="world-meta"><span>MY STORY + ${careerStops.length} WORKPLACES</span><span id="travel-status" role="status">About Me</span></div>
         <div id="world" class="world-container"></div>
         <div class="world-loading" id="world-loading"><span class="loading-orbit"></span><p>A small world is taking shape.</p></div>
         <div class="stage-tools"><button type="button" id="go-today">Meet me today ${icons.arrow}</button><div class="scene-hint" id="scene-hint">Choose a company. I’ll take you there.</div><div class="stage-controls"><button type="button" id="explore-toggle" aria-pressed="false">Explore <span class="toggle-track"><i></i></span></button><button type="button" class="icon-button" id="pause-world" aria-label="Pause scene animation">${icons.pause}</button></div></div>
@@ -56,9 +56,9 @@ document.querySelector('#app').innerHTML = `
       </section>
 
       <aside class="sidebar" aria-label="About me and career details">
-        <nav class="panel-nav" id="panel-nav" aria-label="Portfolio sections"><button type="button" data-panel="journey" class="active" aria-pressed="true">Journey</button><button type="button" data-panel="profile" aria-pressed="false">About Me</button><button type="button" data-panel="projects" aria-pressed="false">Projects <span>${projects.length}</span></button><button type="button" data-panel="contact" aria-pressed="false">Contact</button></nav>
+        <nav class="panel-nav" id="panel-nav" aria-label="Portfolio sections"><button type="button" data-panel="journey" aria-pressed="false">Journey</button><button type="button" data-panel="profile" class="active" aria-pressed="true">About Me</button><button type="button" data-panel="projects" aria-pressed="false">Projects <span>${projects.length}</span></button><button type="button" data-panel="contact" aria-pressed="false">Contact</button></nav>
         <div class="sidebar-body" id="sidebar-body" tabindex="-1" role="region" aria-label="Career details"></div>
-        <div class="company-navigation" id="company-navigation"><button type="button" class="icon-button" id="previous-stop" aria-label="Previous chapter">${icons.previous}</button><span id="stop-counter" aria-live="polite">01 / ${number(latest)}</span><button type="button" class="button button-secondary" id="next-stop">Next company ${icons.next}</button><button type="button" class="icon-button" id="listen" aria-label="Listen to this company story">${icons.sound}</button></div>
+        <div class="company-navigation" id="company-navigation" hidden><button type="button" class="icon-button" id="previous-stop" aria-label="Previous chapter">${icons.previous}</button><span id="stop-counter" aria-live="polite">01 / ${number(latest)}</span><button type="button" class="button button-secondary" id="next-stop">Next company ${icons.next}</button><button type="button" class="icon-button" id="listen" aria-label="Listen to this company story">${icons.sound}</button></div>
       </aside>
     </div>
 
@@ -146,10 +146,35 @@ function stopSpeech() {
 }
 
 function updateMotion() { world?.setPaused(paused||reading||document.hidden||document.querySelector('#project-dialog').open);document.querySelector('#pause-world').innerHTML=paused?icons.play:icons.pause;document.querySelector('#pause-world').setAttribute('aria-label',`${paused?'Resume':'Pause'} scene animation`); }
+function setExploring(value) {
+  exploring=!!value;
+  world?.setExploring(exploring);
+  document.querySelector('#explore-toggle').setAttribute('aria-pressed',exploring);
+  document.querySelector('#touch-controls').hidden=!exploring;
+  document.querySelector('#scene-hint').textContent=exploring?'Move with WASD, arrows, or the controls.':'Choose a company. I’ll take you there.';
+}
+function updateTravelStatus(arrived = false) {
+  const settled=arrived||paused||reading||motionPreference.matches;
+  document.querySelector('#travel-status').textContent=worldStation===-1
+    ? settled?'About Me':'Returning to About Me'
+    : `${settled?'At':'Visiting'} ${careerStops[worldStation].company}`;
+}
+function selectAbout(resetProfile = true) {
+  stopSpeech();
+  setExploring(false);
+  worldStation=-1;
+  panel='profile';
+  if(resetProfile)selectedProfileTab=0;
+  renderPanel();
+  updateMotion();
+  updateTravelStatus();
+  world?.goTo(-1);
+}
 function selectStop(index) {
+  if(index===-1){selectAbout();return;}
   if(!Number.isInteger(index)||index < 0||index>=careerStops.length)return;
-  stopSpeech();active=index;panel='journey';renderPanel();updateChapterControls();
-  document.querySelector('#travel-status').textContent=`${paused||motionPreference.matches?'At':'Visiting'} ${careerStops[active].company}`;
+  stopSpeech();active=index;worldStation=index;panel='journey';renderPanel();updateChapterControls();
+  updateMotion();updateTravelStatus();
   world?.goTo(index);scrollCurrentReading();
 }
 
@@ -183,9 +208,9 @@ document.querySelector('#app').addEventListener('click',event=>{
   const milestone=event.target.closest('[data-story-milestone]');if(milestone){showStoryMilestone(Number(milestone.dataset.storyMilestone));return;}
   const aboutJump=event.target.closest('[data-about-jump]');if(aboutJump){stopSpeech();const body=document.querySelector('#sidebar-body');const target=body.querySelector(aboutJump.dataset.aboutJump==='story'?'#about-story-title':'#about-goal-title');if(target){target.focus({preventScroll:true});body.scrollTo({top:body.scrollTop+target.getBoundingClientRect().top-body.getBoundingClientRect().top-12,behavior:motionPreference.matches?'instant':'smooth'});}return;}
   const project=event.target.closest('[data-project]');if(project){openProject(project.dataset.project,project);return;}
-  const section=event.target.closest('button[data-panel]');if(section){stopSpeech();panel=section.dataset.panel;renderPanel();return;}
+  const section=event.target.closest('button[data-panel]');if(section){if(section.dataset.panel==='profile'){selectAbout(false);}else if(section.dataset.panel==='journey'){selectStop(active);}else{stopSpeech();panel=section.dataset.panel;renderPanel();}return;}
   const category=event.target.closest('[data-filter]');if(category){projectFilter=category.dataset.filter;renderPanel(false);return;}
-  if(event.target.closest('[data-home]')){selectStop(0);return;}
+  if(event.target.closest('[data-home]')){selectAbout();return;}
   if(event.target.closest('[data-copy-email]')) copyEmail();
 });
 document.querySelector('#app').addEventListener('keydown',event=>{
@@ -226,9 +251,9 @@ document.querySelector('#previous-stop').addEventListener('click',()=>selectStop
 document.querySelector('#next-stop').addEventListener('click',()=>selectStop(active===latest?0:active+1));
 document.querySelector('#go-today').addEventListener('click',()=>selectStop(latest));
 
-function toggleReading(force) {reading=typeof force==='boolean'?force:!reading;stopSpeech();document.querySelector('.portfolio-shell').classList.toggle('reading-mode',reading);document.querySelector('#reading-toggle').setAttribute('aria-pressed',reading);document.querySelector('#reading-toggle span').textContent=reading?'3D view':'Reading view';panel='journey';renderPanel();scrollCurrentReading();updateMotion();}
+function toggleReading(force) {reading=typeof force==='boolean'?force:!reading;document.querySelector('.portfolio-shell').classList.toggle('reading-mode',reading);document.querySelector('#reading-toggle').setAttribute('aria-pressed',reading);document.querySelector('#reading-toggle span').textContent=reading?'3D view':'Reading view';selectStop(active);}
 document.querySelector('#reading-toggle').addEventListener('click',()=>toggleReading());
-document.querySelector('#explore-toggle').addEventListener('click',()=>{exploring=!exploring;world?.setExploring(exploring);document.querySelector('#explore-toggle').setAttribute('aria-pressed',exploring);document.querySelector('#touch-controls').hidden=!exploring;document.querySelector('#scene-hint').textContent=exploring?'Move with WASD, arrows, or the controls.':'Choose a company. I’ll take you there.';});
+document.querySelector('#explore-toggle').addEventListener('click',()=>setExploring(!exploring));
 document.querySelector('#touch-controls').addEventListener('click',event=>{const button=event.target.closest('[data-direction]');if(button)world?.move(button.dataset.direction);});
 document.querySelector('#pause-world').addEventListener('click',()=>{paused=!paused;updateMotion();});
 motionPreference.addEventListener('change',()=>{paused=motionPreference.matches;updateMotion();});
@@ -246,7 +271,7 @@ function toast(text) {const node=document.querySelector('#toast');node.textConte
 
 renderPanel();updateChapterControls();updateMotion();
 async function initWorld() {
-  try {const {createWorld}=await import('./world.js');if(disposed)return;world=createWorld({container:document.querySelector('#world'),stations:careerStops,onSelect:index=>selectStop(index),onArrival:index=>{if(index===active)document.querySelector('#travel-status').textContent=`At ${careerStops[index].company}`;},onReady:()=>document.querySelector('#world-loading').classList.add('loaded'),reducedMotion:motionPreference.matches});world.goTo(active);updateMotion();}
+  try {const {createWorld}=await import('./world.js');if(disposed)return;world=createWorld({container:document.querySelector('#world'),stations:careerStops,onSelect:index=>selectStop(index),onArrival:index=>{if(index===worldStation)updateTravelStatus(true);},onReady:()=>document.querySelector('#world-loading').classList.add('loaded'),reducedMotion:motionPreference.matches});world.goTo(worldStation);updateMotion();}
   catch(error){console.warn('The 3D view is unavailable; all career details remain accessible.',error);document.querySelector('#world-loading').classList.add('loaded');document.querySelector('#world').innerHTML=`<div class="world-fallback"><span aria-hidden="true">✳</span><h2>There’s another<br>way into the story.</h2><p>Explore every employer, project, and qualification in reading view.</p><button type="button" class="button button-dark" id="fallback-reading">Read my journey ${icons.next}</button></div>`;document.querySelector('#fallback-reading').addEventListener('click',()=>toggleReading(true));document.querySelector('#explore-toggle').disabled=true;document.querySelector('#pause-world').disabled=true;}
 }
 initWorld();

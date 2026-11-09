@@ -13,12 +13,17 @@ test('single-viewport company journey preserves public assets and résumé links
   await page.goto(site.href);
   await expect(page.locator('#world-loading')).toHaveClass(/loaded/);
   await expect(page.locator('canvas.world-canvas')).toBeVisible();
+  await expect(page.locator('#profile-view-0 #about-card')).toBeVisible();
+  await expect(page.locator('#world')).toHaveAttribute('data-active-station', '-1');
+  await expect(page.locator('#world')).toHaveAttribute('data-traveling', 'false');
+  await expect(page.locator('[data-world-home]')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#panel-nav [data-panel="profile"]')).toHaveText('About Me');
+  await expect(page.locator('.world-label')).toHaveCount(7);
+  await page.locator('[data-panel="journey"]').click();
   await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
   await expect(page.locator('#company-card .eyebrow')).toHaveText('01 / Dhaka, Bangladesh');
   await expect(page.locator('#about-card')).toHaveCount(0);
   await expect(page.locator('#world')).toHaveAttribute('data-active-station', '0');
-  await expect(page.locator('#panel-nav [data-panel="profile"]')).toHaveText('About Me');
-  await expect(page.locator('.world-label')).toHaveCount(7);
 
   const icon = await page.locator('link[rel="icon"]').getAttribute('href');
   expect(new URL(icon, site).href).toBe(new URL('favicon.svg', site).href);
