@@ -26,12 +26,12 @@ function illustration(project) {
       <text x="30" y="39" fill="#173A55" font-family="sans-serif" font-size="21" font-weight="500">Identify BDA</text>
       <text x="610" y="36" text-anchor="end" fill="#0D6296" font-family="sans-serif" font-size="7" letter-spacing="1.3">FROM REQUEST TO DELIVERY</text>
       <path d="M100 144H540" fill="none" stroke="#E5C79E" stroke-width="1.5" stroke-dasharray="4 6"/>
-      ${[['Understand', '◎', 55, 93], ['Source', '⌕', 190, 117], ['Coordinate', '↔', 325, 93], ['Deliver', '✓', 460, 117]].map(([label, symbol, x, y], index) => `
+      ${[['Understand', '◎', 55, 93], ['Design &amp; source', '⌕', 190, 117], ['Coordinate', '↔', 325, 93], ['Deliver', '✓', 460, 117]].map(([label, symbol, x, y], index) => `
         <rect x="${x + 5}" y="${y + 6}" width="112" height="102" rx="10" fill="#E5C79E" opacity=".3"/>
         <rect x="${x}" y="${y}" width="112" height="102" rx="10" fill="${index === 3 ? '#173A55' : '#FFFFFF'}" stroke="#D2E6F2"/>
         <text x="${x + 56}" y="${y + 42}" text-anchor="middle" fill="${index === 3 ? '#D2E6F2' : '#1072AE'}" font-family="Arial,sans-serif" font-size="28">${symbol}</text>
         <text x="${x + 56}" y="${y + 77}" text-anchor="middle" fill="${index === 3 ? '#F2F9FE' : '#173A55'}" font-family="sans-serif" font-size="10">${label}</text>`).join('')}
-      <text x="30" y="251" fill="#0D6296" font-family="sans-serif" font-size="10">People, plans, and every moving part.</text>
+      <text x="30" y="251" fill="#0D6296" font-family="sans-serif" font-size="10">Artwork reviews, when needed, run alongside vendor sourcing.</text>
     </svg>`;
   }
   if (project.id === 'odin') {

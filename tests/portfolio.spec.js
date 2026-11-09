@@ -366,13 +366,21 @@ test('company project actions open details and return focus to the selected empl
   await page.locator('#dialog-close').click();
   await page.locator('#go-today').click();
   const workflow = page.locator('.identify-workflow-stages');
-  for (const stage of ['Understand', 'Source', 'Coordinate', 'Deliver']) {
+  for (const stage of ['Understand', 'Design & source', 'Coordinate', 'Deliver']) {
     await expect(workflow.getByText(stage, { exact: true })).toBeVisible();
   }
+  await expect(page.locator('.identify-workflow-preview figcaption')).toContainText('When artwork is needed');
+  await expect(page.locator('.identify-workflow-preview figcaption')).toContainText('client feedback');
+  await expect(page.locator('.identify-workflow-preview figcaption')).toContainText('while sourcing vendors');
   const exploreFlow = page.getByRole('button', { name: 'Explore the flow: From request to delivery', exact: true });
   await exploreFlow.click();
   await expect(page.getByRole('dialog')).toContainText('Project & Operations Coordinator');
   await expect(page.getByRole('dialog')).toContainText('20+ external vendors');
+  const approach = page.getByRole('dialog').locator('.case-section').filter({ has: page.getByRole('heading', { name: 'The approach', exact: true }) });
+  await expect(approach).toContainText('When artwork is needed');
+  await expect(approach).toContainText('Share drafts for feedback');
+  await expect(approach).toContainText('coordinate revisions with the designers');
+  await expect(approach).toContainText('client approval of the final artwork before production while vendor sourcing continues');
   await page.locator('#dialog-close').click();
   await expect(exploreFlow).toBeFocused();
   await assertSingleViewport(page);
@@ -586,7 +594,7 @@ test('personal profile, qualifications, Identify coordination, projects, and con
   await expect(coordination.getByRole('list', { name: /coordination workflow/i })).toHaveCount(1);
   const workflow = coordination.locator('.identify-workflow-stages');
   await expect(workflow).toHaveCount(1);
-  for (const stage of ['Understand', 'Source', 'Coordinate', 'Deliver']) {
+  for (const stage of ['Understand', 'Design & source', 'Coordinate', 'Deliver']) {
     await expect(workflow.getByText(stage, { exact: true })).toBeVisible();
   }
   await expect(coordination.locator('[data-project="identify"]')).toHaveCount(1);

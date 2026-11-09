@@ -97,7 +97,8 @@ export const projects = [
     role: 'Project & Operations Coordinator',
     challenge: 'Keep changing requirements, supplier options, approvals, deadlines, and delivery details aligned as projects move between clients, internal colleagues, and production partners.',
     approach: [
-      'Clarify the request, confirm specifications and dependencies, coordinate artwork, and obtain client approvals before production.',
+      'Clarify the client brief, specifications, deadlines, and dependencies.',
+      'When artwork is needed, brief designers on the client’s requirements. Share drafts for feedback, coordinate revisions with the designers, and obtain client approval of the final artwork before production while vendor sourcing continues.',
       'Source and compare quotations across a network of 20+ external vendors, evaluating cost, quality, capability, reliability, and turnaround. Negotiate pricing and recommend suitable options.',
       'Track order stages, approvals, deadlines, and changes. Follow up before expected completion and use a one- to two-day scheduling buffer where appropriate to manage delivery risk.',
       'Resolve production and fulfillment issues by gathering evidence, coordinating corrections, finding alternative suppliers, and keeping the client informed.',
