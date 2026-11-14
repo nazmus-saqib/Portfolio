@@ -532,6 +532,24 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
       }
     }
   }
+  // Measure the visible model's top so spare desktop headroom can be used
+  // without cutting off its trees, equipment, or character.
+  let modelTop = -Infinity;
+  const viewMatrix = new THREE.Matrix4(), viewCorner = new THREE.Vector3();
+  world.traverse(object => {
+    if (!object.isMesh) return;
+    if (!object.geometry.boundingBox) object.geometry.computeBoundingBox();
+    const bounds = object.geometry.boundingBox;
+    viewMatrix.multiplyMatrices(camera.matrixWorldInverse, object.matrixWorld);
+    for (const x of [bounds.min.x, bounds.max.x]) {
+      for (const y of [bounds.min.y, bounds.max.y]) {
+        for (const z of [bounds.min.z, bounds.max.z]) {
+          viewCorner.set(x, y, z).applyMatrix4(viewMatrix);
+          modelTop = Math.max(modelTop, viewCorner.y);
+        }
+      }
+    }
+  });
   function updateLabels() {
     projected.set(0, 0.23, 0); world.localToWorld(projected); projected.project(camera);
     homeTarget.style.left = `${(projected.x * 0.5 + 0.5) * size.width}px`;
@@ -567,8 +585,14 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     renderer.setSize(size.width, size.height, false);
     const aspect = size.width / size.height;
     const vertical = Math.max(frameExtent.y + 0.6, (frameExtent.x + 0.8) / aspect);
+    const pixelsPerUnit = size.height / (2 * vertical);
+    const headroom = (vertical - modelTop) * pixelsPerUnit;
+    const liftPixels = window.innerWidth > 860
+      ? Math.min(96, size.height * 0.12, Math.max(0, headroom - 88))
+      : 0;
+    const lift = liftPixels / pixelsPerUnit;
     camera.left = -vertical * aspect; camera.right = vertical * aspect;
-    camera.top = vertical; camera.bottom = -vertical;
+    camera.top = vertical - lift; camera.bottom = -vertical - lift;
     camera.updateProjectionMatrix();
     updateLabels(); renderer.render(scene, camera);
   }
