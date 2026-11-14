@@ -42,7 +42,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, canvas:focus-visib
 .experience-layout { min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 560px; }
 .world-pane { position: relative; overflow: hidden; min-height: 0; min-width: 0; container-type: inline-size; background: #FFFFFF; }
 .world-container { position: absolute; inset: 0; }
-.world-note { position: absolute; left: 25px; top: 24px; z-index: 3; display: flex; align-items: center; gap: 10px; pointer-events: none; }
+.world-note { position: absolute; left: auto; right: 24px; top: 26px; z-index: 3; display: flex; align-items: center; gap: 10px; pointer-events: none; }
 .monogram { width: 31px; height: 31px; border: 1px solid #D2E6F2; border-radius: 50%; display: grid; place-items: center; font-size: 1rem; font-family: var(--serif); font-style: italic; color: #1072AE; }
 .world-note p { font-size: .875rem; color: #526E82; line-height: 1.6; }
 .world-home-target { position: absolute; z-index: 1; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; transform: translate(-50%, -50%); background: transparent; }
@@ -228,7 +228,7 @@ summary::-webkit-details-marker { display: none; }
   .company-role { font-size: 1rem; }
   .company-story p { font-size: 1rem; }
   .company-story h3 { font-size: 20px; }
-  .world-note { left: 19px; top: 20px; }
+  .world-note { right: 18px; top: 22px; }
   .stage-tools { left: 17px; right: 17px; }
   .scene-hint { display: none; }
   #reading-view { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -262,7 +262,7 @@ summary::-webkit-details-marker { display: none; }
   .view-toggle { gap: 5px; font-size: .875rem; }
   .view-toggle svg { width: 12px; height: 12px; }
   .experience-layout { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(165px, 33%) minmax(0, 1fr); }
-  .world-note { left: 14px; top: 13px; gap: 7px; }
+  .world-note { right: 12px; top: 15px; gap: 7px; }
   .monogram { width: 23px; height: 23px; font-size: .875rem; }
   .world-note p { display: none; font-size: .875rem; line-height: 1.6; }
   .world-label { font-size: .875rem; padding: 5px 8px; gap: 5px; }
