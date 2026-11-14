@@ -52,7 +52,7 @@ document.querySelector('#app').innerHTML = `
     <div class="experience-layout" id="scene-layout">
       <section class="world-pane" id="world-pane" aria-label="Explore my workplaces">
         <div class="world-note"><span class="monogram">S.</span><p>Different workplaces.<br>One connected journey.</p></div>
-        <div class="world-meta"><span>MY STORY + ${careerStops.length} WORKPLACES</span><span id="travel-status" role="status">About Me</span></div>
+        <p id="travel-status" class="sr-only" role="status">About Me</p>
         <div id="world" class="world-container"></div>
         <div class="world-loading" id="world-loading"><span class="loading-orbit"></span><p>A small world is taking shape.</p></div>
         <div class="stage-tools"><button type="button" id="go-today">Meet me today ${icons.arrow}</button><div class="scene-hint" id="scene-hint">Choose a company. I’ll take you there.</div><div class="stage-controls"><button type="button" id="explore-toggle" aria-pressed="false">Explore <span class="toggle-track"><i></i></span></button><button type="button" class="icon-button" id="pause-world" aria-label="Pause scene animation">${icons.pause}</button></div></div>

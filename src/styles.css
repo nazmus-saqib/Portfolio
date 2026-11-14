@@ -45,9 +45,6 @@ button:focus-visible, a:focus-visible, summary:focus-visible, canvas:focus-visib
 .world-note { position: absolute; left: 25px; top: 24px; z-index: 3; display: flex; align-items: center; gap: 10px; pointer-events: none; }
 .monogram { width: 31px; height: 31px; border: 1px solid #D2E6F2; border-radius: 50%; display: grid; place-items: center; font-size: 1rem; font-family: var(--serif); font-style: italic; color: #1072AE; }
 .world-note p { font-size: .875rem; color: #526E82; line-height: 1.6; }
-.world-meta { position: absolute; top: 26px; right: 24px; z-index: 3; display: flex; flex-direction: column; align-items: flex-end; gap: 9px; pointer-events: none; }
-.world-meta > span:first-child { font-size: .875rem; letter-spacing: 1.2px; color: #526E82; }
-#travel-status { font-size: .875rem; color: #526E82; background: #FFFFFFcc; border: 1px solid #D2E6F2; padding: 5px 8px; border-radius: 20px; }
 .world-home-target { position: absolute; z-index: 1; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; transform: translate(-50%, -50%); background: transparent; }
 .world-home-target:hover { background: #1072AE0D; box-shadow: 0 0 0 2px #1072AE26; }
 .world-home-target:focus-visible { outline: 2px solid #1072AE; outline-offset: 3px; }
@@ -232,8 +229,6 @@ summary::-webkit-details-marker { display: none; }
   .company-story p { font-size: 1rem; }
   .company-story h3 { font-size: 20px; }
   .world-note { left: 19px; top: 20px; }
-  .world-meta { top: 22px; right: 18px; }
-  .world-meta > span:first-child { display: none; }
   .stage-tools { left: 17px; right: 17px; }
   .scene-hint { display: none; }
   #reading-view { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -244,7 +239,6 @@ summary::-webkit-details-marker { display: none; }
   .resume-link, .view-toggle { font-size: .875rem; }
   .world-note p { font-size: .875rem; }
   .monogram { width: 25px; height: 25px; font-size: .875rem; }
-  .world-meta { display: none; }
   .sidebar-body { padding: 18px 19px; }
   .company-navigation { padding: 12px 17px; gap: 9px; }
   #go-today { font-size: .875rem; gap: 6px; padding: 8px; }
@@ -271,8 +265,6 @@ summary::-webkit-details-marker { display: none; }
   .world-note { left: 14px; top: 13px; gap: 7px; }
   .monogram { width: 23px; height: 23px; font-size: .875rem; }
   .world-note p { display: none; font-size: .875rem; line-height: 1.6; }
-  .world-meta { top: 15px; right: 12px; }
-  #travel-status { font-size: .875rem; padding: 4px 6px; }
   .world-label { font-size: .875rem; padding: 5px 8px; gap: 5px; }
   .world-label span { font-size: .875rem; }
   .world-loading p { font-size: .875rem; }
