@@ -10,6 +10,7 @@ const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character =>
 
 const arrow = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg>';
 const plus = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.5"/></svg>';
+const projectKind = project => project.coordinationCaseStudy?.kind || (project.id === 'identify' ? 'Role overview' : 'Project case study');
 const isAcademic = project => /academic|centennial/i.test(`${project.category} ${project.company}`);
 const resolveAsset = (path, options) => (options.assetUrl || (value => value))(path);
 
@@ -23,6 +24,23 @@ function renderPrototypeLink(link) {
 
 function illustration(project) {
   const open = '<svg class="case-illustration" viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">';
+  if (project.id === 'multi-city-event') {
+    const accessibleOpen = open.replace('aria-hidden="true"', 'role="img" aria-label="Two location workstreams share approvals and production instructions; supplier readiness is checked separately from final receipt."');
+    return `${accessibleOpen}<rect width="640" height="280" rx="12" fill="#EAF6FD"/>
+      <text x="32" y="43" fill="#173A55" font-family="sans-serif" font-size="21">Two locations. Clear handoffs.</text>
+      <rect x="230" y="64" width="180" height="44" rx="9" fill="#1072AE"/><text x="320" y="91" text-anchor="middle" fill="#FFFFFF" font-family="sans-serif" font-size="16">Approved instructions</text>
+      <path d="M320 108v19H166v18m154-18h154v18" fill="none" stroke="#1072AE" stroke-width="2"/>
+      ${[['Location A',64],['Location B',372]].map(([label,x])=>`<rect x="${x}" y="145" width="204" height="78" rx="10" fill="#FFFFFF" stroke="#D2E6F2"/><text x="${x+20}" y="174" fill="#173A55" font-family="sans-serif" font-size="18">${label}</text><text x="${x+20}" y="200" fill="#526E82" font-family="sans-serif" font-size="14">Check supplier readiness</text>`).join('')}
+      <text x="32" y="254" fill="#526E82" font-family="sans-serif" font-size="13">Ready for collection and final receipt are separate checkpoints.</text></svg>`;
+  }
+  if (project.id === 'invoice-investigation') {
+    const accessibleOpen = open.replace('aria-hidden="true"', 'role="img" aria-label="Compare order dates, scope and quantities with invoice details, then clarify the findings with the administrator."');
+    return `${accessibleOpen}<rect width="640" height="280" rx="12" fill="#EAF6FD"/>
+      <text x="32" y="43" fill="#173A55" font-family="sans-serif" font-size="21">Match each invoice to its order.</text>
+      ${[['Order details',42],['Invoice details',364]].map(([label,x])=>`<rect x="${x}" y="70" width="234" height="130" rx="10" fill="#FFFFFF" stroke="#D2E6F2"/><text x="${x+18}" y="100" fill="#173A55" font-family="sans-serif" font-size="18">${label}</text>${['Date','Scope','Quantity'].map((field,i)=>`<text x="${x+18}" y="${127+i*25}" fill="#526E82" font-family="sans-serif" font-size="14">${field}</text><path d="M${x+100} ${122+i*25}h112" stroke="#D2E6F2" stroke-width="3"/>`).join('')}`).join('')}
+      <path d="M285 135h70m-9-7 9 7-9 7m-52-14-9 7 9 7" fill="none" stroke="#1072AE" stroke-width="2"/>
+      <rect x="164" y="220" width="312" height="38" rx="9" fill="#1072AE"/><text x="320" y="245" text-anchor="middle" fill="#FFFFFF" font-family="sans-serif" font-size="16">Clarify findings with the administrator</text></svg>`;
+  }
   if (project.coordinationCaseStudy) {
     const labels = project.id === 'conference' ? ['8 vendors', '3 weeks', 'Event setup'] : project.id === 'supplier-coordination' ? ['Compare', 'Approve', 'Coordinate'] : ['Assess', 'Agree', 'Follow up'];
     const title = project.id === 'conference' ? 'A fixed date. Many moving parts.' : project.id === 'supplier-coordination' ? 'Turn options into an agreed plan.' : 'Keep the next step clear.';
@@ -91,7 +109,7 @@ export function renderProjectCard(project, options = {}) {
   const thumbnail = project.image
     ? `<img src="${escapeHtml(resolveAsset(project.image, options))}" alt="" loading="lazy" decoding="async">`
     : illustration(project);
-  return `<article class="case-card"><button class="case-open" type="button" data-project="${escapeHtml(project.id)}"><span class="case-thumb" aria-hidden="true" style="--case-accent:${escapeHtml(project.accent || '#EAF6FD')}">${thumbnail}</span><span class="case-card-copy"><span class="case-card-company">${escapeHtml(project.company)}</span><strong>${escapeHtml(project.title)}</strong><span class="case-card-summary">${escapeHtml(project.summary)}</span><span class="case-card-context">${escapeHtml(project.collaboration)}</span></span><span class="case-card-arrow">${arrow}</span></button></article>`;
+  return `<article class="case-card"><button class="case-open" type="button" data-project="${escapeHtml(project.id)}"><span class="case-thumb" aria-hidden="true" style="--case-accent:${escapeHtml(project.accent || '#EAF6FD')}">${thumbnail}</span><span class="case-card-copy"><span class="case-card-company">${escapeHtml(project.company)}</span><span class="case-card-kind">${escapeHtml(projectKind(project))}</span><strong>${escapeHtml(project.title)}</strong><span class="case-card-summary">${escapeHtml(project.summary)}</span><span class="case-card-context">${escapeHtml(project.collaboration)}</span></span><span class="case-card-arrow">${arrow}</span></button></article>`;
 }
 
 const paragraphs = value => (Array.isArray(value) ? value : value ? [value] : [])
@@ -168,5 +186,5 @@ export function renderProjectDetail(project, options = {}) {
   if (project.coordinationCaseStudy) return renderCoordinationCase(project, { ...options, coverHtml: cover(project, options) });
   if (project.richCaseStudy) return renderCaseStudy(project, options);
   const context = project.id === 'identify' ? 'Current role' : isAcademic(project) ? 'Academic project' : 'Earlier digital work';
-  return `<article class="case-detail">${cover(project, options)}<div class="case-body"><p class="case-eyebrow">${escapeHtml(project.company)} / ${escapeHtml(project.collaboration)}</p><p class="case-study-label">${project.storyType === 'workflow' ? 'Recurring work example' : 'Project case study'}</p><h2 id="dialog-title">${escapeHtml(project.title)}</h2><p class="case-summary">${escapeHtml(project.summary)}</p>${renderProjectTools(project)}<dl class="case-facts"><div><dt>Context</dt><dd>${context}</dd></div><div><dt>My contribution</dt><dd>${escapeHtml(project.role)}</dd></div></dl><section class="case-section"><h3>The challenge</h3><p>${escapeHtml(project.challenge)}</p></section><section class="case-section"><h3>The approach</h3><ul>${project.approach.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul></section><section class="case-section"><h3>The work in perspective</h3><p>${escapeHtml(project.outcome)}</p></section>${project.gallery?.length ? `<details class="case-prototype"><summary>Explore the prototype screens ${plus}</summary><div class="case-gallery project-gallery">${project.gallery.map(image => `<figure><img src="${escapeHtml(resolveAsset(image.src, options))}" alt="${escapeHtml(image.alt)}" loading="lazy" decoding="async"><figcaption>${escapeHtml(image.alt)}</figcaption></figure>`).join('')}</div></details>` : ''}${project.confidential ? '<p class="case-confidential">A high-level overview. Internal product details stay confidential.</p>' : ''}<button class="case-contact" type="button" data-contact>Let’s talk about the work ${arrow}</button></div></article>`;
+  return `<article class="case-detail">${cover(project, options)}<div class="case-body"><p class="case-eyebrow">${escapeHtml(project.company)} / ${escapeHtml(project.collaboration)}</p><p class="case-study-label">${escapeHtml(projectKind(project))}</p><h2 id="dialog-title">${escapeHtml(project.title)}</h2><p class="case-summary">${escapeHtml(project.summary)}</p>${renderProjectTools(project)}<dl class="case-facts"><div><dt>Context</dt><dd>${context}</dd></div><div><dt>My contribution</dt><dd>${escapeHtml(project.role)}</dd></div></dl><section class="case-section"><h3>The challenge</h3><p>${escapeHtml(project.challenge)}</p></section><section class="case-section"><h3>The approach</h3><ul>${project.approach.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul></section><section class="case-section"><h3>The work in perspective</h3><p>${escapeHtml(project.outcome)}</p></section>${project.gallery?.length ? `<details class="case-prototype"><summary>Explore the prototype screens ${plus}</summary><div class="case-gallery project-gallery">${project.gallery.map(image => `<figure><img src="${escapeHtml(resolveAsset(image.src, options))}" alt="${escapeHtml(image.alt)}" loading="lazy" decoding="async"><figcaption>${escapeHtml(image.alt)}</figcaption></figure>`).join('')}</div></details>` : ''}${project.confidential ? '<p class="case-confidential">A high-level overview. Internal product details stay confidential.</p>' : ''}<button class="case-contact" type="button" data-contact>Let’s talk about the work ${arrow}</button></div></article>`;
 }

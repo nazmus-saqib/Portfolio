@@ -122,11 +122,12 @@ function projectsMarkup() {
   const isOperations = project => project.category === 'operations' || project.id === 'identify';
   const visible = projects.filter(p=>projectFilter==='all'||(projectFilter==='operations'?isOperations(p):!isOperations(p)));
   const groups = [
-    { id: 'case-studies', title: 'Current project case studies', description: 'A specific project with a documented challenge, my contribution and a result.', items: visible.filter(p=>isOperations(p)&&p.storyType==='case-study') },
-    { id: 'workflows', title: 'Recurring coordination examples', description: 'How I organize ongoing work, rather than separate one-off project results.', items: visible.filter(p=>isOperations(p)&&p.storyType!=='case-study') },
+    { id: 'case-studies', title: 'Documented Projects', description: 'Specific work examples, with my contribution and the result established for each.', items: visible.filter(p=>isOperations(p)&&p.storyType==='case-study') },
+    { id: 'workflows', title: 'How I Work', description: 'Recurring coordination methods, rather than separate completed projects.', items: visible.filter(p=>isOperations(p)&&p.storyType==='workflow') },
+    { id: 'overview', title: 'Role overview', description: 'How the responsibilities connect across my current role.', items: visible.filter(p=>isOperations(p)&&p.storyType==='overview') },
     { id: 'digital', title: 'Earlier digital projects', description: 'Design, requirements and stakeholder-review work in its original context.', items: visible.filter(p=>!isOperations(p)) },
   ];
-  return `<section class="project-collection"><p class="eyebrow">CURRENT WORK & EARLIER PROJECTS</p><h1>Plans into <em>progress.</em></h1><p class="panel-description">Current project evidence and recurring coordination examples, with earlier digital projects available separately.</p><button type="button" class="project-tools-link" data-show-tools>View tools &amp; methods ${icons.arrow}</button><div class="project-filter" role="group" aria-label="Filter projects">${[['operations','Current work'],['digital','Earlier digital work'],['all','All work']].map(([id,name])=>`<button type="button" data-filter="${id}" aria-pressed="${id===projectFilter}" class="${id===projectFilter?'active':''}">${name}</button>`).join('')}</div><div class="project-list" id="project-list">${groups.filter(group=>group.items.length).map(group=>`<section class="project-group" data-project-group="${group.id}" aria-labelledby="project-group-${group.id}"><h2 id="project-group-${group.id}">${group.title}</h2><p>${group.description}</p><div class="project-group-cards">${group.items.map(p=>renderProjectCard(p,{assetUrl})).join('')}</div></section>`).join('')}</div><p class="collection-count" aria-live="polite">${visible.length} ${visible.length===1?'work story':'work stories'}</p></section>`;
+  return `<section class="project-collection"><p class="eyebrow">CURRENT WORK & EARLIER PROJECTS</p><h1>Plans into <em>progress.</em></h1><p class="panel-description">Project examples and recurring coordination methods, with earlier digital projects available separately.</p><button type="button" class="project-tools-link" data-show-tools>View tools &amp; methods ${icons.arrow}</button><div class="project-filter" role="group" aria-label="Filter projects">${[['operations','Operations'],['digital','Earlier digital work'],['all','All work']].map(([id,name])=>`<button type="button" data-filter="${id}" aria-pressed="${id===projectFilter}" class="${id===projectFilter?'active':''}">${name}</button>`).join('')}</div><div class="project-list" id="project-list">${groups.filter(group=>group.items.length).map(group=>`<section class="project-group" data-project-group="${group.id}" aria-labelledby="project-group-${group.id}"><h2 id="project-group-${group.id}">${group.title}</h2><p>${group.description}</p><div class="project-group-cards">${group.items.map(p=>renderProjectCard(p,{assetUrl})).join('')}</div></section>`).join('')}</div><p class="collection-count" aria-live="polite">${visible.length} ${visible.length===1?'work story':'work stories'}</p></section>`;
 }
 
 function contactMarkup() {
@@ -347,7 +348,17 @@ document.querySelector('#project-dialog').addEventListener('click',event=>{
   if(event.target.closest('[data-contact]')){closeProject();panel='contact';renderPanel();document.querySelector('#sidebar-body').focus({preventScroll:true});return;}
   if(event.target===event.currentTarget){const rect=event.currentTarget.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)closeProject();}
 });
-document.querySelector('#project-dialog').addEventListener('close',()=>{const target=dialogTrigger?.isConnected?dialogTrigger:document.querySelector('#panel-nav button.active');target?.focus({preventScroll:true});updateMotion();});
+document.querySelector('#project-dialog').addEventListener('close',event=>{
+  // Native close restores focus immediately. Its later close event must not
+  // move focus away from a card the visitor has already selected next.
+  const dialog=event.currentTarget;
+  const focused=document.activeElement;
+  if(!dialog.open&&(!focused||focused===document.body||dialog.contains(focused))){
+    const target=dialogTrigger?.isConnected?dialogTrigger:document.querySelector('#panel-nav button.active');
+    target?.focus({preventScroll:true});
+  }
+  updateMotion();
+});
 window.addEventListener('popstate',syncProjectFromUrl);
 
 async function copyEmail() {try{await navigator.clipboard.writeText(email);toast('Email copied. Let’s connect.');}catch{toast(`Email me at ${email}`);}}

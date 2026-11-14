@@ -66,7 +66,7 @@ test('Reading view preserves About tabs, project filters, Contact, and their rea
   await page.locator('#reading-toggle').click();
   await expect(page.locator('#panel-nav [data-panel="projects"]')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('[data-filter="operations"]')).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.locator('.project-list .case-card')).toHaveCount(4);
+  await expect(page.locator('.project-list .case-card')).toHaveCount(6);
   await page.locator('#panel-nav [data-panel="contact"]').click();
   await page.locator('#reading-toggle').click();
   await expect(page.locator('#panel-nav [data-panel="contact"]')).toHaveAttribute('aria-pressed', 'true');
@@ -113,7 +113,7 @@ test('related coordination cases open inside the dialog and remain navigable wit
   await expect(page.locator('#dialog-title')).toHaveText('Coordinating a $55,000 conference project');
   expect(new URL(page.url()).searchParams.get('project')).toBe('conference');
   await page.goBack();
-  await expect(page.locator('#dialog-title')).toHaveText('Managing changes and urgent orders');
+  await expect(page.locator('#dialog-title')).toHaveText('Managing Project Risks, Changes & Delivery Dependencies');
   await page.keyboard.press('Escape');
   await expect(page.locator('#project-dialog')).not.toBeVisible();
   await expect(page.locator('#panel-nav [data-panel="profile"]')).toBeFocused();

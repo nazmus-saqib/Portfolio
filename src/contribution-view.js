@@ -32,9 +32,10 @@ const contributionThemes = {
     { title: 'Follow through', icon: 'cycle', takeaway: 'Stay in the conversation while customer issues are worked through.' },
   ],
   identify: [
-    { title: 'Align people and projects', icon: 'people', takeaway: 'A shared brief gives everyone the same starting point.' },
-    { title: 'Track decisions and timelines', icon: 'plan', takeaway: 'Recording decisions makes changes easier to manage.' },
-    { title: 'Complete the handoff', icon: 'delivery', takeaway: 'The handoff is complete when the next owner has what they need.' },
+    { title: 'Clarify the handoff', icon: 'people', takeaway: 'Approved requirements give suppliers a clear starting point.' },
+    { title: 'Compare and coordinate', icon: 'plan', takeaway: 'Make commercial and delivery trade-offs clear to decision owners.' },
+    { title: 'Monitor delivery risks', icon: 'research', takeaway: 'Record relevant concerns and discuss practical options when needed.' },
+    { title: 'Connect project and finance records', icon: 'clarity', takeaway: 'Order facts help administrative colleagues clarify discrepancies.' },
   ],
 };
 

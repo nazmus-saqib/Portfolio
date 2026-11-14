@@ -215,3 +215,5 @@
 .case-project-tools h3 { font-size:1rem; line-height:1.5; margin:0 0 12px; color:#173A55; }
 .case-project-tools .case-tools { margin:0; padding:0; border:0; }
 .case-project-tools .case-tools li { background:#fff; }
+
+.case-card-kind { align-self:flex-start; padding:3px 8px; border:1px solid #D2E6F2; border-radius:5px; background:#F2F9FE; color:#0D6296; font-size:.75rem; line-height:1.5; font-weight:600; }

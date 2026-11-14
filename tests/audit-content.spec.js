@@ -21,7 +21,7 @@ test('conference case connects the verified example to responsibilities, decisio
 test('all coordination templates remain usable on a narrow phone without overflowing the page', async ({ page, baseURL }) => {
   await page.setViewportSize({ width: 320, height: 780 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  for (const id of ['conference', 'supplier-coordination', 'change-coordination']) {
+  for (const id of ['conference', 'multi-city-event', 'invoice-investigation', 'supplier-coordination', 'change-coordination']) {
     await page.goto(`${baseURL}?project=${id}`);
     await expect(page.locator('[data-coordination-case]')).toHaveAttribute('data-coordination-case', id);
     for (const details of await page.locator('.coordination-template').all()) {
@@ -46,7 +46,7 @@ test('the delivered HTML, social image and approved résumé remain useful witho
   await page.goto(baseURL);
   await expect(page.getByRole('heading', { name: 'Molla Nazmus Saqib', exact: true })).toBeVisible();
   await expect(page.locator('.static-position')).toHaveText('Project & Operations Coordinator');
-  await expect(page.locator('.static-case')).toHaveCount(6);
+  await expect(page.locator('.static-case')).toHaveCount(8);
   const email = page.locator('a[href="mailto:saqibmollanazmus@gmail.com"]').first();
   await expect(email).toBeVisible();
   const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');

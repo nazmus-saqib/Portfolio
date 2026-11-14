@@ -364,7 +364,7 @@ test('contribution cards keep all takeaways together after the work and remain i
   await expect(readingIdentify.locator('[data-project="identify"]')).toHaveCount(1);
   await expect(page.locator('#reading-view .role-contributions')).toHaveCount(6);
   await expect(page.locator('#reading-view .contribution-takeaway')).toHaveCount(6);
-  await expect(page.locator('#reading-view .contribution-takeaway-item')).toHaveCount(18);
+  await expect(page.locator('#reading-view .contribution-takeaway-item')).toHaveCount(careerStops.reduce((total, stop) => total + stop.highlights.length, 0));
   const first = await assertContributionDescriptionsVisible(page, careerStops[0]);
   const second = await assertContributionDescriptionsVisible(page, careerStops[1]);
   const secondTakeaways = await second.locator('.contribution-takeaway-copy').allTextContents();
@@ -436,9 +436,8 @@ test('company project actions open details and return focus to the selected empl
   await expect(page.getByRole('dialog')).toContainText('20+ external vendors');
   const approach = page.getByRole('dialog').locator('.case-section').filter({ has: page.getByRole('heading', { name: 'The approach', exact: true }) });
   await expect(approach).toContainText('When artwork is needed');
-  await expect(approach).toContainText('Share drafts for feedback');
-  await expect(approach).toContainText('coordinate revisions with the designers');
-  await expect(approach).toContainText('client approval of the final artwork before production while vendor sourcing continues');
+  await expect(approach).toContainText(/brief designers.*gather client feedback.*coordinate revisions/i);
+  await expect(approach).toContainText(/final client approval before production.*vendor sourcing continues/i);
   await page.locator('#dialog-close').click();
   await expect(exploreFlow).toBeFocused();
   await assertSingleViewport(page);
@@ -669,9 +668,10 @@ test('personal profile, qualifications, Identify coordination, projects, and con
 
   await page.locator('#panel-nav button[data-panel="projects"]').click();
   await expect(page.locator('[data-filter="operations"]')).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.locator('.case-card')).toHaveCount(4);
-  await expect(page.locator('[data-project-group="case-studies"] .case-card')).toHaveCount(1);
-  await expect(page.locator('[data-project-group="workflows"] .case-card')).toHaveCount(3);
+  await expect(page.locator('.case-card')).toHaveCount(6);
+  await expect(page.locator('[data-project-group="case-studies"] .case-card')).toHaveCount(3);
+  await expect(page.locator('[data-project-group="workflows"] .case-card')).toHaveCount(2);
+  await expect(page.locator('[data-project-group="overview"] .case-card')).toHaveCount(1);
   await page.locator('[data-show-tools]').click();
   await expect(page.locator('#profile-tools-title')).toBeFocused();
   await expect(page.locator('.profile-tools-groups > article')).toHaveCount(4);
@@ -680,13 +680,13 @@ test('personal profile, qualifications, Identify coordination, projects, and con
   await page.getByRole('button', { name: 'Earlier digital work', exact: true }).click();
   await expect(page.locator('.case-card')).toHaveCount(8);
   await page.getByRole('button', { name: 'All work', exact: true }).click();
-  await expect(page.locator('.case-card')).toHaveCount(12);
+  await expect(page.locator('.case-card')).toHaveCount(14);
   await detail.evaluate(element => element.scrollTop = element.scrollHeight);
   await page.locator('.case-open[data-project="cozey"]').click();
   await expect(page.getByRole('dialog')).toContainText('Academic project');
   await page.locator('#dialog-close').click();
 
-  await expect(page.locator('#panel-nav > button')).toHaveText(['About Me', 'Journey', 'Projects 12', 'Contact']);
+  await expect(page.locator('#panel-nav > button')).toHaveText(['About Me', 'Journey', 'Projects 14', 'Contact']);
   await page.getByRole('button', { name: 'Contact', exact: true }).click();
   await expect(page.locator('#panel-nav [data-panel="contact"]')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#sidebar-body')).toHaveAttribute('aria-label', 'Contact details');

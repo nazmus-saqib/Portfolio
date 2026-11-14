@@ -14,7 +14,8 @@ export function renderProfessionalOverview({ aboutMe, professionalSummary, asset
     <p class="professional-credential">Project Management graduate certificate · Fleming College · 2024</p>
     <details class="professional-quick-view"><summary><span class="profile-preview-title">My work in 30 seconds</span><span class="profile-preview-excerpt"><strong>Today:</strong> Project Coordinator at Identify BDA. I coordinate requirements, schedules, approvals, suppliers and deliverables, and keep the next action clear.</span><span class="profile-preview-toggle"><span class="profile-preview-expand">Read more</span><span class="profile-preview-collapse">Show less</span><span class="profile-preview-icon" aria-hidden="true">+</span></span></summary><div>
       <ul><li><strong>Complex delivery:</strong> coordinated an approximately $55,000 conference project with eight vendors over three weeks.</li><li><strong>Continuity:</strong> supported 25+ clients, including approximately 15 repeat clients.</li><li><strong>Issue resolution:</strong> helped resolve an incorrect item without delaying the conference.</li></ul>
-      <p><strong>Tools:</strong> Trello for stages and follow-up, Excel for comparisons and tracking, Wave for payment follow-up.</p>
+      <p><strong>Risk awareness:</strong> I note relevant concerns in Trello card descriptions and discuss dependencies or practical options with the CEO or suppliers when needed.</p>
+      <p><strong>Tools:</strong> Trello for follow-up, Excel for comparisons and tracking, Wave for financial follow-up.</p>
       <p><strong>Foundation:</strong> Computer Science &amp; Engineering, Interactive Media Management, and Project Management.</p>
       <div class="professional-inline-actions"><button type="button" data-current-experience>Current experience ${arrow}</button><button type="button" data-panel="projects">All case studies ${arrow}</button></div>
     </div></details>
