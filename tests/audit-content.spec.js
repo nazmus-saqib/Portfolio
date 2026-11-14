@@ -7,7 +7,7 @@ test('conference case connects the verified example to responsibilities, decisio
   await expect(dialog.getByRole('heading', { name: 'Coordinating a $55,000 conference project', exact: true })).toBeVisible();
   await expect(dialog.locator('.coordination-facts')).toContainText('8 vendors');
   await expect(dialog.locator('.coordination-facts')).toContainText('3 weeks');
-  await expect(dialog.locator('.coordination-result')).toContainText('without delaying the event');
+  await expect(dialog.locator('.coordination-result')).toContainText('without delaying the conference');
   await dialog.getByText('Who did what', { exact: true }).click();
   await expect(dialog.locator('.coordination-ownership')).toContainText('My contribution');
   const tracker = dialog.locator('[data-coordination-template="task-tracker"]');

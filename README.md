@@ -1,6 +1,6 @@
 # Molla Nazmus Saqib — Project & Operations Coordinator
 
-A white and sky-blue portfolio built with Vite, JavaScript, and Three.js. The opening professional overview connects current coordination experience, the approved résumé, contact details, and a conference case study. Personal stories and the seven-workplace journey remain available for deeper exploration.
+A white and sky-blue portfolio built with Vite, JavaScript, and Three.js. The opening professional overview connects current coordination experience, the approved résumé, contact details, and a conference case study. Personal stories and the six-workplace journey remain available for deeper exploration.
 
 ![Professional overview and interactive career journey](docs/preview.png)
 
@@ -32,11 +32,11 @@ Playwright uses `/usr/bin/chromium`, or `CHROMIUM_PATH` when supplied. The previ
 ## Navigation and accessibility
 
 - About Me opens at the centre of the world. Its Profile, Skills and Learning tabs include the professional overview, always-visible skill cards, qualifications, and optional personal story.
-- Journey preserves seven employers in chronological order, beginning with WebNSofTech in Dhaka. Current Identify BDA experience is also available directly from the professional overview.
-- Projects prioritizes four current coordination stories, followed by eight earlier digital projects. The conference case describes a résumé-supported example; supplier and change cases describe recurring work. Reusable planning templates explain the method without exposing client records.
+- Journey preserves six employers in chronological order, beginning with Synesis IT in Dhaka. Current Identify BDA experience is also available directly from the professional overview.
+- Projects opens with Current Project Work. Its documented conference case study is separated from three recurring work examples: supplier coordination, change coordination and the end-to-end Identify workflow. Earlier digital work is available through its own filter. Reusable planning templates explain the method without exposing client records.
 - Each project has a shareable `?project=id` URL, such as `?project=conference`, with a copy-link action and browser history support.
-- Reading view preserves the selected section and its content. Journey expands into all seven employer chapters in reading mode.
-- On phones, the professional overview takes priority; visitors choose when to open the 3D journey. Desktop retains the visible interactive world. Reduced motion, pause, keyboard navigation and a no-WebGL alternative remain available.
+- Focus on Content uses the reading view to preserve the selected section and its content. Journey expands into all six employer chapters in that view.
+- On phones, the professional overview takes priority; visitors choose when to open the 3D journey. Desktop gives the interactive world and professional content roughly equal width. Reduced motion, pause, keyboard navigation and a no-WebGL alternative remain available.
 - The résumé stays explicitly labelled on phones. Delivered HTML also provides professional and project summaries with working résumé and email links when JavaScript is disabled.
 
 ## Content and source files
@@ -44,7 +44,7 @@ Playwright uses `/usr/bin/chromium`, or `CHROMIUM_PATH` when supplied. The previ
 - `src/content.js`: career history, project collection, qualifications and skills.
 - `src/coordination-case-studies.js`: current conference, supplier and issue-coordination case content and template data.
 - `src/main.js`: navigation, dialog URLs, reading mode and scene startup.
-- `src/recruiter-view.js`: professional overview and direct actions.
+- `src/recruiter-view.js`: industry-neutral professional overview, expandable previews and direct actions.
 - `src/project-view.js` and `src/coordination-case-view.js`: digital and coordination case presentation.
 - `src/case-study-sections.js`: original project pictures and interactive supporting studies.
 - `src/profile-view.js`, `src/story-view.js`, `src/contribution-view.js` and `src/workflow-view.js`: profile, personal journey and employer details.
@@ -54,6 +54,6 @@ Playwright uses `/usr/bin/chromium`, or `CHROMIUM_PATH` when supplied. The previ
 - `public/social-preview.png`: screenshot of the portfolio used for social sharing.
 - `docs/audit-validation.md`: validation evidence and the pending three-person comprehension study.
 
-The primary email matches the approved résumé. The broad professional headline and the Identify employment title are deliberately distinct. Counts use supported client and supplier figures. No unverified monthly project count, invented savings or research outcomes are presented. Earlier design projects retain their original individual, team or academic context, and reconstructed supporting studies remain labelled.
+The primary email matches the approved résumé. Project tools are grouped by their practical use and remain listed in the relevant work examples and case studies. The broad professional headline and the Identify employment title are deliberately distinct. Counts use supported client and supplier figures. No unverified monthly project count, invented savings or research outcomes are presented. Earlier design projects retain their original individual, team or academic context, and reconstructed supporting studies remain labelled.
 
 `package-lock.json` pins dependencies. See [third-party notices](THIRD_PARTY_NOTICES.md) for bundled font and library licenses.

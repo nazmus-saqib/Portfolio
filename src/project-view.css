@@ -210,3 +210,8 @@
 
 #dialog-close { width:44px; height:44px; min-width:44px; min-height:44px; }
 .case-contact { min-height:44px; }
+
+.case-project-tools { margin:24px 0; padding:16px; border:1px solid #D2E6F2; background:#F2F9FE; border-radius:10px; }
+.case-project-tools h3 { font-size:1rem; line-height:1.5; margin:0 0 12px; color:#173A55; }
+.case-project-tools .case-tools { margin:0; padding:0; border:0; }
+.case-project-tools .case-tools li { background:#fff; }

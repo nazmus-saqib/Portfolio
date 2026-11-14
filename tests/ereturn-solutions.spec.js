@@ -9,7 +9,8 @@ for (const width of [1440, 360]) {
     await page.goto(baseURL);
     await expect(page.locator('#world-loading')).toHaveClass(/loaded/);
     await page.locator('#panel-nav [data-panel="projects"]').click();
-    const opener = page.getByRole('button', { name: 'Read eReturn project story', exact: true });
+    await page.locator('[data-filter="digital"]').click();
+    const opener = page.locator('.case-open[data-project="ereturn"]');
     await opener.click();
     const dialog = page.getByRole('dialog');
     const cards = dialog.locator('#case-ereturn-challenges .study-challenge');

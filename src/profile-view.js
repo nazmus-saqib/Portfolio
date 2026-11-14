@@ -25,7 +25,7 @@ export function renderCoordinationMetrics() {
   </div>`;
 }
 
-export function renderProfile({ skills = [], education = [], certificates = [], teaching = {} } = {}, { selectedIndex = 0, assetUrl = path => path, aboutHtml = '' } = {}) {
+export function renderProfile({ skills = [], education = [], certificates = [], teaching = {}, professionalTools = [] } = {}, { selectedIndex = 0, assetUrl = path => path, aboutHtml = '' } = {}) {
   const selected = Number.isInteger(selectedIndex) ? Math.max(0, Math.min(tabs.length - 1, selectedIndex)) : 0;
   return `<section class="profile-detail" aria-label="About Me &amp; My Story">
     <div class="profile-explorer" id="profile-explorer" data-profile-view="${selected}">
@@ -35,6 +35,7 @@ export function renderProfile({ skills = [], education = [], certificates = [], 
       <section class="profile-view" id="profile-view-1" role="tabpanel" aria-labelledby="profile-tab-1" tabindex="0" ${selected === 1 ? '' : 'hidden'}>
         <p class="profile-view-label">WHAT I BRING TO A PROJECT</p><h1 class="profile-view-title">Explore my working strengths.</h1>
         <div class="profile-skill-list">${skills.map((skill, index) => `<article class="profile-skill-card"><h2 class="profile-skill-heading"><span class="profile-skill-symbol">${icon(['plan', 'vendor', 'people', 'delivery'][index])}</span><span>${escapeHtml(skill.title)}</span></h2><div class="profile-skill-body"><p>${escapeHtml(skill.description)}</p><div class="profile-skill-tags">${skill.items.map(item => `<span>${escapeHtml(item)}</span>`).join('')}</div></div></article>`).join('')}</div>
+        <section class="profile-tools" aria-labelledby="profile-tools-title"><h2 id="profile-tools-title" tabindex="-1">Tools &amp; methods</h2><p>The tools supporting my planning, records, communication and design collaboration.</p><div class="profile-tools-groups">${professionalTools.map(group=>`<article><h3>${escapeHtml(group.title)}</h3><p>${escapeHtml(group.context)}</p><ul>${group.items.map(tool=>`<li>${escapeHtml(tool)}</li>`).join('')}</ul></article>`).join('')}</div></section>
       </section>
       <section class="profile-view" id="profile-view-2" role="tabpanel" aria-labelledby="profile-tab-2" tabindex="0" ${selected === 2 ? '' : 'hidden'}>
         <p class="profile-view-label">TECHNICAL FOUNDATION + PROJECT TRAINING</p><h1 class="profile-view-title">Learning that supports delivery.</h1>

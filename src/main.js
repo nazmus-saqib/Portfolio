@@ -1,6 +1,6 @@
 import '@fontsource-variable/dm-sans';
 import '@fontsource/instrument-serif/latin-400-italic.css';
-import { aboutMe, careerStops, formatTenure, projects, skills, education, certificates, teaching } from './content.js';
+import { aboutMe, careerStops, formatTenure, projects, skills, education, certificates, teaching, professionalSummary, professionalTools } from './content.js';
 import { renderProjectCard, renderProjectDetail } from './project-view.js';
 import { bindStudyInteractions } from './case-study-sections.js';
 import { renderStoryJourney, activateStoryMilestone } from './story-view.js';
@@ -46,7 +46,7 @@ document.querySelector('#app').innerHTML = `
   <main class="portfolio-shell" aria-label="Nazmus Saqib’s interactive portfolio">
     <header class="shell-header">
       <button type="button" class="wordmark" data-home aria-label="Nazmus Saqib, About Me">saqib<span></span></button>
-      <div class="header-actions"><a href="${assetUrl('Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf')}" class="resume-link" download>Résumé ${icons.download}</a><button type="button" class="view-toggle" id="reading-toggle" aria-pressed="false">${icons.cube}<span>Reading view</span></button></div>
+      <div class="header-actions"><a href="${assetUrl('Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf')}" class="resume-link" download>Résumé ${icons.download}</a><button type="button" class="view-toggle" id="reading-toggle" aria-pressed="false">${icons.cube}<span>Focus on content</span></button></div>
     </header>
 
     <div class="experience-layout" id="scene-layout">
@@ -78,7 +78,7 @@ function projectNames(stop) {
 
 function aboutMarkup() {
   return `<article class="about-story" id="about-card" aria-labelledby="about-title">
-    ${renderProfessionalOverview({aboutMe,assetUrl})}
+    ${renderProfessionalOverview({aboutMe,professionalSummary,assetUrl})}
     <details class="about-personal" id="about-personal"><summary><span class="profile-preview-title">My story &amp; beyond work</span><span class="profile-preview-excerpt">${esc(aboutMe.introduction)}</span><span class="profile-preview-toggle"><span class="profile-preview-expand">Read more</span><span class="profile-preview-collapse">Show less</span><span class="profile-preview-icon" aria-hidden="true">+</span></span></summary><div class="about-personal-body">
       <div class="about-overview"><header><p class="eyebrow">About Me &amp; My Story</p><h2 class="about-tagline">${esc(aboutMe.tagline)}</h2><div class="about-links"><button type="button" data-about-jump="story" aria-label="Read my story: Bangladesh to Canada">My story ${icons.next}</button><button type="button" data-about-jump="learning" aria-label="Read about my auto repair learning">Beyond the screen ${icons.next}</button></div></header>
       <section class="about-motivation"><h3>What keeps me curious</h3><p>${esc(aboutMe.motivation)}</p></section>
@@ -114,18 +114,23 @@ function companyMarkup(stop, index, compact = false) {
 }
 
 function profileMarkup() {
-  return renderProfile({skills,education,certificates,teaching},{selectedIndex:selectedProfileTab,assetUrl,aboutHtml:aboutMarkup()});
+  return renderProfile({skills,education,certificates,teaching,professionalTools},{selectedIndex:selectedProfileTab,assetUrl,aboutHtml:aboutMarkup()});
 }
 
-let projectFilter = 'all';
+let projectFilter = 'operations';
 function projectsMarkup() {
   const isOperations = project => project.category === 'operations' || project.id === 'identify';
   const visible = projects.filter(p=>projectFilter==='all'||(projectFilter==='operations'?isOperations(p):!isOperations(p)));
-  return `<section class="project-collection"><p class="eyebrow">CURRENT WORK & EARLIER PROJECTS</p><h1>Plans into <em>progress.</em></h1><p class="panel-description">Coordination is my focus today. Earlier digital work shows the requirements, communication, and systems thinking behind it.</p><div class="project-filter" role="group" aria-label="Filter projects">${[['all','All work'],['operations','Operations'],['digital','Earlier digital work']].map(([id,name])=>`<button type="button" data-filter="${id}" aria-pressed="${id===projectFilter}" class="${id===projectFilter?'active':''}">${name}</button>`).join('')}</div><div class="project-list" id="project-list">${visible.map(p=>renderProjectCard(p,{assetUrl})).join('')}</div><p class="collection-count" aria-live="polite">${visible.length} ${visible.length===1?'work story':'work stories'}</p></section>`;
+  const groups = [
+    { id: 'case-studies', title: 'Current project case studies', description: 'A specific project with a documented challenge, my contribution and a result.', items: visible.filter(p=>isOperations(p)&&p.storyType==='case-study') },
+    { id: 'workflows', title: 'Recurring coordination examples', description: 'How I organize ongoing work, rather than separate one-off project results.', items: visible.filter(p=>isOperations(p)&&p.storyType!=='case-study') },
+    { id: 'digital', title: 'Earlier digital projects', description: 'Design, requirements and stakeholder-review work in its original context.', items: visible.filter(p=>!isOperations(p)) },
+  ];
+  return `<section class="project-collection"><p class="eyebrow">CURRENT WORK & EARLIER PROJECTS</p><h1>Plans into <em>progress.</em></h1><p class="panel-description">Current project evidence and recurring coordination examples, with earlier digital projects available separately.</p><button type="button" class="project-tools-link" data-show-tools>View tools &amp; methods ${icons.arrow}</button><div class="project-filter" role="group" aria-label="Filter projects">${[['operations','Current work'],['digital','Earlier digital work'],['all','All work']].map(([id,name])=>`<button type="button" data-filter="${id}" aria-pressed="${id===projectFilter}" class="${id===projectFilter?'active':''}">${name}</button>`).join('')}</div><div class="project-list" id="project-list">${groups.filter(group=>group.items.length).map(group=>`<section class="project-group" data-project-group="${group.id}" aria-labelledby="project-group-${group.id}"><h2 id="project-group-${group.id}">${group.title}</h2><p>${group.description}</p><div class="project-group-cards">${group.items.map(p=>renderProjectCard(p,{assetUrl})).join('')}</div></section>`).join('')}</div><p class="collection-count" aria-live="polite">${visible.length} ${visible.length===1?'work story':'work stories'}</p></section>`;
 }
 
 function contactMarkup() {
-  return `<section class="contact-panel"><p class="eyebrow">THE NEXT CONNECTION</p><h1>Let’s move<br><em>things forward.</em></h1><p>I’m a project and operations coordinator who brings clients, vendors, and teams together—from a clear brief to a completed delivery. My technical education, project management training, and hands-on experience help me coordinate requirements, approvals, timelines, costs, and changes.</p><p>I’m motivated by making the next step clear, keeping people informed, and following through to delivery.</p><p>I’m looking for Project Coordinator or Assistant Project Manager opportunities where I can help teams plan clearly, communicate well, and deliver dependable results.</p><a class="button button-dark" href="mailto:${email}">Start a conversation ${icons.arrow}</a><a class="contact-email" href="mailto:${email}">${email}</a><button type="button" class="copy-email" data-copy-email>Copy email address</button><div class="contact-links"><a href="${assetUrl('Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf')}" download>Résumé ${icons.download}</a><a href="https://github.com/nazmus-saqib" target="_blank" rel="noopener noreferrer">GitHub ${icons.arrow}</a></div><p class="contact-location">Based in Ontario, Canada.</p></section>`;
+  return `<section class="contact-panel"><p class="eyebrow">THE NEXT CONNECTION</p><h1>Let’s move<br><em>things forward.</em></h1><p>I coordinate requirements, stakeholders, schedules, resources and deliverables across business operations, technical field services and digital projects. My technical education and project management training support clear planning, communication and practical problem-solving.</p><p>I’m motivated by making the next step clear, keeping people informed, and following through to delivery.</p><p>I’m looking for Project Coordinator or Assistant Project Manager opportunities where I can help teams plan clearly, communicate well, and deliver dependable results.</p><a class="button button-dark" href="mailto:${email}">Start a conversation ${icons.arrow}</a><a class="contact-email" href="mailto:${email}">${email}</a><button type="button" class="copy-email" data-copy-email>Copy email address</button><div class="contact-links"><a href="${assetUrl('Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf')}" download>Résumé ${icons.download}</a><a href="https://github.com/nazmus-saqib" target="_blank" rel="noopener noreferrer">GitHub ${icons.arrow}</a></div><p class="contact-location">Based in Ontario, Canada.</p></section>`;
 }
 
 function renderPanel(resetScroll = true) {
@@ -217,6 +222,7 @@ document.querySelector('#app').addEventListener('click',event=>{
   const milestone=event.target.closest('[data-story-milestone]');if(milestone){showStoryMilestone(Number(milestone.dataset.storyMilestone));return;}
   const aboutJump=event.target.closest('[data-about-jump]');if(aboutJump){stopSpeech();const body=document.querySelector('#sidebar-body');const personal=body.querySelector('#about-personal');if(personal)personal.open=true;const target=body.querySelector(aboutJump.dataset.aboutJump==='story'?'#about-story-title':'#about-learning-title');if(target){target.focus({preventScroll:true});body.scrollTo({top:body.scrollTop+target.getBoundingClientRect().top-body.getBoundingClientRect().top-12,behavior:motionPreference.matches?'instant':'smooth'});}return;}
   if(event.target.closest('[data-current-experience]')){selectStop(latest);return;}
+  if(event.target.closest('[data-show-tools]')){selectAbout(false);showProfileTab(1);const target=document.querySelector('#profile-tools-title');target?.focus({preventScroll:true});target?.scrollIntoView({block:'start',behavior:motionPreference.matches?'instant':'smooth'});return;}
   const project=event.target.closest('[data-project]');if(project){openProject(project.dataset.project,project);return;}
   const section=event.target.closest('button[data-panel]');if(section){if(section.dataset.panel==='profile'){selectAbout(false);}else if(section.dataset.panel==='journey'){selectStop(active);}else{stopSpeech();panel=section.dataset.panel;renderPanel();}return;}
   const category=event.target.closest('[data-filter]');if(category){projectFilter=category.dataset.filter;renderPanel(false);return;}
@@ -276,7 +282,7 @@ function toggleReading(force) {
   reading=next;
   document.querySelector('.portfolio-shell').classList.toggle('reading-mode',reading);
   document.querySelector('#reading-toggle').setAttribute('aria-pressed',reading);
-  document.querySelector('#reading-toggle span').textContent=reading?'3D view':'Reading view';
+  document.querySelector('#reading-toggle span').textContent=reading?'Return to 3D':'Focus on content';
   if(panel==='journey'){
     renderPanel();updateChapterControls();
     if(reading){const card=body.querySelector('.reading-company.is-current');const first=body.querySelector('.reading-company');if(card&&first)body.scrollTop=card.offsetTop-first.offsetTop+chapterOffset;}

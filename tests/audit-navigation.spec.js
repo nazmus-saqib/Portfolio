@@ -13,6 +13,9 @@ test('every project has a refreshable direct link, while invalid project IDs rec
     await page.goto(siteUrl(baseURL, `ref=recruiter&project=${encodeURIComponent(project.id)}`));
     await expect(page.locator('#project-dialog')).toBeVisible();
     await expect(page.locator('#dialog-title')).toHaveText(project.title);
+    await expect(page.locator('.case-project-tools')).toHaveCount(1);
+    await expect(page.locator('.case-project-tools')).toContainText('Tools & methods');
+    for (const tool of project.tools) await expect(page.locator('.case-project-tools')).toContainText(tool);
     expect(new URL(page.url()).searchParams.get('ref')).toBe('recruiter');
     await page.locator('#dialog-close').click();
     await expect(page.locator('#project-dialog')).not.toBeVisible();
@@ -29,6 +32,7 @@ test('every project has a refreshable direct link, while invalid project IDs rec
 test('project links follow back/forward, survive reload, and Escape removes only the project parameter', async ({ page, baseURL }) => {
   await page.goto(siteUrl(baseURL, 'ref=career'));
   await page.locator('#panel-nav [data-panel="projects"]').click();
+  await page.locator('[data-filter="digital"]').click();
   await page.locator('[data-project="ereturn"]').click();
   await expect(page.locator('#dialog-title')).toHaveText('eReturn');
   expect(new URL(page.url()).searchParams.get('project')).toBe('ereturn');

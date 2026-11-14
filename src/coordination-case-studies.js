@@ -12,6 +12,7 @@ export const coordinationProjects = [
   {
     ...base,
     id: 'conference',
+    storyType: 'case-study',
     title: 'Coordinating a $55,000 conference project',
     year: 'During my current role',
     collaboration: 'Project coordination · team delivery',
@@ -19,10 +20,10 @@ export const coordinationProjects = [
     challenge: 'Keep vendor work, approvals, delivery and onsite setup aligned within a three-week coordination period.',
     approach: [
       'Coordinated the approximately $55,000 conference project with eight vendors over three weeks.',
-      'Supported onsite setup and helped resolve an incorrect backdrop-frame issue without delaying the event.',
+      'Supported onsite setup and helped resolve an incorrect item without delaying the conference.',
       'Worked as part of the delivery team; client approval, commercial decisions and supplier execution remained with their respective owners.',
     ],
-    outcome: 'Helped resolve the incorrect backdrop-frame issue without delaying the event.',
+    outcome: 'Helped resolve an incorrect item without delaying the conference.',
     tools: ['Vendor coordination', 'Scheduling', 'Onsite support', 'Issue resolution'],
     featured: true,
     coordinationCaseStudy: {
@@ -38,24 +39,24 @@ export const coordinationProjects = [
       responsibilities: [
         'Coordinate the project across eight vendors over three weeks.',
         'Support onsite setup and follow through on delivery issues.',
-        'Help resolve the incorrect backdrop-frame issue with the people responsible for delivery.',
+        'Help resolve an issue with an incorrect item alongside the delivery team.',
       ],
       constraints: [
         'A fixed event date and a three-week coordination window.',
         'Eight vendors whose work needed to come together for setup.',
-        'An incorrect backdrop frame that required attention before the event.',
+        'An incorrect item that required attention before the conference.',
       ],
       actions: [
         { title: 'Connect the moving parts', body: 'I coordinated vendor work across the three-week period and supported the transition into onsite setup.' },
-        { title: 'Stay involved at setup', body: 'I supported onsite setup, where the incorrect backdrop-frame issue needed a coordinated response.' },
-        { title: 'Help resolve the issue', body: 'I helped resolve the frame issue with the delivery team. The event proceeded without a delay caused by that issue.' },
+        { title: 'Stay involved at setup', body: 'I supported onsite setup, where an incorrect item needed a coordinated response.' },
+        { title: 'Help resolve the issue', body: 'I helped resolve an incorrect item with the delivery team, without delaying the conference.' },
       ],
       ownership: [
-        { role: 'My contribution', body: 'Project coordination, vendor follow-up, onsite support and assistance resolving the backdrop-frame issue.' },
+        { role: 'My contribution', body: 'Project coordination, vendor follow-up, onsite support and help resolving an issue with an incorrect item.' },
         { role: 'Shared delivery', body: 'Vendors and the onsite team carried out production and setup. I supported their coordination rather than claiming their specialist work.' },
         { role: 'Approval boundaries', body: 'My wider role includes recommending vendor and commercial options to the CEO, and obtaining client artwork approval before production.' },
       ],
-      result: 'The incorrect backdrop-frame issue was resolved without delaying the event.',
+      result: 'I helped resolve an incorrect item without delaying the conference.',
       lessons: [
         'A fixed event date makes dependencies between suppliers especially important.',
         'Coordination continues through onsite setup, where practical issues can still emerge.',
@@ -86,6 +87,7 @@ export const coordinationProjects = [
   {
     ...base,
     id: 'supplier-coordination',
+    storyType: 'workflow',
     title: 'Coordinating multiple suppliers',
     year: '2024–present',
     collaboration: 'Recurring coordination workflow',
@@ -153,6 +155,7 @@ export const coordinationProjects = [
   {
     ...base,
     id: 'change-coordination',
+    storyType: 'workflow',
     title: 'Managing changes and urgent orders',
     year: '2024–present',
     collaboration: 'Recurring issue-resolution workflow',
@@ -195,7 +198,7 @@ export const coordinationProjects = [
         { role: 'My contribution', body: 'Evidence gathering, option checking, stakeholder communication, action tracking and coordination of corrections.' },
         { role: 'Shared responsibility', body: 'Vendors and designers carry out the relevant corrections. Client approvals and CEO commercial decisions remain explicit.' },
       ],
-      result: 'The process gives each issue an owner, a next action and a communication path. A separate documented example is the conference backdrop-frame issue I helped resolve without delaying the event; its full context appears in the conference case study.',
+      result: 'The process gives each issue an owner, a next action and a communication path. A documented example is the incorrect item I helped resolve without delaying the conference; its context appears in the conference case study.',
       lessons: [
         'An early, specific update is more useful than waiting until the deadline to report a problem.',
         'A corrective action needs an owner and follow-up, as well as an agreed solution.',

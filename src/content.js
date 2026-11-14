@@ -95,6 +95,7 @@ export const projects = [
   ...coordinationProjects,
   {
     id: 'identify',
+    storyType: 'workflow',
     title: 'From request to delivery',
     category: 'operations',
     year: '2024–present',
@@ -362,6 +363,13 @@ export const skills = [
   },
 ];
 
+export const professionalTools = [
+  { title: 'Planning & tracking', context: 'Task follow-up, schedules and visual workflow planning.', items: ['Trello', 'ClickUp', 'Microsoft Project', 'Miro'] },
+  { title: 'Analysis & reporting', context: 'Cost comparisons, logs, records and management presentations.', items: ['Microsoft Excel', 'Word', 'PowerPoint'] },
+  { title: 'Communication & files', context: 'Stakeholder updates and organized shared project records.', items: ['Outlook', 'SharePoint', 'Google Drive'] },
+  { title: 'Finance & design collaboration', context: 'Payment follow-up, artwork reviews and digital prototypes.', items: ['Wave', 'Canva', 'Figma', 'Adobe XD'] },
+];
+
 export const certificates = [
   {
     title: 'UI / UX Design Specialization',
@@ -397,26 +405,6 @@ export const teaching = {
 // ongoing-role tenure counts elapsed months as of the current Toronto month.
 export const careerStops = [
   {
-    id: 'webnsoftech',
-    company: 'WebNSofTech',
-    label: 'WebNSofTech',
-    role: 'Graphics Designer',
-    start: '2018-01',
-    end: '2020-07',
-    period: 'Jan 2018–Jul 2020',
-    location: 'Dhaka, Bangladesh',
-    employment: 'Part-time',
-    headline: 'Make the message clear.',
-    story: 'My earlier design work began with visual communication: turning ideas into banners, posters, logos, illustrations, and web designs. It gave me a practical foundation in organizing information and preparing clear deliverables.',
-    highlights: [
-      'Created visual material for digital and print communication.',
-      'Worked across illustration, photo editing, motion graphics, and web design.',
-      'Built a foundation in presenting information clearly.',
-    ],
-    projectIds: [],
-    projectLabel: 'Selected work types',
-  },
-  {
     id: 'synesis',
     company: 'Synesis IT',
     label: 'Synesis IT',
@@ -427,7 +415,7 @@ export const careerStops = [
     location: 'Dhaka, Bangladesh',
     employment: 'Internship → Full-time',
     headline: 'Understand the requirement first.',
-    story: 'At Synesis IT, I worked with business and technical stakeholders on public-service and collaboration products. I learned to clarify requirements, document the work, coordinate feedback, and present prototypes to clients.',
+    story: 'At Synesis IT, I worked as a UX designer with government representatives, business analysts, designers and developers. I documented requirements, presented prototypes, gathered usability feedback and coordinated design revisions with technical teams.',
     highlights: [
       'Internship: Aug–Oct 2020; UX Designer: Nov 2020–Nov 2021.',
       'Translated software and client requirements into user flows, wireframes, and prototypes.',
@@ -447,7 +435,7 @@ export const careerStops = [
     location: 'Dhaka, Bangladesh',
     employment: 'Full-time',
     headline: 'Connect needs with the next step.',
-    story: 'My work at iQuantile connected business and user requirements with organization-management and healthcare experiences. I worked through research, design, and feedback while keeping different stakeholder needs in view.',
+    story: 'At iQuantile, I analyzed business and user requirements for organization-management and healthcare experiences. As a UX designer, I coordinated stakeholder feedback through design reviews and incorporated it into interface revisions.',
     highlights: [
       'Gathered and analyzed business and user requirements.',
       'Communicated requirements and coordinated feedback with internal teams.',
@@ -467,7 +455,7 @@ export const careerStops = [
     location: 'Malaysia',
     employment: 'Full-time',
     headline: 'See the whole operation.',
-    story: 'At iStoreiSend, I worked individually on ODIN, a warehouse and fulfillment system. Working across business and technical teams gave me a closer view of how requirements, information, and operational handoffs fit together.',
+    story: 'At iStoreiSend, I designed interface prototypes for ODIN, an internal warehouse and fulfillment system. I gathered operational requirements and coordinated reviews and revisions with business and technical stakeholders.',
     highlights: [
       'Worked with stakeholders to understand requirements and business objectives.',
       'Collaborated with business and technical colleagues on product design.',
@@ -487,11 +475,11 @@ export const careerStops = [
     location: 'Canada',
     employment: 'On-call · Overlapping roles',
     headline: 'Follow the work onto the site.',
-    story: 'My on-call field work connected technical requirements with hands-on execution at customer and commercial sites. I installed devices, confirmed needs, resolved issues, and sometimes worked independently. This overlapped with my part-time customer-facing roles.',
+    story: 'In on-call field assignments, I confirmed work requirements and site access, installed and supported equipment, documented troubleshooting and exceptions, and escalated unresolved issues to Level 2 support. This overlapped with my part-time customer-facing roles.',
     highlights: [
       'Supported installations of computers, peripherals, network devices, POS, and IoT equipment.',
-      'Confirmed customer requirements and resolved practical site issues.',
-      'Balanced scheduling, prioritization, and hands-on technical execution.',
+      'Confirmed requirements and access arrangements with customer-site contacts.',
+      'Documented completed work and exceptions, and escalated unresolved issues to Level 2 support.',
     ],
     projectIds: [],
     projectLabel: 'Work in practice',
@@ -540,7 +528,7 @@ export const careerStops = [
 
 export const professionalSummary = {
   headline: 'Project & Operations Coordinator',
-  body: 'I coordinate projects from requirements and supplier sourcing through approvals, production, delivery and financial follow-up. At Identify BDA, I have supported 25+ clients and work with 20+ vendors. My experience spans Canadian operations, technical field services and digital projects, supported by formal project management education.',
+  body: 'I coordinate projects by connecting requirements, stakeholders, schedules, resources and deliverables. My experience spans Canadian business operations, technical field services and digital projects, combining practical problem-solving with project management education.',
   location: 'Hamilton, Ontario, Canada',
   qualifications: [
     'Bachelor of Science in Computer Science & Engineering · North South University · 2019',

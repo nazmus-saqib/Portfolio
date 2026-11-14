@@ -24,9 +24,9 @@ test('single-viewport company journey preserves public assets and résumé links
   await expect(page.locator('#world')).toHaveAttribute('data-traveling', 'false');
   await expect(page.locator('[data-world-home]')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#panel-nav [data-panel="profile"]')).toHaveText('About Me');
-  await expect(page.locator('.world-label')).toHaveCount(7);
+  await expect(page.locator('.world-label')).toHaveCount(6);
   await page.locator('#panel-nav button[data-panel="journey"]').click();
-  await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
+  await expect(page.locator('#company-name')).toHaveText('Synesis IT');
   await expect(page.locator('#company-card .eyebrow')).toHaveText('01 / Dhaka, Bangladesh');
   await expect(page.locator('#about-card')).toHaveCount(0);
   await expect(page.locator('#world')).toHaveAttribute('data-active-station', '0');
@@ -41,7 +41,7 @@ test('single-viewport company journey preserves public assets and résumé links
   expect(resume.headers()['content-type']).toContain('application/pdf');
   expect((await resume.body()).subarray(0, 5).toString()).toBe('%PDF-');
 
-  await page.getByRole('button', { name: 'Visit company 02 Synesis IT', exact: true }).click();
+  await page.getByRole('button', { name: 'Visit company 01 Synesis IT', exact: true }).click();
   await page.getByRole('button', { name: 'Read BIWTA project story' }).click();
   await page.getByText('Explore the prototype screens', { exact: true }).click();
   const previews = await page.locator('.project-gallery figure img').evaluateAll(images => images.map(image => image.getAttribute('src')));

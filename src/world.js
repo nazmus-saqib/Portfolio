@@ -155,29 +155,31 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
   groundShadow.rotation.x = -Math.PI / 2; groundShadow.position.y = -1.3; scene.add(groundShadow);
 
   const defaultStations = [
-    { company: 'WebNSofTech', label: 'WebNSofTech' },
-    { company: 'Synesis IT', label: 'Synesis IT' },
-    { company: 'iQuantile', label: 'iQuantile' },
-    { company: 'iStoreiSend', label: 'iStoreiSend' },
-    { company: 'Dynamic Infotech', label: 'Dynamic Infotech' },
-    { company: 'UPS & Staples', label: 'UPS + Staples' },
-    { company: 'Identify BDA', label: 'Identify BDA' },
+    { id: 'synesis', company: 'Synesis IT', label: 'Synesis IT' },
+    { id: 'iquantile', company: 'iQuantile', label: 'iQuantile' },
+    { id: 'istoreisend', company: 'iStoreiSend', label: 'iStoreiSend' },
+    { id: 'dynamic', company: 'Dynamic Infotech', label: 'Dynamic Infotech' },
+    { id: 'ups-staples', company: 'UPS & Staples', label: 'UPS + Staples' },
+    { id: 'identify', company: 'Identify BDA', label: 'Identify BDA' },
   ];
+  const stationColors = { synesis: 'navy', iquantile: 'sage', istoreisend: 'wood', dynamic: 'gray', 'ups-staples': 'terracotta', identify: 'moss' };
   const companyStations = stations?.length ? stations : defaultStations;
   const stationData = companyStations.map((station, index) => {
     const angle = -Math.PI + index * Math.PI * 2 / companyStations.length;
     const x = Math.cos(angle), z = Math.sin(angle);
+    const id = station.id || defaultStations.find(item => item.company === station.company)?.id || `company-${index + 1}`;
     return {
+      id,
       name: station.label || station.company || defaultStations[index]?.company || `Company ${index + 1}`,
       company: station.company || station.label || defaultStations[index]?.company,
       position: [x * 5.05, 0, z * 4.05],
       stop: [x * 3.0, 0, z * 2.4],
       // Keep the automated fulfillment and network labels below their equipment displays.
-      labelAnchor: new THREE.Vector3(x * 6.15, index === 3 ? -0.75 : index === 4 ? -0.35 : 0.5, z * 5.0),
-      color: ['terracotta', 'navy', 'sage', 'wood', 'gray', 'terracotta', 'moss'][index % 7],
+      labelAnchor: new THREE.Vector3(x * 6.15, id === 'istoreisend' ? -0.75 : id === 'dynamic' ? -0.35 : 0.5, z * 5.0),
+      color: stationColors[id] || 'sage',
     };
   });
-  const stationGroups = [], hits = [], labels = [], markers = [];
+  const stationGroupsById = new Map(), hits = [], labels = [], markers = [];
   const targetMarkers = [];
   // A continuous inlaid path connects employers in chronological order.
   stationData.forEach((station, index) => {
@@ -205,7 +207,8 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
 
   stationData.forEach((station, index) => {
     const group = new THREE.Group(); group.position.set(...station.position); group.scale.setScalar(0.78);
-    world.add(group); stationGroups.push(group);
+    group.name = `workplace-${station.id}`;
+    world.add(group); stationGroupsById.set(station.id, group);
     const platform = box(group, 3.25, 0.15, 2.82, 0, 0.225, 0, 'chalk', 0.12);
     platform.userData.station = index; hits.push(platform);
     const hit = new THREE.Mesh(new THREE.BoxGeometry(3.3, 2.4, 2.9), new THREE.MeshBasicMaterial({ visible: false }));
@@ -224,9 +227,9 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     container.append(label); labels.push(label);
   });
 
-  // 01 — the design studio: a large navy pinboard, screen, desk and tiny sketches.
-  {
-    const group = stationGroups[1] || stationGroups[0];
+  // Synesis IT — a design studio with a pinboard, screen, desk and sketches.
+  if (stationGroupsById.has('synesis')) {
+    const group = stationGroupsById.get('synesis');
     box(group, 2.65, 1.92, 0.16, 0, 1.25, -0.97, 'navy', 0.09);
     box(group, 2.2, 1.35, 0.045, 0, 1.34, -0.87, 'sage', 0.04);
     sign(group, 'STUDIO', 1.06, 0.3, 0, 2, -0.872, '#1479b8', '#ffffff');
@@ -255,11 +258,11 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     box(chair, 0.55, 0.05, 0.4, 0, 0.29, 0, 'navy');
   }
 
-  // 04 — an illustrative automated fulfillment cell: robot, conveyor and scanner.
+  // iStoreiSend — an automated fulfillment cell: robot, conveyor and scanner.
   let fulfillmentTime = 0;
   let updateFulfillment = () => {};
-  {
-    const group = stationGroups[3] || stationGroups[0];
+  if (stationGroupsById.has('istoreisend')) {
+    const group = stationGroupsById.get('istoreisend');
     group.name = 'automated-fulfillment-cell';
     const alloy = material(0xe8f2f8, { metalness: 0.32, roughness: 0.42 });
     const cyan = material(0xa6ddf8, { emissive: 0x3aa7de, emissiveIntensity: 0.45, roughness: 0.35 });
@@ -345,28 +348,9 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     updateFulfillment(0);
   }
 
-  // 01 — graphic design: the foundation in visual communication.
-  {
-    const group = stationGroups[0];
-    box(group, 2.4, 1.55, 0.14, 0, 1.23, -0.67, 'terracotta', 0.09);
-    box(group, 2.1, 1.28, 0.03, 0, 1.24, -0.58, 'paper');
-    sign(group, 'CREATE', 1.45, 0.27, 0, 1.72, -0.56, '#ffffff', '#1479b8');
-    [-0.65, 0, 0.65].forEach((x, i) => {
-      box(group, 0.46, 0.66, 0.025, x, 1.14, -0.54, ['navy', 'sage', 'wood'][i], 0.03);
-      cylinder(group, 0.12, 0.12, 0.015, x, 1.22, -0.52, 'paper', 20).rotation.x = Math.PI / 2;
-    });
-    box(group, 2.3, 0.12, 0.76, 0, 0.77, 0.35, 'wood');
-    [-0.93, 0.93].forEach(x => box(group, 0.08, 0.48, 0.57, x, 0.49, 0.35, 'navy'));
-    const sheet = box(group, 0.9, 0.024, 0.51, -0.2, 0.85, 0.3, 'paper'); sheet.rotation.y = -0.13;
-    box(group, 0.24, 0.024, 0.32, -0.42, 0.87, 0.3, 'terracotta');
-    cylinder(group, 0.1, 0.09, 0.24, 0.78, 0.94, 0.29, 'navy');
-    [-0.035, 0.04].forEach((x, i) => cylinder(group, 0.015, 0.015, 0.33, 0.78 + x, 1.18, 0.29, i ? 'wood' : 'amber', 8));
-    plant(group, -1.14, 0.91, 0.75);
-  }
-
-  // 03 — organization management: a small model of connected teams and systems.
-  if (stationGroups[2]) {
-    const group = stationGroups[2];
+  // iQuantile — connected teams and organization-management systems.
+  if (stationGroupsById.has('iquantile')) {
+    const group = stationGroupsById.get('iquantile');
     box(group, 2.45, 1.68, 0.16, 0, 1.15, -0.67, 'sage', 0.1);
     box(group, 2.17, 1.37, 0.035, 0, 1.16, -0.57, 'chalk');
     sign(group, 'CONNECTED', 1.8, 0.24, 0, 1.73, -0.54, '#ffffff', '#1479b8');
@@ -381,9 +365,9 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     plant(group, 1.05, 0.8, 0.8);
   }
 
-  // 05 — network site work: desktop setup, live rack equipment and service kit.
-  if (stationGroups[4]) {
-    const group = stationGroups[4];
+  // Dynamic Infotech — desktop setup, live rack equipment and service kit.
+  if (stationGroupsById.has('dynamic')) {
+    const group = stationGroupsById.get('dynamic');
     group.name = 'dynamic-infotech-network-workplace';
 
     // The open-front rack makes switches, patch ports and server trays legible
@@ -442,9 +426,9 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     lineBetween(group, [-1.19, 0.58, 0.87], [-0.85, 0.58, 0.87], 0.023, 'navy');
   }
 
-  // 06 — customer service: a retail counter, parcel shelving, and point of sale.
-  if (stationGroups[5]) {
-    const group = stationGroups[5];
+  // UPS & Staples — a retail counter, parcel shelving, and point of sale.
+  if (stationGroupsById.has('ups-staples')) {
+    const group = stationGroupsById.get('ups-staples');
     box(group, 2.38, 1.48, 0.14, 0, 1.08, -0.76, 'chalk', 0.08);
     box(group, 2.63, 0.14, 0.66, 0, 1.91, -0.48, 'terracotta');
     [-0.9, -0.45, 0, 0.45, 0.9].forEach(x => box(group, 0.23, 0.04, 0.66, x, 2, -0.48, 'paper', 0.01));
@@ -461,9 +445,9 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     plant(group, 1.11, -0.53, 0.75);
   }
 
-  // 04 — the coordinator's board. Dependencies, approvals, people, delivery.
-  {
-    const group = stationGroups[6] || stationGroups.at(-1);
+  // Identify BDA — dependencies, approvals, people, and delivery.
+  if (stationGroupsById.has('identify')) {
+    const group = stationGroupsById.get('identify');
     box(group, 2.4, 1.55, 0.12, -0.05, 1.38, -0.7, 'wood', 0.05);
     box(group, 2.2, 1.35, 0.035, -0.05, 1.38, -0.615, 'paper', 0.025);
     sign(group, 'MAKE IT HAPPEN', 1.75, 0.23, -0.05, 1.89, -0.59, '#ffffff', '#173a55');
@@ -568,7 +552,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
       const marginX = Math.min(8, size.width / 2), marginY = Math.min(8, size.height / 2);
       const halfWidth = Math.min(label.offsetWidth / 2, size.width / 2 - marginX);
       const halfHeight = Math.min(label.offsetHeight / 2, size.height / 2 - marginY);
-      const left = narrow && index === 3
+      const left = narrow && station.id === 'istoreisend'
         ? halfWidth + marginX
         : THREE.MathUtils.clamp((projected.x * 0.5 + 0.5) * size.width, halfWidth + marginX, size.width - halfWidth - marginX);
       // Reserve the bottom control row when the scene is compact.
@@ -578,6 +562,23 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
       label.classList.toggle('is-active', index === activeIndex);
       label.setAttribute('aria-pressed', String(index === activeIndex));
     });
+    const placed = [];
+    const visibleLabels = labels.filter(label=>label.style.visibility==='visible')
+      .map(label=>({label,left:parseFloat(label.style.left),top:parseFloat(label.style.top),width:label.offsetWidth,height:label.offsetHeight}))
+      .sort((a,b)=>a.top-b.top);
+    for (const item of visibleLabels) {
+      const gap = 8;
+      const overlaps = (top,other) => Math.abs(item.left-other.left)<(item.width+other.width)/2+gap
+        && Math.abs(top-other.top)<(item.height+other.height)/2+gap;
+      const candidates = [item.top,...placed.flatMap(other=>[
+        other.top+(item.height+other.height)/2+gap,
+        other.top-(item.height+other.height)/2-gap,
+      ])].filter(top=>top>=item.height/2+8&&top<=size.height-item.height/2-8)
+        .sort((a,b)=>Math.abs(a-item.top)-Math.abs(b-item.top));
+      const top = candidates.find(candidate=>placed.every(other=>!overlaps(candidate,other))) ?? item.top;
+      item.label.style.top = `${top}px`;
+      placed.push({...item,top});
+    }
   }
   function resize() {
     if (disposed) return;
@@ -604,9 +605,9 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
       : 'A three-dimensional world of Saqib’s career. Choose a company to visit a workplace, or the centre point to return to About Me.';
     const workplace = activeIndex === -1
       ? ' Meet Saqib at the central compass for About Me & My Story: his journey from Bangladesh to Canada and into project coordination.'
-      : activeIndex === 3
+      : stationData[activeIndex]?.id === 'istoreisend'
       ? ' The iStoreiSend illustration shows automated fulfillment with a robotic parcel handler, moving conveyor, illuminated scanner, and automated storage.'
-      : activeIndex === 4
+      : stationData[activeIndex]?.id === 'dynamic'
         ? ' The Dynamic Infotech workplace contains a desktop computer setup, a cabled server rack, and a service kit.'
         : '';
     canvas.setAttribute('aria-label', controls + workplace);
