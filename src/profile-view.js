@@ -20,7 +20,7 @@ const tabs = [
 
 export function renderCoordinationMetrics() {
   return `<div class="profile-stat-grid" aria-label="Current coordination experience">
-    <div class="profile-stat"><span class="profile-stat-icon">${icon('plan')}</span><strong>6–10</strong><span>Projects / month</span></div>
+    <div class="profile-stat"><span class="profile-stat-icon">${icon('plan')}</span><strong>25+</strong><span>Clients supported</span></div>
     <div class="profile-stat"><span class="profile-stat-icon">${icon('people')}</span><strong>20+</strong><span>External vendors</span></div>
   </div>`;
 }
@@ -33,13 +33,13 @@ export function renderProfile({ skills = [], education = [], certificates = [], 
       <div class="profile-explorer-status"><span class="profile-explorer-count" aria-live="polite">View ${String(selected + 1).padStart(2, '0')} / ${String(tabs.length).padStart(2, '0')}</span><span class="profile-explorer-progress" aria-hidden="true"><i style="width:${((selected + 1) / tabs.length) * 100}%"></i></span></div>
       <section class="profile-view profile-view-about" id="profile-view-0" role="tabpanel" aria-labelledby="profile-tab-0" tabindex="0" ${selected === 0 ? '' : 'hidden'}>${aboutHtml}</section>
       <section class="profile-view" id="profile-view-1" role="tabpanel" aria-labelledby="profile-tab-1" tabindex="0" ${selected === 1 ? '' : 'hidden'}>
-        <p class="profile-view-label">WHAT I BRING TO A PROJECT</p><h3>Explore my working strengths.</h3>
-        <div class="profile-skill-list">${skills.map((skill, index) => `<article class="profile-skill-card"><h4 class="profile-skill-heading"><span class="profile-skill-symbol">${icon(['plan', 'vendor', 'people', 'delivery'][index])}</span><span>${escapeHtml(skill.title)}</span></h4><div class="profile-skill-body"><p>${escapeHtml(skill.description)}</p><div class="profile-skill-tags">${skill.items.map(item => `<span>${escapeHtml(item)}</span>`).join('')}</div></div></article>`).join('')}</div>
+        <p class="profile-view-label">WHAT I BRING TO A PROJECT</p><h1 class="profile-view-title">Explore my working strengths.</h1>
+        <div class="profile-skill-list">${skills.map((skill, index) => `<article class="profile-skill-card"><h2 class="profile-skill-heading"><span class="profile-skill-symbol">${icon(['plan', 'vendor', 'people', 'delivery'][index])}</span><span>${escapeHtml(skill.title)}</span></h2><div class="profile-skill-body"><p>${escapeHtml(skill.description)}</p><div class="profile-skill-tags">${skill.items.map(item => `<span>${escapeHtml(item)}</span>`).join('')}</div></div></article>`).join('')}</div>
       </section>
       <section class="profile-view" id="profile-view-2" role="tabpanel" aria-labelledby="profile-tab-2" tabindex="0" ${selected === 2 ? '' : 'hidden'}>
-        <p class="profile-view-label">TECHNICAL FOUNDATION + PROJECT TRAINING</p><h3>Learning that supports delivery.</h3>
-        <div class="profile-education">${education.map(item => `<article class="profile-education-card"><span class="profile-education-icon">${icon('learning')}</span><div><p class="profile-qualification">${escapeHtml(item.qualification)}</p><h4>${escapeHtml(item.title)}</h4><p>${escapeHtml(item.school)}</p></div></article>`).join('')}</div>
-        <details class="profile-learning-credentials credentials"><summary>Courses & knowledge sharing <span aria-hidden="true">+</span></summary>${certificates.map(certificate => `<article><h4>${escapeHtml(certificate.title)}</h4><p>${escapeHtml(certificate.issuer)} · <span>${escapeHtml(certificate.date)}</span></p></article>`).join('')}${teaching.description ? `<article><h4>${escapeHtml(teaching.title || 'Knowledge sharing')}</h4><p>${escapeHtml(teaching.description)}</p></article>` : ''}</details>
+        <p class="profile-view-label">TECHNICAL FOUNDATION + PROJECT TRAINING</p><h1 class="profile-view-title">Learning that supports delivery.</h1>
+        <div class="profile-education">${education.map(item => `<article class="profile-education-card"><span class="profile-education-icon">${icon('learning')}</span><div><p class="profile-qualification">${escapeHtml(item.qualification)}${item.year ? ` · ${escapeHtml(item.year)}` : ''}</p><h2>${escapeHtml(item.title)}</h2><p>${escapeHtml(item.school)}</p></div></article>`).join('')}</div>
+        <details class="profile-learning-credentials credentials"><summary>Courses & knowledge sharing <span aria-hidden="true">+</span></summary>${certificates.map(certificate => `<article><h2>${escapeHtml(certificate.title)}</h2><p>${escapeHtml(certificate.issuer)} · <span>${escapeHtml(certificate.date)}</span></p></article>`).join('')}${teaching.description ? `<article><h2>${escapeHtml(teaching.title || 'Knowledge sharing')}</h2><p>${escapeHtml(teaching.description)}</p></article>` : ''}</details>
       </section>
     </div>
     <a class="button button-dark profile-download" href="${escapeHtml(assetUrl('Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf'))}" download>Download my résumé ${icon('download')}</a>

@@ -31,7 +31,7 @@
 .study-findings>h4 { margin:0 0 17px; }
 .study-findings>article { display:flex; align-items:flex-start; gap:15px; padding:20px 0; border-top:1px solid #D2E6F2; }
 .study-finding-mark { flex-shrink:0; padding-top:2px; color:#526E82; font-size:.8125rem; line-height:1.7; }
-.study-findings h5 { margin:0 0 8px; }
+.study-findings h4 { margin:0 0 8px; }
 .study-findings p { margin:0; color:var(--study-muted); }
 .study-challenges { display:grid; gap:18px; }
 .study-challenges>article { overflow:hidden; border:1px solid var(--study-line); border-radius:12px; background:var(--study-paper); }

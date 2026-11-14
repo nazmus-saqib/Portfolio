@@ -14,12 +14,15 @@ test('single-viewport company journey preserves public assets and résumé links
   await expect(page.locator('#world-loading')).toHaveClass(/loaded/);
   await expect(page.locator('canvas.world-canvas')).toBeVisible();
   await expect(page.locator('#profile-view-0 #about-card')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Molla Nazmus Saqib', exact: true })).toBeVisible();
+  await expect(page.locator('.professional-position')).toHaveText('Project & Operations Coordinator');
+  await expect(page.locator('#about-personal')).not.toHaveAttribute('open', '');
   await expect(page.locator('#world')).toHaveAttribute('data-active-station', '-1');
   await expect(page.locator('#world')).toHaveAttribute('data-traveling', 'false');
   await expect(page.locator('[data-world-home]')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#panel-nav [data-panel="profile"]')).toHaveText('About Me');
   await expect(page.locator('.world-label')).toHaveCount(7);
-  await page.locator('[data-panel="journey"]').click();
+  await page.locator('#panel-nav button[data-panel="journey"]').click();
   await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
   await expect(page.locator('#company-card .eyebrow')).toHaveText('01 / Dhaka, Bangladesh');
   await expect(page.locator('#about-card')).toHaveCount(0);
@@ -35,7 +38,7 @@ test('single-viewport company journey preserves public assets and résumé links
   expect(resume.headers()['content-type']).toContain('application/pdf');
   expect((await resume.body()).subarray(0, 5).toString()).toBe('%PDF-');
 
-  await page.getByRole('button', { name: 'Visit company 2: Synesis IT', exact: true }).click();
+  await page.getByRole('button', { name: 'Visit company 02 Synesis IT', exact: true }).click();
   await page.getByRole('button', { name: 'Read BIWTA project story' }).click();
   await page.getByText('Explore the prototype screens', { exact: true }).click();
   const previews = await page.locator('.project-gallery figure img').evaluateAll(images => images.map(image => image.getAttribute('src')));

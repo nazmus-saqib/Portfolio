@@ -217,7 +217,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     label.type = 'button'; label.className = 'world-label';
     const count = document.createElement('span'); count.textContent = String(index + 1).padStart(2, '0');
     label.append(count, document.createTextNode(` ${station.name}`));
-    label.setAttribute('aria-label', `Visit company ${index + 1}: ${station.company}`);
+    label.setAttribute('aria-label', `Visit company ${String(index + 1).padStart(2, '0')} ${station.company}`);
     label.style.position = 'absolute'; label.style.zIndex = '2';
     label.style.transform = 'translate(-50%, -50%)';
     label.addEventListener('click', () => onSelect(index));

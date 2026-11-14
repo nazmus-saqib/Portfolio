@@ -8,7 +8,7 @@ for (const width of [1440, 360]) {
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(baseURL);
     await expect(page.locator('#world-loading')).toHaveClass(/loaded/);
-    await page.locator('[data-panel="projects"]').click();
+    await page.locator('#panel-nav [data-panel="projects"]').click();
     const opener = page.getByRole('button', { name: 'Read Signfy project story', exact: true });
     await opener.click();
     const dialog = page.getByRole('dialog');

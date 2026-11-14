@@ -1,5 +1,7 @@
 // Project presentation only. Selection, focus management, and dialogs belong
 // to the application shell so the entire portfolio stays in one viewport.
+import { renderCoordinationCase } from './coordination-case-view.js';
+import './coordination-case-view.css';
 import { renderStudySection, renderStudyPictures, renderStudyPortals } from './case-study-sections.js';
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -20,6 +22,11 @@ function renderPrototypeLink(link) {
 
 function illustration(project) {
   const open = '<svg class="case-illustration" viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">';
+  if (project.coordinationCaseStudy) {
+    const labels = project.id === 'conference' ? ['8 vendors', '3 weeks', 'Event setup'] : project.id === 'supplier-coordination' ? ['Compare', 'Approve', 'Coordinate'] : ['Assess', 'Agree', 'Follow up'];
+    const title = project.id === 'conference' ? 'A fixed date. Many moving parts.' : project.id === 'supplier-coordination' ? 'Turn options into an agreed plan.' : 'Keep the next step clear.';
+    return `${open}<rect width="640" height="280" rx="12" fill="#EAF6FD"/><text x="32" y="48" fill="#173A55" font-family="sans-serif" font-size="21">${title}</text><path d="M95 150H545" stroke="#1072AE" stroke-width="2" stroke-dasharray="5 6"/>${labels.map((label,index)=>`<g transform="translate(${32+index*196} 96)"><rect width="176" height="108" rx="12" fill="${index===2?'#1072AE':'#FFFFFF'}" stroke="#D2E6F2"/><text x="18" y="34" fill="${index===2?'#FFFFFF':'#1072AE'}" font-family="sans-serif" font-size="13">0${index+1}</text><text x="18" y="76" fill="${index===2?'#FFFFFF':'#173A55'}" font-family="sans-serif" font-size="18">${label}</text></g>`).join('')}<text x="32" y="250" fill="#526E82" font-family="sans-serif" font-size="12">Identify BDA · Project coordination</text></svg>`;
+  }
   if (project.id === 'identify') {
     return `${open}
       <rect width="640" height="280" rx="12" fill="#F2F9FE"/>
@@ -83,7 +90,7 @@ export function renderProjectCard(project, options = {}) {
   const thumbnail = project.image
     ? `<img src="${escapeHtml(resolveAsset(project.image, options))}" alt="" loading="lazy" decoding="async">`
     : illustration(project);
-  return `<article class="case-card"><button class="case-open" type="button" data-project="${escapeHtml(project.id)}" aria-label="Read ${escapeHtml(project.title)} project story"><span class="case-thumb" aria-hidden="true" style="--case-accent:${escapeHtml(project.accent || '#EAF6FD')}">${thumbnail}</span><span class="case-card-copy"><span class="case-card-company">${escapeHtml(project.company)}</span><strong>${escapeHtml(project.title)}</strong><span class="case-card-summary">${escapeHtml(project.summary)}</span><span class="case-card-context">${escapeHtml(project.collaboration)}</span></span><span class="case-card-arrow">${arrow}</span></button></article>`;
+  return `<article class="case-card"><button class="case-open" type="button" data-project="${escapeHtml(project.id)}" ${project.coordinationCaseStudy ? '' : `aria-label="Read ${escapeHtml(project.title)} project story"`}><span class="case-thumb" aria-hidden="true" style="--case-accent:${escapeHtml(project.accent || '#EAF6FD')}">${thumbnail}</span><span class="case-card-copy"><span class="case-card-company">${escapeHtml(project.company)}</span><strong>${escapeHtml(project.title)}</strong><span class="case-card-summary">${escapeHtml(project.summary)}</span><span class="case-card-context">${escapeHtml(project.collaboration)}</span></span><span class="case-card-arrow">${arrow}</span></button></article>`;
 }
 
 const paragraphs = value => (Array.isArray(value) ? value : value ? [value] : [])
@@ -157,6 +164,7 @@ function renderCaseStudy(project, options) {
 
 /** Case-study markup; the shell supplies the accessible dialog and close button. */
 export function renderProjectDetail(project, options = {}) {
+  if (project.coordinationCaseStudy) return renderCoordinationCase(project, { ...options, coverHtml: cover(project, options) });
   if (project.richCaseStudy) return renderCaseStudy(project, options);
   const context = project.id === 'identify' ? 'Current role' : isAcademic(project) ? 'Academic project' : 'Earlier digital work';
   return `<article class="case-detail">${cover(project, options)}<div class="case-body"><p class="case-eyebrow">${escapeHtml(project.company)} / ${escapeHtml(project.collaboration)}</p><h2 id="dialog-title">${escapeHtml(project.title)}</h2><p class="case-summary">${escapeHtml(project.summary)}</p><dl class="case-facts"><div><dt>Context</dt><dd>${context}</dd></div><div><dt>My contribution</dt><dd>${escapeHtml(project.role)}</dd></div></dl><section class="case-section"><h3>The challenge</h3><p>${escapeHtml(project.challenge)}</p></section><section class="case-section"><h3>The approach</h3><ul>${project.approach.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul></section><section class="case-section"><h3>The work in perspective</h3><p>${escapeHtml(project.outcome)}</p></section>${project.gallery?.length ? `<details class="case-prototype"><summary>Explore the prototype screens ${plus}</summary><div class="case-gallery project-gallery">${project.gallery.map(image => `<figure><img src="${escapeHtml(resolveAsset(image.src, options))}" alt="${escapeHtml(image.alt)}" loading="lazy" decoding="async"><figcaption>${escapeHtml(image.alt)}</figcaption></figure>`).join('')}</div></details>` : ''}${project.confidential ? '<p class="case-confidential">A high-level overview. Internal product details stay confidential.</p>' : ''}<ul class="case-tools" aria-label="Project tools and methods">${project.tools.map(tool => `<li>${escapeHtml(tool)}</li>`).join('')}</ul><button class="case-contact" type="button" data-contact>Let’s talk about the work ${arrow}</button></div></article>`;

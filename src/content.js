@@ -2,6 +2,7 @@
 // Private source material and unresolved source questions stay outside this site.
 import { synesisCaseStudies } from './synesis-case-studies.js';
 import { signfyCaseStudy } from './case-studies/signfy.js';
+import { coordinationProjects } from './coordination-case-studies.js';
 
 const storyMilestones = [
   {
@@ -27,14 +28,14 @@ const storyMilestones = [
     label: 'Coordination',
     period: 'October 2024–Today',
     title: 'Turn plans into progress.',
-    body: 'In October 2024, I joined Identify BDA. As a Project & Operations Coordinator, I now bring clients, vendors, approvals, and timelines together to keep projects moving.',
+    body: 'In October 2024, I joined Identify BDA. As a Project Coordinator, I now bring clients, vendors, approvals, and timelines together to keep projects moving.',
     skill: 'Projects & operations',
     icon: 'checklist',
   },
 ];
 
 export const aboutMe = {
-  name: 'Nazmus Saqib',
+  name: 'Molla Nazmus Saqib',
   position: 'Project & Operations Coordinator',
   company: 'Identify BDA',
   introduction: 'I’m Saqib—originally from Bangladesh and now based in Ontario, Canada. My path has taken me through computer science, UX design, and project management, with a few unexpected learning experiences along the way.',
@@ -83,7 +84,7 @@ export const chapters = [
     eyebrow: '04 / BRINGING IT TOGETHER',
     title: 'Turn the plan into progress.',
     body: 'Today, I coordinate projects and operations at Identify BDA. I connect client requirements with vendor capabilities, keep approvals and timelines moving, resolve issues, and follow the work through production, delivery, and billing. My focus is bringing people and moving parts together.',
-    detail: 'Role: Project & Operations Coordinator · Identify BDA · October 2024–present.',
+    detail: 'Role: Project Coordinator · Identify BDA · October 2024–present.',
     tags: ['Project & operations coordination', 'Client & vendor liaison', 'Delivery & follow-through'],
     place: 'Canada / Today',
     period: '2024–present',
@@ -91,6 +92,7 @@ export const chapters = [
 ];
 
 export const projects = [
+  ...coordinationProjects,
   {
     id: 'identify',
     title: 'From request to delivery',
@@ -98,8 +100,8 @@ export const projects = [
     year: '2024–present',
     company: 'Identify BDA · Canada',
     collaboration: 'Project coordination',
-    summary: 'Keeping client requirements, vendors, approvals, production, and delivery connected across a typical 6–10 projects each month.',
-    role: 'Project & Operations Coordinator',
+    summary: 'Keeping client requirements, vendors, approvals, production, delivery and billing follow-up connected.',
+    role: 'Project Coordinator',
     challenge: 'Keep changing requirements, supplier options, approvals, deadlines, and delivery details aligned as projects move between clients, internal colleagues, and production partners.',
     approach: [
       'Confirm client requirements, quantities, specifications, deadlines, and artwork needs.',
@@ -301,7 +303,7 @@ export const projects = [
 export const experience = [
   {
     period: 'Oct 2024–present',
-    title: 'Project & Operations Coordinator',
+    title: 'Project Coordinator',
     company: 'Identify BDA · Canada',
     description: 'Coordinate client requirements, artwork approvals, vendor sourcing, quotations, production, delivery, and financial follow-up. Work directly with clients, internal colleagues, and a network of 20+ external vendors.',
   },
@@ -379,9 +381,9 @@ export const certificates = [
 ];
 
 export const education = [
-  { title: 'Project Management', school: 'Sir Sandford Fleming College', qualification: 'Ontario Graduate Certificate' },
-  { title: 'Interactive Media Management', school: 'Centennial College', qualification: 'Ontario Graduate Certificate' },
-  { title: 'Computer Science & Engineering', school: 'North South University', qualification: 'Bachelor of Science' },
+  { title: 'Project Management', school: 'Sir Sandford Fleming College', qualification: 'Ontario Graduate Certificate', year: '2024' },
+  { title: 'Interactive Media Management', school: 'Centennial College', qualification: 'Ontario Graduate Certificate', year: '2023' },
+  { title: 'Computer Science & Engineering', school: 'North South University', qualification: 'Bachelor of Science', year: '2019' },
 ];
 
 export const teaching = {
@@ -518,7 +520,7 @@ export const careerStops = [
     id: 'identify',
     company: 'Identify BDA',
     label: 'Identify BDA',
-    role: 'Project & Operations Coordinator',
+    role: 'Project Coordinator',
     start: '2024-10',
     end: null,
     period: 'Oct 2024–Present',
@@ -531,18 +533,19 @@ export const careerStops = [
       'Compare quotations, negotiate pricing, track approvals and timelines, and resolve production issues.',
       'Arrange fulfillment, communicate shipment updates, and coordinate invoicing and cost reconciliation.',
     ],
-    projectIds: ['identify'],
+    projectIds: ['conference', 'supplier-coordination', 'change-coordination', 'identify'],
     projectLabel: 'My coordination workflow',
   },
 ];
 
 export const professionalSummary = {
   headline: 'Project & Operations Coordinator',
-  body: 'Project coordinator with end-to-end experience aligning client requirements, vendors, approvals, timelines, and delivery. I coordinate 6–10 projects a month, work with 20+ external vendors, and keep stakeholders informed through changes and issues. My technical degree and Canadian graduate certificates support a practical, organized approach to project delivery.',
+  body: 'I coordinate projects from requirements and supplier sourcing through approvals, production, delivery and financial follow-up. At Identify BDA, I have supported 25+ clients and work with 20+ vendors. My experience spans Canadian operations, technical field services and digital projects, supported by formal project management education.',
+  location: 'Hamilton, Ontario, Canada',
   qualifications: [
-    'Bachelor of Science in Computer Science & Engineering · North South University',
-    'Ontario Graduate Certificate in Project Management · Sir Sandford Fleming College',
-    'Ontario Graduate Certificate in Interactive Media Management · Centennial College',
+    'Bachelor of Science in Computer Science & Engineering · North South University · 2019',
+    'Ontario Graduate Certificate in Project Management · Sir Sandford Fleming College · 2024',
+    'Ontario Graduate Certificate in Interactive Media Management · Centennial College · 2023',
   ],
   targets: ['Project Coordinator', 'Assistant Project Manager'],
 };

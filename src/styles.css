@@ -263,7 +263,7 @@ summary::-webkit-details-marker { display: none; }
   .wordmark { font-size: 21px; letter-spacing: -1.3px; }
   .wordmark > span { width: 4px; height: 4px; }
   .header-actions { gap: 13px; }
-  .resume-link { font-size: 0; gap: 0; border: 0; padding: 6px 0; }
+  .resume-link { font-size: .875rem; gap: 7px; padding: 8px 0; }
   .resume-link svg { width: 14px; height: 14px; }
   .view-toggle { gap: 5px; font-size: .875rem; }
   .view-toggle svg { width: 12px; height: 12px; }

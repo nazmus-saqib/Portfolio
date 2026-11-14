@@ -18,13 +18,22 @@ test.afterEach(async ({ page }) => {
 async function loadHome(page, baseURL) {
   await page.goto(baseURL || '/');
   await expect(page.locator('#world-loading')).toHaveClass(/loaded/);
-  await expect(page.locator('canvas.world-canvas')).toBeVisible();
-  await expect(page.locator('.world-label')).toHaveCount(7);
+  if (page.viewportSize().width <= 860) {
+    await expect(page.locator('#world-pane')).toBeHidden();
+    await expect(page.locator('canvas.world-canvas')).not.toBeVisible();
+    await expect(page.locator('#mobile-world-toggle')).toBeVisible();
+    await expect(page.locator('#mobile-world-toggle')).toHaveAttribute('aria-expanded', 'false');
+  } else {
+    await expect(page.locator('canvas.world-canvas')).toBeVisible();
+    await expect(page.locator('.world-label')).toHaveCount(7);
+  }
 }
 
 async function loadWorld(page, baseURL) {
   await loadHome(page, baseURL);
-  await page.locator('[data-panel="journey"]').click();
+  await page.locator('#panel-nav button[data-panel="journey"]').click();
+  await expect(page.locator('canvas.world-canvas')).toBeVisible();
+  await expect(page.locator('.world-label')).toHaveCount(7);
 }
 
 async function assertSingleViewport(page) {
@@ -81,9 +90,16 @@ test('About Me opens at the centre and preserves the personal story outside the 
   await expect(page.getByRole('tab', { name: 'Profile', exact: true })).toHaveAttribute('aria-selected', 'true');
   const about = page.locator('#profile-view-0 #about-card');
   await expect(about).toBeVisible();
+  await expect(about.getByRole('heading', { name: 'Molla Nazmus Saqib', exact: true })).toBeVisible();
+  await expect(about.locator('.professional-position')).toHaveText('Project & Operations Coordinator');
+  const personal = about.locator('#about-personal');
+  await expect(personal).not.toHaveAttribute('open', '');
+  await expect(personal.locator('.about-motivation')).toBeHidden();
   await expect(page.locator('.profile-stat-grid')).toHaveCount(0);
   await expect(about.locator('.about-position')).toHaveCount(0);
-  for (const text of ['About Me & My Story', 'Nazmus Saqib', 'Bringing it all together.', 'Bangladesh', 'Canada', '2022', 'Centennial College', 'Sir Sandford Fleming College', 'October 2024', 'Fine Tuned Autos']) {
+  await about.getByRole('button', { name: 'My story: Bangladesh to Canada', exact: true }).click();
+  await expect(personal).toHaveAttribute('open', '');
+  for (const text of ['About Me & My Story', 'Molla Nazmus Saqib', 'Bringing it all together.', 'Bangladesh', 'Canada', '2022', 'Centennial College', 'Sir Sandford Fleming College', 'October 2024', 'Fine Tuned Autos']) {
     await expect(about).toContainText(text);
   }
   await expect(about).toContainText(/two months/i);
@@ -105,7 +121,7 @@ test('About Me opens at the centre and preserves the personal story outside the 
   await expect(page.locator('[data-story-milestone="2"]')).toBeFocused();
   await expect(page.locator('[data-story-milestone="2"]')).toHaveAttribute('aria-selected', 'true');
   await expect(page.locator('#story-panel-2')).toBeVisible();
-  await expect(page.locator('#story-panel-2')).toContainText('Project & Operations Coordinator');
+  await expect(page.locator('#story-panel-2')).toContainText('Project Coordinator');
   await expect(page.locator('#story-panel-2')).toContainText('Identify BDA');
   await expect(page.locator('#story-journey [role="tabpanel"]:visible')).toHaveCount(1);
   await page.keyboard.press('Home');
@@ -119,7 +135,7 @@ test('About Me opens at the centre and preserves the personal story outside the 
   await expect(page.locator('#about-learning-title')).toBeFocused();
   await assertSingleViewport(page);
 
-  await page.locator('[data-panel="journey"]').click();
+  await page.locator('#panel-nav button[data-panel="journey"]').click();
   await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
   await expect(page.locator('#company-card .eyebrow')).toHaveText('01 / Dhaka, Bangladesh');
   await expect(page.locator('#stop-counter')).toHaveText('01 / 07');
@@ -132,27 +148,28 @@ test('About Me opens at the centre and preserves the personal story outside the 
   await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
   await expect(page.locator('#previous-stop')).toBeDisabled();
 
-  await page.locator('[data-panel="profile"]').click();
+  await page.locator('#panel-nav button[data-panel="profile"]').click();
   await page.getByRole('tab', { name: 'Profile', exact: true }).click();
   await expect(page.locator('#panel-nav [data-panel="profile"]')).toHaveAttribute('aria-pressed', 'true');
   await expect(about).toBeVisible();
-  await page.locator('[data-panel="journey"]').click();
+  await page.locator('#panel-nav button[data-panel="journey"]').click();
   await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
   await page.locator('#go-today').click();
   await expect(page.locator('#company-name')).toHaveText('Identify BDA');
   await page.getByRole('button', { name: 'Nazmus Saqib, About Me', exact: true }).click();
   await expect(about).toBeVisible();
   await expect(page.locator('#world')).toHaveAttribute('data-active-station', '-1');
-  await page.locator('[data-panel="journey"]').click();
+  await page.locator('#panel-nav button[data-panel="journey"]').click();
   await expect(page.locator('#company-name')).toHaveText('Identify BDA');
 
   await page.locator('#reading-toggle').click();
   await expect(page.locator('#reading-view .reading-company')).toHaveCount(7);
   await expect(page.locator('#reading-view > .reading-company').first()).toContainText('01 / Dhaka, Bangladesh');
   await expect(page.locator('#reading-view #about-card')).toHaveCount(0);
-  await page.locator('[data-panel="profile"]').click();
+  await page.locator('#panel-nav button[data-panel="profile"]').click();
   await page.getByRole('tab', { name: 'Profile', exact: true }).click();
   await expect(about).toBeVisible();
+  await about.getByRole('button', { name: 'My story: Bangladesh to Canada', exact: true }).click();
   await page.locator('[data-story-milestone="2"]').click();
   await about.getByText('In October 2024,', { exact: false }).scrollIntoViewIfNeeded();
   await assertSingleViewport(page);
@@ -166,7 +183,7 @@ test('the centre About Me control returns from every workplace and preserves the
   await expect(page.locator('#world')).toHaveAttribute('data-traveling', 'false');
 
   for (const [index, company] of companies.entries()) {
-    await page.getByRole('button', { name: `Visit company ${index + 1}: ${company}`, exact: true }).click();
+    await page.getByRole('button', { name: `Visit company ${String(index + 1).padStart(2, '0')} ${company}`, exact: true }).click();
     await expect(page.locator('#company-name')).toHaveText(company);
     await expect(home).toHaveAttribute('aria-pressed', 'false');
     await home.click();
@@ -175,25 +192,25 @@ test('the centre About Me control returns from every workplace and preserves the
     await expect(page.locator('#panel-nav [data-panel="profile"]')).toHaveAttribute('aria-pressed', 'true');
     await expect(page.getByRole('tab', { name: 'Profile', exact: true })).toHaveAttribute('aria-selected', 'true');
     await expect(page.locator('#profile-view-0 #about-card')).toBeVisible();
-    await page.locator('[data-panel="journey"]').click();
+    await page.locator('#panel-nav button[data-panel="journey"]').click();
     await expect(page.locator('#company-name')).toHaveText(company);
     await expect(page.locator('#world')).toHaveAttribute('data-active-station', String(index));
   }
 
-  await page.locator('[data-panel="profile"]').click();
+  await page.locator('#panel-nav button[data-panel="profile"]').click();
   await page.getByRole('tab', { name: 'Skills', exact: true }).click();
-  await page.locator('[data-panel="journey"]').click();
+  await page.locator('#panel-nav button[data-panel="journey"]').click();
   await expect(page.locator('#company-name')).toHaveText('Identify BDA');
-  await page.locator('[data-panel="profile"]').click();
+  await page.locator('#panel-nav button[data-panel="profile"]').click();
   await expect(page.getByRole('tab', { name: 'Skills', exact: true })).toHaveAttribute('aria-selected', 'true');
   await expect(page.locator('#world')).toHaveAttribute('data-active-station', '-1');
-  await page.locator('[data-panel="journey"]').click();
+  await page.locator('#panel-nav button[data-panel="journey"]').click();
   await expect(page.locator('#company-name')).toHaveText('Identify BDA');
   await home.focus();
   await page.keyboard.press('Enter');
   await expect(page.getByRole('tab', { name: 'Profile', exact: true })).toHaveAttribute('aria-selected', 'true');
   await expect(page.locator('#world')).toHaveAttribute('data-active-station', '-1');
-  await page.locator('[data-panel="journey"]').click();
+  await page.locator('#panel-nav button[data-panel="journey"]').click();
   await expect(page.locator('#company-name')).toHaveText('Identify BDA');
   await page.getByRole('button', { name: 'Nazmus Saqib, About Me', exact: true }).click();
   await expect(page.locator('#profile-view-0 #about-card')).toBeVisible();
@@ -238,25 +255,25 @@ test('seven employer cards preserve chronology, accurate roles, and always-visib
     await page.locator('#next-stop').click();
     await expect(page.locator('#company-name')).toHaveText(companies[index]);
     await expect(page.locator('#world')).toHaveAttribute('data-active-company', companies[index]);
-    await expect(page.getByRole('button', { name: `Visit company ${index + 1}: ${companies[index]}`, exact: true })).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByRole('button', { name: `Visit company ${String(index + 1).padStart(2, '0')} ${companies[index]}`, exact: true })).toHaveAttribute('aria-pressed', 'true');
     await assertContributionDescriptionsVisible(page, careerStops[index]);
     await expect(page.locator('#company-card .profile-stat-grid')).toHaveCount(index === companies.length - 1 ? 1 : 0);
   }
-  await expect(page.locator('#company-role')).toHaveText('Project & Operations Coordinator');
+  await expect(page.locator('#company-role')).toHaveText('Project Coordinator');
   await expect(page.locator('#company-dates')).toHaveText('Oct 2024–Present');
   await expect(page.locator('#next-stop')).toContainText('Back to first company');
   await page.locator('#next-stop').click();
   await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
   await expect(page.locator('#previous-stop')).toBeDisabled();
 
-  await page.getByRole('button', { name: 'Visit company 2: Synesis IT', exact: true }).click();
+  await page.getByRole('button', { name: 'Visit company 02 Synesis IT', exact: true }).click();
   await expect(page.locator('#company-dates')).toHaveText('Aug 2020–Nov 2021');
   await expect(page.locator('#company-tenure')).toHaveText('1 yr 4 mos');
   await expect(page.locator('#company-role')).toHaveText('UX Intern → UX Designer');
   await expect(page.getByRole('button', { name: 'Read BIWTA project story' })).toBeVisible();
-  await page.getByRole('button', { name: 'Visit company 5: Dynamic Infotech', exact: true }).click();
+  await page.getByRole('button', { name: 'Visit company 05 Dynamic Infotech', exact: true }).click();
   await expect(page.locator('#company-card')).toContainText('Overlapping roles');
-  await page.getByRole('button', { name: 'Visit company 6: UPS & Staples', exact: true }).click();
+  await page.getByRole('button', { name: 'Visit company 06 UPS & Staples', exact: true }).click();
   await expect(page.locator('#company-card')).toContainText('Overlapping roles');
   await assertSingleViewport(page);
 });
@@ -379,7 +396,7 @@ test('company project actions open details and return focus to the selected empl
   await expect(page.locator('.identify-workflow-preview figcaption')).toContainText('while sourcing vendors');
   const exploreFlow = page.getByRole('button', { name: 'Explore the flow: From request to delivery', exact: true });
   await exploreFlow.click();
-  await expect(page.getByRole('dialog')).toContainText('Project & Operations Coordinator');
+  await expect(page.getByRole('dialog')).toContainText('Project Coordinator');
   await expect(page.getByRole('dialog')).toContainText('20+ external vendors');
   const approach = page.getByRole('dialog').locator('.case-section').filter({ has: page.getByRole('heading', { name: 'The approach', exact: true }) });
   await expect(approach).toContainText('When artwork is needed');
@@ -393,7 +410,7 @@ test('company project actions open details and return focus to the selected empl
 
 test('BIWTA and eReturn connect needs, persona stories, and design evidence with keyboard controls', async ({ page, baseURL }) => {
   await loadWorld(page, baseURL);
-  await page.locator('[data-panel="projects"]').click();
+  await page.locator('#panel-nav button[data-panel="projects"]').click();
   for (const [id, title] of [['biwta', 'BIWTA'], ['ereturn', 'eReturn']]) {
     const trigger = page.getByRole('button', { name: `Read ${title} project story`, exact: true });
     await trigger.click();
@@ -473,7 +490,7 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 360, height: 740
   test(`eReturn ${viewport.width}px registration scenarios preserve the source handoffs and readable evidence`, async ({ page, request, baseURL }) => {
     await page.setViewportSize(viewport);
     await loadWorld(page, baseURL);
-    await page.locator('[data-panel="projects"]').click();
+    await page.locator('#panel-nav button[data-panel="projects"]').click();
     const trigger = page.getByRole('button', { name: 'Read eReturn project story', exact: true });
     await trigger.click();
     const dialog = page.getByRole('dialog');
@@ -540,7 +557,7 @@ test('personal profile, qualifications, Identify coordination, projects, and con
   await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
   await expect(page.locator('.profile-stat-grid')).toHaveCount(0);
   await expect(page.locator('#panel-nav [data-panel="profile"]')).toHaveText('About Me');
-  await page.locator('[data-panel="profile"]').click();
+  await page.locator('#panel-nav button[data-panel="profile"]').click();
   const detail = page.locator('#sidebar-body');
   await expect(page.locator('#profile-view-0 #about-card')).toContainText('Fine Tuned Autos');
   await expect(page.locator('.profile-stat-grid')).toHaveCount(0);
@@ -555,7 +572,7 @@ test('personal profile, qualifications, Identify coordination, projects, and con
   await expect(strengthCards).toHaveCount(4);
   await expect(skillsPanel.locator('details, summary')).toHaveCount(0);
   for (const card of await strengthCards.all()) {
-    await expect(card.getByRole('heading', { level: 4 })).toBeVisible();
+    await expect(card.getByRole('heading', { level: 2 })).toBeVisible();
     await expect(card.locator('.profile-skill-body > p')).toBeVisible();
     for (const tag of await card.locator('.profile-skill-tags > span').all()) await expect(tag).toBeVisible();
   }
@@ -593,9 +610,11 @@ test('personal profile, qualifications, Identify coordination, projects, and con
   const coordination = page.locator('#company-card');
   await expect(coordination.locator('.profile-stat-grid')).toBeVisible();
   await expect(coordination.locator('.profile-stat-grid > .profile-stat')).toHaveCount(2);
-  await expect(coordination.getByText('6–10', { exact: true })).toBeVisible();
+  await expect(coordination.getByText('25+', { exact: true })).toBeVisible();
+  await expect(coordination.getByText('Clients supported', { exact: true })).toBeVisible();
+  await expect(coordination).not.toContainText('6–10');
   await expect(coordination.getByText('20+', { exact: true })).toBeVisible();
-  await expect(coordination.getByText('Project & Operations Coordinator', { exact: true })).toHaveCount(1);
+  await expect(coordination.getByText('Project Coordinator', { exact: true })).toHaveCount(1);
   await expect(coordination.getByRole('list', { name: /coordination workflow/i })).toHaveCount(1);
   const workflow = coordination.locator('.identify-workflow-stages');
   await expect(workflow).toHaveCount(1);
@@ -610,26 +629,26 @@ test('personal profile, qualifications, Identify coordination, projects, and con
   await expect(coordinationStory).toBeFocused();
   await assertSingleViewport(page);
 
-  await page.locator('[data-panel="projects"]').click();
-  await expect(page.locator('.case-card')).toHaveCount(9);
+  await page.locator('#panel-nav button[data-panel="projects"]').click();
+  await expect(page.locator('.case-card')).toHaveCount(12);
   await page.getByRole('button', { name: 'Operations', exact: true }).click();
-  await expect(page.locator('.case-card')).toHaveCount(1);
+  await expect(page.locator('.case-card')).toHaveCount(4);
   await page.getByRole('button', { name: 'Earlier digital work', exact: true }).click();
   await expect(page.locator('.case-card')).toHaveCount(8);
   await page.getByRole('button', { name: 'All work', exact: true }).click();
-  await expect(page.locator('.case-card')).toHaveCount(9);
+  await expect(page.locator('.case-card')).toHaveCount(12);
   await detail.evaluate(element => element.scrollTop = element.scrollHeight);
   await page.getByRole('button', { name: 'Read Cozey project story' }).click();
   await expect(page.getByRole('dialog')).toContainText('Academic project');
   await page.locator('#dialog-close').click();
 
-  await expect(page.locator('#panel-nav > button')).toHaveText(['About Me', 'Journey', 'Projects 9', 'Contact']);
+  await expect(page.locator('#panel-nav > button')).toHaveText(['About Me', 'Journey', 'Projects 12', 'Contact']);
   await page.getByRole('button', { name: 'Contact', exact: true }).click();
   await expect(page.locator('#panel-nav [data-panel="contact"]')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#sidebar-body')).toHaveAttribute('aria-label', 'Contact details');
   await expect(page.locator('.contact-panel')).toContainText('technical education, project management training, and hands-on experience');
   await expect(page.locator('.contact-panel')).toContainText('making the next step clear, keeping people informed, and following through to delivery');
-  await expect(page.getByRole('link', { name: 'Start a conversation' })).toHaveAttribute('href', 'mailto:saqib.uxui@gmail.com');
+  await expect(page.getByRole('link', { name: 'Start a conversation' })).toHaveAttribute('href', 'mailto:saqibmollanazmus@gmail.com');
   await expect(page.locator('#sidebar-body')).toContainText('Assistant Project Manager');
   await assertSingleViewport(page);
 });
@@ -642,16 +661,23 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 640 }
     await expect(page.locator('#world-pane')).toBeVisible();
     await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
     await expect(page.locator('#company-card .eyebrow')).toHaveText('01 / Dhaka, Bangladesh');
-    await page.locator('[data-panel="profile"]').click();
+    await page.locator('#panel-nav button[data-panel="profile"]').click();
     await page.getByRole('tab', { name: 'Profile', exact: true }).click();
     await expect(page.locator('#about-card')).toBeVisible();
+    await expect(page.locator('#world-pane')).toBeHidden();
+    await page.locator('#mobile-world-toggle').click();
+    await expect(page.locator('#mobile-world-toggle')).toHaveAttribute('aria-expanded', 'true');
+    await expect(page.locator('canvas.world-canvas')).toBeVisible();
+    await page.locator('#mobile-world-toggle').click();
+    await expect(page.locator('#world-pane')).toBeHidden();
+    await page.locator('#about-card').getByRole('button', { name: 'My story: Bangladesh to Canada', exact: true }).click();
     await page.locator('[data-story-milestone="2"]').click();
     await expect(page.locator('#story-panel-2')).toBeVisible();
     await expect(page.locator('#story-journey [role="tabpanel"]:visible')).toHaveCount(1);
     expect(await page.locator('#story-panel-2 .about-story-paragraph').evaluate(element => getComputedStyle(element).fontSize)).toBe('16px');
     await page.locator('#about-card').getByText('In October 2024,', { exact: false }).scrollIntoViewIfNeeded();
     await assertSingleViewport(page);
-    await page.locator('[data-panel="journey"]').click();
+    await page.locator('#panel-nav button[data-panel="journey"]').click();
     await expect(page.locator('#company-name')).toHaveText('WebNSofTech');
     await page.locator('#next-stop').click();
     await expect(page.locator('#company-name')).toHaveText('Synesis IT');
@@ -670,7 +696,7 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 640 }
     await expect(page.locator('#dialog-close')).toBeInViewport();
     await page.locator('#dialog-close').click();
     await assertSingleViewport(page);
-    await page.locator('[data-panel="profile"]').click();
+    await page.locator('#panel-nav button[data-panel="profile"]').click();
     await page.locator('[data-profile-tab="2"]').click();
     await expect(page.locator('#profile-view-2')).toBeVisible();
     await expect(page.locator('#profile-view-2')).toContainText('Centennial College');
@@ -679,6 +705,10 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 640 }
     await expect(page.getByRole('link', { name: 'Download my résumé' })).toBeVisible();
     await assertSingleViewport(page);
     await page.locator('#reading-toggle').click();
+    await expect(page.locator('#panel-nav [data-panel="profile"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('[data-profile-tab="2"]')).toHaveAttribute('aria-selected', 'true');
+    await expect(page.locator('#profile-view-2')).toBeVisible();
+    await page.locator('#panel-nav button[data-panel="journey"]').click();
     await expect(page.locator('#reading-view .reading-company')).toHaveCount(7);
     await expect(page.locator('#reading-view #about-card')).toHaveCount(0);
     await expect(page.locator('#reading-view > .reading-company').first()).toContainText('01 / Dhaka, Bangladesh');
@@ -711,7 +741,7 @@ test('without WebGL the complete career and clickable projects remain available 
   await page.getByRole('button', { name: 'Explore the flow: From request to delivery', exact: true }).click();
   await expect(page.locator('#dialog-title')).toHaveText('From request to delivery');
   await page.locator('#dialog-close').click();
-  await page.locator('[data-panel="profile"]').click();
+  await page.locator('#panel-nav button[data-panel="profile"]').click();
   await page.getByRole('tab', { name: 'Profile', exact: true }).click();
   await expect(page.locator('#about-card')).toContainText('Bangladesh');
   await expect(page.locator('#about-card')).toContainText('Canada');

@@ -1,87 +1,59 @@
-# Nazmus Saqib — A world of connected work
+# Molla Nazmus Saqib — Project & Operations Coordinator
 
-A single-viewport portfolio about project and operations coordination, built with Vite, vanilla JavaScript, and Three.js. It opens with “00 About Me & My Story” at the central plaza, followed by seven employers in chronological order, from WebNSofTech to Identify BDA. The profile summary and résumé target Project Coordinator and Assistant Project Manager opportunities. Earlier UX work appears as career history, alongside individual, team, and academic project stories.
+A white and sky-blue portfolio built with Vite, JavaScript, and Three.js. The opening professional overview connects current coordination experience, the approved résumé, contact details, and a conference case study. Personal stories and the seven-workplace journey remain available for deeper exploration.
 
-The page fits the browser viewport on desktop and mobile. Longer role descriptions, profile details, project collections, and case studies scroll inside their own panels; the page itself does not scroll.
+![Professional overview and interactive career journey](docs/preview.png)
 
-![Nazmus Saqib's interactive portfolio preview](docs/preview.png)
+## Development
 
-## Run locally
-
-Use Node.js 22.12+ (validated here on Node.js 24.19.0).
+Use Node.js 22.12+ and the existing checkout at `/workspace/Portfolio` in the prepared cloud environment. Setup was verified with Node.js 24.19.0 and npm 11.9.0.
 
 ```sh
-git clone https://github.com/nazmus-saqib/Portfolio.git
-cd Portfolio
-npm ci
-npm run dev
+npm ci --no-audit --no-fund
+npm run dev -- --port 5173 --strictPort
 ```
 
-In the prepared cloud environment, use the existing checkout at `/workspace/Portfolio`.
+Fonts, illustrations, project images and the character are bundled or generated locally. The application needs no backend, API key or external asset service. Keep uploaded source documents and confidential records outside `public/` and `dist/`.
 
-Build a static site and serve the output:
+## Build, test and publish
 
-```sh
-npm run build
-npm run preview -- --port 4173
-```
-
-Deploy the generated `dist/` directory to a static hosting provider. No API keys, account integrations, backend, or external asset services are required. Fonts, images, models, and JavaScript are bundled locally. Building alone does not publish the website.
-
-### GitHub Pages
-
-The project-site address is `https://nazmus-saqib.github.io/Portfolio/`. Build for its project path:
+The public project site is https://nazmus-saqib.github.io/Portfolio/.
 
 ```sh
 npm run build -- --base=/Portfolio/
+npm run preview -- --base=/Portfolio/ --port 4174 --strictPort
+PORTFOLIO_TEST_URL=http://127.0.0.1:4174/Portfolio/ npm test
 ```
 
-The `gh-pages` branch contains the compiled website, including fonts, project images, résumé, license notices, and a `.nojekyll` marker. In the repository's **Settings → Pages**, select **Deploy from a branch**, choose **gh-pages**, select **/ (root)**, and save. GitHub publishes the branch after Pages is enabled. Subsequent source changes need a fresh build and an update to that deployment branch. The `main` branch retains the editable source.
+Playwright uses `/usr/bin/chromium`, or `CHROMIUM_PATH` when supplied. The preview server must run in a separate session. A quick deployment-path check is `npm test -- tests/pages.spec.js` with the same `PORTFOLIO_TEST_URL`.
 
-For a local Pages-path regression check, serve the build with `npm run preview -- --base=/Portfolio/ --port 4174 --strictPort`, then run `PORTFOLIO_TEST_URL=http://127.0.0.1:4174/Portfolio/ npm test -- tests/pages.spec.js`.
+`main` contains editable source. `gh-pages` contains a tested copy of `dist/`, `.nojekyll`, and any existing `CNAME`. GitHub Pages deploys from that branch's root. Building or pushing alone does not establish that the public deployment succeeded; check the deployment and public assets separately.
 
-## Controls and alternatives
+## Navigation and accessibility
 
-- “00 About Me & My Story” introduces Saqib’s name, position, professional statement, tagline, motivation, goal, and journey from Bangladesh to Canada. “THE WORLD OF MY WORK / PEOPLE. PLANS. FOLLOW-THROUGH.” appears below the career goal as a closing statement. Its quick links jump to the story or goal inside the panel. Select the wordmark or central compass to return to the introduction.
-- The Bangladesh–Canada story uses three selectable milestones: Roots, Canada, and Today. Each reveals a short passage and a transferable skill, while the route marker and progress indicator follow the selection. Arrow keys, Home, and End work while a milestone tab is focused; reduced-motion preferences disable transitions.
-- Profile uses matching Work, Skills, and Learning cards. Explore the coordination workflow, expand practical skill groups, and browse education, courses, and knowledge sharing. The current-work card opens the coordination case study; the résumé download stays available below the profile.
-- Choose a company in the 3D world or use the Previous/Next chapter controls. Employer chapters remain numbered 01–07, with role, month/year dates, tenure, and clickable project names.
-- “What I brought to the work” stays open for every employer. All contribution cards appear first, followed by one “What I carry forward” card containing the three numbered takeaways. Everything stays visible; selecting a contribution highlights its corresponding takeaway using a click, tap, Enter, or Space, or the arrow keys, Home, and End. Reading view keeps each employer’s selection independent.
-- Identify BDA has an illustrated Understand → Source → Coordinate → Deliver workflow. “Explore the flow” opens its coordination project story; the diagram reflows into two columns in narrower panels.
-- “First company” begins the employment journey; “Next company” follows the chronological order. “Meet me today” jumps to Identify BDA. The world and content fill the space below the header.
-- “Explore” enables WASD / arrow-key movement while the canvas has keyboard focus; on-screen controls support touch.
-- The speaker button starts optional narration using the visitor’s browser speech synthesis. Voice availability depends on the browser/device. No voice recording is embedded.
-- Pause stops scene animation. Reduced-motion preferences disable continuous movement.
-- “Reading view” presents the introduction and all seven employer stories as ordinary text inside the viewport. If WebGL is unavailable, a fallback leads to this view.
-- Journey, Profile, Projects, and Contact tabs share the same side panel. Current operations and earlier digital-work filters, project dialogs, a BIWTA prototype gallery, qualifications, skills, and credentials remain available without a long landing page.
+- About Me opens at the centre of the world. Its Profile, Skills and Learning tabs include the professional overview, always-visible skill cards, qualifications, and optional personal story.
+- Journey preserves seven employers in chronological order, beginning with WebNSofTech in Dhaka. Current Identify BDA experience is also available directly from the professional overview.
+- Projects prioritizes four current coordination stories, followed by eight earlier digital projects. The conference case describes a résumé-supported example; supplier and change cases describe recurring work. Reusable planning templates explain the method without exposing client records.
+- Each project has a shareable `?project=id` URL, such as `?project=conference`, with a copy-link action and browser history support.
+- Reading view preserves the selected section and its content. Journey expands into all seven employer chapters in reading mode.
+- On phones, the professional overview takes priority; visitors choose when to open the 3D journey. Desktop retains the visible interactive world. Reduced motion, pause, keyboard navigation and a no-WebGL alternative remain available.
+- The résumé stays explicitly labelled on phones. Delivered HTML also provides professional and project summaries with working résumé and email links when JavaScript is disabled.
 
-## Content and personalization
+## Content and source files
 
-- `src/content.js`: the `aboutMe` introduction and personal story, employer chronology, professional summary, tenure formatting, project stories, skills, education, and credentials. Ended roles count the supplied calendar months; current-role tenure uses elapsed months in the current Toronto month. Dynamic Infotech and UPS/Staples are explicitly identified as overlapping roles.
-- `src/main.js`: interface and interactions; public contact email.
-- `src/world.js`: locally generated character and environment; no external model downloads. iStoreiSend is illustrated as an automated fulfillment cell with robotic handling, parcel conveyors, scanning, and automated storage. Machine movement follows the scene’s pause and reduced-motion settings. The Dynamic Infotech workplace contains a desktop computer, cabled server rack, and service kit.
-- `src/styles.css`: responsive interface styling, with 16px body text and labels and controls of at least 14px. Internally scrolling panels preserve readable type inside the viewport.
-- `src/project-view.js` and `src/project-view.css`: reusable project previews and case-study presentation inside the viewport.
-- `src/story-view.js` and `src/story-view.css`: the illustrated story route, accessible milestone tabs, and brief story cards. `aboutMe.storyMilestones` is the single source for the shortened copy and narration.
-- `src/profile-view.js` and `src/profile-view.css`: the interactive professional profile, using the supplied summary, skills, education, and credentials. Its tabs support the same arrow-key, Home, and End navigation as the story.
-- `src/contribution-view.js` and `src/contribution-view.css`: illustrated contribution cards and one grouped takeaway card for each employer. The original career highlights remain the source for every contribution description; each takeaway stays visible beneath the contribution stack.
-- `src/workflow-view.js` and `src/workflow-view.css`: the responsive four-stage coordination diagram in the Identify BDA chapter.
-- `public/projects/`: optimized previews from supplied project files. Original career records, project source files, and confidential documents are **not** public assets.
-- `public/favicon.svg`: the site icon. The wordmark is styled in CSS, interface icons are inline SVG in `src/main.js`, and illustrative project covers are generated from HTML/CSS. No external icon account or asset download is required.
-- `public/licenses/`: original dependency license notices, also copied into the built website.
-- `public/Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf`: the résumé PDF supplied by the owner, preserved without changes. All résumé downloads use this file. `public/resume.html` provides view and download links that work without JavaScript. Replace the PDF and update the links when a new résumé is supplied; the website does not generate its résumé from HTML.
+- `src/content.js`: career history, project collection, qualifications and skills.
+- `src/coordination-case-studies.js`: current conference, supplier and issue-coordination case content and template data.
+- `src/main.js`: navigation, dialog URLs, reading mode and scene startup.
+- `src/recruiter-view.js`: professional overview and direct actions.
+- `src/project-view.js` and `src/coordination-case-view.js`: digital and coordination case presentation.
+- `src/case-study-sections.js`: original project pictures and interactive supporting studies.
+- `src/profile-view.js`, `src/story-view.js`, `src/contribution-view.js` and `src/workflow-view.js`: profile, personal journey and employer details.
+- `src/world.js` and `src/character.js`: locally generated career world and the brown-jacket character.
+- `public/projects/`: optimized project previews; original Signfy personas and the owner-supplied eReturn sketches and inspiration board remain intact.
+- `public/Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf`: owner-approved PDF, retained unchanged. `public/resume.html` works without JavaScript.
+- `public/social-preview.png`: screenshot of the portfolio used for social sharing.
+- `docs/audit-validation.md`: validation evidence and the pending three-person comprehension study.
 
-`package-lock.json` pins all library and font dependencies. Run `npm ci` to restore them; dependency folders and build output are not committed. The production build includes the used font files, images, CSS, and scripts. See [third-party notices](THIRD_PARTY_NOTICES.md) for bundled font and library licenses.
+The primary email matches the approved résumé. The broad professional headline and the Identify employment title are deliberately distinct. Counts use supported client and supplier figures. No unverified monthly project count, invented savings or research outcomes are presented. Earlier design projects retain their original individual, team or academic context, and reconstructed supporting studies remain labelled.
 
-The character is a provisional stylized representation inspired by the previously supplied training-poster photo. A recent photo had not arrived as an accessible attachment at implementation time. ODIN, Quantibly, and Cozey use clearly labeled portfolio cover illustrations because their original source files exceeded the transfer limit. Confidential Quantibly system details remain excluded. Signfy is presented as an academic concept/prototype; its planned business targets are not represented as achieved results. Project dates beyond known employment periods are not invented. Education completion dates were not supplied and are omitted.
-
-## Browser validation
-
-```sh
-npm run build
-npm test
-```
-
-The Playwright configuration uses Chromium at `/usr/bin/chromium` in this cloud environment (or `CHROMIUM_PATH` if provided). In another environment, install a compatible browser or set that path. Tests cover employer chronology, dates and tenure, real canvas movement, chapter navigation, clickable company projects, profile qualifications, project dialogs, local images and résumé download, mobile viewport containment, reduced motion, and the no-WebGL fallback. Test reports and generated build files are ignored by Git.
-
-Use the existing checkout; cloud tasks are already isolated. Do not create worktrees unless explicitly requested.
+`package-lock.json` pins dependencies. See [third-party notices](THIRD_PARTY_NOTICES.md) for bundled font and library licenses.
