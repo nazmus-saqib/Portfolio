@@ -17,6 +17,9 @@ test('single-viewport company journey preserves public assets and résumé links
   await expect(page.getByRole('heading', { name: 'Molla Nazmus Saqib', exact: true })).toBeVisible();
   await expect(page.locator('.professional-position')).toHaveText('Project & Operations Coordinator');
   await expect(page.locator('#about-personal')).not.toHaveAttribute('open', '');
+  await expect(page.locator('.professional-personal-links')).toHaveCount(0);
+  await expect(page.locator('.professional-quick-view > summary .profile-preview-excerpt')).toBeVisible();
+  await expect(page.locator('#about-personal > summary .profile-preview-excerpt')).toBeVisible();
   await expect(page.locator('#world')).toHaveAttribute('data-active-station', '-1');
   await expect(page.locator('#world')).toHaveAttribute('data-traveling', 'false');
   await expect(page.locator('[data-world-home]')).toHaveAttribute('aria-pressed', 'true');

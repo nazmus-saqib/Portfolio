@@ -79,9 +79,8 @@ function projectNames(stop) {
 function aboutMarkup() {
   return `<article class="about-story" id="about-card" aria-labelledby="about-title">
     ${renderProfessionalOverview({aboutMe,assetUrl})}
-    <details class="about-personal" id="about-personal"><summary>My story &amp; beyond work <span aria-hidden="true">+</span></summary><div class="about-personal-body">
+    <details class="about-personal" id="about-personal"><summary><span class="profile-preview-title">My story &amp; beyond work</span><span class="profile-preview-excerpt">${esc(aboutMe.introduction)}</span><span class="profile-preview-toggle"><span class="profile-preview-expand">Read more</span><span class="profile-preview-collapse">Show less</span><span class="profile-preview-icon" aria-hidden="true">+</span></span></summary><div class="about-personal-body">
       <div class="about-overview"><header><p class="eyebrow">About Me &amp; My Story</p><h2 class="about-tagline">${esc(aboutMe.tagline)}</h2><div class="about-links"><button type="button" data-about-jump="story" aria-label="Read my story: Bangladesh to Canada">My story ${icons.next}</button><button type="button" data-about-jump="learning" aria-label="Read about my auto repair learning">Beyond the screen ${icons.next}</button></div></header>
-      <p class="about-statement">${esc(aboutMe.introduction)}</p>
       <section class="about-motivation"><h3>What keeps me curious</h3><p>${esc(aboutMe.motivation)}</p></section>
       <section class="about-learning"><h3 id="about-learning-title" tabindex="-1">${esc(aboutMe.handsOnLearning.title)}</h3><p>${esc(aboutMe.handsOnLearning.introduction)} <a href="${esc(aboutMe.handsOnLearning.url)}" target="_blank" rel="noopener noreferrer">${esc(aboutMe.handsOnLearning.organization)}</a>.</p></section></div>
       ${renderStoryJourney(aboutMe,{selectedIndex:selectedStoryMilestone})}

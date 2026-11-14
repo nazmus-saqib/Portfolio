@@ -93,12 +93,32 @@ test('About Me opens at the centre and preserves the personal story outside the 
   await expect(about.getByRole('heading', { name: 'Molla Nazmus Saqib', exact: true })).toBeVisible();
   await expect(about.locator('.professional-position')).toHaveText('Project & Operations Coordinator');
   const personal = about.locator('#about-personal');
-  await expect(personal).not.toHaveAttribute('open', '');
+  const quickWork = about.locator('.professional-quick-view');
+  await expect(about.locator('.professional-personal-links')).toHaveCount(0);
+  await expect(about.getByRole('button', { name: 'My story: Bangladesh to Canada', exact: true })).toHaveCount(0);
+  for (const card of [quickWork, personal]) {
+    await expect(card).not.toHaveAttribute('open', '');
+    await expect(card.locator('summary .profile-preview-excerpt')).toBeVisible();
+    await expect(card.locator('summary .profile-preview-excerpt')).not.toHaveText('');
+    await expect(card.locator('summary .profile-preview-toggle')).toBeVisible();
+  }
+  const quickWorkBody = quickWork.locator(':scope > div');
+  await expect(quickWorkBody).toBeHidden();
+  await quickWork.locator('summary').focus();
+  await page.keyboard.press('Enter');
+  await expect(quickWork).toHaveAttribute('open', '');
+  await expect(quickWorkBody).toBeVisible();
+  await expect(quickWorkBody).toContainText('Complex delivery');
+  expect(await quickWork.locator('summary .profile-preview-excerpt').evaluate(node => node.scrollHeight <= node.clientHeight + 1)).toBe(true);
+  await page.keyboard.press('Space');
+  await expect(quickWork).not.toHaveAttribute('open', '');
+  await expect(quickWorkBody).toBeHidden();
   await expect(personal.locator('.about-motivation')).toBeHidden();
   await expect(page.locator('.profile-stat-grid')).toHaveCount(0);
   await expect(about.locator('.about-position')).toHaveCount(0);
-  await about.getByRole('button', { name: 'My story: Bangladesh to Canada', exact: true }).click();
+  await personal.locator(':scope > summary').click();
   await expect(personal).toHaveAttribute('open', '');
+  expect(await personal.locator('summary .profile-preview-excerpt').evaluate(node => node.scrollHeight <= node.clientHeight + 1)).toBe(true);
   for (const text of ['About Me & My Story', 'Molla Nazmus Saqib', 'Bringing it all together.', 'Bangladesh', 'Canada', '2022', 'Centennial College', 'Sir Sandford Fleming College', 'October 2024', 'Fine Tuned Autos']) {
     await expect(about).toContainText(text);
   }
@@ -169,7 +189,7 @@ test('About Me opens at the centre and preserves the personal story outside the 
   await page.locator('#panel-nav button[data-panel="profile"]').click();
   await page.getByRole('tab', { name: 'Profile', exact: true }).click();
   await expect(about).toBeVisible();
-  await about.getByRole('button', { name: 'My story: Bangladesh to Canada', exact: true }).click();
+  await personal.locator(':scope > summary').click();
   await page.locator('[data-story-milestone="2"]').click();
   await about.getByText('In October 2024,', { exact: false }).scrollIntoViewIfNeeded();
   await assertSingleViewport(page);
