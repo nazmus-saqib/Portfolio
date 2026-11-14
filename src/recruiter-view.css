@@ -28,9 +28,6 @@
 .about-personal .about-overview { padding:0 16px 16px; }
 .about-personal .story-journey { margin:0 16px 16px; }
 .about-personal h2 { font-size:1.55rem; margin:12px 0; line-height:1.2; }
-.case-share { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin:28px 0; }
-.case-share p { width:100%; margin:0; }
-.case-share input { width:100%; font:inherit; color:#173A55; border:1px solid #D2E6F2; padding:12px; border-radius:7px; margin-top:8px; }
 .static-overview { max-width:1050px; margin:auto; padding:clamp(24px,5vw,64px); line-height:1.65; color:#173A55; background:#fff; }
 #app:has(>.static-overview) { height:100svh; overflow:auto; }
 .static-overview h1 { font-size:clamp(2rem,5vw,3.7rem); line-height:1.1; margin:16px 0; }

@@ -34,7 +34,7 @@ Playwright uses `/usr/bin/chromium`, or `CHROMIUM_PATH` when supplied. The previ
 - About Me opens at the centre of the world. Its Profile, Skills and Learning tabs include the professional overview, always-visible skill cards, qualifications, and optional personal story.
 - Journey preserves six employers in chronological order, beginning with Synesis IT in Dhaka. Current Identify BDA experience is also available directly from the professional overview.
 - Projects opens with Current Project Work. Its documented conference case study is separated from three recurring work examples: supplier coordination, change coordination and the end-to-end Identify workflow. Earlier digital work is available through its own filter. Reusable planning templates explain the method without exposing client records.
-- Each project has a shareable `?project=id` URL, such as `?project=conference`, with a copy-link action and browser history support.
+- Each project has a shareable `?project=id` URL, such as `?project=conference`, with browser history support.
 - Focus on Content uses the reading view to preserve the selected section and its content. Journey expands into all six employer chapters in that view.
 - On phones, the professional overview takes priority; visitors choose when to open the 3D journey. Desktop gives the interactive world and professional content roughly equal width. Reduced motion, pause, keyboard navigation and a no-WebGL alternative remain available.
 - The résumé stays explicitly labelled on phones. Delivered HTML also provides professional and project summaries with working résumé and email links when JavaScript is disabled.

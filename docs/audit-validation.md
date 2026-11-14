@@ -83,3 +83,7 @@ The mobile scene now loads when requested. Desktop retains the interactive world
 ### Remaining external checks
 
 The three-person comprehension study above requires real participants. A physical-phone review is also outstanding; mobile viewport emulation does not complete it. Public-host verification must follow deployment and use an allowed connection to the published site.
+
+## Later platform checks and copy-control removal
+
+The subsequent [cross-browser/device-profile report](platform-validation.md) records the completed Chromium and native Firefox checks, the unavailable WebKit runtime, and the unchanged physical-device/participant boundaries. The copy-link control and its hidden fallback were removed from all case studies; browser-address URLs and history remain usable.

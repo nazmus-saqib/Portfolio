@@ -318,7 +318,6 @@ function openProject(id,trigger,{updateUrl=true}={}) {
   currentProjectId=id;
   if(changed||!dialog.open){
     content.innerHTML=renderProjectDetail(project,{assetUrl});
-    content.querySelector('.case-body')?.insertAdjacentHTML('afterbegin',`<div class="case-share"><button type="button" class="button button-secondary" data-copy-project-link>Copy case study link ${icons.arrow}</button><p data-case-link-fallback hidden><label>Case study link<input aria-label="Case study link" readonly value="${esc(projectUrl(id).href)}"></label></p></div>`);
     bindStudyInteractions(content);
     content.scrollTop=0;
   }
@@ -341,20 +340,10 @@ function syncProjectFromUrl() {
   closeProject({updateUrl:false});
   if(id!==null)history.replaceState({...history.state,portfolioProject:null},'',projectUrl(null));
 }
-async function copyProjectLink() {
-  if(!currentProjectId)return;
-  const value=projectUrl(currentProjectId).href;
-  try{await navigator.clipboard.writeText(value);toast('Case study link copied.');}
-  catch{
-    const fallback=document.querySelector('[data-case-link-fallback]');
-    if(fallback){fallback.hidden=false;const input=fallback.querySelector('input');input.value=value;input.focus();input.select();}
-  }
-}
 document.querySelector('#dialog-close').addEventListener('click',()=>closeProject());
 document.querySelector('#project-dialog').addEventListener('cancel',event=>{event.preventDefault();closeProject();});
 document.querySelector('#project-dialog').addEventListener('click',event=>{
   const projectButton=event.target.closest('[data-project]');if(projectButton){openProject(projectButton.dataset.project,projectButton);return;}
-  if(event.target.closest('[data-copy-project-link]')){copyProjectLink();return;}
   if(event.target.closest('[data-contact]')){closeProject();panel='contact';renderPanel();document.querySelector('#sidebar-body').focus({preventScroll:true});return;}
   if(event.target===event.currentTarget){const rect=event.currentTarget.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)closeProject();}
 });

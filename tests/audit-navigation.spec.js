@@ -13,6 +13,7 @@ test('every project has a refreshable direct link, while invalid project IDs rec
     await page.goto(siteUrl(baseURL, `ref=recruiter&project=${encodeURIComponent(project.id)}`));
     await expect(page.locator('#project-dialog')).toBeVisible();
     await expect(page.locator('#dialog-title')).toHaveText(project.title);
+    await expect(page.locator('.case-share, [data-copy-project-link], [data-case-link-fallback]')).toHaveCount(0);
     await expect(page.locator('.case-project-tools')).toHaveCount(1);
     await expect(page.locator('.case-project-tools')).toContainText('Tools & methods');
     for (const tool of project.tools) await expect(page.locator('.case-project-tools')).toContainText(tool);
@@ -46,18 +47,6 @@ test('project links follow back/forward, survive reload, and Escape removes only
   await expect(page.locator('#project-dialog')).not.toBeVisible();
   expect(new URL(page.url()).searchParams.has('project')).toBe(false);
   expect(new URL(page.url()).searchParams.get('ref')).toBe('career');
-});
-
-test('case-study link copying provides a usable fallback when clipboard permission is denied', async ({ page, baseURL }) => {
-  await page.addInitScript(() => {
-    Object.defineProperty(navigator, 'clipboard', { value: { writeText: async () => { throw new Error('Permission denied'); } }, configurable: true });
-  });
-  await page.goto(siteUrl(baseURL, 'project=ereturn'));
-  await page.getByRole('button', { name: 'Copy case study link', exact: false }).click();
-  const field = page.getByRole('textbox', { name: 'Case study link', exact: true });
-  await expect(field).toBeVisible();
-  await expect(field).toHaveValue(page.url());
-  await expect(field).toBeFocused();
 });
 
 test('Reading view preserves About tabs, project filters, Contact, and their reading positions', async ({ page, baseURL }) => {
