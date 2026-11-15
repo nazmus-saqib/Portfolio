@@ -200,6 +200,21 @@ summary::-webkit-details-marker { display: none; }
 .project-dialog::backdrop { background: #173A5514; backdrop-filter: blur(7px); }
 #dialog-content { overflow-y: auto; overflow-x: hidden; max-height: calc(100dvh - 48px); border-radius: 14px; overscroll-behavior: contain; }
 .dialog-close { position: absolute; top: 15px; right: 15px; z-index: 5; background: #FFFFFF; box-shadow: 0 2px 12px #173A5514; width: 36px; height: 36px; border-color: #D2E6F2; }
+.email-dialog { position: fixed; width: min(460px, calc(100% - 36px)); max-height: calc(100dvh - 36px); margin: auto; padding: 28px; border: 1px solid var(--line); border-radius: 16px; color: var(--ink); background: var(--paper); box-shadow: 0 24px 70px #173A5524; overflow-y: auto; overscroll-behavior: contain; }
+.email-dialog::backdrop { background: #173A5540; backdrop-filter: blur(5px); }
+.email-close { position: absolute; top: 14px; right: 14px; }
+.email-dialog > .eyebrow { padding-right: 40px; }
+.email-dialog h2 { margin: 12px 35px 10px 0; font-size: 1.875rem; font-weight: 500; line-height: 1.2; letter-spacing: -.6px; }
+#email-description { color: var(--muted); line-height: 1.6; }
+.email-providers { display: grid; gap: 10px; margin-top: 24px; }
+.email-providers .button { justify-content: space-between; min-height: 48px; }
+.email-app-link { display: inline-flex; align-items: center; gap: 10px; margin: 16px 0 22px; padding: 4px 0; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.email-app-link svg { width: 14px; height: 14px; }
+.email-copy { padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: #F2F9FE; }
+#email-address { overflow-wrap: anywhere; user-select: all; }
+#email-address:focus { outline: 2px solid var(--accent); outline-offset: 3px; }
+.email-status { min-height: 2.8em; padding-top: 12px; color: var(--muted); font-size: .875rem; }
+@media (max-width: 400px) { .email-dialog { padding: 22px; } .email-copy { padding: 12px; } }
 .toast { position: fixed; z-index: 50; bottom: 22px; left: 50%; transform: translate(-50%, 15px); opacity: 0; pointer-events: none; background: #1072AE; color: #FFFFFF; padding: 13px 20px; border-radius: 7px; box-shadow: 0 5px 25px #173A5520; font-size: 1rem; transition: transform .25s, opacity .25s; max-width: calc(100% - 30px); }
 .toast.visible { transform: translate(-50%, 0); opacity: 1; }
 .noscript { margin: 30px; color: #1072AE; }

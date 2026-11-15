@@ -87,7 +87,7 @@ async function assertContributionDescriptionsVisible(page, stop) {
   return contribution;
 }
 
-test('Meet me today opens the email draft link without changing the selected panel or Journey stop', async ({ page, baseURL }) => {
+test('Meet me today offers email options without changing the selected panel or Journey stop', async ({ page, baseURL }) => {
   await loadHome(page, baseURL);
   const meetMe = page.getByRole('link', { name: 'Meet me today', exact: false });
   await expect(meetMe).toHaveAttribute('id', 'go-today');
@@ -95,16 +95,12 @@ test('Meet me today opens the email draft link without changing the selected pan
   await expect(meetMe).toHaveJSProperty('tagName', 'A');
   const originalURL = page.url();
 
-  // Suppress only the native email-client handoff; application click handlers still run.
-  await meetMe.evaluate(link => {
-    window.__meetMeActivations = 0;
-    link.addEventListener('click', event => {
-      event.preventDefault();
-      window.__meetMeActivations += 1;
-    });
-  });
   await meetMe.click();
-  expect(await page.evaluate(() => window.__meetMeActivations)).toBe(1);
+  const emailDialog = page.getByRole('dialog', { name: 'Send an email', exact: true });
+  await expect(emailDialog).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(emailDialog).not.toBeVisible();
+  await expect(meetMe).toBeFocused();
   await expect(page.locator('#panel-nav [data-panel="profile"]')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#profile-view-0 #about-card')).toBeVisible();
   await expect(page.locator('#world')).toHaveAttribute('data-active-station', '-1');
@@ -114,7 +110,10 @@ test('Meet me today opens the email draft link without changing the selected pan
   await selectCompany(page, 'iQuantile');
   await meetMe.focus();
   await page.keyboard.press('Enter');
-  expect(await page.evaluate(() => window.__meetMeActivations)).toBe(2);
+  await expect(emailDialog).toBeVisible();
+  await emailDialog.getByRole('button', { name: 'Close email options', exact: true }).click();
+  await expect(emailDialog).not.toBeVisible();
+  await expect(meetMe).toBeFocused();
   await expect(page.locator('#panel-nav [data-panel="journey"]')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#company-name')).toHaveText('iQuantile');
   await expect(page.locator('#stop-counter')).toHaveText('05 / 06');

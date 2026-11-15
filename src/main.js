@@ -31,12 +31,15 @@ const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp
 const assetUrl = path => `${import.meta.env.BASE_URL}${String(path).replace(/^\/+/, '')}`;
 const number = index => String(index + 1).padStart(2, '0');
 const email = 'saqibmollanazmus@gmail.com';
+const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}`;
+const outlookComposeUrl = `https://outlook.live.com/mail/0/deeplink/compose?to=${encodeURIComponent(email)}`;
 const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 const latest = careerStops.length - 1;
 // Keep physical map indices stable while presenting the career from current to previous.
 const journeyPosition = stationIndex => latest - stationIndex;
 let world, active = latest, worldStation = -1, panel = 'profile', reading = false, exploring = false, paused = motionPreference.matches;
 let toastTimer, speaking = false, dialogTrigger, disposed = false;
+let emailDialogTrigger;
 let selectedStoryMilestone = 0;
 let selectedProfileTab = 0;
 const selectedContributions = new Map();
@@ -57,7 +60,7 @@ document.querySelector('#app').innerHTML = `
         <p id="travel-status" class="sr-only" role="status">About Me</p>
         <div id="world" class="world-container"></div>
         <div class="world-loading" id="world-loading"><span class="loading-orbit"></span><p>A small world is taking shape.</p></div>
-        <div class="stage-tools"><a id="go-today" href="mailto:${email}" aria-label="Meet me today — send email">Meet me today ${icons.arrow}</a><div class="sr-only" id="scene-hint" role="status">Choose a company. I’ll take you there.</div><div class="stage-controls"><button type="button" id="explore-toggle" aria-pressed="false">Explore <span class="toggle-track"><i></i></span></button><button type="button" class="icon-button" id="pause-world" aria-label="Pause scene animation">${icons.pause}</button></div></div>
+        <div class="stage-tools"><a id="go-today" href="mailto:${email}" data-email-compose aria-haspopup="dialog" aria-controls="email-dialog" aria-label="Meet me today — send email">Meet me today ${icons.arrow}</a><div class="sr-only" id="scene-hint" role="status">Choose a company. I’ll take you there.</div><div class="stage-controls"><button type="button" id="explore-toggle" aria-pressed="false">Explore <span class="toggle-track"><i></i></span></button><button type="button" class="icon-button" id="pause-world" aria-label="Pause scene animation">${icons.pause}</button></div></div>
         <div class="touch-controls" id="touch-controls" aria-label="Move character" hidden><button type="button" data-direction="up" aria-label="Move forward">↑</button><button type="button" data-direction="left" aria-label="Move left">←</button><button type="button" data-direction="down" aria-label="Move back">↓</button><button type="button" data-direction="right" aria-label="Move right">→</button></div>
       </section>
 
@@ -71,6 +74,15 @@ document.querySelector('#app').innerHTML = `
 
   </main>
   <dialog class="project-dialog" id="project-dialog" aria-labelledby="dialog-title"><button type="button" class="dialog-close icon-button" id="dialog-close" aria-label="Close project">${icons.close}</button><div id="dialog-content"></div></dialog>
+  <dialog class="email-dialog" id="email-dialog" aria-labelledby="email-title" aria-describedby="email-description">
+    <button type="button" class="email-close icon-button" id="email-close" aria-label="Close email options">${icons.close}</button>
+    <p class="eyebrow">LET’S CONNECT</p><h2 id="email-title">Send an email</h2>
+    <p id="email-description">Choose your email service, or copy my address.</p>
+    <div class="email-providers"><a class="button button-dark" href="${esc(gmailComposeUrl)}" target="_blank" rel="noopener noreferrer">Open Gmail ${icons.arrow}</a><a class="button button-secondary" href="${esc(outlookComposeUrl)}" target="_blank" rel="noopener noreferrer">Open Outlook ${icons.arrow}</a></div>
+    <a class="email-app-link" href="mailto:${email}">Use email app ${icons.arrow}</a>
+    <div class="email-copy"><p id="email-address" tabindex="-1">${esc(email).replace('@','<wbr>@')}</p><button type="button" class="copy-email" data-copy-email>Copy email address</button></div>
+    <p class="email-status" id="email-status" role="status"></p>
+  </dialog>
   <div class="toast" id="toast" role="status"></div>
 `;
 
@@ -133,7 +145,7 @@ function projectsMarkup() {
 }
 
 function contactMarkup() {
-  return `<section class="contact-panel"><p class="eyebrow">THE NEXT CONNECTION</p><h1>Let’s move<br><em>things forward.</em></h1><p>I coordinate requirements, stakeholders, schedules, resources and deliverables across business operations, technical field services and digital projects. My technical education and project management training support clear planning, communication and practical problem-solving.</p><p>I’m motivated by making the next step clear, keeping people informed, and following through to delivery.</p><p>${renderOpportunityStatement(professionalSummary)}</p><a class="button button-dark" href="mailto:${email}">Start a conversation ${icons.arrow}</a><a class="contact-email" href="mailto:${email}">${email}</a><button type="button" class="copy-email" data-copy-email>Copy email address</button><div class="contact-links"><a href="${assetUrl('Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf')}" download>Résumé ${icons.download}</a><a href="https://github.com/nazmus-saqib" target="_blank" rel="noopener noreferrer">GitHub ${icons.arrow}</a></div><p class="contact-location">Based in Ontario, Canada.</p></section>`;
+  return `<section class="contact-panel"><p class="eyebrow">THE NEXT CONNECTION</p><h1>Let’s move<br><em>things forward.</em></h1><p>I coordinate requirements, stakeholders, schedules, resources and deliverables across business operations, technical field services and digital projects. My technical education and project management training support clear planning, communication and practical problem-solving.</p><p>I’m motivated by making the next step clear, keeping people informed, and following through to delivery.</p><p>${renderOpportunityStatement(professionalSummary)}</p><a class="button button-dark" href="mailto:${email}" data-email-compose aria-haspopup="dialog" aria-controls="email-dialog">Start a conversation ${icons.arrow}</a><a class="contact-email" href="mailto:${email}" data-email-compose aria-haspopup="dialog" aria-controls="email-dialog">${email}</a><button type="button" class="copy-email" data-copy-email>Copy email address</button><div class="contact-links"><a href="${assetUrl('Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf')}" download>Résumé ${icons.download}</a><a href="https://github.com/nazmus-saqib" target="_blank" rel="noopener noreferrer">GitHub ${icons.arrow}</a></div><p class="contact-location">Based in Ontario, Canada.</p></section>`;
 }
 
 function renderPanel(resetScroll = true) {
@@ -162,7 +174,7 @@ function stopSpeech() {
   speaking=false;const button=document.querySelector('#listen');button.classList.remove('speaking');button.setAttribute('aria-label','Listen to this company story');
 }
 
-function updateMotion() { world?.setPaused(paused||reading||document.hidden||getComputedStyle(document.querySelector('#world-pane')).display==='none'||document.querySelector('#project-dialog').open);document.querySelector('#pause-world').innerHTML=paused?icons.play:icons.pause;document.querySelector('#pause-world').setAttribute('aria-label',`${paused?'Resume':'Pause'} scene animation`); }
+function updateMotion() { world?.setPaused(paused||reading||document.hidden||getComputedStyle(document.querySelector('#world-pane')).display==='none'||document.querySelector('#project-dialog').open||document.querySelector('#email-dialog').open);document.querySelector('#pause-world').innerHTML=paused?icons.play:icons.pause;document.querySelector('#pause-world').setAttribute('aria-label',`${paused?'Resume':'Pause'} scene animation`); }
 function setExploring(value) {
   exploring=!!value;
   world?.setExploring(exploring);
@@ -220,6 +232,7 @@ function showRoleContribution(section, index, focus = false) {
 }
 
 document.querySelector('#app').addEventListener('click',event=>{
+  const emailLink=event.target.closest('[data-email-compose]');if(emailLink){event.preventDefault();openEmailOptions(emailLink);return;}
   const contribution=event.target.closest('[data-contribution-index]');if(contribution){showRoleContribution(contribution.closest('[data-role-contributions]'),Number(contribution.dataset.contributionIndex));return;}
   const profileTab=event.target.closest('[data-profile-tab]');if(profileTab){showProfileTab(Number(profileTab.dataset.profileTab));return;}
   const milestone=event.target.closest('[data-story-milestone]');if(milestone){showStoryMilestone(Number(milestone.dataset.storyMilestone));return;}
@@ -230,7 +243,7 @@ document.querySelector('#app').addEventListener('click',event=>{
   const section=event.target.closest('button[data-panel]');if(section){if(section.dataset.panel==='profile'){selectAbout(false);}else if(section.dataset.panel==='journey'){selectStop(active);}else{stopSpeech();panel=section.dataset.panel;renderPanel();}return;}
   const category=event.target.closest('[data-filter]');if(category){projectFilter=category.dataset.filter;renderPanel(false);return;}
   if(event.target.closest('[data-home]')){selectAbout();return;}
-  if(event.target.closest('[data-copy-email]')) copyEmail();
+  if(event.target.closest('[data-copy-email]')) copyEmail(event.target.closest('#email-dialog')?.querySelector('#email-status'));
 });
 document.querySelector('#app').addEventListener('keydown',event=>{
   const card=event.target.closest('[data-contribution-index]');if(!card)return;
@@ -362,7 +375,43 @@ document.querySelector('#project-dialog').addEventListener('close',event=>{
 });
 window.addEventListener('popstate',syncProjectFromUrl);
 
-async function copyEmail() {try{await navigator.clipboard.writeText(email);toast('Email copied. Let’s connect.');}catch{toast(`Email me at ${email}`);}}
+function openEmailOptions(trigger) {
+  stopSpeech();
+  const dialog=document.querySelector('#email-dialog');
+  emailDialogTrigger=trigger;
+  document.querySelector('#email-status').textContent='';
+  if(!dialog.open)dialog.showModal();
+  updateMotion();
+}
+document.querySelector('#email-close').addEventListener('click',()=>document.querySelector('#email-dialog').close());
+document.querySelector('#email-dialog').addEventListener('click',event=>{
+  if(event.target!==event.currentTarget)return;
+  const rect=event.currentTarget.getBoundingClientRect();
+  if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)event.currentTarget.close();
+});
+document.querySelector('#email-dialog').addEventListener('close',event=>{
+  const dialog=event.currentTarget,focused=document.activeElement;
+  if(!dialog.open&&(!focused||focused===document.body||dialog.contains(focused))){
+    const target=emailDialogTrigger?.isConnected?emailDialogTrigger:document.querySelector('#panel-nav button.active');
+    target?.focus({preventScroll:true});
+  }
+  updateMotion();
+});
+async function copyEmail(status) {
+  try {
+    await navigator.clipboard.writeText(email);
+    if(status?.closest('dialog')?.open)status.textContent='Email address copied.';
+    else toast('Email copied. Let’s connect.');
+  } catch {
+    if(status?.closest('dialog')?.open){
+      const address=document.querySelector('#email-address');
+      address.focus({preventScroll:true});
+      const range=document.createRange();range.selectNodeContents(address);
+      const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);
+      status.textContent='Copy the selected email address to continue.';
+    }else toast(`Email me at ${email}`);
+  }
+}
 function toast(text) {const node=document.querySelector('#toast');node.textContent=text;node.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>node.classList.remove('visible'),4000);}
 
 renderPanel();updateChapterControls();updateMotion();syncProjectFromUrl();
