@@ -19,8 +19,9 @@ test('single-viewport company journey preserves public assets and résumé links
   await expect(page.locator('.professional-actions')).toHaveCount(0);
   await expect(page.locator('#scene-hint')).toHaveClass(/sr-only/);
   const controls = page.locator('.stage-tools');
-  const today = controls.getByRole('button', { name: 'Meet me today', exact: false });
+  const today = controls.getByRole('link', { name: 'Meet me today', exact: false });
   await expect(today).toBeVisible();
+  await expect(today).toHaveAttribute('href', 'mailto:saqibmollanazmus@gmail.com');
   await expect(controls.locator('#explore-toggle')).toBeVisible();
   await expect(controls.locator('#pause-world')).toBeVisible();
   const positions = await controls.evaluate(node => ({
@@ -40,10 +41,10 @@ test('single-viewport company journey preserves public assets and résumé links
   await expect(page.locator('#panel-nav [data-panel="profile"]')).toHaveText('About Me');
   await expect(page.locator('.world-label')).toHaveCount(6);
   await page.locator('#panel-nav button[data-panel="journey"]').click();
-  await expect(page.locator('#company-name')).toHaveText('Synesis IT');
-  await expect(page.locator('#company-card .eyebrow')).toHaveText('01 / Dhaka, Bangladesh');
+  await expect(page.locator('#company-name')).toHaveText('Identify BDA');
+  await expect(page.locator('#company-card .eyebrow')).toHaveText('01 / Canada');
   await expect(page.locator('#about-card')).toHaveCount(0);
-  await expect(page.locator('#world')).toHaveAttribute('data-active-station', '0');
+  await expect(page.locator('#world')).toHaveAttribute('data-active-station', '5');
 
   const icon = await page.locator('link[rel="icon"]').getAttribute('href');
   expect(new URL(icon, site).href).toBe(new URL('favicon.svg', site).href);
@@ -55,7 +56,7 @@ test('single-viewport company journey preserves public assets and résumé links
   expect(resume.headers()['content-type']).toContain('application/pdf');
   expect((await resume.body()).subarray(0, 5).toString()).toBe('%PDF-');
 
-  await page.getByRole('button', { name: 'Visit company 01 Synesis IT', exact: true }).click();
+  await page.getByRole('button', { name: 'Visit company 06 Synesis IT', exact: true }).click();
   await page.getByRole('button', { name: 'Read BIWTA project story' }).click();
   await page.getByText('Explore the prototype screens', { exact: true }).click();
   const previews = await page.locator('.project-gallery figure img').evaluateAll(images => images.map(image => image.getAttribute('src')));

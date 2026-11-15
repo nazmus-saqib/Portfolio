@@ -32,7 +32,8 @@ Playwright uses `/usr/bin/chromium`, or `CHROMIUM_PATH` when supplied. The previ
 ## Navigation and accessibility
 
 - About Me opens at the centre of the world. Its Profile, Skills and Learning tabs include the professional overview, always-visible skill cards, qualifications, and optional personal story.
-- Journey preserves six employers in chronological order, beginning with Synesis IT in Dhaka. Current Identify BDA experience is also available directly from the professional overview.
+- Journey starts with Identify BDA and goes backwards through UPS & Staples, Dynamic Infotech, iStoreiSend, iQuantile and Synesis IT. Map labels and keyboard order follow the same current-to-previous sequence. Overlapping roles remain labelled, and workplace locations on the map stay fixed.
+- Meet me today opens an email draft to the portfolio’s contact address. Current experience at Identify BDA remains available from the professional overview.
 - Projects opens with Operations: three documented project examples, two recurring coordination methods and a separate role overview. Earlier digital work is available through its own filter. Case-study research, ownership, source notes and templates remain visible; image and portal galleries retain their navigation.
 - Each project has a shareable `?project=id` URL, such as `?project=conference`, with browser history support.
 - Focus on Content uses the reading view to preserve the selected section and its content. Journey expands into all six employer chapters in that view.

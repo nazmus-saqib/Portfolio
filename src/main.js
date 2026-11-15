@@ -33,7 +33,9 @@ const number = index => String(index + 1).padStart(2, '0');
 const email = 'saqibmollanazmus@gmail.com';
 const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 const latest = careerStops.length - 1;
-let world, active = 0, worldStation = -1, panel = 'profile', reading = false, exploring = false, paused = motionPreference.matches;
+// Keep physical map indices stable while presenting the career from current to previous.
+const journeyPosition = stationIndex => latest - stationIndex;
+let world, active = latest, worldStation = -1, panel = 'profile', reading = false, exploring = false, paused = motionPreference.matches;
 let toastTimer, speaking = false, dialogTrigger, disposed = false;
 let selectedStoryMilestone = 0;
 let selectedProfileTab = 0;
@@ -55,7 +57,7 @@ document.querySelector('#app').innerHTML = `
         <p id="travel-status" class="sr-only" role="status">About Me</p>
         <div id="world" class="world-container"></div>
         <div class="world-loading" id="world-loading"><span class="loading-orbit"></span><p>A small world is taking shape.</p></div>
-        <div class="stage-tools"><button type="button" id="go-today">Meet me today ${icons.arrow}</button><div class="sr-only" id="scene-hint" role="status">Choose a company. I’ll take you there.</div><div class="stage-controls"><button type="button" id="explore-toggle" aria-pressed="false">Explore <span class="toggle-track"><i></i></span></button><button type="button" class="icon-button" id="pause-world" aria-label="Pause scene animation">${icons.pause}</button></div></div>
+        <div class="stage-tools"><a id="go-today" href="mailto:${email}" aria-label="Meet me today — send email">Meet me today ${icons.arrow}</a><div class="sr-only" id="scene-hint" role="status">Choose a company. I’ll take you there.</div><div class="stage-controls"><button type="button" id="explore-toggle" aria-pressed="false">Explore <span class="toggle-track"><i></i></span></button><button type="button" class="icon-button" id="pause-world" aria-label="Pause scene animation">${icons.pause}</button></div></div>
         <div class="touch-controls" id="touch-controls" aria-label="Move character" hidden><button type="button" data-direction="up" aria-label="Move forward">↑</button><button type="button" data-direction="left" aria-label="Move left">←</button><button type="button" data-direction="down" aria-label="Move back">↓</button><button type="button" data-direction="right" aria-label="Move right">→</button></div>
       </section>
 
@@ -63,7 +65,7 @@ document.querySelector('#app').innerHTML = `
         <button type="button" id="mobile-world-toggle" class="mobile-world-toggle" aria-expanded="false" aria-controls="world-pane">Explore the 3D journey</button>
         <nav class="panel-nav" id="panel-nav" aria-label="Portfolio sections"><button type="button" data-panel="profile" class="active" aria-pressed="true">About Me</button><button type="button" data-panel="journey" aria-pressed="false">Journey</button><button type="button" data-panel="projects" aria-pressed="false">Projects <span>${projects.length}</span></button><button type="button" data-panel="contact" aria-pressed="false">Contact</button></nav>
         <div class="sidebar-body" id="sidebar-body" tabindex="-1" role="region" aria-label="Career details"></div>
-        <div class="company-navigation" id="company-navigation" hidden><button type="button" class="icon-button" id="previous-stop" aria-label="Previous chapter">${icons.previous}</button><span id="stop-counter" aria-live="polite">01 / ${number(latest)}</span><button type="button" class="button button-secondary" id="next-stop">Next company ${icons.next}</button><button type="button" class="icon-button" id="listen" aria-label="Listen to this company story">${icons.sound}</button></div>
+        <div class="company-navigation" id="company-navigation" hidden><button type="button" class="icon-button" id="previous-stop" aria-label="More recent role">${icons.previous}</button><span id="stop-counter" aria-live="polite">01 / ${number(latest)}</span><button type="button" class="button button-secondary" id="next-stop">Previous role ${icons.next}</button><button type="button" class="icon-button" id="listen" aria-label="Listen to this company story">${icons.sound}</button></div>
       </aside>
     </div>
 
@@ -102,7 +104,7 @@ function companyProjectsMarkup(stop) {
 function companyMarkup(stop, index, compact = false) {
   const isIdentify = stop.id === 'identify';
   return `<article class="company-card ${compact?'reading-company':''} ${index===active?'is-current':''}" ${compact?'':`id="company-card"`} data-stop="${esc(stop.id)}">
-    <div class="card-topline"><p class="eyebrow">${number(index)} / ${esc(stop.location)}</p><span class="employment-type">${esc(stop.employment)}</span></div>
+    <div class="card-topline"><p class="eyebrow">${number(journeyPosition(index))} / ${esc(stop.location)}</p><span class="employment-type">${esc(stop.employment)}</span></div>
     <h2 ${compact?'':'id="company-name"'}>${esc(stop.company)}</h2><p class="company-role" ${compact?'':'id="company-role"'}>${esc(stop.role)}</p>
     <div class="job-dates"><span ${compact?'':'id="company-dates"'}>${esc(stop.period)}</span><span class="tenure" ${compact?'':'id="company-tenure"'} title="Based on the supplied month-level dates">${esc(formatTenure(stop.start,stop.end))}</span></div>
     ${isIdentify?'':companyProjectsMarkup(stop)}
@@ -136,7 +138,7 @@ function contactMarkup() {
 
 function renderPanel(resetScroll = true) {
   const body=document.querySelector('#sidebar-body');
-  if(panel==='journey') body.innerHTML='<h1 class="sr-only">Career experience</h1>'+(reading?`<div id="reading-view">${careerStops.map((s,i)=>companyMarkup(s,i,true)).join('')}</div>`:companyMarkup(careerStops[active],active));
+  if(panel==='journey') body.innerHTML='<h1 class="sr-only">Career experience</h1>'+(reading?`<div id="reading-view">${careerStops.map((s,i)=>companyMarkup(s,i,true)).reverse().join('')}</div>`:companyMarkup(careerStops[active],active));
   if(panel==='profile') body.innerHTML=profileMarkup();
   if(panel==='projects') body.innerHTML=projectsMarkup();
   if(panel==='contact') body.innerHTML=contactMarkup();
@@ -149,9 +151,9 @@ function renderPanel(resetScroll = true) {
 }
 
 function updateChapterControls() {
-  document.querySelector('#stop-counter').textContent=`${number(active)} / ${number(latest)}`;
-  document.querySelector('#previous-stop').disabled=active===0;
-  document.querySelector('#next-stop').innerHTML=`${active===latest?'Back to first company':'Next company'} ${icons.next}`;
+  document.querySelector('#stop-counter').textContent=`${number(journeyPosition(active))} / ${number(latest)}`;
+  document.querySelector('#previous-stop').disabled=active===latest;
+  document.querySelector('#next-stop').innerHTML=`${active===0?'Back to current role':'Previous role'} ${icons.next}`;
   document.querySelector('#listen').setAttribute('aria-label','Listen to this company story');
 }
 
@@ -264,9 +266,8 @@ document.querySelector('#app').addEventListener('keydown',event=>{
   if(next===undefined)return;
   event.preventDefault();showProfileTab(next,true);
 });
-document.querySelector('#previous-stop').addEventListener('click',()=>selectStop(active-1));
-document.querySelector('#next-stop').addEventListener('click',()=>selectStop(active===latest?0:active+1));
-document.querySelector('#go-today').addEventListener('click',()=>selectStop(latest));
+document.querySelector('#previous-stop').addEventListener('click',()=>selectStop(active+1));
+document.querySelector('#next-stop').addEventListener('click',()=>selectStop(active===0?latest:active-1));
 
 function toggleReading(force) {
   const next=typeof force==='boolean'?force:!reading;
@@ -375,7 +376,7 @@ function ensureWorld() {
 }
 
 async function initWorld() {
-  try {const {createWorld}=await import('./world.js');if(disposed)return;world=createWorld({container:document.querySelector('#world'),stations:careerStops,onSelect:index=>selectStop(index),onArrival:index=>{if(index===worldStation)updateTravelStatus(true);},onReady:()=>document.querySelector('#world-loading').classList.add('loaded'),reducedMotion:motionPreference.matches});world.goTo(worldStation);world.setExploring(exploring);updateMotion();}
+  try {const {createWorld}=await import('./world.js');if(disposed)return;world=createWorld({container:document.querySelector('#world'),stations:careerStops.map((stop,index)=>({...stop,journeyNumber:journeyPosition(index)+1})),onSelect:index=>selectStop(index),onArrival:index=>{if(index===worldStation)updateTravelStatus(true);},onReady:()=>document.querySelector('#world-loading').classList.add('loaded'),reducedMotion:motionPreference.matches});world.goTo(worldStation);world.setExploring(exploring);updateMotion();}
   catch(error){worldFailed=true;console.warn('The 3D view is unavailable; all career details remain accessible.',error);document.querySelector('#world-loading').classList.add('loaded');document.querySelector('#world').innerHTML=`<div class="world-fallback"><span aria-hidden="true">✳</span><h2>There’s another<br>way into the story.</h2><p>Explore every employer, project, and qualification in reading view.</p><button type="button" class="button button-dark" id="fallback-reading">Read my journey ${icons.next}</button></div>`;document.querySelector('#fallback-reading').addEventListener('click',()=>{selectStop(active);toggleReading(true);});document.querySelector('#explore-toggle').disabled=true;document.querySelector('#pause-world').disabled=true;}
 }
 ensureWorld();

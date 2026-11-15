@@ -58,7 +58,7 @@ button:focus-visible, a:focus-visible, summary:focus-visible, canvas:focus-visib
 .world-loading.loaded { opacity: 0; pointer-events: none; }
 .loading-orbit { width: 35px; height: 35px; border-radius: 50%; border: 1px solid #D2E6F2; border-top-color: #1072AE; animation: orbit 1.5s linear infinite; }
 .stage-tools { position: absolute; left: 22px; right: 22px; bottom: 20px; display: flex; align-items: center; justify-content: space-between; pointer-events: none; gap: 20px; z-index: 3; }
-.stage-tools button { pointer-events: auto; }
+.stage-tools button,.stage-tools a { pointer-events: auto; }
 #go-today { display: inline-flex; align-items: center; flex-shrink: 0; white-space: nowrap; gap: 14px; font-size: .875rem; color: #526E82; background: #FFFFFFde; border: 1px solid #D2E6F2; padding: 9px 12px; border-radius: 5px; }
 #go-today svg { width: 12px; height: 12px; }
 .stage-controls { display: flex; align-items: center; flex-shrink: 0; gap: 16px; }

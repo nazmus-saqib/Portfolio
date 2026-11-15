@@ -172,6 +172,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
       id,
       name: station.label || station.company || defaultStations[index]?.company || `Company ${index + 1}`,
       company: station.company || station.label || defaultStations[index]?.company,
+      journeyNumber: station.journeyNumber ?? index + 1,
       position: [x * 5.05, 0, z * 4.05],
       stop: [x * 3.0, 0, z * 2.4],
       // Keep the automated fulfillment and network labels below their equipment displays.
@@ -218,14 +219,19 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     markers.push(marker); targetMarkers.push(inner);
     const label = document.createElement('button');
     label.type = 'button'; label.className = 'world-label';
-    const count = document.createElement('span'); count.textContent = String(index + 1).padStart(2, '0');
+    const journeyNumber = String(station.journeyNumber).padStart(2, '0');
+    const count = document.createElement('span'); count.textContent = journeyNumber;
     label.append(count, document.createTextNode(` ${station.name}`));
-    label.setAttribute('aria-label', `Visit company ${String(index + 1).padStart(2, '0')} ${station.company}`);
+    label.setAttribute('aria-label', `Visit company ${journeyNumber} ${station.company}`);
     label.style.position = 'absolute'; label.style.zIndex = '2';
     label.style.transform = 'translate(-50%, -50%)';
     label.addEventListener('click', () => onSelect(index));
     container.append(label); labels.push(label);
   });
+  // Match keyboard traversal to the journey without changing physical stations.
+  const labelOrder = stationData.map((_, index) => index);
+  labelOrder.sort((a, b) => stationData[a].journeyNumber - stationData[b].journeyNumber);
+  labelOrder.forEach(index => container.append(labels[index]));
 
   // Synesis IT — a design studio with a pinboard, screen, desk and sketches.
   if (stationGroupsById.has('synesis')) {
