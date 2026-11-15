@@ -17,7 +17,8 @@ test('single-viewport company journey preserves public assets and résumé links
   await expect(page.getByRole('heading', { name: 'Molla Nazmus Saqib', exact: true })).toBeVisible();
   await expect(page.locator('.professional-position')).toHaveText('Project & Operations Coordinator');
   await expect(page.locator('.professional-actions')).toHaveCount(0);
-  await expect(page.locator('#scene-hint')).toHaveClass(/sr-only/);
+  await expect(page.locator('#scene-hint')).toBeVisible();
+  await expect(page.locator('#scene-hint')).toHaveText('Choose a company. I’ll take you there.');
   const controls = page.locator('.stage-tools');
   const today = controls.getByRole('link', { name: 'Meet me today', exact: false });
   await expect(today).toBeVisible();
@@ -42,7 +43,7 @@ test('single-viewport company journey preserves public assets and résumé links
   await expect(page.locator('.world-label')).toHaveCount(6);
   await page.locator('#panel-nav button[data-panel="journey"]').click();
   await expect(page.locator('#company-name')).toHaveText('Identify BDA');
-  await expect(page.locator('#company-card .eyebrow')).toHaveText('01 / Canada');
+  await expect(page.locator('#company-card .eyebrow')).toHaveText('06 / Canada');
   await expect(page.locator('#about-card')).toHaveCount(0);
   await expect(page.locator('#world')).toHaveAttribute('data-active-station', '5');
 
@@ -56,7 +57,7 @@ test('single-viewport company journey preserves public assets and résumé links
   expect(resume.headers()['content-type']).toContain('application/pdf');
   expect((await resume.body()).subarray(0, 5).toString()).toBe('%PDF-');
 
-  await page.getByRole('button', { name: 'Visit company 06 Synesis IT', exact: true }).click();
+  await page.getByRole('button', { name: 'Visit company 01 Synesis IT', exact: true }).click();
   await page.getByRole('button', { name: 'Read BIWTA project story' }).click();
   await page.getByText('Explore the prototype screens', { exact: true }).click();
   const previews = await page.locator('.project-gallery figure img').evaluateAll(images => images.map(image => image.getAttribute('src')));

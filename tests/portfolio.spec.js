@@ -38,7 +38,7 @@ async function loadWorld(page, baseURL) {
 }
 
 async function selectCompany(page, company) {
-  const chapter = String(journeyCompanies.indexOf(company) + 1).padStart(2, '0');
+  const chapter = String(companies.indexOf(company) + 1).padStart(2, '0');
   await page.getByRole('button', { name: `Visit company ${chapter} ${company}`, exact: true }).click();
   await expect(page.locator('#company-name')).toHaveText(company);
 }
@@ -116,7 +116,7 @@ test('Meet me today offers email options without changing the selected panel or 
   await expect(meetMe).toBeFocused();
   await expect(page.locator('#panel-nav [data-panel="journey"]')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#company-name')).toHaveText('iQuantile');
-  await expect(page.locator('#stop-counter')).toHaveText('05 / 06');
+  await expect(page.locator('#stop-counter')).toHaveText('02 / 06');
   await expect(page.locator('#world')).toHaveAttribute('data-active-station', '1');
   expect(page.url()).toBe(originalURL);
 });
@@ -220,8 +220,8 @@ test('About Me opens at the centre and preserves the personal story outside the 
 
   await page.locator('#panel-nav button[data-panel="journey"]').click();
   await expect(page.locator('#company-name')).toHaveText('Identify BDA');
-  await expect(page.locator('#company-card .eyebrow')).toHaveText('01 / Canada');
-  await expect(page.locator('#stop-counter')).toHaveText('01 / 06');
+  await expect(page.locator('#company-card .eyebrow')).toHaveText('06 / Canada');
+  await expect(page.locator('#stop-counter')).toHaveText('06 / 06');
   await expect(page.locator('#about-card')).toHaveCount(0);
   await expect(page.locator('#previous-stop')).toBeDisabled();
   await page.locator('#next-stop').click();
@@ -249,7 +249,7 @@ test('About Me opens at the centre and preserves the personal story outside the 
 
   await page.locator('#reading-toggle').click();
   await expect(page.locator('#reading-view .reading-company')).toHaveCount(6);
-  await expect(page.locator('#reading-view > .reading-company').first()).toContainText('01 / Canada');
+  await expect(page.locator('#reading-view > .reading-company').first()).toContainText('06 / Canada');
   await expect(page.locator('#reading-view #about-card')).toHaveCount(0);
   await page.locator('#panel-nav button[data-panel="profile"]').click();
   await page.getByRole('tab', { name: 'Profile', exact: true }).click();
@@ -327,10 +327,10 @@ test('returning to the centre walks home and exits free exploration', async ({ p
 });
 
 test('Journey starts with current work and walks through six employers from current to previous', async ({ page, baseURL }) => {
-  // Source order preserves physical station positions; the reader follows the reverse career sequence.
+  // Original company numbers and physical station positions stay fixed; the reader follows the reverse career sequence.
   expect(careerStops.map(stop => stop.company)).toEqual(companies);
   await loadWorld(page, baseURL);
-  await expect(page.locator('.world-label')).toHaveText(journeyCompanies.map((company, index) => `${String(index + 1).padStart(2, '0')} ${company}`));
+  await expect(page.locator('.world-label')).toHaveText(journeyCompanies.map(company => `${String(companies.indexOf(company) + 1).padStart(2, '0')} ${company}`));
   await expect(page.locator('.journey-footer')).toHaveCount(0);
   await expect(page.locator('#company-name')).toHaveText('Identify BDA');
   await expect(page.locator('#company-role')).toHaveText('Project Coordinator');
@@ -346,7 +346,7 @@ test('Journey starts with current work and walks through six employers from curr
     }
     const physicalIndex = companies.indexOf(company);
     const stop = careerStops[physicalIndex];
-    const chapter = String(index + 1).padStart(2, '0');
+    const chapter = String(physicalIndex + 1).padStart(2, '0');
     await expect(page.locator('#company-name')).toHaveText(company);
     await expect(page.locator('#company-card .eyebrow')).toHaveText(`${chapter} / ${stop.location}`);
     await expect(page.locator('#stop-counter')).toHaveText(`${chapter} / 06`);
@@ -364,20 +364,20 @@ test('Journey starts with current work and walks through six employers from curr
   await expect(page.locator('#next-stop')).toContainText('Back to current role');
   await page.locator('#previous-stop').click();
   await expect(page.locator('#company-name')).toHaveText('iQuantile');
-  await expect(page.locator('#stop-counter')).toHaveText('05 / 06');
+  await expect(page.locator('#stop-counter')).toHaveText('02 / 06');
   await page.locator('#next-stop').click();
   await expect(page.locator('#company-name')).toHaveText('Synesis IT');
   await page.locator('#next-stop').click();
   await expect(page.locator('#company-name')).toHaveText('Identify BDA');
-  await expect(page.locator('#stop-counter')).toHaveText('01 / 06');
+  await expect(page.locator('#stop-counter')).toHaveText('06 / 06');
   await expect(page.locator('#previous-stop')).toBeDisabled();
 
   await page.locator('#reading-toggle').click();
   const readingCards = page.locator('#reading-view > .reading-company');
   await expect(readingCards).toHaveCount(6);
   expect(await readingCards.evaluateAll(cards => cards.map(card => card.dataset.stop))).toEqual(['identify', 'ups-staples', 'dynamic', 'istoreisend', 'iquantile', 'synesis']);
-  await expect(readingCards.first()).toContainText('01 / Canada');
-  await expect(readingCards.last()).toContainText('06 / Dhaka, Bangladesh');
+  await expect(readingCards.first()).toContainText('06 / Canada');
+  await expect(readingCards.last()).toContainText('01 / Dhaka, Bangladesh');
   await page.locator('#reading-toggle').click();
 
   await selectCompany(page, 'Synesis IT');
@@ -782,7 +782,7 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 640 }
     await assertSingleViewport(page);
     await expect(page.locator('#world-pane')).toBeVisible();
     await expect(page.locator('#company-name')).toHaveText('Identify BDA');
-    await expect(page.locator('#company-card .eyebrow')).toHaveText('01 / Canada');
+    await expect(page.locator('#company-card .eyebrow')).toHaveText('06 / Canada');
     await page.locator('#panel-nav button[data-panel="profile"]').click();
     await page.getByRole('tab', { name: 'Profile', exact: true }).click();
     await expect(page.locator('#about-card')).toBeVisible();
@@ -835,7 +835,7 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 640 }
     await page.locator('#panel-nav button[data-panel="journey"]').click();
     await expect(page.locator('#reading-view .reading-company')).toHaveCount(6);
     await expect(page.locator('#reading-view #about-card')).toHaveCount(0);
-    await expect(page.locator('#reading-view > .reading-company').first()).toContainText('01 / Canada');
+    await expect(page.locator('#reading-view > .reading-company').first()).toContainText('06 / Canada');
     await expect(page.locator('#world-pane')).toBeHidden();
     await page.locator('#reading-view [data-stop="identify"]').scrollIntoViewIfNeeded();
     await expect(page.getByRole('button', { name: 'Explore the flow: From request to delivery', exact: true })).toBeVisible();
@@ -860,7 +860,7 @@ test('without WebGL the complete career and clickable projects remain available 
   await page.getByRole('button', { name: 'Read my journey' }).click();
   await expect(page.locator('#reading-view #about-card')).toHaveCount(0);
   await expect(page.locator('#reading-view .reading-company')).toHaveCount(6);
-  await expect(page.locator('#reading-view > .reading-company').first()).toContainText('01 / Canada');
+  await expect(page.locator('#reading-view > .reading-company').first()).toContainText('06 / Canada');
   await expect(page.locator('#reading-view')).toContainText('Oct 2024–Present');
   await page.getByRole('button', { name: 'Explore the flow: From request to delivery', exact: true }).click();
   await expect(page.locator('#dialog-title')).toHaveText('From request to delivery');

@@ -35,8 +35,7 @@ const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeU
 const outlookComposeUrl = `https://outlook.live.com/mail/0/deeplink/compose?to=${encodeURIComponent(email)}`;
 const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 const latest = careerStops.length - 1;
-// Keep physical map indices stable while presenting the career from current to previous.
-const journeyPosition = stationIndex => latest - stationIndex;
+// Preserve the original company numbers and map indices while reading current to previous.
 let world, active = latest, worldStation = -1, panel = 'profile', reading = false, exploring = false, paused = motionPreference.matches;
 let toastTimer, speaking = false, dialogTrigger, disposed = false;
 let emailDialogTrigger;
@@ -60,7 +59,7 @@ document.querySelector('#app').innerHTML = `
         <p id="travel-status" class="sr-only" role="status">About Me</p>
         <div id="world" class="world-container"></div>
         <div class="world-loading" id="world-loading"><span class="loading-orbit"></span><p>A small world is taking shape.</p></div>
-        <div class="stage-tools"><a id="go-today" href="mailto:${email}" data-email-compose aria-haspopup="dialog" aria-controls="email-dialog" aria-label="Meet me today — send email">Meet me today ${icons.arrow}</a><div class="sr-only" id="scene-hint" role="status">Choose a company. I’ll take you there.</div><div class="stage-controls"><button type="button" id="explore-toggle" aria-pressed="false">Explore <span class="toggle-track"><i></i></span></button><button type="button" class="icon-button" id="pause-world" aria-label="Pause scene animation">${icons.pause}</button></div></div>
+        <div class="stage-tools"><a id="go-today" href="mailto:${email}" data-email-compose aria-haspopup="dialog" aria-controls="email-dialog" aria-label="Meet me today — send email">Meet me today ${icons.arrow}</a><div class="scene-hint" id="scene-hint" role="status">Choose a company. I’ll take you there.</div><div class="stage-controls"><button type="button" id="explore-toggle" aria-pressed="false">Explore <span class="toggle-track"><i></i></span></button><button type="button" class="icon-button" id="pause-world" aria-label="Pause scene animation">${icons.pause}</button></div></div>
         <div class="touch-controls" id="touch-controls" aria-label="Move character" hidden><button type="button" data-direction="up" aria-label="Move forward">↑</button><button type="button" data-direction="left" aria-label="Move left">←</button><button type="button" data-direction="down" aria-label="Move back">↓</button><button type="button" data-direction="right" aria-label="Move right">→</button></div>
       </section>
 
@@ -68,7 +67,7 @@ document.querySelector('#app').innerHTML = `
         <button type="button" id="mobile-world-toggle" class="mobile-world-toggle" aria-expanded="false" aria-controls="world-pane">Explore the 3D journey</button>
         <nav class="panel-nav" id="panel-nav" aria-label="Portfolio sections"><button type="button" data-panel="profile" class="active" aria-pressed="true">About Me</button><button type="button" data-panel="journey" aria-pressed="false">Journey</button><button type="button" data-panel="projects" aria-pressed="false">Projects <span>${projects.length}</span></button><button type="button" data-panel="contact" aria-pressed="false">Contact</button></nav>
         <div class="sidebar-body" id="sidebar-body" tabindex="-1" role="region" aria-label="Career details"></div>
-        <div class="company-navigation" id="company-navigation" hidden><button type="button" class="icon-button" id="previous-stop" aria-label="More recent role">${icons.previous}</button><span id="stop-counter" aria-live="polite">01 / ${number(latest)}</span><button type="button" class="button button-secondary" id="next-stop">Previous role ${icons.next}</button><button type="button" class="icon-button" id="listen" aria-label="Listen to this company story">${icons.sound}</button></div>
+        <div class="company-navigation" id="company-navigation" hidden><button type="button" class="icon-button" id="previous-stop" aria-label="More recent role">${icons.previous}</button><span id="stop-counter" aria-live="polite">${number(latest)} / ${number(latest)}</span><button type="button" class="button button-secondary" id="next-stop">Previous role ${icons.next}</button><button type="button" class="icon-button" id="listen" aria-label="Listen to this company story">${icons.sound}</button></div>
       </aside>
     </div>
 
@@ -116,7 +115,7 @@ function companyProjectsMarkup(stop) {
 function companyMarkup(stop, index, compact = false) {
   const isIdentify = stop.id === 'identify';
   return `<article class="company-card ${compact?'reading-company':''} ${index===active?'is-current':''}" ${compact?'':`id="company-card"`} data-stop="${esc(stop.id)}">
-    <div class="card-topline"><p class="eyebrow">${number(journeyPosition(index))} / ${esc(stop.location)}</p><span class="employment-type">${esc(stop.employment)}</span></div>
+    <div class="card-topline"><p class="eyebrow">${number(index)} / ${esc(stop.location)}</p><span class="employment-type">${esc(stop.employment)}</span></div>
     <h2 ${compact?'':'id="company-name"'}>${esc(stop.company)}</h2><p class="company-role" ${compact?'':'id="company-role"'}>${esc(stop.role)}</p>
     <div class="job-dates"><span ${compact?'':'id="company-dates"'}>${esc(stop.period)}</span><span class="tenure" ${compact?'':'id="company-tenure"'} title="Based on the supplied month-level dates">${esc(formatTenure(stop.start,stop.end))}</span></div>
     ${isIdentify?'':companyProjectsMarkup(stop)}
@@ -163,7 +162,7 @@ function renderPanel(resetScroll = true) {
 }
 
 function updateChapterControls() {
-  document.querySelector('#stop-counter').textContent=`${number(journeyPosition(active))} / ${number(latest)}`;
+  document.querySelector('#stop-counter').textContent=`${number(active)} / ${number(latest)}`;
   document.querySelector('#previous-stop').disabled=active===latest;
   document.querySelector('#next-stop').innerHTML=`${active===0?'Back to current role':'Previous role'} ${icons.next}`;
   document.querySelector('#listen').setAttribute('aria-label','Listen to this company story');
@@ -177,10 +176,10 @@ function stopSpeech() {
 function updateMotion() { world?.setPaused(paused||reading||document.hidden||getComputedStyle(document.querySelector('#world-pane')).display==='none'||document.querySelector('#project-dialog').open||document.querySelector('#email-dialog').open);document.querySelector('#pause-world').innerHTML=paused?icons.play:icons.pause;document.querySelector('#pause-world').setAttribute('aria-label',`${paused?'Resume':'Pause'} scene animation`); }
 function setExploring(value) {
   exploring=!!value;
-  world?.setExploring(exploring);
   document.querySelector('#explore-toggle').setAttribute('aria-pressed',exploring);
   document.querySelector('#touch-controls').hidden=!exploring;
   document.querySelector('#scene-hint').textContent=exploring?'Move with WASD, arrows, or the controls.':'Choose a company. I’ll take you there.';
+  world?.setExploring(exploring);
 }
 function updateTravelStatus(arrived = false) {
   const settled=arrived||paused||reading||motionPreference.matches;
@@ -425,7 +424,7 @@ function ensureWorld() {
 }
 
 async function initWorld() {
-  try {const {createWorld}=await import('./world.js');if(disposed)return;world=createWorld({container:document.querySelector('#world'),stations:careerStops.map((stop,index)=>({...stop,journeyNumber:journeyPosition(index)+1})),onSelect:index=>selectStop(index),onArrival:index=>{if(index===worldStation)updateTravelStatus(true);},onReady:()=>document.querySelector('#world-loading').classList.add('loaded'),reducedMotion:motionPreference.matches});world.goTo(worldStation);world.setExploring(exploring);updateMotion();}
+  try {const {createWorld}=await import('./world.js');if(disposed)return;world=createWorld({container:document.querySelector('#world'),stations:careerStops,onSelect:index=>selectStop(index),onArrival:index=>{if(index===worldStation)updateTravelStatus(true);},onReady:()=>document.querySelector('#world-loading').classList.add('loaded'),reducedMotion:motionPreference.matches});world.goTo(worldStation);world.setExploring(exploring);updateMotion();}
   catch(error){worldFailed=true;console.warn('The 3D view is unavailable; all career details remain accessible.',error);document.querySelector('#world-loading').classList.add('loaded');document.querySelector('#world').innerHTML=`<div class="world-fallback"><span aria-hidden="true">✳</span><h2>There’s another<br>way into the story.</h2><p>Explore every employer, project, and qualification in reading view.</p><button type="button" class="button button-dark" id="fallback-reading">Read my journey ${icons.next}</button></div>`;document.querySelector('#fallback-reading').addEventListener('click',()=>{selectStop(active);toggleReading(true);});document.querySelector('#explore-toggle').disabled=true;document.querySelector('#pause-world').disabled=true;}
 }
 ensureWorld();

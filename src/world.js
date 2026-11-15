@@ -230,7 +230,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
   });
   // Match keyboard traversal to the journey without changing physical stations.
   const labelOrder = stationData.map((_, index) => index);
-  labelOrder.sort((a, b) => stationData[a].journeyNumber - stationData[b].journeyNumber);
+  labelOrder.sort((a, b) => stationData[b].journeyNumber - stationData[a].journeyNumber);
   labelOrder.forEach(index => container.append(labels[index]));
 
   // Synesis IT — a design studio with a pinboard, screen, desk and sketches.
@@ -541,6 +541,8 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     }
   });
   function updateLabels() {
+    const footer = container.parentElement?.querySelector('.stage-tools');
+    const footerInset = Math.min(footer ? Math.max(8, size.height - footer.offsetTop + 8) : 8, size.height / 2);
     projected.set(0, 0.23, 0); world.localToWorld(projected); projected.project(camera);
     homeTarget.style.left = `${(projected.x * 0.5 + 0.5) * size.width}px`;
     homeTarget.style.top = `${(-projected.y * 0.5 + 0.5) * size.height}px`;
@@ -549,7 +551,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     stationData.forEach((station, index) => {
       projected.copy(station.labelAnchor); world.localToWorld(projected); projected.project(camera);
       const label = labels[index];
-      const narrow = size.width < 480 || size.height < 240;
+      const narrow = size.width < 480 || size.height - footerInset < 240;
       // Previous/Next chapter controls provide access on compact screens;
       // showing one world label keeps the small scene and character legible.
       label.style.visibility = size.height < 180 || (narrow && index !== activeIndex) ? 'hidden' : 'visible';
@@ -561,8 +563,8 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
       const left = narrow && station.id === 'istoreisend'
         ? halfWidth + marginX
         : THREE.MathUtils.clamp((projected.x * 0.5 + 0.5) * size.width, halfWidth + marginX, size.width - halfWidth - marginX);
-      // Reserve the bottom control row when the scene is compact.
-      const bottomMargin = narrow ? Math.min(64, size.height / 2) : marginY;
+      // Keep labels above the instruction and controls, including wrapped footers.
+      const bottomMargin = footerInset;
       const top = THREE.MathUtils.clamp((-projected.y * 0.5 + 0.5) * size.height, halfHeight + marginY, size.height - halfHeight - bottomMargin);
       label.style.left = `${left}px`; label.style.top = `${top}px`;
       label.classList.toggle('is-active', index === activeIndex);
@@ -579,7 +581,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
       const candidates = [item.top,...placed.flatMap(other=>[
         other.top+(item.height+other.height)/2+gap,
         other.top-(item.height+other.height)/2-gap,
-      ])].filter(top=>top>=item.height/2+8&&top<=size.height-item.height/2-8)
+      ])].filter(top=>top>=item.height/2+8&&top<=size.height-item.height/2-footerInset)
         .sort((a,b)=>Math.abs(a-item.top)-Math.abs(b-item.top));
       const top = candidates.find(candidate=>placed.every(other=>!overlaps(candidate,other))) ?? item.top;
       item.label.style.top = `${top}px`;
@@ -812,6 +814,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
       if (exploring) { walkPath = []; container.dataset.traveling = 'false'; }
       updateCanvasDescription();
       if (exploring) canvas.focus({ preventScroll: true });
+      renderOnce();
     },
     move,
     dispose() {
