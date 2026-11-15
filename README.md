@@ -44,7 +44,7 @@ Playwright uses `/usr/bin/chromium`, or `CHROMIUM_PATH` when supplied. The previ
 - `src/content.js`: career history, project collection, qualifications and skills.
 - `src/coordination-case-studies.js`: current conference, supplier and issue-coordination case content and template data.
 - `src/main.js`: navigation, dialog URLs, reading mode and scene startup.
-- `src/recruiter-view.js`: three-paragraph professional overview, four target roles and expandable personal previews. Résumé and Contact remain accessible through the main navigation.
+- `src/recruiter-view.js`: concise professional overview and expandable personal previews, with four target roles listed in Contact. Résumé and Contact remain accessible through the main navigation.
 - `src/project-view.js` and `src/coordination-case-view.js`: digital and coordination case presentation.
 - `src/case-study-sections.js`: original project pictures and interactive supporting studies.
 - `src/profile-view.js`, `src/story-view.js`, `src/contribution-view.js` and `src/workflow-view.js`: profile, personal journey and employer details.

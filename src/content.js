@@ -529,8 +529,7 @@ export const careerStops = [
 
 export const professionalSummary = {
   headline: 'Project & Operations Coordinator',
-  body: 'I’m a Project & Operations Coordinator with experience managing project workflows, coordinating stakeholders and suppliers, and supporting day-to-day business operations. My background spans procurement, scheduling, risk and issue management, financial coordination, technical field services and digital projects.',
-  background: 'I combine hands-on operational experience with a technical education and formal project management training to solve problems, improve workflows and keep projects moving from planning through delivery.',
+  body: 'I connect requirements, stakeholders, suppliers, schedules and deliverables to move projects forward. My work includes quotation analysis, approvals, delivery coordination, practical risk monitoring, issue resolution and financial follow-up. I bring technical experience and formal project management education to cross-functional operations.',
   opportunityLead: 'I’m seeking opportunities as a ',
   opportunityContext: ', where I can contribute to efficient operations, cross-functional collaboration and successful project delivery.',
   location: 'Hamilton, Ontario, Canada',

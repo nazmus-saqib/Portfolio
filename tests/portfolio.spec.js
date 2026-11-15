@@ -98,12 +98,8 @@ test('About Me opens at the centre and preserves the personal story outside the 
   await expect(about.getByRole('button', { name: 'Contact me', exact: true })).toHaveCount(0);
   await expect(page.locator('.header-actions .resume-link')).toBeVisible();
   const professionalCopy = about.locator('.professional-summary');
-  await expect(professionalCopy.locator('p')).toHaveText([
-    'I’m a Project & Operations Coordinator with experience managing project workflows, coordinating stakeholders and suppliers, and supporting day-to-day business operations. My background spans procurement, scheduling, risk and issue management, financial coordination, technical field services and digital projects.',
-    'I combine hands-on operational experience with a technical education and formal project management training to solve problems, improve workflows and keep projects moving from planning through delivery.',
-    'I’m seeking opportunities as a Project Coordinator, Operations Coordinator, Assistant Project Manager or Implementation Coordinator, where I can contribute to efficient operations, cross-functional collaboration and successful project delivery.',
-  ]);
-  await expect(professionalCopy.locator('strong')).toHaveText('Project Coordinator, Operations Coordinator, Assistant Project Manager or Implementation Coordinator');
+  await expect(professionalCopy).toHaveText('I connect requirements, stakeholders, suppliers, schedules and deliverables to move projects forward. My work includes quotation analysis, approvals, delivery coordination, practical risk monitoring, issue resolution and financial follow-up. I bring technical experience and formal project management education to cross-functional operations.');
+  await expect(professionalCopy).not.toContainText('I’m seeking opportunities');
   await expect(page.locator('#reading-toggle')).toContainText('Focus on content');
   const desktopBalance = await page.locator('.experience-layout').evaluate(node => {
     const world = node.querySelector('.world-pane').getBoundingClientRect().width;

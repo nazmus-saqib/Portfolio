@@ -14,7 +14,7 @@ export function renderProfessionalOverview({ aboutMe, professionalSummary }) {
     <h1 id="about-title">${esc(aboutMe.name)}</h1>
     <p class="professional-position">${esc(professionalSummary.headline)}</p>
     <button class="professional-current" type="button" data-current-experience>Current experience at Identify BDA ${arrow}</button>
-    <div class="professional-summary"><p>${esc(professionalSummary.body)}</p><p>${esc(professionalSummary.background)}</p><p>${renderOpportunityStatement(professionalSummary)}</p></div>
+    <p class="professional-summary">${esc(professionalSummary.body)}</p>
     <ul class="professional-evidence" aria-label="Current Identify BDA experience"><li><strong>25+</strong><span>Clients supported</span><small>Identify BDA</small></li><li><strong>20+</strong><span>Suppliers coordinated</span><small>Canada &amp; international</small></li></ul>
     <p class="professional-credential">Project Management graduate certificate · Fleming College · 2024</p>
     <details class="professional-quick-view"><summary><span class="profile-preview-title">My work in 30 seconds</span><span class="profile-preview-excerpt"><strong>Today:</strong> Project Coordinator at Identify BDA. I coordinate requirements, schedules, approvals, suppliers and deliverables, and keep the next action clear.</span><span class="profile-preview-toggle"><span class="profile-preview-expand">Read more</span><span class="profile-preview-collapse">Show less</span><span class="profile-preview-icon" aria-hidden="true">+</span></span></summary><div>

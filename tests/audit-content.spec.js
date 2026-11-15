@@ -45,8 +45,7 @@ test('the delivered HTML, social image and approved résumé remain useful witho
   await page.goto(baseURL);
   await expect(page.getByRole('heading', { name: 'Molla Nazmus Saqib', exact: true })).toBeVisible();
   await expect(page.locator('.static-position')).toHaveText('Project & Operations Coordinator');
-  await expect(page.locator('.static-summary > p')).toHaveCount(3);
-  await expect(page.locator('.static-summary > p').last().locator('strong')).toHaveText('Project Coordinator, Operations Coordinator, Assistant Project Manager or Implementation Coordinator');
+  await expect(page.locator('p.static-summary')).toContainText('I connect requirements, stakeholders, suppliers, schedules and deliverables to move projects forward.');
   await expect(page.locator('.static-case')).toHaveCount(8);
   const email = page.locator('a[href="mailto:saqibmollanazmus@gmail.com"]').first();
   await expect(email).toBeVisible();
