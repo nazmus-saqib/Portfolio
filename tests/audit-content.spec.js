@@ -8,12 +8,12 @@ test('conference case connects the verified example to responsibilities, decisio
   await expect(dialog.locator('.coordination-facts')).toContainText('8 vendors');
   await expect(dialog.locator('.coordination-facts')).toContainText('3 weeks');
   await expect(dialog.locator('.coordination-result')).toContainText('without delaying the conference');
-  await dialog.getByText('Who did what', { exact: true }).click();
+  await expect(dialog.getByRole('heading', { name: 'Who did what', exact: true })).toBeVisible();
+  await expect(dialog.locator('.coordination-ownership dl')).toBeVisible();
   await expect(dialog.locator('.coordination-ownership')).toContainText('My contribution');
   const tracker = dialog.locator('[data-coordination-template="task-tracker"]');
-  await tracker.locator('summary').focus();
-  await page.keyboard.press('Enter');
-  await expect(tracker).toHaveAttribute('open', '');
+  await expect(tracker.getByRole('heading', { name: 'Task tracker template', exact: true })).toBeVisible();
+  await expect(tracker.getByRole('region')).toBeVisible();
   await expect(tracker.getByRole('columnheader', { name: 'Next action', exact: true })).toBeVisible();
   await expect(tracker).toContainText('[Responsible person]');
 });
@@ -24,9 +24,8 @@ test('all coordination templates remain usable on a narrow phone without overflo
   for (const id of ['conference', 'multi-city-event', 'invoice-investigation', 'supplier-coordination', 'change-coordination']) {
     await page.goto(`${baseURL}?project=${id}`);
     await expect(page.locator('[data-coordination-case]')).toHaveAttribute('data-coordination-case', id);
-    for (const details of await page.locator('.coordination-template').all()) {
-      if (!await details.evaluate(node => node.open)) await details.locator('summary').click();
-      const region = details.getByRole('region');
+    for (const template of await page.locator('.coordination-template').all()) {
+      const region = template.getByRole('region');
       await region.scrollIntoViewIfNeeded();
       await expect(region).toBeVisible();
       await region.focus();
@@ -46,6 +45,8 @@ test('the delivered HTML, social image and approved résumé remain useful witho
   await page.goto(baseURL);
   await expect(page.getByRole('heading', { name: 'Molla Nazmus Saqib', exact: true })).toBeVisible();
   await expect(page.locator('.static-position')).toHaveText('Project & Operations Coordinator');
+  await expect(page.locator('.static-summary > p')).toHaveCount(3);
+  await expect(page.locator('.static-summary > p').last().locator('strong')).toHaveText('Project Coordinator, Operations Coordinator, Assistant Project Manager or Implementation Coordinator');
   await expect(page.locator('.static-case')).toHaveCount(8);
   const email = page.locator('a[href="mailto:saqibmollanazmus@gmail.com"]').first();
   await expect(email).toBeVisible();

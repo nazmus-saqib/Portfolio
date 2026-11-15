@@ -529,14 +529,17 @@ export const careerStops = [
 
 export const professionalSummary = {
   headline: 'Project & Operations Coordinator',
-  body: 'I connect requirements, stakeholders, suppliers, schedules and deliverables to move projects forward. My work includes quotation analysis, approvals, delivery coordination, practical risk monitoring, issue resolution and financial follow-up. I bring technical experience and formal project management education to cross-functional operations.',
+  body: 'I’m a Project & Operations Coordinator with experience managing project workflows, coordinating stakeholders and suppliers, and supporting day-to-day business operations. My background spans procurement, scheduling, risk and issue management, financial coordination, technical field services and digital projects.',
+  background: 'I combine hands-on operational experience with a technical education and formal project management training to solve problems, improve workflows and keep projects moving from planning through delivery.',
+  opportunityLead: 'I’m seeking opportunities as a ',
+  opportunityContext: ', where I can contribute to efficient operations, cross-functional collaboration and successful project delivery.',
   location: 'Hamilton, Ontario, Canada',
   qualifications: [
     'Bachelor of Science in Computer Science & Engineering · North South University · 2019',
     'Ontario Graduate Certificate in Project Management · Sir Sandford Fleming College · 2024',
     'Ontario Graduate Certificate in Interactive Media Management · Centennial College · 2023',
   ],
-  targets: ['Project Coordinator', 'Assistant Project Manager'],
+  targets: ['Project Coordinator', 'Operations Coordinator', 'Assistant Project Manager', 'Implementation Coordinator'],
 };
 
 export function formatTenure(start, end, asOfDate = new Date()) {

@@ -13,10 +13,10 @@
 .coordination-pair { display:grid; grid-template-columns:1fr 1fr; gap:28px; margin-top:24px; }
 .coordination-actions { list-style:none; padding:0; margin:0; }
 .coordination-actions>li { display:flex; gap:16px; padding:18px 0; border-bottom:1px solid #D2E6F2; }
-.coordination-actions>li>span { color:#1072AE; font-size:.875rem; font-weight:600; padding-top:2px; }
+.coordination-actions>li>span { flex-shrink:0; min-width:2ch; white-space:nowrap; color:#1072AE; font-size:.875rem; font-weight:600; padding-top:2px; }
 .coordination-actions p { margin:0; }
 .coordination-ownership,.coordination-template { border:1px solid #D2E6F2; border-radius:10px; margin-top:18px; }
-.coordination-ownership summary,.coordination-template summary { padding:16px; cursor:pointer; color:#173A55; font-weight:600; font-size:1rem; }
+.coordination-ownership>h4,.coordination-template>h4 { padding:16px; margin:0; color:#173A55; font-weight:600; font-size:1rem; }
 .coordination-ownership dl { margin:0; padding:0 16px 16px; }
 .coordination-ownership dl>div+div { margin-top:14px; }
 .coordination-ownership dt { font-weight:600; color:#173A55; }

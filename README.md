@@ -33,7 +33,7 @@ Playwright uses `/usr/bin/chromium`, or `CHROMIUM_PATH` when supplied. The previ
 
 - About Me opens at the centre of the world. Its Profile, Skills and Learning tabs include the professional overview, always-visible skill cards, qualifications, and optional personal story.
 - Journey preserves six employers in chronological order, beginning with Synesis IT in Dhaka. Current Identify BDA experience is also available directly from the professional overview.
-- Projects opens with Current Project Work. Its documented conference case study is separated from three recurring work examples: supplier coordination, change coordination and the end-to-end Identify workflow. Earlier digital work is available through its own filter. Reusable planning templates explain the method without exposing client records.
+- Projects opens with Operations: three documented project examples, two recurring coordination methods and a separate role overview. Earlier digital work is available through its own filter. Case-study research, ownership, source notes and templates remain visible; image and portal galleries retain their navigation.
 - Each project has a shareable `?project=id` URL, such as `?project=conference`, with browser history support.
 - Focus on Content uses the reading view to preserve the selected section and its content. Journey expands into all six employer chapters in that view.
 - On phones, the professional overview takes priority; visitors choose when to open the 3D journey. Desktop gives the interactive world and professional content roughly equal width. Reduced motion, pause, keyboard navigation and a no-WebGL alternative remain available.
@@ -44,7 +44,7 @@ Playwright uses `/usr/bin/chromium`, or `CHROMIUM_PATH` when supplied. The previ
 - `src/content.js`: career history, project collection, qualifications and skills.
 - `src/coordination-case-studies.js`: current conference, supplier and issue-coordination case content and template data.
 - `src/main.js`: navigation, dialog URLs, reading mode and scene startup.
-- `src/recruiter-view.js`: industry-neutral professional overview, expandable previews and direct actions.
+- `src/recruiter-view.js`: three-paragraph professional overview, four target roles and expandable personal previews. Résumé and Contact remain accessible through the main navigation.
 - `src/project-view.js` and `src/coordination-case-view.js`: digital and coordination case presentation.
 - `src/case-study-sections.js`: original project pictures and interactive supporting studies.
 - `src/profile-view.js`, `src/story-view.js`, `src/contribution-view.js` and `src/workflow-view.js`: profile, personal journey and employer details.

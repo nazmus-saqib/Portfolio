@@ -66,8 +66,8 @@ for (const width of [1440, 360]) {
     await expect(testing).toContainText('qualitative feedback');
     await expect(testing.locator('h5', { hasText: 'Recorded feedback' })).toHaveCount(5);
     await expect(testing).not.toContainText('Proposed evaluation tasks');
-    await dialog.locator('.case-study-disclosure > summary').filter({ hasText: 'Site map' }).click();
     const map = dialog.locator('#case-signfy-sitemap');
+    await expect(map.getByRole('heading', { name: 'Site map', exact: true })).toBeVisible();
     await expect(map.locator('.study-sitemap > ul > li')).toHaveCount(5);
     await map.locator('[data-study-map-select]').last().click();
     await expect(map.locator('[data-study-map-status]')).not.toContainText('Select an area');

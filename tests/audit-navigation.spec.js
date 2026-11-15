@@ -13,6 +13,7 @@ test('every project has a refreshable direct link, while invalid project IDs rec
     await page.goto(siteUrl(baseURL, `ref=recruiter&project=${encodeURIComponent(project.id)}`));
     await expect(page.locator('#project-dialog')).toBeVisible();
     await expect(page.locator('#dialog-title')).toHaveText(project.title);
+    await expect(page.locator('#project-dialog details, #project-dialog summary')).toHaveCount(0);
     await expect(page.locator('.case-share, [data-copy-project-link], [data-case-link-fallback]')).toHaveCount(0);
     await expect(page.locator('.case-project-tools')).toHaveCount(1);
     await expect(page.locator('.case-project-tools')).toContainText('Tools & methods');

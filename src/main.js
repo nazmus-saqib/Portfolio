@@ -7,7 +7,7 @@ import { renderStoryJourney, activateStoryMilestone } from './story-view.js';
 import { renderProfile, renderCoordinationMetrics, activateProfileTab } from './profile-view.js';
 import { renderRoleContributions, activateRoleContribution } from './contribution-view.js';
 import { renderIdentifyWorkflow } from './workflow-view.js';
-import { renderProfessionalOverview } from './recruiter-view.js';
+import { renderProfessionalOverview, renderOpportunityStatement } from './recruiter-view.js';
 import './project-view.css';
 import './case-study-sections.css';
 import './story-view.css';
@@ -55,7 +55,7 @@ document.querySelector('#app').innerHTML = `
         <p id="travel-status" class="sr-only" role="status">About Me</p>
         <div id="world" class="world-container"></div>
         <div class="world-loading" id="world-loading"><span class="loading-orbit"></span><p>A small world is taking shape.</p></div>
-        <div class="stage-tools"><button type="button" id="go-today">Meet me today ${icons.arrow}</button><div class="scene-hint" id="scene-hint">Choose a company. I’ll take you there.</div><div class="stage-controls"><button type="button" id="explore-toggle" aria-pressed="false">Explore <span class="toggle-track"><i></i></span></button><button type="button" class="icon-button" id="pause-world" aria-label="Pause scene animation">${icons.pause}</button></div></div>
+        <div class="stage-tools"><button type="button" id="go-today">Meet me today ${icons.arrow}</button><div class="sr-only" id="scene-hint" role="status">Choose a company. I’ll take you there.</div><div class="stage-controls"><button type="button" id="explore-toggle" aria-pressed="false">Explore <span class="toggle-track"><i></i></span></button><button type="button" class="icon-button" id="pause-world" aria-label="Pause scene animation">${icons.pause}</button></div></div>
         <div class="touch-controls" id="touch-controls" aria-label="Move character" hidden><button type="button" data-direction="up" aria-label="Move forward">↑</button><button type="button" data-direction="left" aria-label="Move left">←</button><button type="button" data-direction="down" aria-label="Move back">↓</button><button type="button" data-direction="right" aria-label="Move right">→</button></div>
       </section>
 
@@ -78,7 +78,7 @@ function projectNames(stop) {
 
 function aboutMarkup() {
   return `<article class="about-story" id="about-card" aria-labelledby="about-title">
-    ${renderProfessionalOverview({aboutMe,professionalSummary,assetUrl})}
+    ${renderProfessionalOverview({aboutMe,professionalSummary})}
     <details class="about-personal" id="about-personal"><summary><span class="profile-preview-title">My story &amp; beyond work</span><span class="profile-preview-excerpt">${esc(aboutMe.introduction)}</span><span class="profile-preview-toggle"><span class="profile-preview-expand">Read more</span><span class="profile-preview-collapse">Show less</span><span class="profile-preview-icon" aria-hidden="true">+</span></span></summary><div class="about-personal-body">
       <div class="about-overview"><header><p class="eyebrow">About Me &amp; My Story</p><h2 class="about-tagline">${esc(aboutMe.tagline)}</h2><div class="about-links"><button type="button" data-about-jump="story" aria-label="Read my story: Bangladesh to Canada">My story ${icons.next}</button><button type="button" data-about-jump="learning" aria-label="Read about my auto repair learning">Beyond the screen ${icons.next}</button></div></header>
       <section class="about-motivation"><h3>What keeps me curious</h3><p>${esc(aboutMe.motivation)}</p></section>
@@ -131,7 +131,7 @@ function projectsMarkup() {
 }
 
 function contactMarkup() {
-  return `<section class="contact-panel"><p class="eyebrow">THE NEXT CONNECTION</p><h1>Let’s move<br><em>things forward.</em></h1><p>I coordinate requirements, stakeholders, schedules, resources and deliverables across business operations, technical field services and digital projects. My technical education and project management training support clear planning, communication and practical problem-solving.</p><p>I’m motivated by making the next step clear, keeping people informed, and following through to delivery.</p><p>I’m looking for Project Coordinator or Assistant Project Manager opportunities where I can help teams plan clearly, communicate well, and deliver dependable results.</p><a class="button button-dark" href="mailto:${email}">Start a conversation ${icons.arrow}</a><a class="contact-email" href="mailto:${email}">${email}</a><button type="button" class="copy-email" data-copy-email>Copy email address</button><div class="contact-links"><a href="${assetUrl('Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf')}" download>Résumé ${icons.download}</a><a href="https://github.com/nazmus-saqib" target="_blank" rel="noopener noreferrer">GitHub ${icons.arrow}</a></div><p class="contact-location">Based in Ontario, Canada.</p></section>`;
+  return `<section class="contact-panel"><p class="eyebrow">THE NEXT CONNECTION</p><h1>Let’s move<br><em>things forward.</em></h1><p>I coordinate requirements, stakeholders, schedules, resources and deliverables across business operations, technical field services and digital projects. My technical education and project management training support clear planning, communication and practical problem-solving.</p><p>I’m motivated by making the next step clear, keeping people informed, and following through to delivery.</p><p>${renderOpportunityStatement(professionalSummary)}</p><a class="button button-dark" href="mailto:${email}">Start a conversation ${icons.arrow}</a><a class="contact-email" href="mailto:${email}">${email}</a><button type="button" class="copy-email" data-copy-email>Copy email address</button><div class="contact-links"><a href="${assetUrl('Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf')}" download>Résumé ${icons.download}</a><a href="https://github.com/nazmus-saqib" target="_blank" rel="noopener noreferrer">GitHub ${icons.arrow}</a></div><p class="contact-location">Based in Ontario, Canada.</p></section>`;
 }
 
 function renderPanel(resetScroll = true) {

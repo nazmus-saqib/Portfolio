@@ -17,9 +17,8 @@ for (const width of [1440, 360]) {
     await expect(cards).toHaveCount(4);
     for (let index = 0; index < 4; index += 1) {
       const card = cards.nth(index);
-      await card.locator(':scope > summary').focus();
-      await page.keyboard.press('Enter');
-      await expect(card).toHaveAttribute('open', '');
+      await expect(card.locator(':scope > header').getByRole('heading', { level: 4 })).toBeVisible();
+      await expect(card.locator('.study-challenge-detail')).toBeVisible();
       const evidence = card.locator('.study-picture');
       await expect(evidence).toHaveCount(1);
       const image = evidence.locator('img');
@@ -55,7 +54,7 @@ for (const width of [1440, 360]) {
       await expect.poll(() => image.evaluate(node => node.complete && node.naturalWidth > 0)).toBe(true);
     }
     await expect(dialog.locator('#case-ereturn-sketches [data-study-picture-select]')).toHaveCount(3);
-    const overflow = await dialog.locator('#dialog-content, .study-challenge[open], .study-picture:visible').evaluateAll(nodes => nodes.filter(node => node.scrollWidth > node.clientWidth + 1).map(node => node.className));
+    const overflow = await dialog.locator('#dialog-content, .study-challenge, .study-picture:visible').evaluateAll(nodes => nodes.filter(node => node.scrollWidth > node.clientWidth + 1).map(node => node.className));
     expect(overflow).toEqual([]);
     expect(errors).toEqual([]);
     await page.keyboard.press('Escape');

@@ -2,14 +2,19 @@ const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&a
 
 const arrow = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg>';
 
-export function renderProfessionalOverview({ aboutMe, professionalSummary, assetUrl }) {
+export function renderOpportunityStatement(summary) {
+  const roles = summary.targets.map(esc);
+  const roleList = `${roles.slice(0, -1).join(', ')} or ${roles.at(-1)}`;
+  return `${esc(summary.opportunityLead)}<strong>${roleList}</strong>${esc(summary.opportunityContext)}`;
+}
+
+export function renderProfessionalOverview({ aboutMe, professionalSummary }) {
   return `<section class="professional-overview" aria-label="Quick professional overview">
     <p class="eyebrow">PROFESSIONAL PORTFOLIO · ${esc(professionalSummary.location)}</p>
     <h1 id="about-title">${esc(aboutMe.name)}</h1>
     <p class="professional-position">${esc(professionalSummary.headline)}</p>
     <button class="professional-current" type="button" data-current-experience>Current experience at Identify BDA ${arrow}</button>
-    <p class="professional-summary">${esc(professionalSummary.body)}</p>
-    <div class="professional-actions"><button class="button button-dark" type="button" data-project="conference">View conference case study ${arrow}</button><a class="button button-secondary" href="${esc(assetUrl('Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf'))}" download>Download résumé <span aria-hidden="true">↓</span></a><button class="professional-text-link" type="button" data-panel="contact">Contact me ${arrow}</button></div>
+    <div class="professional-summary"><p>${esc(professionalSummary.body)}</p><p>${esc(professionalSummary.background)}</p><p>${renderOpportunityStatement(professionalSummary)}</p></div>
     <ul class="professional-evidence" aria-label="Current Identify BDA experience"><li><strong>25+</strong><span>Clients supported</span><small>Identify BDA</small></li><li><strong>20+</strong><span>Suppliers coordinated</span><small>Canada &amp; international</small></li></ul>
     <p class="professional-credential">Project Management graduate certificate · Fleming College · 2024</p>
     <details class="professional-quick-view"><summary><span class="profile-preview-title">My work in 30 seconds</span><span class="profile-preview-excerpt"><strong>Today:</strong> Project Coordinator at Identify BDA. I coordinate requirements, schedules, approvals, suppliers and deliverables, and keep the next action clear.</span><span class="profile-preview-toggle"><span class="profile-preview-expand">Read more</span><span class="profile-preview-collapse">Show less</span><span class="profile-preview-icon" aria-hidden="true">+</span></span></summary><div>

@@ -16,6 +16,20 @@ test('single-viewport company journey preserves public assets and résumé links
   await expect(page.locator('#profile-view-0 #about-card')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Molla Nazmus Saqib', exact: true })).toBeVisible();
   await expect(page.locator('.professional-position')).toHaveText('Project & Operations Coordinator');
+  await expect(page.locator('.professional-actions')).toHaveCount(0);
+  await expect(page.locator('#scene-hint')).toHaveClass(/sr-only/);
+  const controls = page.locator('.stage-tools');
+  const today = controls.getByRole('button', { name: 'Meet me today', exact: false });
+  await expect(today).toBeVisible();
+  await expect(controls.locator('#explore-toggle')).toBeVisible();
+  await expect(controls.locator('#pause-world')).toBeVisible();
+  const positions = await controls.evaluate(node => ({
+    today: node.querySelector('#go-today').getBoundingClientRect().right,
+    explore: node.querySelector('#explore-toggle').getBoundingClientRect().left,
+    pause: node.querySelector('#pause-world').getBoundingClientRect().left,
+  }));
+  expect(positions.today).toBeLessThan(positions.explore);
+  expect(positions.explore).toBeLessThan(positions.pause);
   await expect(page.locator('#about-personal')).not.toHaveAttribute('open', '');
   await expect(page.locator('.professional-personal-links')).toHaveCount(0);
   await expect(page.locator('.professional-quick-view > summary .profile-preview-excerpt')).toBeVisible();

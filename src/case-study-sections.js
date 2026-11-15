@@ -104,7 +104,7 @@ function renderSketch(study, key, projectId, assetUrl) {
       <figure class="study-sketch-figure ${wireframe ? 'study-wireframe-figure' : ''}"><svg id="${escapeHtml(visualId)}" viewBox="0 0 700 ${data.variant === 'booking' ? 495 : 410}" role="img" aria-label="${escapeHtml(wireframe ? 'Reconstructed wireframe layout study' : 'Reconstructed low-fidelity sketch study')}">${sketchDrawing(data.variant || 'meetings', wireframe, annotations.length)}</svg><figcaption>${wireframe ? 'A clean layout study showing hierarchy, navigation, and working areas.' : 'A low-fidelity structure study showing how the tasks could be organized.'}</figcaption></figure>
       ${annotations.length ? `<div class="study-sketch-annotations" role="group" aria-label="Explore the layout">${annotations.map((annotation,index)=>`<button type="button" data-study-sketch-select="${index}" aria-pressed="${index===0}" aria-controls="${escapeHtml(visualId)}"><span class="study-control-number">${number(index)}</span><span><strong>${escapeHtml(annotation.title)}</strong><span>${escapeHtml(annotation.body)}</span></span></button>`).join('')}</div><p class="study-interaction-status" role="status" aria-live="polite" data-study-sketch-status>Focus: ${escapeHtml(annotations[0].title)}</p>` : ''}
     </div>`;
-  const body = `${renderPictures(data.pictures, assetUrl, wireframe ? 'Wireframe pictures' : 'Sketch pictures')}${data.pictures?.length ? `<details class="study-disclosure study-structure-details"><summary>Explore the layout <span aria-hidden="true">+</span></summary><div class="study-disclosure-body">${structure}</div></details>` : structure}`;
+  const body = `${renderPictures(data.pictures, assetUrl, wireframe ? 'Wireframe pictures' : 'Sketch pictures')}${data.pictures?.length ? `<section class="study-panel study-structure-details"><h4 class="study-panel-heading">Layout study</h4><div class="study-panel-body">${structure}</div></section>` : structure}`;
   return section(study, key, projectId, body, data.intro);
 }
 
@@ -116,7 +116,7 @@ function renderPersona(persona, index, assetUrl, prefix) {
       <h4>Goal</h4><p>${escapeHtml(persona.goal)}</p>
       ${persona.needs?.length ? `<h4>Needs</h4>${list(persona.needs)}` : ''}
       ${persona.designResponse ? `<h4>Design response</h4>${paragraphs(persona.designResponse)}` : ''}
-      ${persona.context || persona.userStory || persona.frictions?.length || persona.basis ? `<details class="study-disclosure study-persona-evidence"><summary>Task story and design notes <span aria-hidden="true">+</span></summary><div class="study-disclosure-body">${persona.userStory ? `<h4>Task story</h4><p class="study-persona-user-story">${escapeHtml(persona.userStory)}</p>` : ''}${persona.context ? `<h4>Context</h4><p>${escapeHtml(persona.context)}</p>` : ''}${persona.frictions?.length ? `<h4>Potential friction</h4>${list(persona.frictions)}` : ''}${persona.basis ? `<p class="study-source-note">${escapeHtml(persona.basis)}</p>` : ''}</div></details>` : ''}
+      ${persona.context || persona.userStory || persona.frictions?.length || persona.basis ? `<div class="study-panel study-persona-evidence"><div class="study-panel-body">${persona.userStory ? `<h4>Task story</h4><p class="study-persona-user-story">${escapeHtml(persona.userStory)}</p>` : ''}${persona.context ? `<h4>Context</h4><p>${escapeHtml(persona.context)}</p>` : ''}${persona.frictions?.length ? `<h4>Potential friction</h4>${list(persona.frictions)}` : ''}${persona.basis ? `<p class="study-source-note">${escapeHtml(persona.basis)}</p>` : ''}</div></div>` : ''}
       ${renderPictures(persona.pictures,assetUrl,`${persona.role} persona pictures`)}
     </div></article>`;
 }
@@ -157,19 +157,18 @@ export function renderStudySection(study, key, { projectId = 'project', assetUrl
     return section(study,key,projectId,body ? `<div class="study-needs">${body}</div>` : '',data.intro);
   }
   if (key === 'requirements') {
-    const cards = data.map((item,index)=>`<details class="study-requirement study-disclosure"><summary class="study-card-heading"><span class="study-card-number" aria-hidden="true">${number(index)}</span><h4>${escapeHtml(item.need)}</h4><span class="study-disclosure-mark" aria-hidden="true">+</span></summary><dl class="study-disclosure-body"><div><dt>Design response</dt><dd>${escapeHtml(item.response)}</dd></div><div><dt>Source</dt><dd>${escapeHtml(item.evidence)}</dd></div></dl></details>`).join('');
+    const cards = data.map((item,index)=>`<article class="study-requirement study-panel"><header class="study-card-heading"><span class="study-card-number" aria-hidden="true">${number(index)}</span><h4>${escapeHtml(item.need)}</h4></header><dl class="study-panel-body"><div><dt>Design response</dt><dd>${escapeHtml(item.response)}</dd></div><div><dt>Source</dt><dd>${escapeHtml(item.evidence)}</dd></div></dl></article>`).join('');
     return section(study,key,projectId,cards ? `<div class="study-requirements">${cards}</div>` : '');
   }
   if (key === 'research') {
-    const methods = data.methods?.length ? `<details class="study-disclosure study-research-methods"><summary>Research approach and sources <span aria-hidden="true">+</span></summary><div class="study-methods study-disclosure-body">${data.methods.map(method=>`<article><p class="study-evidence-tag">${escapeHtml(method.status || 'Documented activity')}</p><h4>${escapeHtml(method.title)}</h4><p>${escapeHtml(method.body)}</p></article>`).join('')}</div></details>` : '';
-    const renderFinding = (finding,index) => `<article><span class="study-finding-mark" aria-hidden="true">${number(index)}</span><div><h4>${escapeHtml(finding.title)}</h4><p>${escapeHtml(finding.body)}</p>${finding.evidence ? `<details class="study-evidence"><summary>Source</summary><p class="study-source-note">${escapeHtml(finding.evidence)}</p></details>` : ''}</div></article>`;
+    const methods = data.methods?.length ? `<section class="study-panel study-research-methods"><h4 class="study-panel-heading">Research approach and sources</h4><div class="study-methods study-panel-body">${data.methods.map(method=>`<article><p class="study-evidence-tag">${escapeHtml(method.status || 'Documented activity')}</p><h5>${escapeHtml(method.title)}</h5><p>${escapeHtml(method.body)}</p></article>`).join('')}</div></section>` : '';
+    const renderFinding = (finding,index) => `<article><span class="study-finding-mark" aria-hidden="true">${number(index)}</span><div><h4>${escapeHtml(finding.title)}</h4><p>${escapeHtml(finding.body)}</p>${finding.evidence ? `<aside class="study-evidence" aria-label="Source for ${escapeHtml(finding.title)}"><p class="study-evidence-label">Source</p><p class="study-source-note">${escapeHtml(finding.evidence)}</p></aside>` : ''}</div></article>`;
     const findings = data.findings || [];
-    const visible = findings.slice(0,3).map(renderFinding).join('');
-    const more = findings.length>3 ? `<details class="study-disclosure study-more-findings"><summary>More findings <span aria-hidden="true">+</span></summary><div class="study-findings study-disclosure-body">${findings.slice(3).map((finding,index)=>renderFinding(finding,index+3)).join('')}</div></details>` : '';
-    return section(study,key,projectId,`${visible ? `<div class="study-findings study-findings-primary">${visible}</div>` : ''}${more}${methods}`,data.intro);
+    const visible = findings.map(renderFinding).join('');
+    return section(study,key,projectId,`${visible ? `<div class="study-findings study-findings-primary">${visible}</div>` : ''}${methods}`,data.intro);
   }
   if (key === 'challenges') {
-    const cards = data.map((item,index)=>`<details class="study-challenge study-disclosure"><summary><span><span class="study-mini-label">Challenge ${number(index)}</span><h4>${escapeHtml(item.title)}</h4></span><span class="study-disclosure-mark" aria-hidden="true">+</span></summary><div class="study-disclosure-body"><p class="study-challenge-detail">${escapeHtml(item.detail)}</p><div class="study-challenge-response"><span class="study-mini-label">Design response</span><p>${escapeHtml(item.response)}</p></div>${renderPictures(item.pictures,assetUrl,`Solution ${number(index)} prototype`)}</div></details>`).join('');
+    const cards = data.map((item,index)=>`<article class="study-challenge study-panel"><header class="study-panel-heading"><span class="study-mini-label">Challenge ${number(index)}</span><h4>${escapeHtml(item.title)}</h4></header><div class="study-panel-body"><p class="study-challenge-detail">${escapeHtml(item.detail)}</p><div class="study-challenge-response"><span class="study-mini-label">Design response</span><p>${escapeHtml(item.response)}</p></div>${renderPictures(item.pictures,assetUrl,`Solution ${number(index)} prototype`)}</div></article>`).join('');
     return section(study,key,projectId,cards ? `<div class="study-challenges">${cards}</div>` : '',study.challengesNote);
   }
   if (key === 'personas') {
@@ -258,11 +257,6 @@ export function bindStudyInteractions(container) {
       const target = document.getElementById(href.slice(1));
       if (!target || !container.contains(target)) return;
       event.preventDefault();
-      let ancestor = target;
-      while (ancestor && container.contains(ancestor)) {
-        if (ancestor.tagName === 'DETAILS') ancestor.open = true;
-        ancestor = ancestor.parentElement;
-      }
       const heading = target.querySelector('h2,h3,h4') || target;
       heading.setAttribute('tabindex','-1');
       target.scrollIntoView({ block:'start', behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });

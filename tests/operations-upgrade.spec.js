@@ -47,9 +47,8 @@ for (const width of [1440, 320]) {
     await page.reload();
     await expect(page.locator('[data-coordination-case]')).toHaveAttribute('data-coordination-case', 'multi-city-event');
     const ownership = page.locator('.coordination-ownership');
-    await ownership.locator('summary').focus();
-    await page.keyboard.press('Space');
-    await expect(ownership).toHaveAttribute('open', '');
+    await expect(ownership.getByRole('heading', { name: 'Who did what', exact: true })).toBeVisible();
+    await expect(ownership.locator('dl')).toBeVisible();
     await expect(ownership).toContainText(/vendor|supplier/i);
     await page.keyboard.press('Escape');
     await expect(page.locator('#project-dialog')).not.toBeVisible();
@@ -57,7 +56,7 @@ for (const width of [1440, 320]) {
     await page.locator('.case-open[data-project="invoice-investigation"]').click();
     await expect(page.locator('.coordination-result')).toContainText(/administrator.*(different|distinct) work/i);
     await expect(page.locator('.coordination-result')).toContainText(/recovery.*balance.*not established/i);
-    await page.locator('.coordination-ownership > summary').click();
+    await expect(page.locator('.coordination-ownership dl')).toBeVisible();
     await expect(page.locator('.coordination-ownership')).toContainText(/administrator/i);
     await expect(page.locator('.coordination-ownership')).toContainText(/payment follow-up/i);
     await page.reload();
@@ -80,9 +79,9 @@ test('risk notes describe the real Trello practice and clearly identify the prop
   await expect(dialog.locator('.case-summary')).toContainText(/CEO.*when needed/i);
   await expect(dialog).toContainText(/risk.*(future|could|potential)/i);
   await expect(dialog).toContainText(/issue.*(occurred|happened|already)/i);
-  const reconstructed = dialog.locator('.coordination-template').filter({ has: page.locator('summary', { hasText: 'Reconstructed example, not an original employer record' }) });
-  await expect(reconstructed.locator('summary')).toBeVisible();
-  if (!await reconstructed.evaluate(node => node.open)) await reconstructed.locator('summary').click();
+  const reconstructed = dialog.locator('[data-coordination-template="trello-description"]');
+  await expect(reconstructed.getByRole('heading', { name: 'Reconstructed example, not an original employer record', exact: true })).toBeVisible();
+  await expect(reconstructed.getByRole('region')).toBeVisible();
   await expect(reconstructed).toContainText(/proposed|suggested/i);
   await expect(reconstructed).toContainText(/not.*(standard|previous|original)/i);
   await expect(reconstructed).toContainText(/artwork/i);

@@ -71,8 +71,6 @@ button:focus-visible, a:focus-visible, summary:focus-visible, canvas:focus-visib
 .icon-button:hover { background: #E3F3FD; }
 .icon-button svg { width: 14px; height: 14px; }
 .icon-button.speaking { background: #E3F3FD; box-shadow: 0 0 0 4px #1072AE30; }
-.scene-hint { flex: 1; min-width: 0; color: #526E82; font-size: .875rem; pointer-events: none; text-align: center; white-space: nowrap; }
-@container (max-width: 660px) { .scene-hint { display: none; } }
 .touch-controls { position: absolute; right: 22px; bottom: 65px; z-index: 3; display: grid; grid-template-columns: repeat(3, 34px); gap: 3px; }
 .touch-controls button { height: 34px; width: 34px; border-radius: 5px; border: 1px solid #D2E6F2; background: #FFFFFFeb; }
 .touch-controls button:first-child { grid-column: 2; }
@@ -230,7 +228,6 @@ summary::-webkit-details-marker { display: none; }
   .company-story h3 { font-size: 20px; }
   .world-note { right: 18px; top: 22px; }
   .stage-tools { left: 17px; right: 17px; }
-  .scene-hint { display: none; }
   #reading-view { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 1000px) and (min-width: 861px) {

@@ -92,6 +92,18 @@ test('About Me opens at the centre and preserves the personal story outside the 
   await expect(about).toBeVisible();
   await expect(about.getByRole('heading', { name: 'Molla Nazmus Saqib', exact: true })).toBeVisible();
   await expect(about.locator('.professional-position')).toHaveText('Project & Operations Coordinator');
+  await expect(about.locator('.professional-actions')).toHaveCount(0);
+  await expect(about.getByRole('button', { name: 'View conference case study', exact: false })).toHaveCount(0);
+  await expect(about.getByRole('link', { name: 'Download résumé', exact: true })).toHaveCount(0);
+  await expect(about.getByRole('button', { name: 'Contact me', exact: true })).toHaveCount(0);
+  await expect(page.locator('.header-actions .resume-link')).toBeVisible();
+  const professionalCopy = about.locator('.professional-summary');
+  await expect(professionalCopy.locator('p')).toHaveText([
+    'I’m a Project & Operations Coordinator with experience managing project workflows, coordinating stakeholders and suppliers, and supporting day-to-day business operations. My background spans procurement, scheduling, risk and issue management, financial coordination, technical field services and digital projects.',
+    'I combine hands-on operational experience with a technical education and formal project management training to solve problems, improve workflows and keep projects moving from planning through delivery.',
+    'I’m seeking opportunities as a Project Coordinator, Operations Coordinator, Assistant Project Manager or Implementation Coordinator, where I can contribute to efficient operations, cross-functional collaboration and successful project delivery.',
+  ]);
+  await expect(professionalCopy.locator('strong')).toHaveText('Project Coordinator, Operations Coordinator, Assistant Project Manager or Implementation Coordinator');
   await expect(page.locator('#reading-toggle')).toContainText('Focus on content');
   const desktopBalance = await page.locator('.experience-layout').evaluate(node => {
     const world = node.querySelector('.world-pane').getBoundingClientRect().width;
@@ -138,7 +150,7 @@ test('About Me opens at the centre and preserves the personal story outside the 
   }
   await expect(about).toContainText(/two months/i);
   await expect(about.getByRole('link', { name: 'Fine Tuned Autos', exact: true })).toHaveAttribute('href', 'https://finetunedautos.ca/');
-  await expect(about).not.toContainText('Assistant Project Manager');
+  await expect(personal).not.toContainText('Assistant Project Manager');
   await expect(about).not.toContainText('Where I’m headed');
   await expect(page.locator('.profile-target')).toHaveCount(0);
   await page.getByRole('button', { name: 'Read my story: Bangladesh to Canada', exact: true }).click();
@@ -470,20 +482,19 @@ test('BIWTA and eReturn connect needs, persona stories, and design evidence with
       await expect(dialog.locator('[data-study-persona-detail]:visible')).toHaveCount(1);
       const profile = dialog.locator('[data-study-persona-detail]').nth(index);
       await expect(profile.locator('.study-persona-story')).toBeVisible();
-      await expect(profile.locator('.study-persona-evidence')).not.toHaveAttribute('open', '');
-      await profile.locator('.study-persona-evidence > summary').click();
+      await expect(profile.locator('.study-persona-evidence')).toBeVisible();
       await expect(profile.locator('.study-persona-user-story')).toBeVisible();
       await expect(profile.getByRole('heading', { name: 'Design response', exact: true })).toHaveCount(1);
     }
 
     const sketch = dialog.locator(`#case-${id}-sketches`);
-    await sketch.locator('.study-structure-details > summary').click();
+    await expect(sketch.locator('.study-structure-details')).toBeVisible();
     const annotation = sketch.locator('[data-study-sketch-select]').last();
     await annotation.focus();
     await page.keyboard.press('Space');
     await expect(annotation).toHaveAttribute('aria-pressed', 'true');
     await expect(sketch.locator('[data-sketch-region].is-selected')).toHaveCount(1);
-    await dialog.locator('.case-study-disclosure > summary').filter({ hasText: 'Site map and information architecture' }).click();
+    await expect(dialog.locator(`#case-${id}-sitemap`).getByRole('heading', { name: 'Site map and information architecture', exact: true })).toBeVisible();
     const leaf = dialog.locator('[data-study-map-select]').last();
     await leaf.click();
     await expect(leaf).toHaveAttribute('aria-pressed', 'true');
@@ -495,8 +506,6 @@ test('BIWTA and eReturn connect needs, persona stories, and design evidence with
     const requirements = dialog.locator(`#case-${id}-requirements`);
     await expect(requirements.getByRole('heading', { name: 'Requirements analysis', exact: true })).toBeFocused();
     const requirement = requirements.locator('.study-requirement').first();
-    await expect(requirement).not.toHaveAttribute('open', '');
-    await requirement.locator(':scope > summary').click();
     await expect(requirement.locator('dd').first()).toBeVisible();
     if (id === 'biwta') {
       const prototypeGallery = dialog.locator('.project-gallery [data-study-portal-detail]:visible [data-study-gallery]');
@@ -693,7 +702,9 @@ test('personal profile, qualifications, Identify coordination, projects, and con
   await expect(page.locator('.contact-panel')).toContainText('technical education and project management training');
   await expect(page.locator('.contact-panel')).toContainText('making the next step clear, keeping people informed, and following through to delivery');
   await expect(page.getByRole('link', { name: 'Start a conversation' })).toHaveAttribute('href', 'mailto:saqibmollanazmus@gmail.com');
-  await expect(page.locator('#sidebar-body')).toContainText('Assistant Project Manager');
+  for (const role of ['Project Coordinator', 'Operations Coordinator', 'Assistant Project Manager', 'Implementation Coordinator']) {
+    await expect(page.locator('.contact-panel')).toContainText(role);
+  }
   await assertSingleViewport(page);
 });
 
