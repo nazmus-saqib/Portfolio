@@ -70,10 +70,6 @@
 .static-overview a { text-decoration:underline; text-underline-offset:3px; }
 
 .professional-evidence small { color:#526E82; font-size:.875rem; line-height:1.4; }
-.professional-credential { display:flex; align-items:center; gap:12px; margin:0 0 22px; padding:14px 16px; border:1px solid #D2E6F2; border-radius:10px; background:#FFFFFF; color:#526E82; font-size:.875rem; line-height:1.6; }
-.professional-credential-icon { display:grid; place-items:center; flex-shrink:0; width:32px; height:32px; border:1px solid #D2E6F2; border-radius:8px; background:#F2F9FE; color:#1072AE; }
-.professional-credential-icon>svg { width:21px; height:21px; }
-.professional-credential>span:last-child { min-width:0; }
 .shell-header .view-toggle { padding:10px 14px; border:1px solid #D2E6F2; border-radius:8px; background:#F2F9FE; color:#0D6296; }
 .project-group+ .project-group { margin-top:22px; }
 .project-group>h2 { font-size:1.25rem; line-height:1.4; margin:0 0 6px; color:#173A55; }
