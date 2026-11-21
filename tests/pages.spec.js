@@ -43,6 +43,8 @@ test('single-viewport company journey preserves public assets and résumé links
   await expect(page.locator('.world-label')).toHaveCount(6);
   await page.locator('#panel-nav button[data-panel="journey"]').click();
   await expect(page.locator('#company-name')).toHaveText('Identify BDA');
+  await expect(page.getByRole('heading', { name: 'Project Coordinator', exact: true })).toHaveAttribute('id', 'company-role');
+  await expect(page.locator('#company-name')).toHaveJSProperty('tagName', 'P');
   await expect(page.locator('#company-card .eyebrow')).toHaveText('06 / Canada');
   await expect(page.locator('#about-card')).toHaveCount(0);
   await expect(page.locator('#world')).toHaveAttribute('data-active-station', '5');

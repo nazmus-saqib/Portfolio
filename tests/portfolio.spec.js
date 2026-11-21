@@ -330,7 +330,9 @@ test('Journey starts with current work and walks through six employers from curr
   // Original company numbers and physical station positions stay fixed; the reader follows the reverse career sequence.
   expect(careerStops.map(stop => stop.company)).toEqual(companies);
   await loadWorld(page, baseURL);
-  await expect(page.locator('.world-label')).toHaveText(journeyCompanies.map(company => `${String(companies.indexOf(company) + 1).padStart(2, '0')} ${company}`));
+  await expect(page.locator('.world-label-number')).toHaveText(journeyCompanies.map(company => String(companies.indexOf(company) + 1).padStart(2, '0')));
+  await expect(page.locator('.world-label-role')).toHaveText(journeyCompanies.map(company => careerStops[companies.indexOf(company)].role));
+  await expect(page.locator('.world-label-company')).toHaveText(journeyCompanies);
   await expect(page.locator('.journey-footer')).toHaveCount(0);
   await expect(page.locator('#company-name')).toHaveText('Identify BDA');
   await expect(page.locator('#company-role')).toHaveText('Project Coordinator');
@@ -348,13 +350,20 @@ test('Journey starts with current work and walks through six employers from curr
     const stop = careerStops[physicalIndex];
     const chapter = String(physicalIndex + 1).padStart(2, '0');
     await expect(page.locator('#company-name')).toHaveText(company);
+    await expect(page.locator('#company-role')).toHaveText(stop.role);
+    await expect(page.locator('#company-role')).toHaveJSProperty('tagName', 'H2');
+    await expect(page.locator('#company-name')).toHaveJSProperty('tagName', 'P');
+    expect(await page.locator('#company-role').evaluate(role => Boolean(role.compareDocumentPosition(document.querySelector('#company-name')) & Node.DOCUMENT_POSITION_FOLLOWING)), 'The position title precedes the employer, as in an experience entry').toBe(true);
     await expect(page.locator('#company-card .eyebrow')).toHaveText(`${chapter} / ${stop.location}`);
     await expect(page.locator('#stop-counter')).toHaveText(`${chapter} / 06`);
     await expect(page.locator('#world')).toHaveAttribute('data-active-company', company);
     await expect(page.locator('#world')).toHaveAttribute('data-active-station', String(physicalIndex));
     if (company === 'iStoreiSend') await expect(page.locator('canvas.world-canvas')).toHaveAttribute('aria-label', /automated fulfillment.*robotic parcel handler/i);
     if (company === 'Dynamic Infotech') await expect(page.locator('canvas.world-canvas')).toHaveAttribute('aria-label', /desktop computer setup.*server rack/i);
-    await expect(page.getByRole('button', { name: `Visit company ${chapter} ${company}`, exact: true })).toHaveAttribute('aria-pressed', 'true');
+    const worldLabel = page.getByRole('button', { name: `Visit company ${chapter} ${company}`, exact: true });
+    await expect(worldLabel).toHaveAttribute('aria-pressed', 'true');
+    await expect(worldLabel.locator('.world-label-role')).toHaveText(stop.role);
+    await expect(worldLabel.locator('.world-label-company')).toHaveText(company);
     await assertContributionDescriptionsVisible(page, stop);
     await expect(page.locator('#company-card .profile-stat-grid')).toHaveCount(company === 'Identify BDA' ? 1 : 0);
     if (index > 0) await expect(page.locator('#previous-stop')).toBeEnabled();
@@ -376,6 +385,8 @@ test('Journey starts with current work and walks through six employers from curr
   const readingCards = page.locator('#reading-view > .reading-company');
   await expect(readingCards).toHaveCount(6);
   expect(await readingCards.evaluateAll(cards => cards.map(card => card.dataset.stop))).toEqual(['identify', 'ups-staples', 'dynamic', 'istoreisend', 'iquantile', 'synesis']);
+  await expect(readingCards.locator('h2.company-position')).toHaveText(journeyCompanies.map(company => careerStops[companies.indexOf(company)].role));
+  await expect(readingCards.locator('p.company-employer')).toHaveText(journeyCompanies);
   await expect(readingCards.first()).toContainText('06 / Canada');
   await expect(readingCards.last()).toContainText('01 / Dhaka, Bangladesh');
   await page.locator('#reading-toggle').click();

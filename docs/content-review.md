@@ -67,3 +67,8 @@ The production build and four affected browser regressions passed after the PDF 
 ## Desktop proportions — 21 November 2026
 
 At the owner’s request, the desktop layout restores the panel widths used immediately before the 50/50 change: 560px by default, 620px on wide desktops, 470px on smaller desktops and 440px from 861–1000px. The animation takes the remaining width. The existing mobile layout and full-width Reading View are retained.
+
+
+## Position labels — 21 November 2026
+
+Workplace labels now show the recorded position title above the company, retaining the original company numbers. Journey and Reading View use the same job-title-first heading. Titles come from the existing career record; no employment dates, role descriptions or résumé content were changed. Label spacing keeps the centre About Me target available.
