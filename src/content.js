@@ -321,8 +321,8 @@ export const experience = [
     description: 'Coordinate client requirements, artwork approvals, vendor sourcing, quotations, production, delivery, and financial follow-up. Work directly with clients, internal colleagues, and a network of 20+ external vendors.',
   },
   {
-    period: 'Jan 2023–Sep 2024',
-    title: 'Field Technician, Level 1',
+    period: 'Jan 2023–Present',
+    title: 'Field Technician, Level 1 (On-call)',
     company: 'Dynamic Infotech · Canada',
     description: 'On-call technical-site work involving device installations, requirement confirmation, customer coordination, issue resolution, and hands-on execution.',
   },
@@ -412,7 +412,7 @@ export const teaching = {
 };
 
 // Employer stops are chronological by the supplied start month. The two Canadian
-// roles with identical dates overlap; their order does not imply a promotion.
+// on-call and part-time roles share a start month; their order does not imply a promotion.
 // Dates have month precision. Ended-role tenure counts listed calendar months;
 // ongoing-role tenure counts elapsed months as of the current Toronto month.
 export const careerStops = [
@@ -480,14 +480,14 @@ export const careerStops = [
     id: 'dynamic',
     company: 'Dynamic Infotech',
     label: 'Dynamic Infotech',
-    role: 'Field Technician, Level 1',
+    role: 'Field Technician, Level 1 (On-call)',
     start: '2023-01',
-    end: '2024-09',
-    period: 'Jan 2023–Sep 2024',
+    end: null,
+    period: 'Jan 2023–Present',
     location: 'Canada',
     employment: 'On-call · Overlapping roles',
     headline: 'Follow the work onto the site.',
-    story: 'In on-call field assignments, I confirmed work requirements and site access, installed and supported equipment, and documented completed work, troubleshooting and exceptions. I escalated unresolved issues to Level 2 support so site work had a clear technical handoff. This overlapped with my part-time customer-facing roles.',
+    story: 'In on-call field assignments, I confirm work requirements and site access, install and support equipment, and document completed work, troubleshooting and exceptions. I escalate unresolved issues to Level 2 support so site work has a clear technical handoff. This role overlapped with my part-time customer-facing roles.',
     highlights: [
       'Supported installations of computers, peripherals, network devices, POS, and IoT equipment.',
       'Confirmed requirements and access arrangements with customer-site contacts.',

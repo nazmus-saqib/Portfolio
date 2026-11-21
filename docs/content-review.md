@@ -77,3 +77,7 @@ Workplace labels now show the recorded position title above the company, retaini
 ## Animation-label correction — 21 November 2026
 
 The animation is restored to the earlier numbered company-only labels and placement. Position titles remain the main headings in Journey and Reading View, with company names and employment details underneath. The wider animation layout and current résumé are retained.
+
+## Dynamic Infotech employment update — 21 November 2026
+
+The owner confirmed the position as Field Technician, Level 1 (On-call), Jan 2023–Present. Both experience records now reflect the ongoing role, and Journey and Reading View calculate its current tenure. The UPS & Staples dates, animation labels and résumé file are unchanged.
