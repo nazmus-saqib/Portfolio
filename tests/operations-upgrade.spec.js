@@ -80,7 +80,7 @@ test('risk notes describe the real Trello practice and clearly identify the prop
   await expect(dialog).toContainText(/risk.*(future|could|potential)/i);
   await expect(dialog).toContainText(/issue.*(occurred|happened|already)/i);
   const reconstructed = dialog.locator('[data-coordination-template="trello-description"]');
-  await expect(reconstructed.getByRole('heading', { name: 'Reconstructed example, not an original employer record', exact: true })).toBeVisible();
+  await expect(reconstructed.getByRole('heading', { name: 'Illustrative risk note based on Trello descriptions', exact: true })).toBeVisible();
   await expect(reconstructed.getByRole('region')).toBeVisible();
   await expect(reconstructed).toContainText(/proposed|suggested/i);
   await expect(reconstructed).toContainText(/not.*(standard|previous|original)/i);

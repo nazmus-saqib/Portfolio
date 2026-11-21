@@ -1,0 +1,14 @@
+.career-context { margin:24px 0; padding:18px; border:1px solid #D2E6F2; border-radius:8px; background:#F2F9FE; color:#173A55; }
+.career-context h3 { margin:0 0 10px; font-size:1.25rem; font-weight:500; line-height:1.35; letter-spacing:-.3px; }
+.career-context p { color:#526E82; font-size:1rem; line-height:1.65; overflow-wrap:anywhere; }
+.career-context .career-context-subtitle { margin-bottom:10px; font-weight:500; color:#173A55; }
+.career-context .career-context-note { font-size:.875rem; line-height:1.6; }
+.career-bridge .career-context-note { margin-top:12px; }
+.management-example { margin-top:18px; padding:15px; border:1px solid #D2E6F2; border-radius:7px; background:#FFFFFF; }
+.management-example h4 { margin:0 0 8px; font-size:1rem; font-weight:550; line-height:1.5; }
+.management-example dl { margin:14px 0 0; }
+.management-example dl>div { display:grid; grid-template-columns:minmax(110px,.8fr) minmax(0,1.2fr); gap:10px; padding:11px 0; border-top:1px solid #D2E6F2; }
+.management-example dt,.management-example dd { margin:0; font-size:.875rem; line-height:1.6; overflow-wrap:anywhere; }
+.management-example dt { font-weight:550; }
+.management-example dd { color:#526E82; }
+@media(max-width:500px) { .career-context { padding:15px; } .management-example { padding:12px; } .management-example dl>div { grid-template-columns:minmax(0,1fr); gap:3px; } }

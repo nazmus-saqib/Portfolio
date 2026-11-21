@@ -8,6 +8,7 @@ import { renderProfile, renderCoordinationMetrics, activateProfileTab } from './
 import { renderRoleContributions, activateRoleContribution } from './contribution-view.js';
 import { renderIdentifyWorkflow } from './workflow-view.js';
 import { renderProfessionalOverview, renderOpportunityStatement } from './recruiter-view.js';
+import { renderManagementUpdates, renderCareerBridge } from './career-context.js';
 import './project-view.css';
 import './case-study-sections.css';
 import './story-view.css';
@@ -15,6 +16,7 @@ import './profile-view.css';
 import './contribution-view.css';
 import './workflow-view.css';
 import './recruiter-view.css';
+import './career-context.css';
 
 const icons = {
   arrow: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg>',
@@ -122,6 +124,7 @@ function companyMarkup(stop, index, compact = false) {
     <div class="company-story${isIdentify?' identify-overview':''}" ${compact?'':'id="story-copy"'}>${isIdentify?'':`<h3>${esc(stop.headline)}</h3>`}<p>${esc(stop.story)}</p></div>
     ${isIdentify?renderCoordinationMetrics():''}
     ${renderRoleContributions(stop, { selectedIndex: selectedContributions.get(stop.id) ?? 0 })}
+    ${isIdentify?renderManagementUpdates():''}
     ${isIdentify?companyProjectsMarkup(stop):''}
   </article>`;
 }
@@ -140,11 +143,11 @@ function projectsMarkup() {
     { id: 'overview', title: 'Role overview', description: 'How the responsibilities connect across my current role.', items: visible.filter(p=>isOperations(p)&&p.storyType==='overview') },
     { id: 'digital', title: 'Earlier digital projects', description: 'Design, requirements and stakeholder-review work in its original context.', items: visible.filter(p=>!isOperations(p)) },
   ];
-  return `<section class="project-collection"><p class="eyebrow">CURRENT WORK & EARLIER PROJECTS</p><h1>Plans into <em>progress.</em></h1><p class="panel-description">Project examples and recurring coordination methods, with earlier digital projects available separately.</p><button type="button" class="project-tools-link" data-show-tools>View tools &amp; methods ${icons.arrow}</button><div class="project-filter" role="group" aria-label="Filter projects">${[['operations','Operations'],['digital','Earlier digital work'],['all','All work']].map(([id,name])=>`<button type="button" data-filter="${id}" aria-pressed="${id===projectFilter}" class="${id===projectFilter?'active':''}">${name}</button>`).join('')}</div><div class="project-list" id="project-list">${groups.filter(group=>group.items.length).map(group=>`<section class="project-group" data-project-group="${group.id}" aria-labelledby="project-group-${group.id}"><h2 id="project-group-${group.id}">${group.title}</h2><p>${group.description}</p><div class="project-group-cards">${group.items.map(p=>renderProjectCard(p,{assetUrl})).join('')}</div></section>`).join('')}</div><p class="collection-count" aria-live="polite">${visible.length} ${visible.length===1?'work story':'work stories'}</p></section>`;
+  return `<section class="project-collection"><p class="eyebrow">CURRENT WORK & EARLIER PROJECTS</p><h1>Plans into <em>progress.</em></h1><p class="panel-description">Project examples and recurring coordination methods, with earlier digital projects available separately.</p><button type="button" class="project-tools-link" data-show-tools>View tools &amp; methods ${icons.arrow}</button><div class="project-filter" role="group" aria-label="Filter projects">${[['operations','Operations'],['digital','Earlier digital work'],['all','All work']].map(([id,name])=>`<button type="button" data-filter="${id}" aria-pressed="${id===projectFilter}" class="${id===projectFilter?'active':''}">${name}</button>`).join('')}</div><div class="project-list" id="project-list">${groups.filter(group=>group.items.length).map(group=>`<section class="project-group" data-project-group="${group.id}" aria-labelledby="project-group-${group.id}"><h2 id="project-group-${group.id}">${group.title}</h2><p>${group.description}</p>${group.id==='digital'?renderCareerBridge():''}<div class="project-group-cards">${group.items.map(p=>renderProjectCard(p,{assetUrl})).join('')}</div></section>`).join('')}</div><p class="collection-count" aria-live="polite">${visible.length} ${visible.length===1?'work story':'work stories'}</p></section>`;
 }
 
 function contactMarkup() {
-  return `<section class="contact-panel"><p class="eyebrow">THE NEXT CONNECTION</p><h1>Let’s move<br><em>things forward.</em></h1><p>I coordinate requirements, stakeholders, schedules, resources and deliverables across business operations, technical field services and digital projects. My technical education and project management training support clear planning, communication and practical problem-solving.</p><p>I’m motivated by making the next step clear, keeping people informed, and following through to delivery.</p><p>${renderOpportunityStatement(professionalSummary)}</p><a class="button button-dark" href="mailto:${email}" data-email-compose aria-haspopup="dialog" aria-controls="email-dialog">Start a conversation ${icons.arrow}</a><a class="contact-email" href="mailto:${email}" data-email-compose aria-haspopup="dialog" aria-controls="email-dialog">${email}</a><button type="button" class="copy-email" data-copy-email>Copy email address</button><div class="contact-links"><a href="${assetUrl('Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf')}" download>Résumé ${icons.download}</a><a href="https://github.com/nazmus-saqib" target="_blank" rel="noopener noreferrer">GitHub ${icons.arrow}</a></div><p class="contact-location">Based in Ontario, Canada.</p></section>`;
+  return `<section class="contact-panel"><p class="eyebrow">THE NEXT CONNECTION</p><h1>Let’s move<br><em>things forward.</em></h1><p>I coordinate cross-functional work from requirements and supplier evaluation through approvals, execution and delivery. My experience includes procurement, practical risk and issue management, operational documentation, cost analysis and stakeholder communication across business operations, technical field services and digital projects.</p><p>I enjoy turning complex requests into clear next steps, keeping people informed about decisions and dependencies, and following through when plans change. My technical education and project management training help me bridge business needs with practical execution.</p><p>${renderOpportunityStatement(professionalSummary)}</p><a class="button button-dark" href="mailto:${email}" data-email-compose aria-haspopup="dialog" aria-controls="email-dialog">Start a conversation ${icons.arrow}</a><a class="contact-email" href="mailto:${email}" data-email-compose aria-haspopup="dialog" aria-controls="email-dialog">${email}</a><button type="button" class="copy-email" data-copy-email>Copy email address</button><div class="contact-links"><a href="${assetUrl('Molla_Nazmus_Saqib_Project_Coordinator_Resume.pdf')}" download>Résumé ${icons.download}</a><a href="https://github.com/nazmus-saqib" target="_blank" rel="noopener noreferrer">GitHub ${icons.arrow}</a></div><p class="contact-location">Based in Ontario, Canada.</p></section>`;
 }
 
 function renderPanel(resetScroll = true) {

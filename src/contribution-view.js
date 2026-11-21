@@ -32,10 +32,10 @@ const contributionThemes = {
     { title: 'Follow through', icon: 'cycle', takeaway: 'Stay in the conversation while customer issues are worked through.' },
   ],
   identify: [
-    { title: 'Clarify the handoff', icon: 'people', takeaway: 'Approved requirements give suppliers a clear starting point.' },
-    { title: 'Compare and coordinate', icon: 'plan', takeaway: 'Make commercial and delivery trade-offs clear to decision owners.' },
-    { title: 'Monitor delivery risks', icon: 'research', takeaway: 'Record relevant concerns and discuss practical options when needed.' },
-    { title: 'Connect project and finance records', icon: 'clarity', takeaway: 'Order facts help administrative colleagues clarify discrepancies.' },
+    { title: 'Clarify requirements and approvals', icon: 'people', takeaway: 'Give teams a reliable, approved starting point.' },
+    { title: 'Evaluate supplier trade-offs', icon: 'plan', takeaway: 'Compare capability, price and delivery fit for decision owners.' },
+    { title: 'Monitor dependencies and risks', icon: 'research', takeaway: 'Make concerns and next actions visible before milestones.' },
+    { title: 'Connect operations with reporting', icon: 'clarity', takeaway: 'Give management and finance the project context needed to act.' },
   ],
 };
 

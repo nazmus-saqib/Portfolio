@@ -15,6 +15,10 @@
 .coordination-actions>li { display:flex; gap:16px; padding:18px 0; border-bottom:1px solid #D2E6F2; }
 .coordination-actions>li>span { flex-shrink:0; min-width:2ch; white-space:nowrap; color:#1072AE; font-size:.875rem; font-weight:600; padding-top:2px; }
 .coordination-actions p { margin:0; }
+.coordination-examples { margin-top:24px; padding:18px; border-left:2px solid #1072AE; background:#F2F9FE; border-radius:0 8px 8px 0; }
+.coordination-examples article+article { margin-top:18px; padding-top:18px; border-top:1px solid #D2E6F2; }
+.coordination-examples h5 { margin:0 0 6px; color:#173A55; font-size:1rem; line-height:1.5; }
+.coordination-examples p { margin:0; }
 .coordination-ownership,.coordination-template { border:1px solid #D2E6F2; border-radius:10px; margin-top:18px; }
 .coordination-ownership>h4,.coordination-template>h4 { padding:16px; margin:0; color:#173A55; font-weight:600; font-size:1rem; }
 .coordination-ownership dl { margin:0; padding:0 16px 16px; }
@@ -23,6 +27,9 @@
 .coordination-ownership dd { margin:4px 0 0; }
 .coordination-result { background:#F2F9FE; padding:24px; border:1px solid #D2E6F2; border-radius:12px; }
 .coordination-result h4 { margin-top:20px; }
+.coordination-evidence-note { margin-top:16px; padding-top:14px; border-top:1px solid #D2E6F2; }
+.coordination-evidence-note h4 { margin:0 0 6px; font-size:.875rem; line-height:1.5; }
+.coordination-evidence-note p { margin:0; font-size:.875rem; }
 .coordination-template-body { padding:0 16px 16px; }
 .coordination-template-body>p { margin:0 0 16px; }
 .coordination-table-scroll { overflow:auto; border:1px solid #D2E6F2; border-radius:8px; }

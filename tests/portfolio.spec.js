@@ -767,7 +767,7 @@ test('personal profile, qualifications, Identify coordination, projects, and con
   await expect(page.locator('#panel-nav [data-panel="contact"]')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#sidebar-body')).toHaveAttribute('aria-label', 'Contact details');
   await expect(page.locator('.contact-panel')).toContainText('technical education and project management training');
-  await expect(page.locator('.contact-panel')).toContainText('making the next step clear, keeping people informed, and following through to delivery');
+  await expect(page.locator('.contact-panel')).toContainText('keeping people informed about decisions and dependencies, and following through when plans change');
   await expect(page.getByRole('link', { name: 'Start a conversation' })).toHaveAttribute('href', 'mailto:saqibmollanazmus@gmail.com');
   for (const role of ['Project Coordinator', 'Operations Coordinator', 'Assistant Project Manager', 'Implementation Coordinator']) {
     await expect(page.locator('.contact-panel')).toContainText(role);

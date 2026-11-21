@@ -9,6 +9,6 @@ const workflowStages = [
 export function renderIdentifyWorkflow() {
   return `<figure class="identify-workflow-preview" aria-label="From request to delivery">
     <ol class="identify-workflow-stages" aria-label="Coordination workflow">${workflowStages.map(stage => `<li class="identify-workflow-stage${stage.label === 'Deliver' ? ' is-delivery' : ''}"><span class="identify-workflow-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${stage.symbol}</svg></span><span class="identify-workflow-label">${stage.label.replaceAll('&', '&amp;')}</span></li>`).join('')}</ol>
-    <figcaption>When artwork is needed, I brief designers, relay client feedback, coordinate revisions, and obtain final artwork approval while sourcing vendors.</figcaption>
+    <figcaption>When artwork is needed, I brief designers, relay client feedback, coordinate revisions, and obtain final client approval while sourcing vendors. Production is released only after required approvals and specifications are confirmed.</figcaption>
   </figure>`;
 }
