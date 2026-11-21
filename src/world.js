@@ -172,7 +172,6 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
       id,
       name: station.label || station.company || defaultStations[index]?.company || `Company ${index + 1}`,
       company: station.company || station.label || defaultStations[index]?.company,
-      role: station.role || '',
       journeyNumber: station.journeyNumber ?? index + 1,
       position: [x * 5.05, 0, z * 4.05],
       stop: [x * 3.0, 0, z * 2.4],
@@ -221,14 +220,8 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     const label = document.createElement('button');
     label.type = 'button'; label.className = 'world-label';
     const journeyNumber = String(station.journeyNumber).padStart(2, '0');
-    const count = document.createElement('span'); count.className = 'world-label-number'; count.textContent = journeyNumber;
-    const copy = document.createElement('span'); copy.className = 'world-label-copy';
-    if (station.role) {
-      const role = document.createElement('span'); role.className = 'world-label-role'; role.textContent = station.role;
-      role.id = `world-role-${index}`; copy.append(role); label.setAttribute('aria-describedby', role.id);
-    }
-    const company = document.createElement('span'); company.className = 'world-label-company'; company.textContent = station.name;
-    copy.append(company); label.append(count, copy);
+    const count = document.createElement('span'); count.textContent = journeyNumber;
+    label.append(count, document.createTextNode(` ${station.name}`));
     label.setAttribute('aria-label', `Visit company ${journeyNumber} ${station.company}`);
     label.style.position = 'absolute'; label.style.zIndex = '2';
     label.style.transform = 'translate(-50%, -50%)';
@@ -550,8 +543,6 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
   function updateLabels() {
     const footer = container.parentElement?.querySelector('.stage-tools');
     const footerInset = Math.min(footer ? Math.max(8, size.height - footer.offsetTop + 8) : 8, size.height / 2);
-    const labelArea = Math.max(240, ...labels.map(label => label.offsetHeight * 4 + 64));
-    const narrow = size.width < 480 || size.height - footerInset < labelArea;
     projected.set(0, 0.23, 0); world.localToWorld(projected); projected.project(camera);
     homeTarget.style.left = `${(projected.x * 0.5 + 0.5) * size.width}px`;
     homeTarget.style.top = `${(-projected.y * 0.5 + 0.5) * size.height}px`;
@@ -560,6 +551,7 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
     stationData.forEach((station, index) => {
       projected.copy(station.labelAnchor); world.localToWorld(projected); projected.project(camera);
       const label = labels[index];
+      const narrow = size.width < 480 || size.height - footerInset < 240;
       // Previous/Next chapter controls provide access on compact screens;
       // showing one world label keeps the small scene and character legible.
       label.style.visibility = size.height < 180 || (narrow && index !== activeIndex) ? 'hidden' : 'visible';
@@ -578,20 +570,17 @@ export function createWorld({ container, onSelect = () => {}, onReady = () => {}
       label.classList.toggle('is-active', index === activeIndex);
       label.setAttribute('aria-pressed', String(index === activeIndex));
     });
-    const placed = homeTarget.hidden ? [] : [{
-      left: parseFloat(homeTarget.style.left), top: parseFloat(homeTarget.style.top),
-      width: homeTarget.offsetWidth, height: homeTarget.offsetHeight, home: true,
-    }];
+    const placed = [];
     const visibleLabels = labels.filter(label=>label.style.visibility==='visible')
       .map(label=>({label,left:parseFloat(label.style.left),top:parseFloat(label.style.top),width:label.offsetWidth,height:label.offsetHeight}))
       .sort((a,b)=>a.top-b.top);
     for (const item of visibleLabels) {
-      const gap = other => other.home ? 4 : 8;
-      const overlaps = (top,other) => Math.abs(item.left-other.left)<(item.width+other.width)/2+gap(other)
-        && Math.abs(top-other.top)<(item.height+other.height)/2+gap(other);
+      const gap = 8;
+      const overlaps = (top,other) => Math.abs(item.left-other.left)<(item.width+other.width)/2+gap
+        && Math.abs(top-other.top)<(item.height+other.height)/2+gap;
       const candidates = [item.top,...placed.flatMap(other=>[
-        other.top+(item.height+other.height)/2+gap(other),
-        other.top-(item.height+other.height)/2-gap(other),
+        other.top+(item.height+other.height)/2+gap,
+        other.top-(item.height+other.height)/2-gap,
       ])].filter(top=>top>=item.height/2+8&&top<=size.height-item.height/2-footerInset)
         .sort((a,b)=>Math.abs(a-item.top)-Math.abs(b-item.top));
       const top = candidates.find(candidate=>placed.every(other=>!overlaps(candidate,other))) ?? item.top;

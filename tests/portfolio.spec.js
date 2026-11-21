@@ -330,9 +330,7 @@ test('Journey starts with current work and walks through six employers from curr
   // Original company numbers and physical station positions stay fixed; the reader follows the reverse career sequence.
   expect(careerStops.map(stop => stop.company)).toEqual(companies);
   await loadWorld(page, baseURL);
-  await expect(page.locator('.world-label-number')).toHaveText(journeyCompanies.map(company => String(companies.indexOf(company) + 1).padStart(2, '0')));
-  await expect(page.locator('.world-label-role')).toHaveText(journeyCompanies.map(company => careerStops[companies.indexOf(company)].role));
-  await expect(page.locator('.world-label-company')).toHaveText(journeyCompanies);
+  await expect(page.locator('.world-label')).toHaveText(journeyCompanies.map(company => `${String(companies.indexOf(company) + 1).padStart(2, '0')} ${company}`));
   await expect(page.locator('.journey-footer')).toHaveCount(0);
   await expect(page.locator('#company-name')).toHaveText('Identify BDA');
   await expect(page.locator('#company-role')).toHaveText('Project Coordinator');
@@ -362,8 +360,6 @@ test('Journey starts with current work and walks through six employers from curr
     if (company === 'Dynamic Infotech') await expect(page.locator('canvas.world-canvas')).toHaveAttribute('aria-label', /desktop computer setup.*server rack/i);
     const worldLabel = page.getByRole('button', { name: `Visit company ${chapter} ${company}`, exact: true });
     await expect(worldLabel).toHaveAttribute('aria-pressed', 'true');
-    await expect(worldLabel.locator('.world-label-role')).toHaveText(stop.role);
-    await expect(worldLabel.locator('.world-label-company')).toHaveText(company);
     await assertContributionDescriptionsVisible(page, stop);
     await expect(page.locator('#company-card .profile-stat-grid')).toHaveCount(company === 'Identify BDA' ? 1 : 0);
     if (index > 0) await expect(page.locator('#previous-stop')).toBeEnabled();

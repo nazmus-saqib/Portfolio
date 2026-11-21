@@ -48,12 +48,8 @@ button:focus-visible, a:focus-visible, summary:focus-visible, canvas:focus-visib
 .world-home-target { position: absolute; z-index: 1; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; transform: translate(-50%, -50%); background: transparent; }
 .world-home-target:hover { background: #1072AE0D; box-shadow: 0 0 0 2px #1072AE26; }
 .world-home-target:focus-visible { outline: 2px solid #1072AE; outline-offset: 3px; }
-.world-label { width: max-content; max-width: min(270px, calc(100% - 16px)); white-space: normal; border: 1px solid #D2E6F2; background: #FFFFFFf5; box-shadow: 0 2px 9px #173A5512; color: #173A55; border-radius: 20px; padding: 8px 12px; font-size: .875rem; font-weight: 500; display: flex; align-items: center; gap: 8px; text-align: left; transition: color .2s, background .2s; }
+.world-label { width: max-content; max-width: calc(100% - 16px); white-space: nowrap; border: 1px solid #D2E6F2; background: #FFFFFFf5; box-shadow: 0 2px 9px #173A5512; color: #173A55; border-radius: 20px; padding: 6px 10px; font-size: .875rem; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: color .2s, background .2s; }
 .world-label span { font-size: .875rem; color: #526E82; }
-.world-label .world-label-number { flex-shrink: 0; align-self: flex-start; line-height: 1.4; }
-.world-label .world-label-copy { display: grid; min-width: 0; gap: 2px; line-height: 1.4; }
-.world-label .world-label-role { color: #173A55; font-weight: 600; }
-.world-label .world-label-company { font-weight: 400; }
 .world-label:hover { background: #E3F3FD; }
 .world-label.is-active { background: #1072AE; border-color: #1072AE; color: #FFFFFF; box-shadow: 0 3px 12px #173A5530; }
 .world-label.is-active span { color:#FFFFFF; }

@@ -72,3 +72,8 @@ At the owner’s request, the desktop layout restores the panel widths used imme
 ## Position labels — 21 November 2026
 
 Workplace labels now show the recorded position title above the company, retaining the original company numbers. Journey and Reading View use the same job-title-first heading. Titles come from the existing career record; no employment dates, role descriptions or résumé content were changed. Label spacing keeps the centre About Me target available.
+
+
+## Animation-label correction — 21 November 2026
+
+The animation is restored to the earlier numbered company-only labels and placement. Position titles remain the main headings in Journey and Reading View, with company names and employment details underneath. The wider animation layout and current résumé are retained.
