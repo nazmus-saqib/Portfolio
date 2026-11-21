@@ -62,3 +62,8 @@ These are local browser/emulated-viewport checks, not physical-phone testing, a 
 ## Replacement résumé checks — 21 November 2026
 
 The production build and four affected browser regressions passed after the PDF replacement. Actual downloads from the header, Profile, Contact and résumé landing page all matched the uploaded PDF byte for byte. Existing download paths and link markup were retained. The earlier 45-test suite and 24-view scan above apply to the reviewed content implementation; no application code changed for the PDF replacement.
+
+
+## Desktop proportions — 21 November 2026
+
+At the owner’s request, the desktop layout restores the panel widths used immediately before the 50/50 change: 560px by default, 620px on wide desktops, 470px on smaller desktops and 440px from 861–1000px. The animation takes the remaining width. The existing mobile layout and full-width Reading View are retained.

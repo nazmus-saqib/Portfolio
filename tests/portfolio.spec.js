@@ -142,13 +142,13 @@ test('About Me opens at the centre and preserves the personal story outside the 
   await expect(professionalCopy).toHaveText('I connect requirements, stakeholders, suppliers, schedules and deliverables to move projects forward. My work includes quotation analysis, approvals, delivery coordination, practical risk monitoring, issue resolution and financial follow-up. I bring technical experience and formal project management education to cross-functional operations.');
   await expect(professionalCopy).not.toContainText('I’m seeking opportunities');
   await expect(page.locator('#reading-toggle')).toContainText('Focus on content');
-  const desktopBalance = await page.locator('.experience-layout').evaluate(node => {
+  const desktopPanels = await page.locator('.experience-layout').evaluate(node => {
     const world = node.querySelector('.world-pane').getBoundingClientRect().width;
     const content = node.querySelector('.sidebar').getBoundingClientRect().width;
-    return world / content;
+    return { world, content };
   });
-  expect(desktopBalance).toBeGreaterThanOrEqual(0.95);
-  expect(desktopBalance).toBeLessThanOrEqual(1.05);
+  expect(desktopPanels.content).toBe(560);
+  expect(desktopPanels.world).toBeGreaterThan(desktopPanels.content);
   await page.setViewportSize({width:1000,height:800});
   await expect.poll(()=>page.locator('.world-label').evaluateAll(labels=>{
     const boxes=labels.filter(label=>getComputedStyle(label).visibility==='visible').map(label=>label.getBoundingClientRect());

@@ -38,7 +38,7 @@ Playwright uses `/usr/bin/chromium`, or `CHROMIUM_PATH` when supplied. The previ
 - Projects opens with Operations: three documented project examples, two recurring coordination methods and a separate role overview. Earlier digital work is available through its own filter. Case-study research, ownership, source notes and templates remain visible; image and portal galleries retain their navigation.
 - Each project has a shareable `?project=id` URL, such as `?project=conference`, with browser history support.
 - Focus on Content uses the reading view to preserve the selected section and its content. Journey expands into all six employer chapters in that view.
-- On phones, the professional overview takes priority; visitors choose when to open the 3D journey. Desktop gives the interactive world and professional content roughly equal width. Reduced motion, pause, keyboard navigation and a no-WebGL alternative remain available.
+- On phones, the professional overview takes priority; visitors choose when to open the 3D journey. Desktop restores the earlier proportions: a wider interactive world alongside a details panel sized for each desktop breakpoint. Reduced motion, pause, keyboard navigation and a no-WebGL alternative remain available.
 - The résumé stays explicitly labelled on phones. Delivered HTML also provides professional and project summaries with working résumé and email links when JavaScript is disabled.
 
 ## Content and source files
