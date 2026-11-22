@@ -89,3 +89,7 @@ The owner supplied a newer two-page PDF (73,783 bytes), which replaces the previ
 ## Dynamic Infotech heading — 22 November 2026
 
 At the owner’s request, the position heading now reads Field Technician, Level 1. On-call remains in the employment-type details; Jan 2023–Present and the latest résumé are unchanged.
+
+## About Me heading — 22 November 2026
+
+Removed the Professional Portfolio and location line above the name in About Me and the matching static fallback. The contact details, location metadata, résumé and other About Me content remain unchanged.

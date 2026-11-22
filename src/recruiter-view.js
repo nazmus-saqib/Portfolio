@@ -15,7 +15,6 @@ export function renderOpportunityStatement(summary) {
 
 export function renderProfessionalOverview({ aboutMe, professionalSummary }) {
   return `<section class="professional-overview" aria-label="Quick professional overview">
-    <p class="eyebrow">PROFESSIONAL PORTFOLIO · ${esc(professionalSummary.location)}</p>
     <h1 id="about-title">${esc(aboutMe.name)}</h1>
     <p class="professional-position">${esc(professionalSummary.headline)}</p>
     <button class="professional-current" type="button" data-current-experience>Current experience at Identify BDA ${arrow}</button>
