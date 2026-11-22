@@ -85,3 +85,7 @@ The owner confirmed the position as Field Technician, Level 1 (On-call), Jan 202
 ## Latest résumé replacement — 21 November 2026
 
 The owner supplied a newer two-page PDF (73,783 bytes), which replaces the previous résumé verbatim at the existing public route. Header, Profile, Contact and landing-page downloads and the View résumé link all returned bytes matching this attachment. The production build and existing Pages browser check passed. No website copy, link markup or application code changed.
+
+## Dynamic Infotech heading — 22 November 2026
+
+At the owner’s request, the position heading now reads Field Technician, Level 1. On-call remains in the employment-type details; Jan 2023–Present and the latest résumé are unchanged.

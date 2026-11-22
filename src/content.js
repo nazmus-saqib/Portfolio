@@ -322,7 +322,7 @@ export const experience = [
   },
   {
     period: 'Jan 2023–Present',
-    title: 'Field Technician, Level 1 (On-call)',
+    title: 'Field Technician, Level 1',
     company: 'Dynamic Infotech · Canada',
     description: 'On-call technical-site work involving device installations, requirement confirmation, customer coordination, issue resolution, and hands-on execution.',
   },
@@ -480,7 +480,7 @@ export const careerStops = [
     id: 'dynamic',
     company: 'Dynamic Infotech',
     label: 'Dynamic Infotech',
-    role: 'Field Technician, Level 1 (On-call)',
+    role: 'Field Technician, Level 1',
     start: '2023-01',
     end: null,
     period: 'Jan 2023–Present',
