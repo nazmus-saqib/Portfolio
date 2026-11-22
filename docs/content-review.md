@@ -81,3 +81,7 @@ The animation is restored to the earlier numbered company-only labels and placem
 ## Dynamic Infotech employment update — 21 November 2026
 
 The owner confirmed the position as Field Technician, Level 1 (On-call), Jan 2023–Present. Both experience records now reflect the ongoing role, and Journey and Reading View calculate its current tenure. The UPS & Staples dates, animation labels and résumé file are unchanged.
+
+## Latest résumé replacement — 21 November 2026
+
+The owner supplied a newer two-page PDF (73,783 bytes), which replaces the previous résumé verbatim at the existing public route. Header, Profile, Contact and landing-page downloads and the View résumé link all returned bytes matching this attachment. The production build and existing Pages browser check passed. No website copy, link markup or application code changed.
