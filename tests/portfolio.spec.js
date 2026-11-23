@@ -62,27 +62,29 @@ async function assertContributionDescriptionsVisible(page, stop) {
   const contribution = page.locator(`[data-role-contributions="${stop.id}"]`);
   await expect(contribution.getByRole('heading', { name: 'What I brought to the work', exact: true })).toBeVisible();
   const cards = contribution.locator('.contribution-cards [data-contribution-index]');
-  const takeaway = contribution.locator('.contribution-takeaway');
-  const items = takeaway.locator('.contribution-takeaway-item');
+  const items = contribution.locator('[data-contribution-takeaway-index]');
   await expect(cards).toHaveCount(stop.highlights.length);
-  await expect(takeaway).toHaveCount(1);
-  await expect(takeaway.getByText('What I carry forward', { exact: true })).toHaveCount(1);
   await expect(items).toHaveCount(stop.highlights.length);
-  await expect(takeaway.locator('.contribution-takeaway-title')).toHaveCount(0);
-  expect(await contribution.evaluate(element => {
-    const cards = element.querySelector('.contribution-cards');
-    const takeaway = element.querySelector('.contribution-takeaway');
-    return !cards.contains(takeaway) && Boolean(cards.compareDocumentPosition(takeaway) & Node.DOCUMENT_POSITION_FOLLOWING);
-  }), 'One takeaway card follows the complete contribution stack').toBe(true);
+  await expect(contribution.locator(':scope > .contribution-takeaway')).toHaveCount(0);
+  expect(await contribution.locator('[data-contribution-index][aria-expanded="true"]').count()).toBeLessThanOrEqual(1);
   for (let index = 0; index < stop.highlights.length; index += 1) {
     const card = cards.nth(index);
     const item = items.nth(index);
     await expect(card.getByText(stop.highlights[index], { exact: true })).toBeVisible();
-    await expect(item).toBeVisible();
+    await expect(item.getByText('What I carry forward', { exact: true })).toHaveCount(1);
     await expect(item.locator('.contribution-takeaway-copy')).not.toBeEmpty();
     const takeawayId = await item.getAttribute('id');
-    expect(takeawayId, 'Each takeaway row has an addressable ID').toMatch(/\S+/);
-    await expect(card, 'Each contribution controls its matching takeaway row').toHaveAttribute('aria-controls', takeawayId);
+    expect(takeawayId, 'Each takeaway panel has an addressable ID').toMatch(/\S+/);
+    await expect(card, 'Each contribution controls its own inline takeaway').toHaveAttribute('aria-controls', takeawayId);
+    expect(await item.evaluate(panel => {
+      const card = panel.parentElement.querySelector('[data-contribution-index]');
+      return card && card.parentElement === panel.parentElement && card.nextElementSibling === panel;
+    }), 'Each takeaway immediately follows its contribution inside the same card').toBe(true);
+    const expanded = await card.getAttribute('aria-expanded');
+    expect(['true', 'false']).toContain(expanded);
+    await expect(item).toHaveJSProperty('hidden', expanded === 'false');
+    if (expanded === 'true') await expect(item).toBeVisible();
+    else await expect(item).toBeHidden();
   }
   return contribution;
 }
@@ -399,45 +401,52 @@ test('Journey starts with current work and walks through six employers from curr
   await assertSingleViewport(page);
 });
 
-test('contribution cards keep all takeaways together after the work and remain independent in reading view', async ({ page, baseURL }) => {
+test('contribution cards keep their takeaways inline and remain independent in reading view', async ({ page, baseURL }) => {
   await loadWorld(page, baseURL);
   await selectCompany(page, 'Synesis IT');
   const contribution = await assertContributionDescriptionsVisible(page, careerStops[0]);
   expect(await contribution.evaluate(element => element.closest('details'))).toBeNull();
   await expect(contribution.locator('summary, details')).toHaveCount(0);
   const cards = contribution.locator('[data-contribution-index]');
-  const items = contribution.locator('.contribution-takeaway-item');
+  const items = contribution.locator('[data-contribution-takeaway-index]');
   await expect(cards).toHaveCount(3);
-  await expect(contribution.locator('[data-contribution-index][aria-pressed="true"]')).toHaveCount(1);
-  await expect(contribution.locator('.contribution-takeaway')).toHaveCount(1);
-  await expect(items).toHaveCount(3);
+  await expect(contribution.locator('[data-contribution-index][aria-expanded="true"]')).toHaveCount(1);
   const takeawayCopies = contribution.locator('.contribution-takeaway-copy');
   const originalTakeaways = await takeawayCopies.allTextContents();
 
-  await cards.nth(1).click();
-  await expect(cards.nth(1)).toHaveAttribute('aria-pressed', 'true');
-  await expect(items.nth(1)).toHaveClass(/is-active/);
-  await expect(contribution.locator('.contribution-takeaway-item.is-active')).toHaveCount(1);
+  await cards.nth(1).hover();
+  await expect(cards.nth(1)).toHaveAttribute('aria-expanded', 'true');
+  await expect(items.nth(1)).toBeVisible();
+  await expect(items.nth(0)).toBeHidden();
+  await expect(contribution.locator('[data-contribution-takeaway-index]:not([hidden])')).toHaveCount(1);
   await expect(takeawayCopies).toHaveText(originalTakeaways);
   await assertContributionDescriptionsVisible(page, careerStops[0]);
 
+  await cards.nth(1).focus();
   await page.keyboard.press('ArrowRight');
   await expect(cards.nth(2)).toBeFocused();
-  await expect(cards.nth(2)).toHaveAttribute('aria-pressed', 'true');
-  await expect(items.nth(2)).toHaveClass(/is-active/);
+  await expect(cards.nth(2)).toHaveAttribute('aria-expanded', 'true');
+  await expect(items.nth(2)).toBeVisible();
   await page.keyboard.press('Home');
   await expect(cards.nth(0)).toBeFocused();
-  await expect(items.nth(0)).toHaveClass(/is-active/);
+  await expect(items.nth(0)).toBeVisible();
   await expect(takeawayCopies).toHaveText(originalTakeaways);
   await page.keyboard.press('End');
   await expect(cards.nth(2)).toBeFocused();
-  await expect(cards.nth(2)).toHaveAttribute('aria-pressed', 'true');
-  await cards.nth(1).focus();
+  await expect(cards.nth(2)).toHaveAttribute('aria-expanded', 'true');
   await page.keyboard.press('Enter');
-  await expect(cards.nth(1)).toHaveAttribute('aria-pressed', 'true');
-  await expect(items.nth(1)).toHaveClass(/is-active/);
+  await expect(cards.nth(2)).toHaveAttribute('aria-expanded', 'false');
+  await expect(items.nth(2)).toBeHidden();
+  await page.keyboard.press('Space');
+  await expect(cards.nth(2)).toHaveAttribute('aria-expanded', 'true');
+  await expect(items.nth(2)).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(cards.nth(2)).toBeFocused();
+  await expect(cards.nth(2)).toHaveAttribute('aria-expanded', 'false');
+  await expect(contribution.locator('[data-contribution-takeaway-index]:not([hidden])')).toHaveCount(0);
   await expect(takeawayCopies).toHaveText(originalTakeaways);
   await assertContributionDescriptionsVisible(page, careerStops[0]);
+  await page.keyboard.press('Space');
 
   await page.locator('#reading-toggle').click();
   await expect(page.locator('#reading-view .profile-stat-grid')).toHaveCount(1);
@@ -448,23 +457,81 @@ test('contribution cards keep all takeaways together after the work and remain i
   await expect(readingIdentify.locator('.identify-workflow-stages')).toHaveCount(1);
   await expect(readingIdentify.locator('[data-project="identify"]')).toHaveCount(1);
   await expect(page.locator('#reading-view .role-contributions')).toHaveCount(6);
-  await expect(page.locator('#reading-view .contribution-takeaway')).toHaveCount(6);
-  await expect(page.locator('#reading-view .contribution-takeaway-item')).toHaveCount(careerStops.reduce((total, stop) => total + stop.highlights.length, 0));
+  await expect(page.locator('#reading-view [data-contribution-takeaway-index]')).toHaveCount(careerStops.reduce((total, stop) => total + stop.highlights.length, 0));
   const first = await assertContributionDescriptionsVisible(page, careerStops[0]);
   const second = await assertContributionDescriptionsVisible(page, careerStops[1]);
   const secondTakeaways = await second.locator('.contribution-takeaway-copy').allTextContents();
-  const secondSelection = await second.locator('[aria-pressed="true"]').getAttribute('data-contribution-index');
-  const current = Number(await first.locator('[data-contribution-index][aria-pressed="true"]').getAttribute('data-contribution-index'));
-  await first.locator('[data-contribution-index]').nth((current + 1) % 3).click();
+  const secondSelection = await second.locator('[data-contribution-index][aria-expanded="true"]').getAttribute('data-contribution-index');
+  const current = Number(await first.locator('[data-contribution-index][aria-expanded="true"]').getAttribute('data-contribution-index'));
+  await first.locator('[data-contribution-index]').nth((current + 1) % 3).hover();
   await expect(second.locator('.contribution-takeaway-copy')).toHaveText(secondTakeaways);
-  await expect(second.locator(`[data-contribution-index="${secondSelection}"]`)).toHaveAttribute('aria-pressed', 'true');
-  await expect(second.locator(`[data-contribution-takeaway-index="${secondSelection}"]`)).toHaveClass(/is-active/);
-  await expect(first.locator('[data-contribution-index][aria-pressed="true"]')).toHaveCount(1);
-  await expect(first.locator('.contribution-takeaway-item.is-active')).toHaveCount(1);
+  await expect(second.locator(`[data-contribution-index="${secondSelection}"]`)).toHaveAttribute('aria-expanded', 'true');
+  await expect(second.locator(`[data-contribution-takeaway-index="${secondSelection}"]`)).toBeVisible();
+  await expect(first.locator('[data-contribution-index][aria-expanded="true"]')).toHaveCount(1);
+  await expect(first.locator('[data-contribution-takeaway-index]:not([hidden])')).toHaveCount(1);
   for (const stop of careerStops) await assertContributionDescriptionsVisible(page, stop);
   const ids = await page.locator('#reading-view .role-contributions [id]').evaluateAll(elements => elements.map(element => element.id));
-  expect(new Set(ids).size, 'Contribution headings and grouped takeaway rows have unique IDs in reading view').toBe(ids.length);
+  expect(new Set(ids).size, 'Contribution controls and inline panels have unique IDs in reading view').toBe(ids.length);
   await assertSingleViewport(page);
+});
+
+test('contribution takeaways open on hover and keyboard focus and remain dismissible', async ({ page, baseURL }) => {
+  await loadWorld(page, baseURL);
+  const stop = careerStops.find(stop => stop.id === 'identify');
+  const contribution = await assertContributionDescriptionsVisible(page, stop);
+  const cards = contribution.locator('[data-contribution-index]');
+  const panels = contribution.locator('[data-contribution-takeaway-index]');
+  await expect(panels.nth(0)).toContainText('Give teams a reliable, approved starting point.');
+
+  await cards.nth(1).hover();
+  await expect(cards.nth(1)).toHaveAttribute('aria-expanded', 'true');
+  await expect(panels.nth(1)).toBeVisible();
+  await expect(panels.nth(0)).toBeHidden();
+  await contribution.locator('.contribution-heading').hover();
+  await expect(panels.nth(1), 'Moving off the card does not remove a takeaway while it is being read').toBeVisible();
+
+  await cards.nth(0).hover();
+  await cards.nth(0).click();
+  await expect(cards.nth(0), 'A pointer click can collapse the hovered disclosure without focus reopening it').toHaveAttribute('aria-expanded', 'false');
+  await expect(panels.nth(0)).toBeHidden();
+  await cards.nth(0).click();
+  await expect(panels.nth(0)).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(cards.nth(0)).toBeFocused();
+  await expect(panels.nth(0)).toBeHidden();
+  await page.keyboard.press('Tab');
+  await expect(cards.nth(1)).toBeFocused();
+  await expect(cards.nth(1)).toHaveAttribute('aria-expanded', 'true');
+  await expect(panels.nth(1)).toBeVisible();
+  await assertContributionDescriptionsVisible(page, stop);
+});
+
+test('contribution takeaways open on the first phone tap and close on the next tap', async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
+  const page = await context.newPage();
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  try {
+    await loadWorld(page, baseURL);
+    const stop = careerStops.find(stop => stop.id === 'identify');
+    const contribution = await assertContributionDescriptionsVisible(page, stop);
+    const cards = contribution.locator('[data-contribution-index]');
+    const panels = contribution.locator('[data-contribution-takeaway-index]');
+    await cards.nth(1).tap();
+    await expect(cards.nth(1), 'Touch focus must not open and immediately toggle the same panel closed').toHaveAttribute('aria-expanded', 'true');
+    await expect(panels.nth(1)).toBeVisible();
+    await expect(panels.nth(0)).toBeHidden();
+    await cards.nth(1).tap();
+    await expect(cards.nth(1)).toHaveAttribute('aria-expanded', 'false');
+    await expect(panels.nth(1)).toBeHidden();
+    await cards.nth(3).tap();
+    await expect(panels.nth(3)).toBeVisible();
+    await assertContributionDescriptionsVisible(page, stop);
+    await assertSingleViewport(page);
+    expect(errors).toEqual([]);
+  } finally {
+    await context.close();
+  }
 });
 
 test('the character renders movement with on-screen and focused keyboard controls', async ({ page, baseURL }) => {
@@ -815,8 +882,8 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 640 }
     expect(await contribution.locator('.contribution-takeaway, .contribution-takeaway-item').evaluateAll(elements => elements.every(element => element.scrollWidth <= element.clientWidth))).toBe(true);
     expect(await contribution.getByText(careerStops[1].highlights[1], { exact: true }).evaluate(element => getComputedStyle(element).fontSize)).toBe('16px');
     expect(await contribution.locator('.contribution-takeaway-copy').first().evaluate(element => getComputedStyle(element).fontSize)).toBe('16px');
-    await contribution.locator('[data-contribution-index="2"]').click();
-    await expect(contribution.locator('[data-contribution-index="2"]')).toHaveAttribute('aria-pressed', 'true');
+    await contribution.locator('[data-contribution-index="2"]').hover();
+    await expect(contribution.locator('[data-contribution-index="2"]')).toHaveAttribute('aria-expanded', 'true');
     await assertContributionDescriptionsVisible(page, careerStops[1]);
     await assertSingleViewport(page);
     await page.locator('#next-stop').click();

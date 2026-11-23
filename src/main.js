@@ -36,6 +36,7 @@ const email = 'saqibmollanazmus@gmail.com';
 const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}`;
 const outlookComposeUrl = `https://outlook.live.com/mail/0/deeplink/compose?to=${encodeURIComponent(email)}`;
 const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+const contributionHoverPreference = window.matchMedia('(any-hover: hover) and (any-pointer: fine)');
 const latest = careerStops.length - 1;
 // Preserve the original company numbers and map indices while reading current to previous.
 let world, active = latest, worldStation = -1, panel = 'profile', reading = false, exploring = false, paused = motionPreference.matches;
@@ -44,6 +45,7 @@ let emailDialogTrigger;
 let selectedStoryMilestone = 0;
 let selectedProfileTab = 0;
 const selectedContributions = new Map();
+let contributionKeyboardInput = false;
 let currentProjectId = null;
 let worldInitialization = null, worldFailed = false;
 
@@ -227,7 +229,7 @@ function showProfileTab(index, focus = false) {
 }
 
 function showRoleContribution(section, index, focus = false) {
-  if(!section||!Number.isInteger(index)||index<0||index>=section.querySelectorAll('[data-contribution-index]').length)return;
+  if(!section||!Number.isInteger(index)||index< -1||index>=section.querySelectorAll('[data-contribution-index]').length)return;
   selectedContributions.set(section.dataset.roleContributions,index);
   stopSpeech();
   activateRoleContribution(section,index,{focus});
@@ -235,7 +237,7 @@ function showRoleContribution(section, index, focus = false) {
 
 document.querySelector('#app').addEventListener('click',event=>{
   const emailLink=event.target.closest('[data-email-compose]');if(emailLink){event.preventDefault();openEmailOptions(emailLink);return;}
-  const contribution=event.target.closest('[data-contribution-index]');if(contribution){showRoleContribution(contribution.closest('[data-role-contributions]'),Number(contribution.dataset.contributionIndex));return;}
+  const contribution=event.target.closest('[data-contribution-index]');if(contribution){showRoleContribution(contribution.closest('[data-role-contributions]'),contribution.getAttribute('aria-expanded')==='true'?-1:Number(contribution.dataset.contributionIndex));return;}
   const profileTab=event.target.closest('[data-profile-tab]');if(profileTab){showProfileTab(Number(profileTab.dataset.profileTab));return;}
   const milestone=event.target.closest('[data-story-milestone]');if(milestone){showStoryMilestone(Number(milestone.dataset.storyMilestone));return;}
   const aboutJump=event.target.closest('[data-about-jump]');if(aboutJump){stopSpeech();const body=document.querySelector('#sidebar-body');const personal=body.querySelector('#about-personal');if(personal)personal.open=true;const target=body.querySelector(aboutJump.dataset.aboutJump==='story'?'#about-story-title':'#about-learning-title');if(target){target.focus({preventScroll:true});body.scrollTo({top:body.scrollTop+target.getBoundingClientRect().top-body.getBoundingClientRect().top-12,behavior:motionPreference.matches?'instant':'smooth'});}return;}
@@ -247,9 +249,31 @@ document.querySelector('#app').addEventListener('click',event=>{
   if(event.target.closest('[data-home]')){selectAbout();return;}
   if(event.target.closest('[data-copy-email]')) copyEmail(event.target.closest('#email-dialog')?.querySelector('#email-status'));
 });
+function showHoveredContribution(event) {
+  if(contributionKeyboardInput||event.pointerType!=='mouse'||!contributionHoverPreference.matches)return;
+  const card=event.target.closest('[data-contribution-index]');if(!card)return;
+  if(event.type==='pointerover'&&event.relatedTarget instanceof Node&&card.contains(event.relatedTarget))return;
+  if(card.getAttribute('aria-expanded')==='true')return;
+  showRoleContribution(card.closest('[data-role-contributions]'),Number(card.dataset.contributionIndex));
+}
+document.querySelector('#app').addEventListener('keydown',()=>{contributionKeyboardInput=true;},{capture:true});
+document.querySelector('#app').addEventListener('pointerdown',()=>{contributionKeyboardInput=false;},{capture:true});
+document.querySelector('#app').addEventListener('pointerover',showHoveredContribution);
+document.querySelector('#app').addEventListener('pointermove',event=>{
+  if(event.pointerType!=='mouse'||(!event.movementX&&!event.movementY))return;
+  const wasKeyboard=contributionKeyboardInput;
+  contributionKeyboardInput=false;
+  if(wasKeyboard)showHoveredContribution(event);
+});
+document.querySelector('#app').addEventListener('focusin',event=>{
+  const card=event.target.closest('[data-contribution-index]');
+  if(!card||!card.matches(':focus-visible')||card.getAttribute('aria-expanded')==='true')return;
+  showRoleContribution(card.closest('[data-role-contributions]'),Number(card.dataset.contributionIndex));
+});
 document.querySelector('#app').addEventListener('keydown',event=>{
   const card=event.target.closest('[data-contribution-index]');if(!card)return;
   const section=card.closest('[data-role-contributions]');
+  if(event.key==='Escape'){event.preventDefault();showRoleContribution(section,-1);return;}
   const index=Number(card.dataset.contributionIndex),count=section.querySelectorAll('[data-contribution-index]').length;
   let next;
   if(event.key==='ArrowRight'||event.key==='ArrowDown')next=(index+1)%count;

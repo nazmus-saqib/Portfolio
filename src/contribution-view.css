@@ -7,10 +7,11 @@
 .contribution-heading-symbol > svg { width: 20px; height: 20px; }
 .contribution-cards { position: relative; display: grid; gap: 11px; min-width: 0; }
 .contribution-cards::before { content: ''; position: absolute; top: 31px; bottom: 31px; left: 31px; width: 1px; background: repeating-linear-gradient(to bottom, #1072AE 0 4px, transparent 4px 8px); }
-.contribution-card { position: relative; display: flex; align-items: flex-start; gap: 13px; width: 100%; min-width: 0; padding: 15px 15px 16px 12px; border: 1px solid #D2E6F2; border-radius: 11px; background: linear-gradient(115deg, #FFFFFF, #F2F9FE); color: #526E82; text-align: left; transition: border-color .18s ease, background .18s ease, box-shadow .18s ease; }
-.contribution-card:nth-child(even):not(.is-active) { background: linear-gradient(115deg, #FFFFFF, #FAFDFF); }
-.contribution-card:hover { border-color: #1072AE; box-shadow: 0 3px 11px #173A550A; }
-.contribution-card.is-active { border-color: #1072AE; background: linear-gradient(115deg, #F2F9FE, #E3F3FD); box-shadow: inset 0 0 0 1px #1072AE; }
+.contribution-item { position: relative; min-width: 0; border: 1px solid #D2E6F2; border-radius: 11px; background: linear-gradient(115deg, #FFFFFF, #F2F9FE); transition: border-color .18s ease, background .18s ease, box-shadow .18s ease; }
+.contribution-item:nth-child(even):not(.is-active) { background: linear-gradient(115deg, #FFFFFF, #FAFDFF); }
+.contribution-item:hover { border-color: #1072AE; box-shadow: 0 3px 11px #173A550A; }
+.contribution-item.is-active { border-color: #1072AE; background: linear-gradient(115deg, #F2F9FE, #E3F3FD); box-shadow: inset 0 0 0 1px #1072AE; }
+.contribution-card { position: relative; display: flex; align-items: flex-start; gap: 13px; width: 100%; min-width: 0; padding: 15px 15px 16px 12px; border: 0; border-radius: 10px; background: transparent; color: #526E82; text-align: left; }
 .contribution-card:focus-visible { outline: 2px solid #1072AE; outline-offset: 3px; }
 .contribution-node { display: grid; place-items: center; position: relative; flex-shrink: 0; width: 37px; height: 37px; border: 1px solid #D2E6F2; border-radius: 50%; background: #FFFFFF; color: #1072AE; box-shadow: 0 3px 7px #173A5508; transition: color .18s ease, background .18s ease, border-color .18s ease; }
 .contribution-node > svg { width: 21px; height: 21px; }
@@ -20,17 +21,19 @@
 .contribution-card-topline > strong { min-width: 0; font-size: 1rem; line-height: 1.4; font-weight: 550; color: #173A55; }
 .contribution-number { margin-left: auto; flex-shrink: 0; color: #1072AE; font-size: .875rem; line-height: 1.4; font-variant-numeric: tabular-nums; }
 .contribution-description { display: block; color: #526E82; font-size: 1rem; line-height: 1.6; overflow-wrap: anywhere; }
-.contribution-takeaway { min-width: 0; margin-top: 18px; padding: 17px 15px 12px; border: 1px solid #D2E6F2; border-radius: 10px; background: #FFFFFF; }
-.contribution-takeaway-heading { display: flex; align-items: center; gap: 11px; margin-bottom: 10px; }
-.contribution-takeaway-mark { display: grid; place-items: center; flex-shrink: 0; width: 30px; height: 30px; border: 1px solid #D2E6F2; border-radius: 8px; background: #F2F9FE; color: #1072AE; }
+.contribution-disclosure { display: flex; align-items: center; gap: 6px; margin-top: 10px; color: #1072AE; font-size: .8125rem; font-weight: 500; line-height: 1.5; }
+.contribution-disclosure > svg { flex-shrink: 0; width: 15px; height: 15px; transition: transform .18s ease; }
+.contribution-collapse-label, .contribution-card[aria-expanded="true"] .contribution-expand-label { display: none; }
+.contribution-card[aria-expanded="true"] .contribution-collapse-label { display: inline; }
+.contribution-card[aria-expanded="true"] .contribution-disclosure > svg { transform: rotate(180deg); }
+.contribution-takeaway { min-width: 0; margin: 0 15px 15px 62px; padding-top: 13px; border-top: 1px solid #B8D9EE; animation: contribution-reveal .16s ease-out; }
+.contribution-takeaway[hidden] { display: none; }
+.contribution-takeaway-heading { display: flex; align-items: center; gap: 7px; margin-bottom: 7px; }
+.contribution-takeaway-mark { display: grid; place-items: center; flex-shrink: 0; width: 21px; height: 21px; color: #1072AE; }
 .contribution-takeaway-mark > svg { width: 19px; height: 19px; }
-.contribution-takeaway-label { margin: 0; color: #526E82; font-size: 1rem; line-height: 1.5; font-weight: 500; }
-.contribution-takeaway-list { display: grid; gap: 3px; min-width: 0; margin: 0; padding: 0; list-style: none; }
-.contribution-takeaway-item { display: grid; grid-template-columns: 24px minmax(0, 1fr); align-items: start; gap: 10px; min-width: 0; padding: 12px 10px 12px 8px; border-left: 2px solid transparent; border-bottom: 1px solid #D2E6F2; border-radius: 6px; transition: background .18s ease, border-color .18s ease; }
-.contribution-takeaway-item:last-child { border-bottom-color: transparent; }
-.contribution-takeaway-item.is-active { border-left-color: #1072AE; background: #F2F9FE; }
-.contribution-takeaway-number { padding-top: 2px; color: #1072AE; font-size: .875rem; line-height: 1.6; font-weight: 500; font-variant-numeric: tabular-nums; }
+.contribution-takeaway-label { margin: 0; color: #173A55; font-size: .875rem; line-height: 1.5; font-weight: 550; }
 .contribution-takeaway-copy { margin: 0; color: #526E82; font-size: 1rem; line-height: 1.6; overflow-wrap: anywhere; }
+@keyframes contribution-reveal { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 620px) {
   .role-contributions { margin-top: 22px; padding-top: 19px; }
   .contribution-heading { gap: 9px; }
@@ -40,10 +43,9 @@
   .contribution-cards::before { left: 27px; }
   .contribution-node { width: 33px; height: 33px; }
   .contribution-node > svg { width: 19px; height: 19px; }
-  .contribution-takeaway { padding: 15px 12px 10px; }
-  .contribution-takeaway-heading { gap: 10px; }
-  .contribution-takeaway-item { grid-template-columns: 21px minmax(0, 1fr); gap: 8px; padding: 11px 8px 11px 6px; }
+  .contribution-takeaway { margin: 0 12px 14px 53px; padding-top: 11px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .contribution-card, .contribution-node, .contribution-takeaway-item { transition: none; }
+  .contribution-item, .contribution-node, .contribution-disclosure > svg { transition: none; }
+  .contribution-takeaway { animation: none; }
 }
